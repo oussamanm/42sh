@@ -6,13 +6,12 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/07/24 23:42:14 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/09/23 00:58:29 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include "read_line.h"
-
 
 ///******* print *****/
 void	ft_print_pipe(t_pipes *st_pipes)
@@ -82,7 +81,7 @@ void	ft_print_tokens(t_cmds *st_cmds)
 	ft_print_jobctr(st_jobctr);
 }
 ///******* End print *****/
-	/*if (ft_error_redir(st_tokens))
+	/*if (ft_error_redir(st_tokens))*/
 
 
 
@@ -173,12 +172,16 @@ int			ft_cmd_fork(int fork_it, t_pipes *st_pipes, char ***env)
 	g_sign = 1;
 	wait(&rtn);
 	g_sign = 0;
+	if (rtn != 0)
+		rtn = 0;
+	else if (rtn == 0)
+		rtn = 1;
 	return (rtn);
 }
 
 /*
-** Config Cmds by : - Lexer - Check Syntax - apply her_doc - Execution - Clear lists
-*/
+ ** Config Cmds by : - Lexer - Check Syntax - apply her_doc - Execution - Clear lists
+ */
 
 int			ft_cmds_setup(char *str_arg, char ***environ)
 {
@@ -200,7 +203,7 @@ int			ft_cmds_setup(char *str_arg, char ***environ)
 
 	/// Check Error Syntax
 	/*if (ft_error_syntax(st_tokens) == 1)
-		return (-1);*/
+	  return (-1);*/
 
 	/// Fill Lists of lists
 	ft_parse_cmd(st_cmds);
@@ -217,8 +220,35 @@ int			ft_cmds_setup(char *str_arg, char ***environ)
 }
 
 /*
-** Execute cmds
-*/
+ ** Execute cmds
+ */
+
+static	void	logical_ops(t_logopr *st_logopr, char ***env)
+{
+	int		cmp;
+	int		state;
+
+	state = -1;
+	while (st_logopr != NULL) {
+		state = ft_pipe(st_logopr->st_pipes, env);
+		if ((st_logopr->status == 248 && state == 0) ||
+				(st_logopr->status == 76 && state == 1))
+			st_logopr = st_logopr->next;
+		else
+		{
+			cmp = st_logopr->status;
+			st_logopr = st_logopr->next;
+			while (st_logopr != NULL) {
+				if (st_logopr->status != cmp)
+				{
+					st_logopr = st_logopr->next;
+					break;
+				}
+				st_logopr = st_logopr->next;
+			}
+		}
+	}
+}
 
 void		ft_cmds_exec(t_cmds *st_cmds, char ***environ)
 {
@@ -230,7 +260,9 @@ void		ft_cmds_exec(t_cmds *st_cmds, char ***environ)
 	st_jobctr = st_cmds->st_jobctr;
 	while (st_jobctr)
 	{
-		//ft_logic_opr(st_jobctr->st_logopr, environ);
+		logical_ops(st_jobctr->st_logopr, environ);
 		st_jobctr = st_jobctr->next;
 	}
 }
+
+
