@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_func_minish.c                                   :+:      :+:    :+:   */
+/*   ft_helper_func.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -45,21 +45,6 @@ char		*ft_find_path(char *arg, char **env)
 	return (NULL);
 }
 
-t_pipes		*ft_new_stpipe(void)
-{
-	t_pipes *st_pipes;
-
-	if ((st_pipes = (t_pipes *)malloc(sizeof(t_pipes))) == NULL)
-		return (NULL);
-	st_pipes->args = NULL;
-	st_pipes->cmd = NULL;
-	ft_bzero(st_pipes->fds, 2);
-	st_pipes->st_redir = NULL;
-	st_pipes->st_tokens = NULL;
-	st_pipes->next = NULL;
-	return (st_pipes);
-}
-
 /*
 ** Convert table of string to list : O
 */
@@ -77,7 +62,7 @@ t_pipes		*ft_strr_list(char **args_pipe)
 	{
 		if (st_pipes == NULL)
 		{
-			st_pipes = ft_new_stpipe();
+			st_pipes = ft_new_pipe();
 			head = st_pipes;
 		}
 		st_pipes->cmd = *args_pipe;
@@ -86,9 +71,75 @@ t_pipes		*ft_strr_list(char **args_pipe)
 		args_pipe++;
 		if (*args_pipe != NULL)
 		{
-			st_pipes->next = ft_new_stpipe();
+			st_pipes->next = ft_new_pipe();
 			st_pipes = st_pipes->next;
 		}
 	}
 	return (head);
+}
+
+/*
+** Print error and exit
+*/
+
+void		ft_err_exit(char *str)
+{
+	ft_putstr_fd(str, 2);
+	exit(EXIT_FAILURE);
+}
+
+/*
+** Check if exist redirection
+*/
+
+int			ft_check_redi(t_pipes *st_pipes)
+{
+	t_tokens	*st_temp;
+
+	if (st_pipes == NULL || st_pipes->st_tokens == NULL)
+		return (-1);
+	st_temp = st_pipes->st_tokens;
+	while (st_temp)
+	{
+		if (st_temp->token < 0)
+			return (1);
+		st_temp = st_temp->next;
+	}
+	return (0);
+}
+
+/*
+** Check if exist token in list tokens
+*/
+
+int			ft_check_token(t_tokens *st_tokens, int token)
+{
+	if (!st_tokens)
+		return (0);
+	while (st_tokens)
+	{
+		if (st_tokens->token == token)
+			return (1);
+		st_tokens = st_tokens->next;
+	}
+	return (0);
+}
+
+/*
+** Calculate sum of ASCI :
+*/
+
+int			ft_sum_asci(char str[])
+{
+	int	sum;
+
+	if (str == NULL)
+		return (0);
+	sum = 0;
+	while (*str != '\0')
+	{
+		sum += *str;
+		str++;
+	}
+	return (sum);
 }

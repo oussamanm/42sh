@@ -19,9 +19,10 @@
 
 void		ft_built_exit(t_pipes *st_pipes, char ***env)
 {
+	UNUSED(st_pipes);
 	ft_strrdel(*env);
 	ft_clear_readline_struct();
-	ft_clear_cmds(st_pipes);
+	//ft_clear_cmds(st_pipes);
 	exit(0);
 }
 
@@ -44,6 +45,7 @@ void		ft_buil_echo(char **arg)
 			ft_putchar(arg[i][j++]);
 	}
 	ft_putstr("\n");
+	exit(EXIT_SUCCESS);
 }
 
 /*

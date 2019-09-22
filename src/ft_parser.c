@@ -5,137 +5,144 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/03 21:01:27 by onouaman          #+#    #+#             */
-/*   Updated: 2019/08/03 21:01:28 by onouaman         ###   ########.fr       */
+/*   Created: 2019/09/22 21:06:25 by onouaman          #+#    #+#             */
+/*   Updated: 2019/09/22 21:06:27 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 /*
-**	ft_call_redire : calls function redirection
+**	fill structs : Job_controle & Logical_opr & pipe
 */
 
-void			ft_call_redire(t_redir *st_redir, t_tokens *st_tokens)
+static void     ft_fill_jobctr(t_cmds *st_cmds)
 {
-	if (CHECK_TOKEN(st_tokens->token, T_RED_OUT_S, T_RED_OUT_A, T_RED_OUT_B))
-		ft_redi_out(st_redir, st_tokens);
-	else if (CHECK_TOKEN(st_tokens->token, T_RED_IN_S, T_RED_IN_A, T_RED_IN_B))
-		ft_redi_in(st_redir, st_tokens);
-	else if (CHECK_TOKEN(st_tokens->token, T_RED_APP_S, T_RED_APP_M,
-		T_RED_APP_A))
-		ft_redi_app(st_redir, st_tokens);
-	else if (st_tokens->token == T_RED_BOTH)
-		ft_redi_both(st_redir, st_tokens);
-}
-
-/*
-**	ft_read_tokens : Read token and fill struct t_redir with redirection
-*/
-
-static void		ft_read_tokens(t_pipes *st_pipes, t_tokens *st_tokens)
-{
-	t_redir		*st_redir;
-	t_redir		*head;
-
-	st_redir = NULL;
-	head = st_pipes->st_redir;
-	while (st_tokens != NULL)
-	{
-		if (st_tokens->token < 0 && st_tokens->token != T_RED_HER_D)
-		{
-			if (head == NULL)
-			{
-				st_redir = ft_new_redir();
-				head = st_redir;
-			}
-			else
-			{
-				st_redir = head;
-				st_redir->next = ft_new_redir();
-				st_redir = st_redir->next;
-			}
-			ft_call_redire(st_redir, st_tokens);
-		}
-		st_tokens = st_tokens->next;
-	}
-	st_pipes->st_redir = head;
-}
-
-/*
-**	ft_apply_redi : apply redirection
-*/
-
-static int		ft_apply_redi(t_pipes *st_pipes)
-{
-	t_redir	*st_r;
-
-	if (st_pipes == NULL)
-		return (REDI_KO);
-	st_r = st_pipes->st_redir;
-	while (st_r != NULL)
-	{
-		(st_r->type_red == 4) ? ft_apply_hered(st_r) : NULL;
-		if (st_r->fd_close != -1)
-			close(st_r->fd_close);
-		if (st_r->fd_red != -1 && st_r->fd_des != -1)
-		{
-			if (st_r->fd_des == -2)
-				st_r->fd_des = ft_open_file(st_r->fd_file, st_r->type_red);
-			if (st_r->fd_des == -1 || !ft_exist_fd(st_r->fd_des))
-				return (REDI_KO);
-			if (dup2(st_r->fd_des, st_r->fd_red) == -1)
-				return (ft_putendl_fd("Error in dub", 2) && 0);
-		}
-		if (st_r->fd_err != -1 && st_r->fd_des != -1)
-			if (dup2(st_r->fd_des, st_r->fd_err) == -1)
-				return (ft_putendl_fd("Error in dub", 2) && 0);
-		st_r = st_r->next;
-	}
-	return (REDI_OK);
-}
-
-/*
-**	ft_update_args : update args by remove redirection
-*/
-
-static void		ft_update_args(t_pipes *st_pipes)
-{
-	int			count;
-	int			i;
+	t_jobctr	*st_jobctr;
+	t_tokens	*st_token;
 	t_tokens	*st_temp;
 
-	count = 0;
-	i = 0;
-	st_temp = st_pipes->st_tokens;
-	while (st_temp != NULL && st_temp->value != NULL)
+	// alloc st_jobctr
+	st_cmds->st_jobctr = ft_new_jobctr();
+	st_jobctr = st_cmds->st_jobctr;
+
+	// alloc t_tokens 
+	st_jobctr->st_tokens = ft_new_token();
+	st_token = st_jobctr->st_tokens;
+
+	st_temp = st_cmds->st_tokens;
+	while (st_temp)
 	{
-		if (!(st_temp->token < 0 || st_temp->is_arg == 1))
-			count++;
+		if (st_temp->token != T_JOBCTR)
+			ft_dup_token(&st_token, st_temp, T_JOBCTR);
+		else
+		{
+			st_jobctr->status = 1;
+			if (st_temp->next) // if exist more tokens
+			{
+				st_jobctr->next = ft_new_jobctr();
+				st_jobctr = st_jobctr->next;
+				st_jobctr->st_tokens = ft_new_token();
+				st_token = st_jobctr->st_tokens;
+			}
+		}
 		st_temp = st_temp->next;
 	}
-	st_temp = st_pipes->st_tokens;
-	ft_strrdel(st_pipes->args);
-	st_pipes->args = ft_strr_new(count);
-	while (st_temp != NULL && st_temp->value != NULL)
-	{
-		if (!(st_temp->token < 0 || st_temp->is_arg == 1))
-			(st_pipes->args)[i++] = ft_strdup(st_temp->value);
-		st_temp = st_temp->next;
-	}
-	(st_pipes->args)[i] = NULL;
 }
 
-/*
-**	ft_parse_cmd : read tokens and apply redirection
-*/
-
-int				ft_parse_cmd(t_pipes *st_pipes)
+static void     ft_fill_logopr(t_jobctr *st_jobctr)
 {
-	ft_update_tokens(st_pipes->st_tokens);
-	ft_read_tokens(st_pipes, st_pipes->st_tokens);
-	if (ft_apply_redi(st_pipes) == REDI_KO)
-		return (PARSE_KO);
-	ft_update_args(st_pipes);
-	return (PARSE_OK);
+	t_logopr	*st_logopr;
+	t_tokens	*st_token;
+	t_tokens	*st_temp;
+
+	// alloc st_logopr
+	st_jobctr->st_logopr = ft_new_logopr();
+	st_logopr = st_jobctr->st_logopr;
+
+	// alloc t_tokens in st_token
+	st_logopr->st_tokens = ft_new_token();
+	st_token = st_logopr->st_tokens;
+
+	st_temp = st_jobctr->st_tokens;
+	while (st_temp)
+	{
+		if (st_temp->token != T_LOGOPR_AND && st_temp->token != T_LOGOPR_OR)
+			ft_dup_token(&st_token, st_temp, T_LOGOPR_AND);
+		else
+		{
+			st_logopr->bl_jobctr = (st_jobctr->status) ? 1 : 0;
+			st_logopr->status = st_temp->token;
+			if (st_temp->next) // if exist more tokens
+			{
+				st_logopr->next = ft_new_logopr();
+				st_logopr = st_logopr->next;
+				st_logopr->st_tokens = ft_new_token();
+				st_token = st_logopr->st_tokens;
+			}
+		}
+		st_temp = st_temp->next;
+	}
+}
+
+static void     ft_fill_pipe(t_logopr *st_logopr)
+{
+	t_pipes		*st_pipes;
+	t_tokens	*st_token;
+	t_tokens	*st_temp;
+
+	// alloc st_logopr
+	st_logopr->st_pipes = ft_new_pipe();
+	st_pipes = st_logopr->st_pipes;
+
+	// alloc t_tokens in st_token
+	st_pipes->st_tokens = ft_new_token();
+	st_token = st_pipes->st_tokens;
+
+	st_temp = st_logopr->st_tokens;
+	while (st_temp)
+	{
+		if (st_temp->token != T_PIPE)
+			ft_dup_token(&st_token, st_temp, T_PIPE);
+		else
+		{
+			st_pipes->bl_jobctr = (st_logopr->bl_jobctr) ? 1 : 0; 
+			if (st_temp->next) // if exist more tokens
+			{
+				st_pipes->next = ft_new_pipe();
+				st_pipes = st_pipes->next;
+				st_pipes->st_tokens = ft_new_token();
+				st_token = st_pipes->st_tokens;
+			}
+		}
+		st_temp = st_temp->next;
+	}
+}
+
+void            ft_parse_cmd(t_cmds *st_cmds)
+{
+	t_jobctr	*st_jobctr;
+	t_logopr	*st_logopr;
+
+	if (!st_cmds)
+		return ;
+	
+	/// Fill Job Controle
+	ft_fill_jobctr(st_cmds);
+
+	/// Fill Logical Operator
+	st_jobctr = st_cmds->st_jobctr;
+	while (st_jobctr)
+	{
+		ft_fill_logopr(st_jobctr);
+
+		/// Fill Pipe
+		st_logopr = st_jobctr->st_logopr;
+		while (st_logopr)
+		{
+			ft_fill_pipe(st_logopr);
+			st_logopr = st_logopr->next;
+		}
+		st_jobctr = st_jobctr->next;
+	}
 }

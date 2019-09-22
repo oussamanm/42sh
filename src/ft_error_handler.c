@@ -12,15 +12,35 @@
 
 #include "shell.h"
 
-void		ft_err_exit(char *str)
+/*
+** Check error syntax of command ; | 
+*/
+
+char		**ft_error_syntax(char *str_cmds)
 {
-	ft_putstr_fd(str, 2);
-	exit(0);
+	char	**args;
+	int		i;
+
+	i = 0;
+	if (ft_error_separ(str_cmds, ';'))
+	{
+		ft_putstr_fd("syntax error near unexpected token `;' \n", 2);
+		ft_strdel(&str_cmds);
+		return (NULL);
+	}
+	if ((args = ft_str_split_q(str_cmds, ";")) == NULL || *args == NULL)
+	{
+		ft_putstr_fd("syntax error near unexpected tokenl `;' \n", 2);
+		ft_strrdel(args);
+		ft_strdel(&str_cmds);
+		return (NULL);
+	}
+	return (args);
 }
 
 /*
-** ft_error_separ : Check error syntax (; and |) : O
-** return 1 in case of error
+** Check error syntax (; and |)
+** 		return 1 in case of error
 */
 
 int			ft_error_separ(char *str_arg, char c)
@@ -53,32 +73,10 @@ int			ft_error_separ(char *str_arg, char c)
 }
 
 /*
-** Check if exist error syntax of redirection
+** Check error syntax of pipe |
 */
 
-int			ft_error_syn(t_pipes *st_pipes)
-{
-	if (st_pipes == NULL)
-		return (0);
-	while (st_pipes)
-	{
-		st_pipes->args = ft_str_split_q(st_pipes->cmd, " \t\n");
-		st_pipes->st_tokens = ft_lexer(st_pipes->args);
-		if (ft_error_redir(st_pipes->st_tokens))
-		{
-			ft_clear_cmds(st_pipes);
-			return (1);
-		}
-		st_pipes = st_pipes->next;
-	}
-	return (0);
-}
-
-/*
-** Check if exist error syntax of pipe
-*/
-
-int			ft_pipe_error(char *str)
+int			ft_error_pipe(char *str)
 {
 	char	*tmp;
 	int		i;
@@ -86,6 +84,11 @@ int			ft_pipe_error(char *str)
 	i = 0;
 	if (!str || (str && *str == 0))
 		return (0);
+	if (ft_error_separ(str, '|'))
+	{
+		ft_putstr_fd("syntax error near unexpected token `|' \n", 2);
+		return (1);
+	}
 	tmp = ft_strtrim(str);
 	while (tmp && tmp[i])
 	{
@@ -97,14 +100,50 @@ int			ft_pipe_error(char *str)
 	return (0);
 }
 
-int			ft_parse_error(char *str_cmds)
+/*
+** ft_error_redir_h: helper funct for ft_error_redir :
+*/
+
+int			ft_error_redir_h(t_tokens *st_tokens)
 {
-	if (str_cmds == NULL)
-		return (1);
-	if (ft_error_separ(str_cmds, '|') || ft_pipe_error(str_cmds))
+	if (st_tokens->token == T_RED_APP_S && NEXT && NEXT->token == T_TXT)
+		if (NEXT->indx != st_tokens->indx &&
+			NEXT->next && NEXT->next->token < 0)
+			return (ft_putendl_fd("syntax error near unexpected token ", 2));
+	if (st_tokens->token < T_RED_APP_M)
+		return (ft_putendl_fd("syntax error near unexpected token ", 2));
+	if (st_tokens->token <= -122 && !ft_strncmp(st_tokens->value, "><", 2))
+		return (ft_putendl_fd("syntax error near unexpected token `<'", 2));
+	return (0);
+}
+
+/*
+** ft_error_redir: Check Error syntax of redirection
+*/
+
+int			ft_error_redir(t_tokens *st_tokens)
+{
+	while (st_tokens != NULL)
 	{
-		ft_putstr_fd("syntax error near unexpected token `|' \n", 2);
-		return (1);
+		if (st_tokens->token == T_RED_OUT_S && NEXT && NEXT->token == T_TXT &&
+			NEXT->value && NEXT->value[0] == '&')
+			return (ft_putendl_fd("syntax error near unexpected token `&'", 2));
+		if (ft_error_redir_h(st_tokens))
+			return (1);
+		if (st_tokens->token < 0 &&
+			ft_check_char(st_tokens->value, ERRO_IN_AND))
+			return (ft_putendl_fd("syntax error near unexpected token `&'", 2));
+		if (st_tokens->token < 0 && (NEXT == NULL || NEXT->token < 0) &&
+			st_tokens->token != -145 && st_tokens->token != -143)
+			return (ft_putendl_fd("syntax error near unexpected token", 2));
+		if (st_tokens->token == T_RED_OUT_A && NEXT &&
+			!ft_isalldigit(NEXT->value) && PREV && PREV->indx == st_tokens->indx
+			&& ft_isalldigit(PREV->value) && ft_atoi(PREV->value) != 1)
+			return (ft_putendl_fd("ambiguous redirect", 2));
+		if ((st_tokens->token == T_RED_OUT_A || st_tokens->token == T_RED_HER_D)
+			&& NEXT && NEXT->value && NEXT->value[0] == '&')
+			return (ft_putendl_fd("syntax error near unexpected token `&'", 2));
+		st_tokens = NEXT;
 	}
 	return (0);
 }

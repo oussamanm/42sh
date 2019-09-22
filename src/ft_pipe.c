@@ -63,44 +63,21 @@ void		ft_apply_pipe_h(t_pipes *st_pipes, t_pipes *st_head,
 	if (dup2(st_pipes->fds[i], i) == -1)
 		ft_putendl_fd("Error in dub STD_", 2);
 	ft_close_pipes(st_head);
-	ft_split_cmd(0, st_pipes, environ);
+	ft_cmd_fork(0, st_pipes, environ);
 	exit(0);
-}
-
-/*
-**	ft_check_cmd : PIPE :
-*/
-
-static int	ft_check_cmd(t_pipes *st_pipes, char **environ)
-{
-	int		rtn;
-	char	*str_arg;
-
-	rtn = 0;
-	if (!ft_check_char(st_pipes->args[0], '/'))
-		str_arg = ft_find_path(st_pipes->args[0], environ);
-	else
-	{
-		str_arg = ft_strdup(st_pipes->args[0]);
-		if (access(str_arg, F_OK) != 0 && ++rtn)
-			ft_print_error(FIL_NS, NULL, str_arg, 2);
-	}
-	if (!rtn && str_arg && access(str_arg, X_OK) != 0 && ++rtn)
-		ft_print_error(FIL_PD, NULL, str_arg, 2);
-	if (rtn == 0 && str_arg == NULL && ++rtn)
-		ft_print_error(CMD_NF, "21sh: ", (st_pipes->args)[0], 0);
-	return (rtn);
 }
 
 /*
 **	ft_apply_pipe : PIPE :
 */
 
-void		ft_apply_pipe(t_pipes *st_pipes, char ***environ)
+int			ft_apply_pipe(t_pipes *st_pipes, char ***environ)
 {
 	t_pipes	*st_head;
 	int		parent;
+	int		status;
 
+	status = 0;
 	st_head = st_pipes;
 	if ((parent = fork()) == -1)
 		ft_err_exit("Error in Fork \n");
@@ -118,5 +95,25 @@ void		ft_apply_pipe(t_pipes *st_pipes, char ***environ)
 			ft_apply_pipe_h(st_pipes, st_head, 0, environ);
 	}
 	if (parent > 0)
-		wait(NULL);
+		wait(&status);
+	return (status);
+}
+
+/*
+** exec pipe
+*/
+
+int			ft_pipe(t_pipes *st_pipe, char ***env)
+{
+	int status;
+
+	status = 0;
+	if (!st_pipe)
+		return (-1); /// Check this status
+	/// if exist pipe
+	if (st_pipe && st_pipe->next)
+		status = ft_apply_pipe(st_pipe, env);
+	else
+		status = ft_cmd_fork(1, st_pipe, env);
+	return (status);
 }

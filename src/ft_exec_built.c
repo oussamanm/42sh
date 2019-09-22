@@ -16,7 +16,7 @@
 ** initail builtens : duplicate STD_* , Call builtens , Resete STD_*
 */
 
-void		ft_init_built(t_pipes *st_pipes, char ***env)
+int		ft_init_built(t_pipes *st_pipes, char ***env)
 {
 	int i;
 	int tmp[3];
@@ -29,7 +29,8 @@ void		ft_init_built(t_pipes *st_pipes, char ***env)
 	while (++i < 3)
 		if (dup2(tmp[i], i) == -1 || close(tmp[i]) == -1)
 			ft_putendl_fd("Error in dup or close \n", 2);
-	return ;
+	// should add return status of builtens
+	return (1);
 }
 
 /*
@@ -43,7 +44,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***env)
 	rtn = 0;
 	if (st_pipes == NULL || st_pipes->args == NULL)
 		return (-1);
-	if (ft_check_redi(st_pipes) && ft_parse_cmd(st_pipes) == PARSE_KO)
+	if (ft_check_redi(st_pipes) && ft_parse_redir(st_pipes) == PARSE_KO)
 		return (REDI_KO);
 	if (ft_strcmp((st_pipes->args)[0], "exit") == 0)
 		ft_built_exit(st_pipes, env);

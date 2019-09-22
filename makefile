@@ -11,11 +11,11 @@ NAME = 21sh
 
 SRC = ./src/
 OBJS = ft_built_env.o ft_builtins.o ft_error_handler.o\
-	ft_func_minish.o ft_quote.o ft_strsplit.o ft_strsplit_q.o\
+	ft_helper_func.o ft_quote.o ft_strsplit.o ft_strsplit_q.o\
 	ft_variable.o minishell.o ft_signals.o ft_lexer_h.o\
-	ft_lexer.o ft_pipe.o ft_execution.o ft_parser.o ft_exec_built.o ft_free.o\
-	ft_redirection_h.o ft_new.o\
-	ft_redirection.o\
+	ft_lexer.o ft_pipe.o ft_execution.o  ft_exec_built.o ft_free.o\
+	ft_parser.o ft_redir_read.o ft_redir_parse.o ft_new.o\
+	ft_redir_setup.o\
 	read_line/addition.o\
 	read_line/auto_completion.o\
 	read_line/copy_paste.o\

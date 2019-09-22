@@ -70,6 +70,31 @@ void		ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx)
 }
 
 /*
+** lexer for || &&
+*/
+
+void		ft_lexer_logopr(t_tokens **st_tokens, char *arg, int *j, int indx)
+{
+	int		i;
+	char	*temp;
+
+	i = 0;
+	temp = NULL;
+	while (arg[i])
+	{
+		if ((arg[i] == '|' && arg[i + 1] == '|') || (arg[i] == '&' && arg[i + 1] == '&'))
+		{
+			temp = (arg[i] == '|') ? ft_strdup("||") : ft_strdup("&&");
+			i++;
+			break ;
+		}
+		i++;
+	}
+	ft_fill_token(st_tokens, ft_sum_asci(temp), ft_strdup(temp), indx);
+	*j += i;
+}
+
+/*
 ** ft_lexer_txt : lexer for any txt
 */
 
@@ -95,7 +120,7 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 }
 
 /*
-** ft_lexer_h : call funct lexer
+**  call funct lexer
 */
 
 void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
@@ -107,17 +132,23 @@ void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
 	j = 0;
 	while (arg[j])
 	{
-		if (arg[j] == '"' || arg[j] == '\'')
-			ft_lexer_quot(st_tokens, &arg[j], &j, i);
-		else if (arg[j] == '&' && ft_check_char("><", arg[j + 1]))
-			ft_lexer_red(st_tokens, &arg[j], &j, i);
-		else if (arg[j] == '>' || arg[j] == '<')
-			ft_lexer_red(st_tokens, &arg[j], &j, i);
-		else if ((*st_tokens)->prev && (*st_tokens)->prev->token == T_RED_OUT_A
-			&& arg[j] == '-' && j && arg[j - 1] == '&')
-			ft_upd_token((*st_tokens)->prev, T_RED_OUT_B, ">&-");
-		else
-			ft_lexer_txt(st_tokens, &arg[j], &j, i);
+	/*Quot*/	if (arg[j] == '"' || arg[j] == '\'')
+					ft_lexer_quot(st_tokens, &arg[j], &j, i);
+	/*Redi*/	else if (arg[j] == '&' && ft_check_char("><", arg[j + 1]))
+					ft_lexer_red(st_tokens, &arg[j], &j, i);
+				else if (arg[j] == '>' || arg[j] == '<')
+					ft_lexer_red(st_tokens, &arg[j], &j, i);
+				else if ((*st_tokens)->prev && (*st_tokens)->prev->token == T_RED_OUT_A
+					&& arg[j] == '-' && j && arg[j - 1] == '&')
+					ft_upd_token((*st_tokens)->prev, T_RED_OUT_B, ">&-");
+	/*Pipe*/	else if (arg[j] == '|' && arg[j + 1] != '|')
+					ft_fill_token(st_tokens, T_PIPE, ft_strdup("|"), i);
+	/*Logi*/	else if ((arg[j] == '&' && arg[j + 1] == '&') || (arg[j] == '|' && arg[j + 1] == '|'))
+					ft_lexer_logopr(st_tokens, &arg[j], &j, i);
+	/*Jobs*/	else if (arg[j] == '&')
+					ft_fill_token(st_tokens, '&', ft_strdup("&"), i);
+	/*Txt*/		else
+					ft_lexer_txt(st_tokens, &arg[j], &j, i);
 		j++;
 	}
 }
@@ -146,7 +177,15 @@ t_tokens	*ft_lexer(char **args)
 		st_tokens->prev->next = NULL;
 		free(st_tokens);
 	}
-	if (i == 0)
+	/*	st_tokens = st_head;
+		while (st_tokens != NULL)
+		{
+			dprintf(2, "index = %d Token = <%d> : <%s>\n",st_tokens->indx, st_tokens->token,st_tokens->value);
+			st_tokens = st_tokens->next;
+		}
+		dprintf(2,"\n--------------\n");
+		exit(0);*/
+	if (i == -1)
 		return (NULL);
 	return (st_head);
 }

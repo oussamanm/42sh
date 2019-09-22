@@ -29,6 +29,10 @@ void		ft_initial_read_line(t_history **his, t_select **select)
 	ft_save_address(his, select);
 }
 
+/*
+** Save adresse t_history to t_select , to easy access from other function
+*/
+
 void		ft_save_address(t_history **his, t_select **select)
 {
 	static t_history	*p_his;
@@ -46,34 +50,9 @@ void		ft_save_address(t_history **his, t_select **select)
 	}
 }
 
-char		**ft_error_multi(char *str_cmds)
-{
-	char	**args;
-	int		i;
-
-	i = 0;
-	if (ft_error_separ(str_cmds, ';'))
-	{
-		ft_putstr_fd("syntax error near unexpected token `;' \n", 2);
-		ft_strdel(&str_cmds);
-		return (NULL);
-	}
-	if ((args = ft_str_split_q(str_cmds, ";")) == NULL || *args == NULL)
-	{
-		ft_putstr_fd("syntax error near unexpected tokenl `;' \n", 2);
-		ft_strrdel(args);
-		ft_strdel(&str_cmds);
-		return (NULL);
-	}
-	while (args[i])
-		if (ft_parse_error(args[i++]))
-		{
-			ft_strrdel(args);
-			ft_strdel(&str_cmds);
-			return (NULL);
-		}
-	return (args);
-}
+/*
+** Check Error of syntax , and correction Expansions , call function_exec
+*/
 
 void		ft_multi_cmd(char *str_cmds, char ***environ)
 {
@@ -81,12 +60,11 @@ void		ft_multi_cmd(char *str_cmds, char ***environ)
 	int		i;
 
 	i = 0;
-	if ((args = ft_error_multi(str_cmds)) == NULL)
+	if ((args = ft_error_syntax(str_cmds)) == NULL)
 		return ;
 	while (args[i] != NULL)
 	{
-		args[i] = ft_corr_args(args[i], *environ);
-		ft_call_cmdss(args[i], environ);
+		ft_cmds_setup(args[i], environ);
 		i++;
 	}
 	ft_strrdel(args);

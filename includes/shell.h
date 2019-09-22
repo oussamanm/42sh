@@ -64,6 +64,10 @@
 
 # define T_TXT 0
 # define T_QUO 1
+# define T_JOBCTR		38
+# define T_LOGOPR_AND	76
+# define T_LOGOPR_OR	248
+# define T_PIPE			124
 # define T_RED_IN_S		-60
 # define T_RED_IN_A		-98
 # define T_RED_IN_B		-143
@@ -119,10 +123,36 @@ typedef struct			s_pipes
 	char				*cmd;
 	int					fds[2];
 	char				**args;
+	int					bl_jobctr:1;
 	t_tokens			*st_tokens;
 	t_redir				*st_redir;
 	struct s_pipes		*next;
 }						t_pipes;
+
+typedef struct 			s_logopr
+{
+	t_tokens			*st_tokens;
+	int					status;
+	int					bl_jobctr:1;
+	t_pipes				*st_pipes;
+	struct s_logopr		*next;
+}						t_logopr;
+
+typedef struct s_jobctr
+{
+	t_tokens			*st_tokens;
+	int					status:1;
+	t_logopr			*st_logopr;
+	struct s_jobctr		*next;
+}						t_jobctr;
+
+typedef	struct s_cmds
+{
+	char				*str_cmd;
+	char				**args;
+	t_tokens			*st_tokens;
+	t_jobctr			*st_jobctr;
+}						t_cmds;
 
 /*
 **Builtins
@@ -154,10 +184,11 @@ void					ft_print_error(char *msg, char *para1, char *para2,
 void					ft_err_exit(char *str);
 int						ft_error_cd(char *path, char **arg);
 int						ft_error_semic(char *str_arg, char **args_cmd);
-int						ft_error_separ(char *str_arg, char c);
-int						ft_error_syn(t_pipes *st_pipes);
-int						ft_pipe_error(char *str);
+int						ft_call_lexer(t_pipes *st_pipes);
 int						ft_parse_error(char *str_cmds);
+char					**ft_error_syntax(char *str_cmds);
+int						ft_error_pipe(char *str);
+int						ft_error_separ(char *str_arg, char c);
 
 /*
 **Updated Splite
@@ -175,6 +206,9 @@ char					**ft_strsplit_by_arr(char *str, char *split);
 char					*ft_find_path(char *arg, char **env);
 int						ft_count_word(const char *str, char *c);
 t_pipes					*ft_strr_list(char **args_pipe);
+int						ft_check_redi(t_pipes *st_pipes);
+int						ft_check_token(t_tokens *st_tokens, int token);
+int						ft_sum_asci(char str[]);
 
 /*
 **Quote
@@ -203,9 +237,9 @@ int						ft_putchar_err(int c);
 /*
 **Pipes
 */
-
+int						ft_pipe(t_pipes *st_pipe, char ***env);
 void					ft_create_pipes(t_pipes *st_pipes);
-void					ft_apply_pipe(t_pipes *st_pipes, char ***environ);
+int						ft_apply_pipe(t_pipes *st_pipes, char ***environ);
 
 /*
 **Lexer
@@ -220,12 +254,14 @@ void					ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j,
 	int indx);
 t_tokens				*ft_lexer(char **args);
 
-t_tokens				*ft_new_token();
 void					ft_fill_token(t_tokens **st_tokens, int token,
 	char *value, int indx);
-int						ft_sum_asci(char str[]);
 void					ft_upd_token(t_tokens *st_tokens, int token,
 	char *value);
+void					ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token);
+void		ft_tokens_args(t_pipes *st_pipe);
+int		ft_count_tokens(t_tokens *st_tokens);
+
 
 /*
 **Redirection
@@ -237,40 +273,61 @@ void					ft_redi_app(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_in(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_out(t_redir *st_redir, t_tokens *st_tokens);
 int						ft_error_redir(t_tokens *st_tokens);
-t_redir					*ft_new_redir();
 void					ft_init_redi(t_redir *st_redir, int type_red);
 void					ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_apply_hered(t_redir *st_redi);
+void					ft_apply_her_doc(t_pipes *st_pipes);
 
 /*
 **Parser Red; ft_read_tokens,ft_apply_redi,ft_update_args
 */
 
-int						ft_parse_cmd(t_pipes *st_pipes);
+int						ft_parse_redir(t_pipes *st_pipes);
 
 /*
 **Execution
 */
 
-int						ft_cmd_exec(t_pipes *st_pipes, char **env);
-void					ft_split_cmd(int fork_it, t_pipes *st_pipes,
-	char ***env);
-int						ft_call_cmdss(char *str_arg, char ***environ);
-int						ft_check_redi(t_pipes *st_pipes);
+void					ft_cmd_exec(t_pipes *st_pipes, char **env);
+int						ft_cmds_setup(char *str_arg, char ***environ);
+void					ft_cmds_exec(t_cmds *st_cmds, char ***environ);
+int			ft_cmd_fork(int fork_it, t_pipes *st_pipes, char ***env);
+int		ft_check_cmd(t_pipes *st_pipes, char **environ);
 
 /*
-**Exec builtens
+** Exec builtens
 */
 
-void					ft_init_built(t_pipes *st_pipes, char ***env);
+int						ft_init_built(t_pipes *st_pipes, char ***env);
 int						ft_call_built(t_pipes *st_pipes, char ***env);
 int						ft_check_built(char *arg);
 
 /*
-**Free
+** New
+*/
+
+t_redir					*ft_new_redir();
+t_tokens				*ft_new_token();
+t_pipes					*ft_new_pipe(void);
+t_logopr				*ft_new_logopr(void);
+t_jobctr				*ft_new_jobctr(void);
+t_cmds					*ft_new_cmds();
+
+/*
+** Free
 */
 
 void					ft_clear_cmds(t_pipes *st_pipes);
 void					ft_clear_tokens(t_tokens *st_tokens);
+
+/*
+** Parse Cmds
+*/
+
+void					ft_parse_cmd(t_cmds *st_cmds);
+
+
+
+
 
 #endif
