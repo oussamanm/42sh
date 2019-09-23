@@ -81,28 +81,33 @@ void		ft_apply_hered(t_redir *st_redi)
 ** Apply here_doc if exist
 */
 
-void		ft_apply_her_doc(t_pipes *st_pipes)
+void		ft_apply_her_doc(t_jobctr *st_jobctr)
 {
+	t_logopr	*st_logopr;
+	t_pipes		*st_pipe;
 	t_tokens	*st_temp;
-	t_redir		*st_redir;
 
-	if (st_pipes == NULL)
+	if (!st_jobctr)
 		return ;
-	st_temp = NULL;
-	while (st_pipes)
+	while (st_jobctr && (st_logopr = st_jobctr->st_logopr))
 	{
-		if (st_pipes->st_tokens)
-			st_temp = st_pipes->st_tokens;
-		while (st_temp != NULL)
+		while (st_logopr && (st_pipe = st_logopr->st_pipes))
 		{
-			if (st_temp->token == T_RED_HER_D)
+			while (st_pipe && (st_temp = st_pipe->st_tokens))
 			{
-				st_redir = ft_new_redir();
-				st_pipes->st_redir = st_redir;
-				ft_redi_her(st_redir, st_temp);
+				while (st_temp)
+				{
+					if (st_temp->token == T_RED_HER_D)
+					{
+						st_pipe->st_redir = ft_new_redir();
+						ft_redi_her(st_pipe->st_redir, st_temp);
+					}
+					st_temp = st_temp->next;
+				}
+				st_pipe = st_pipe->next;
 			}
-			st_temp = st_temp->next;
+			st_logopr = st_logopr->next;
 		}
-		st_pipes = st_pipes->next;
+		st_jobctr = st_jobctr->next;
 	}
 }

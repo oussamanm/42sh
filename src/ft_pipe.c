@@ -96,7 +96,7 @@ int			ft_apply_pipe(t_pipes *st_pipes, char ***environ)
 	}
 	if (parent > 0)
 		wait(&status);
-	return (status);
+	return ((status) ? 0 : 1);
 }
 
 /*

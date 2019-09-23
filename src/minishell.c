@@ -51,7 +51,7 @@ void		ft_save_address(t_history **his, t_select **select)
 }
 
 /*
-** Check Error of syntax , and correction Expansions , call function_exec
+** Check Error of syntax , call function_exec
 */
 
 void		ft_multi_cmd(char *str_cmds, char ***environ)
@@ -64,6 +64,8 @@ void		ft_multi_cmd(char *str_cmds, char ***environ)
 		return ;
 	while (args[i] != NULL)
 	{
+		/// Correction args
+		args[i] = ft_corr_args(args[i], *environ);
 		ft_cmds_setup(args[i], environ);
 		i++;
 	}

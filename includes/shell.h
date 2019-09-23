@@ -276,7 +276,7 @@ int						ft_error_redir(t_tokens *st_tokens);
 void					ft_init_redi(t_redir *st_redir, int type_red);
 void					ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_apply_hered(t_redir *st_redi);
-void					ft_apply_her_doc(t_pipes *st_pipes);
+void					ft_apply_her_doc(t_jobctr *st_jobctr);
 
 /*
 **Parser Red; ft_read_tokens,ft_apply_redi,ft_update_args

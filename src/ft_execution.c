@@ -89,11 +89,12 @@ void	ft_print_tokens(t_cmds *st_cmds)
 ** Check if exist Cmd : check if Ok and permission
 */
 
-int			ft_check_cmd(t_pipes *st_pipes, char **environ)
+int				ft_check_cmd(t_pipes *st_pipes, char **environ)
 {
-	int		rtn;
-	char	*str_arg;
-	char	*cmd;
+	int			rtn;
+	char		*str_arg;
+	char		*cmd;
+	struct stat	st_stat;
 
 	if (!st_pipes)
 		return (0);
@@ -108,6 +109,8 @@ int			ft_check_cmd(t_pipes *st_pipes, char **environ)
 		str_arg = ft_strdup(cmd);
 		if (access(str_arg, F_OK) != 0 && ++rtn)
 			ft_print_error(FIL_NS, NULL, str_arg, 2);
+		else if (lstat(str_arg, &st_stat) == 0 && S_ISDIR(st_stat.st_mode) && ++rtn)
+			ft_print_error("Is a directory", "21sh :", str_arg, 0);
 	}
 	if (!rtn && str_arg && access(str_arg, X_OK) != 0 && ++rtn)
 		ft_print_error(FIL_PD, NULL, str_arg, 2);
@@ -120,7 +123,7 @@ int			ft_check_cmd(t_pipes *st_pipes, char **environ)
 ** Execute Cmd
 */
 
-void		ft_cmd_exec(t_pipes *st_pipes, char **env)
+void			ft_cmd_exec(t_pipes *st_pipes, char **env)
 {
 	char	*str_arg;
 
@@ -142,7 +145,7 @@ void		ft_cmd_exec(t_pipes *st_pipes, char **env)
 ** Check if cmd is builtens
 */
 
-int			ft_cmd_fork(int fork_it, t_pipes *st_pipes, char ***env)
+int				ft_cmd_fork(int fork_it, t_pipes *st_pipes, char ***env)
 {
 	int	pid;
 	int rtn;
@@ -172,27 +175,20 @@ int			ft_cmd_fork(int fork_it, t_pipes *st_pipes, char ***env)
 	g_sign = 1;
 	wait(&rtn);
 	g_sign = 0;
-	if (rtn != 0)
-		rtn = 0;
-	else if (rtn == 0)
-		rtn = 1;
-	return (rtn);
+	return ((rtn) ? 0 : 1);
 }
 
 /*
  ** Config Cmds by : - Lexer - Check Syntax - apply her_doc - Execution - Clear lists
  */
 
-int			ft_cmds_setup(char *str_arg, char ***environ)
+int				ft_cmds_setup(char *str_arg, char ***environ)
 {
 	t_cmds		*st_cmds;
 
 	if (str_arg == NULL)
 		return (-1);
 	st_cmds = ft_new_cmds();
-
-	/// Correction args
-	st_cmds->str_cmd = ft_corr_args(st_cmds->str_cmd, *environ);
 
 	/// Fill args
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
@@ -208,9 +204,9 @@ int			ft_cmds_setup(char *str_arg, char ***environ)
 	/// Fill Lists of lists
 	ft_parse_cmd(st_cmds);
 
-	//ft_apply_her_doc(st_pipes);
+	/// Apply here_doc
+	ft_apply_her_doc(st_cmds->st_jobctr);
 
-	//ft_print_tokens(st_cmds);
 	/// Executions
 	ft_cmds_exec(st_cmds, environ);
 
@@ -220,16 +216,17 @@ int			ft_cmds_setup(char *str_arg, char ***environ)
 }
 
 /*
- ** Execute cmds
+ ** Execute Logical Operateur
  */
 
-static	void	logical_ops(t_logopr *st_logopr, char ***env)
+static void		logical_ops(t_logopr *st_logopr, char ***env)
 {
 	int		cmp;
 	int		state;
 
 	state = -1;
-	while (st_logopr != NULL) {
+	while (st_logopr != NULL)
+	{
 		state = ft_pipe(st_logopr->st_pipes, env);
 		if ((st_logopr->status == 248 && state == 0) ||
 				(st_logopr->status == 76 && state == 1))
@@ -238,7 +235,8 @@ static	void	logical_ops(t_logopr *st_logopr, char ***env)
 		{
 			cmp = st_logopr->status;
 			st_logopr = st_logopr->next;
-			while (st_logopr != NULL) {
+			while (st_logopr != NULL)
+			{
 				if (st_logopr->status != cmp)
 				{
 					st_logopr = st_logopr->next;
@@ -250,7 +248,11 @@ static	void	logical_ops(t_logopr *st_logopr, char ***env)
 	}
 }
 
-void		ft_cmds_exec(t_cmds *st_cmds, char ***environ)
+/*
+ ** Execute cmds
+ */
+
+void			ft_cmds_exec(t_cmds *st_cmds, char ***environ)
 {
 	t_jobctr	*st_jobctr;
 	UNUSED(environ);
@@ -264,5 +266,3 @@ void		ft_cmds_exec(t_cmds *st_cmds, char ***environ)
 		st_jobctr = st_jobctr->next;
 	}
 }
-
-

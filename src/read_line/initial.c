@@ -18,7 +18,7 @@ char	**ft_alloc_tab(void)
 	char	**tb;
 
 	i = 0;
-	if (!(tb = (char **)malloc(sizeof(char *) * MAX_HISTORY + 1)))
+	if (!(tb = (char **)malloc(sizeof(char *) * (MAX_HISTORY + 1))))
 		return (NULL);
 	while (i < MAX_HISTORY)
 		tb[i++] = NULL;
