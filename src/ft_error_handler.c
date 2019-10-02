@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-** Check error syntax of command ; | 
+** Check error syntax of command ;
 */
 
 char		**ft_error_syntax(char *str_cmds)

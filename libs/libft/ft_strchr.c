@@ -16,10 +16,12 @@ char	*ft_strchr(const char *s, int c)
 {
 	size_t			i;
 	unsigned char	*n_s;
+	size_t			len;
 
 	i = 0;
 	n_s = (unsigned char *)s;
-	while (i <= ft_strlen((const char *)n_s))
+	len = ft_strlen(s);
+	while (i < len)
 	{
 		if (n_s[i] == '\0' && c == 0)
 			return ((char *)&s[i]);

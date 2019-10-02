@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -13,7 +14,7 @@
 #include "shell.h"
 #include "read_line.h"
 
-///******* print *****/
+///******* Function just for Debuging *****/
 void	ft_print_pipe(t_pipes *st_pipes)
 {
 	t_tokens *st_tokens;
@@ -70,7 +71,6 @@ void	ft_print_jobctr(t_jobctr *st_jobctr)
 		st_jobctr = st_jobctr->next;
 	}
 }
-
 void	ft_print_tokens(t_cmds *st_cmds)
 {
 	t_jobctr *st_jobctr;
@@ -81,145 +81,12 @@ void	ft_print_tokens(t_cmds *st_cmds)
 	ft_print_jobctr(st_jobctr);
 }
 ///******* End print *****/
-	/*if (ft_error_redir(st_tokens))*/
-
-
-
-/*
-** Check if exist Cmd : check if Ok and permission
-*/
-
-int				ft_check_cmd(t_pipes *st_pipes, char **environ)
-{
-	int			rtn;
-	char		*str_arg;
-	char		*cmd;
-	struct stat	st_stat;
-
-	if (!st_pipes)
-		return (0);
-	rtn = 0;
-	cmd = NULL;
-	if (st_pipes->st_tokens)
-		cmd = st_pipes->st_tokens->value;
-	if (!ft_check_char(cmd, '/'))
-		str_arg = ft_find_path(cmd, environ);
-	else
-	{
-		str_arg = ft_strdup(cmd);
-		if (access(str_arg, F_OK) != 0 && ++rtn)
-			ft_print_error(FIL_NS, NULL, str_arg, 2);
-		else if (lstat(str_arg, &st_stat) == 0 && S_ISDIR(st_stat.st_mode) && ++rtn)
-			ft_print_error("Is a directory", "21sh :", str_arg, 0);
-	}
-	if (!rtn && str_arg && access(str_arg, X_OK) != 0 && ++rtn)
-		ft_print_error(FIL_PD, NULL, str_arg, 2);
-	if (rtn == 0 && str_arg == NULL && ++rtn)
-		ft_print_error(CMD_NF, "21sh: ", cmd, 0);
-	return (rtn);
-}
-
-/*
-** Execute Cmd
-*/
-
-void			ft_cmd_exec(t_pipes *st_pipes, char **env)
-{
-	char	*str_arg;
-
-	str_arg = NULL;
-	if (st_pipes->args == NULL || st_pipes->args[0] == NULL)
-		exit(EXIT_FAILURE);
-	
-	str_arg = ft_find_path(st_pipes->args[0], env);
-	if (str_arg != NULL)
-	{
-		execve(str_arg, st_pipes->args, env);
-		ft_strdel(&str_arg);
-		exit(EXIT_FAILURE);
-	}
-	exit(EXIT_FAILURE);
-}
-
-/*
-** Check if cmd is builtens
-*/
-
-int				ft_cmd_fork(int fork_it, t_pipes *st_pipes, char ***env)
-{
-	int	pid;
-	int rtn;
-
-	pid = 0;
-	rtn = 0;
-	/// Fill args from tokens
-	ft_tokens_args(st_pipes);
-	/// Remove Quote
-	ft_remove_quot(st_pipes->args);
-	/// Check if Builtens
-	if (st_pipes && ft_check_built((st_pipes->args)[0]))
-		return (ft_init_built(st_pipes, env)); ///  add return to ft_init_built
-	/// Fork - Child
-	if (fork_it && (pid = fork()) == -1)
-		ft_err_exit("Error in Fork new process \n");
-	if (pid == 0)
-	{
-		ft_signal_default();
-		if (ft_check_redi(st_pipes) && ft_parse_redir(st_pipes) == PARSE_KO)
-			exit(EXIT_FAILURE);
-		if (!ft_strcmp(st_pipes->args[0], "echo"))
-			ft_buil_echo(st_pipes->args);
-		else if (!ft_check_cmd(st_pipes, *env)) /// Check if cmd and exist and permission
-			ft_cmd_exec(st_pipes, *env);
-	}
-	g_sign = 1;
-	wait(&rtn);
-	g_sign = 0;
-	return ((rtn) ? 0 : 1);
-}
-
-/*
- ** Config Cmds by : - Lexer - Check Syntax - apply her_doc - Execution - Clear lists
- */
-
-int				ft_cmds_setup(char *str_arg, char ***environ)
-{
-	t_cmds		*st_cmds;
-
-	if (str_arg == NULL)
-		return (-1);
-	st_cmds = ft_new_cmds();
-
-	/// Fill args
-	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
-
-	/// Apply Lexer
-	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL)
-		return (-1);
-
-	/// Check Error Syntax
-	/*if (ft_error_syntax(st_tokens) == 1)
-	  return (-1);*/
-
-	/// Fill Lists of lists
-	ft_parse_cmd(st_cmds);
-
-	/// Apply here_doc
-	ft_apply_her_doc(st_cmds->st_jobctr);
-
-	/// Executions
-	ft_cmds_exec(st_cmds, environ);
-
-	/// Clear allocated space
-	//ft_clear_cmds(st_cmds);
-	return (1);
-}
 
 /*
  ** Execute Logical Operateur
  */
 
-static void		logical_ops(t_logopr *st_logopr, char ***env)
+static void		logical_ops(t_logopr *st_logopr)
 {
 	int		cmp;
 	int		state;
@@ -227,7 +94,7 @@ static void		logical_ops(t_logopr *st_logopr, char ***env)
 	state = -1;
 	while (st_logopr != NULL)
 	{
-		state = ft_pipe(st_logopr->st_pipes, env);
+		state = ft_pipe(st_logopr->st_pipes);
 		if ((st_logopr->status == 248 && state == 0) ||
 				(st_logopr->status == 76 && state == 1))
 			st_logopr = st_logopr->next;
@@ -252,17 +119,153 @@ static void		logical_ops(t_logopr *st_logopr, char ***env)
  ** Execute cmds
  */
 
-void			ft_cmds_exec(t_cmds *st_cmds, char ***environ)
+static void		ft_cmds_exec(t_cmds *st_cmds)
 {
 	t_jobctr	*st_jobctr;
-	UNUSED(environ);
 
 	if (!st_cmds)
 		return ;
 	st_jobctr = st_cmds->st_jobctr;
 	while (st_jobctr)
 	{
-		logical_ops(st_jobctr->st_logopr, environ);
+		logical_ops(st_jobctr->st_logopr);
 		st_jobctr = st_jobctr->next;
 	}
+}
+
+
+/*
+** Check if exist Cmd : check if Ok and permission
+*/
+
+int				ft_check_cmd(t_pipes *st_pipes, char **environ)
+{
+	int			rtn;
+	char		*str_arg;
+	char		*cmd;
+	struct stat	st_stat;
+
+	if (!st_pipes)
+		return (0);
+	rtn = 0;
+	cmd = NULL;
+	if (st_pipes->args)
+		cmd = st_pipes->args[0];
+	if (!ft_check_char(cmd, '/'))
+		str_arg = ft_find_path(cmd, environ);
+	else
+	{
+		str_arg = ft_strdup(cmd);
+		if (access(str_arg, F_OK) != 0 && ++rtn)
+			ft_print_error(FIL_NS, "42sh :", str_arg, 2);
+		else if (!lstat(str_arg, &st_stat) && S_ISDIR(st_stat.st_mode) && ++rtn)
+			ft_print_error(IS_DIR, "42sh :", str_arg, 0);
+	}
+	if (!rtn && str_arg && access(str_arg, X_OK) && ++rtn)
+		ft_print_error(FIL_PD, NULL, str_arg, 2);
+	if (rtn == 0 && str_arg == NULL && ++rtn)
+		ft_print_error(CMD_NF, "42sh: ", cmd, 0);
+	(rtn) ? exit(EXIT_FAILURE) : NULL;
+	return (rtn);
+}
+
+/*
+** Execute Cmd
+*/
+
+static void		ft_cmd_exec(t_pipes *st_pipes, char **env)
+{
+	char	*str_arg;
+
+	str_arg = NULL;
+	if (st_pipes->args == NULL || st_pipes->args[0] == NULL)
+		exit(EXIT_FAILURE);
+	
+	str_arg = ft_find_path(st_pipes->args[0], env);
+	if (str_arg != NULL)
+	{
+		execve(str_arg, st_pipes->args, env);
+		ft_strdel(&str_arg);
+		exit(EXIT_FAILURE);
+	}
+	exit(EXIT_FAILURE);
+}
+
+/*
+** Create child proccess , check if builtens , call for apply redirection
+*/
+
+int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
+{
+	int		pid;
+	int		rtn;
+	char	**environ;
+
+	pid = 0;
+	rtn = 0;
+	/// Remove Quote
+	ft_remove_quot(st_pipes->args);
+	/// Check if tmp_env if exist
+	environ = (st_pipes->tmp_env) ? st_pipes->tmp_env : g_environ;
+	/// Check if Builtens
+	if (st_pipes && ft_check_built((st_pipes->args)[0]))
+		return (ft_init_built(st_pipes, &(st_pipes->tmp_env))); ///  add return to ft_init_built
+	/// Fork - Child
+	if (fork_it && (pid = fork()) == -1)
+		ft_err_exit("Error in Fork new process \n");
+	if (pid == 0)
+	{
+		ft_signal_default();
+		if (ft_check_redi(st_pipes) && ft_parse_redir(st_pipes) == PARSE_KO)
+			exit(EXIT_FAILURE);
+		if (!ft_strcmp(st_pipes->args[0], "echo"))
+			ft_buil_echo(st_pipes->args);
+		else if (!ft_check_cmd(st_pipes, environ)) /// Check if cmd and exist and permission
+			ft_cmd_exec(st_pipes, environ);
+	}
+	g_sign = 1;
+	wait(&rtn);
+	g_sign = 0;
+	return ((rtn) ? 0 : 1);
+}
+
+/*
+ ** Config Cmds by : - Lexer - Check Syntax - Apply sub_shell - Apply her_doc - Execution - Clear lists
+ */
+
+int				ft_cmds_setup(char *str_arg, int bl_subsh)
+{
+	t_cmds		*st_cmds;
+
+	if (str_arg == NULL)
+		return (-1);
+
+	st_cmds = ft_new_cmds();
+
+	/// Fill args
+	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
+
+	/// Apply Lexer
+	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL)
+		return (-1);
+
+	/// Check Error Syntax
+	/*if (ft_error_syntax(st_tokens) == 1)
+	  return (-1);*/
+
+	/// Apply sub_shell
+	//ft_apply_subsh(st_cmds);
+
+	/// Fill Lists of lists
+	ft_parse_cmd(st_cmds);
+
+	/// Apply here_doc (do not applied in case of comming from SUB_SHELL)
+	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;
+
+	/// Executions
+	ft_cmds_exec(st_cmds);
+
+	/// Clear allocated space
+	//ft_clear_cmds(st_cmds);
+	return (1);
 }

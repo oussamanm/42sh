@@ -110,7 +110,7 @@ static void		ft_update_args(t_pipes *st_pipes)
 	st_temp = st_pipes->st_tokens;
 	while (st_temp != NULL && st_temp->value != NULL)
 	{
-		if (!(st_temp->token < 0 || st_temp->is_arg == 1))
+		if (!(st_temp->token < 0 || st_temp->is_arg == 1) && st_temp->is_arg != T_EQUAL)
 			count++;
 		st_temp = st_temp->next;
 	}
@@ -119,7 +119,7 @@ static void		ft_update_args(t_pipes *st_pipes)
 	st_pipes->args = ft_strr_new(count);
 	while (st_temp != NULL && st_temp->value != NULL)
 	{
-		if (!(st_temp->token < 0 || st_temp->is_arg == 1))
+		if (!(st_temp->token < 0 || st_temp->is_arg))
 			(st_pipes->args)[i++] = ft_strdup(st_temp->value);
 		st_temp = st_temp->next;
 	}

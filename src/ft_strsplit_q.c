@@ -21,19 +21,28 @@ char		**ft_str_split_q(char *str, char *c)
 	int		i;
 	char	**s_re;
 	char	save;
+	int		finded;
 	char	*temp;
 
 	i = 0;
+	finded = 0;
 	if (str == NULL || c == NULL)
 		return (NULL);
 	temp = ft_strdup(str);
 	save = 0;
 	while (temp[i] != '\0')
 	{
-		if (save == 0 && (temp[i] == '"' || temp[i] == '\''))
+		if (save == 0 && (temp[i] == '(' ||temp[i] == '"' || temp[i] == '\''))
+		{
 			save = temp[i];
-		else if (temp[i] == save)
-			save = 0;
+			finded++;
+		}
+		else if (save == '(' && temp[i] == ')')
+		{
+			finded--;
+			if (finded == 1)
+				save = 0;
+		}
 		if (save == 0 && ft_check_char(c, temp[i]))
 			temp[i] = -1;
 		i++;

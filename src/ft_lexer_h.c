@@ -65,7 +65,7 @@ void		ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token)
 	if (st_src->next && st_src->next->token != token)
 	{
 		if (M_CHECK(token, T_LOGOPR_AND, T_LOGOPR_AND) &&
-			M_CHECK(st_src->next->token, T_LOGOPR_AND, T_LOGOPR_AND))
+			M_CHECK(st_src->next->token, T_LOGOPR_AND, T_LOGOPR_OR))
 			return ;
 		(*st_token)->next = ft_new_token();
 		st_temp = *st_token;
@@ -92,7 +92,8 @@ void		ft_tokens_args(t_pipes *st_pipe)
 	st_pipe->args = ft_strr_new(len);
 	while (st_tokens)
 	{
-		st_pipe->args[i++] = ft_strdup(st_tokens->value);
+		if (st_tokens->is_arg != T_EQUAL)
+			st_pipe->args[i++] = ft_strdup(st_tokens->value);
 		st_tokens = st_tokens->next;
 	}
 }
@@ -101,7 +102,7 @@ void		ft_tokens_args(t_pipes *st_pipe)
 ** Count tokens
 */
 
-int		ft_count_tokens(t_tokens *st_tokens)
+int			ft_count_tokens(t_tokens *st_tokens)
 {
 	int		rtn;
 
@@ -114,4 +115,21 @@ int		ft_count_tokens(t_tokens *st_tokens)
 		st_tokens = st_tokens->next;
 	}
 	return (rtn);
+}
+
+/*
+** Check if exist token in list tokens
+*/
+
+int			ft_check_token(t_tokens *st_tokens, int token)
+{
+	if (!st_tokens)
+		return (0);
+	while (st_tokens)
+	{
+		if (st_tokens->token == token)
+			return (1);
+		st_tokens = st_tokens->next;
+	}
+	return (0);
 }

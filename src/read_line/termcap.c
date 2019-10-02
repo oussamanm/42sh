@@ -21,13 +21,13 @@ int		my_outc(int c)
 void	ft_disable(void)
 {
 	if (tcsetattr(0, TCSANOW, &g_pos.disable) == ERR)
-		ft_err_exit("ERROR in seting Temcap parameters");
+		ft_err_exit("ERROR in seting Termcap parameters");
 }
 
 void	ft_enable(void)
 {
 	if (tcsetattr(0, TCSANOW, &g_pos.enable) == ERR)
-		ft_err_exit("ERROR in seting Temcap parameters");
+		ft_err_exit("ERROR in seting Termcap parameters");
 }
 
 int		ft_set_termcap(void)

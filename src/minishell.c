@@ -54,7 +54,7 @@ void		ft_save_address(t_history **his, t_select **select)
 ** Check Error of syntax , call function_exec
 */
 
-void		ft_multi_cmd(char *str_cmds, char ***environ)
+void		ft_multi_cmd(char *str_cmds)
 {
 	char	**args;
 	int		i;
@@ -64,14 +64,15 @@ void		ft_multi_cmd(char *str_cmds, char ***environ)
 		return ;
 	while (args[i] != NULL)
 	{
-		/// Correction args
-		args[i] = ft_corr_args(args[i], *environ);
-		ft_cmds_setup(args[i], environ);
+		/// Correction args by change expansion
+		args[i] = ft_corr_args(args[i]);
+		ft_cmds_setup(args[i], 0);
 		i++;
 	}
 	ft_strrdel(args);
-	ft_strdel(&g_pos.cmd);
+	ft_strdel(&str_cmds);
 }
+
 
 int			main(void)
 {
@@ -79,25 +80,28 @@ int			main(void)
 	char		*str_cmds;
 	t_history	*his;
 	t_select	*select;
-	
+
+	g_intern = NULL;
 	if (ft_set_termcap() == -1)
-		ft_err_exit("ERROR in seting Temcap parameters\n");
+		ft_err_exit("ERROR in setting Termcap parameters\n");
 	ft_initial_read_line(&his, &select);
 	ft_call_signal();
-	environ = ft_strr_dup(environ, ft_strrlen(environ));
-	his->path = ft_get_vrb("PATH", environ);
+	// Duplicate environ vrbs
+	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
+	his->path = ft_get_vrb("PATH", g_environ);
 	while (1337)
 	{
 		ft_putstr("\033[0;32m21sh $>\033[0m ");
-		if ((str_cmds = ft_read_line(his, select, 8)) != NULL)
-		{
-			ft_quotes(&str_cmds, select, his);
-			ft_stock_history(his->history, str_cmds, his->his_count);
-			his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
-			if (!(g_pos.exit))
-				ft_multi_cmd(str_cmds, &environ);
-		}
+		if ((str_cmds = ft_read_line(his, select, 8)) == NULL)
+			continue ;
+		// Check incomplete syntax of Quoting
+		ft_quotes(&str_cmds, select, his);
+		// Check incomplete syntax of Sub_shell
+		ft_check_subsh(0, &str_cmds, select, his);
+		ft_stock_history(his->history, str_cmds, his->his_count);
+		his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
+		// Execution
+		(!(g_pos.exit)) ? ft_multi_cmd(str_cmds) : NULL;
 	}
-	ft_strrdel(environ);
 	return (0);
 }

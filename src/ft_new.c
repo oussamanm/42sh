@@ -16,7 +16,7 @@
 ** New t_cmds
 */
 
-t_cmds		*ft_new_cmds()
+t_cmds		*ft_new_cmds(void)
 {
 	t_cmds	*st_cmds;
 
@@ -82,7 +82,6 @@ t_tokens	*ft_new_token(void)
 	return (st_token);
 }
 
-
 /*
 **	New t_redir
 */
@@ -98,6 +97,8 @@ t_pipes		*ft_new_pipe(void)
 	ft_bzero(st_pipes->fds, 2);
 	st_pipes->st_redir = NULL;
 	st_pipes->st_tokens = NULL;
+	st_pipes->st_intern = NULL;
+	st_pipes->tmp_env = NULL;
 	st_pipes->next = NULL;
 	return (st_pipes);
 }
@@ -114,4 +115,20 @@ t_redir		*ft_new_redir(void)
 		return (NULL);
 	st_redir->next = NULL;
 	return (st_redir);
+}
+
+/*
+**	New t_intern
+*/
+
+t_intern	*new_intern(char *key, char *value)
+{
+    t_intern *new;
+
+    if (!(new = (t_intern*)malloc(sizeof(t_intern))))
+        return (NULL);
+    new->key = (key) ? ft_strdup(key) : NULL;
+    new->value = (value) ? ft_strdup(value) : NULL;
+    new->next = NULL;
+    return (new);
 }

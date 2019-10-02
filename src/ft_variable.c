@@ -60,7 +60,7 @@ void		ft_add_vrb(char *arg, char ***env)
 }
 
 /*
-**	ft_set_vrb : update vrb in environ if exist else create new  :
+**	update vrb in environ if exist else create new  :
 */
 
 void		ft_set_vrb(char *vrb, char ***env, int rm)
@@ -118,4 +118,55 @@ void		ft_unset_vrb(char *vrb, char ***env)
 		}
 		i++;
 	}
+}
+
+void		ft_insert_vrb(char *vrb, char ***env, int rm)
+{
+    int        i;
+    int        len_vrb;
+    char    **temp;
+
+    if (vrb == NULL || *env == NULL)
+        return ;
+    i = -1;
+    temp = *env;
+    while (temp[++i] != NULL)
+    {
+        len_vrb = ft_find_char(vrb, '=');
+        if (len_vrb != -1 && !ft_strncmp(vrb, temp[i], len_vrb)
+            && temp[i][len_vrb] == '=')
+        {
+            ft_strdel(&temp[i]);
+            temp[i] = ft_strdup(vrb);
+            i = -2;
+            break ;
+        }
+    }
+    if (i != -2)
+        temp[i] = ft_strdup(vrb);
+    (rm == 1) ? ft_strdel(&vrb) : NULL;
+}
+
+int			ft_edit_vrb(char *vrb, char ***env)
+{
+    int        i;
+    int        len_vrb;
+    char    **temp;
+
+    if (vrb == NULL || *env == NULL)
+        return (0);
+    i = -1;
+    temp = *env;
+    while (temp[++i] != NULL)
+    {
+        len_vrb = ft_find_char(vrb, '=');
+        if (len_vrb != -1 && !ft_strncmp(vrb, temp[i], len_vrb)
+            && temp[i][len_vrb] == '=')
+        {
+            ft_strdel(&temp[i]);
+            temp[i] = ft_strdup(vrb);
+            return (1);
+        }
+    }
+    return (0);
 }

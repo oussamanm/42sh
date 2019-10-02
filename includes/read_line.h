@@ -150,4 +150,9 @@ void				ft_enable(void);
 void				ft_disable(void);
 char				*ft_clear(t_cursor *pos, char *s, char *buf);
 
+/*
+** read for sub_shell
+*/
+int					ft_check_subsh(int i, char **line, t_select *select, t_history *his);
+
 #endif

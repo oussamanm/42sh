@@ -14,6 +14,7 @@
 # define _SHELL_H
 
 # include "libft.h"
+# include "builtins.h"
 # include <sys/types.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -64,10 +65,12 @@
 
 # define T_TXT 0
 # define T_QUO 1
+# define T_SUBSHL		117
 # define T_JOBCTR		38
 # define T_LOGOPR_AND	76
 # define T_LOGOPR_OR	248
 # define T_PIPE			124
+# define T_EQUAL		61
 # define T_RED_IN_S		-60
 # define T_RED_IN_A		-98
 # define T_RED_IN_B		-143
@@ -107,6 +110,14 @@ typedef struct			s_filedes
 	struct s_filedes	*next;
 }						t_filedes;
 
+typedef struct    s_intern
+{
+    char    *key;
+    char    *value;
+    struct s_intern *next;
+}                t_intern;
+
+
 typedef struct			s_redir
 {
 	int					type_red;
@@ -124,8 +135,10 @@ typedef struct			s_pipes
 	int					fds[2];
 	char				**args;
 	int					bl_jobctr:1;
+	char				**tmp_env;
 	t_tokens			*st_tokens;
 	t_redir				*st_redir;
+	t_intern			*st_intern;
 	struct s_pipes		*next;
 }						t_pipes;
 
@@ -154,17 +167,32 @@ typedef	struct s_cmds
 	t_jobctr			*st_jobctr;
 }						t_cmds;
 
+t_intern	*g_intern;
+char		**g_environ;
+
 /*
-**Builtins
+** Builtins
 */
 
 void					ft_built_exit(t_pipes *st_pipes, char ***env);
 void					ft_buil_echo(char **arg);
-void					ft_buil_cd(char **arg, char ***env);
-void					ft_builtenv_cmd(char **args, char ***env);
-void					ft_buil_env(char **args, char ***env);
-void					ft_buil_setenv(char **args, char ***env);
-void					ft_buil_unsetenv(char **args, char ***env);
+int						ft_buil_cd(char **arg, char **env);
+int						ft_buil_type(char **args, char **tmpenv);
+void					ft_buil_env(char **args, char ***tmp_env);
+void					ft_buil_export(t_tokens *st_tokens);
+void					ft_buil_unset(char **args);
+
+/*
+** Intern variable
+*/
+
+void					add_intern_var(char *key, char *value);
+void					delete_intern_var(char *key, t_intern **head);
+char					**ft_fill_env(char **args);
+char					**parse_var(char *line);
+char					*get_intern_value(char *key);
+t_intern				get_key_value(t_tokens *st_tokens);
+
 
 /*
 **Variable
@@ -174,13 +202,15 @@ char					*ft_get_vrb(char *vrb, char **env);
 void					ft_set_vrb(char *vrb, char ***env, int rm);
 void					ft_add_vrb(char *arg, char ***env);
 void					ft_unset_vrb(char *vrb, char ***env);
+void					ft_insert_vrb(char *vrb, char ***env, int rm);
+int						ft_edit_vrb(char *vrb, char ***env);
+
 
 /*
-**Error handler
+** Error handler
 */
 
-void					ft_print_error(char *msg, char *para1, char *para2,
-	int rm);
+void					ft_print_error(char *msg, char *para1, char *para2, int rm);
 void					ft_err_exit(char *str);
 int						ft_error_cd(char *path, char **arg);
 int						ft_error_semic(char *str_arg, char **args_cmd);
@@ -189,15 +219,17 @@ int						ft_parse_error(char *str_cmds);
 char					**ft_error_syntax(char *str_cmds);
 int						ft_error_pipe(char *str);
 int						ft_error_separ(char *str_arg, char c);
+int						ft_putchar_err(int c);
 
 /*
-**Updated Splite
+** Updated Splite
 */
 
 char					**ft_str_split(char const *s, char *c);
 char					**ft_str_split_q(char *str, char *c);
 int						ft_index_of_first_split(char *s1, char *s2);
 char					**ft_strsplit_by_arr(char *str, char *split);
+
 
 /*
 **Helper
@@ -207,64 +239,55 @@ char					*ft_find_path(char *arg, char **env);
 int						ft_count_word(const char *str, char *c);
 t_pipes					*ft_strr_list(char **args_pipe);
 int						ft_check_redi(t_pipes *st_pipes);
-int						ft_check_token(t_tokens *st_tokens, int token);
 int						ft_sum_asci(char str[]);
 
+
 /*
-**Quote
+** Quote
 */
-void					ft_rm_quot(char **str);
-char					*ft_corr_args(char *argv, char **environ);
+
+char					*ft_rm_quot(char *str);
+char					*ft_corr_args(char *argv);
 void					ft_remove_quot(char **args);
 void					ft_update_tokens(t_tokens *st_tokens);
 
 /*
-**Signals
+** Signals
 */
 
 void					ft_call_signal();
 void					ft_call_handler();
 void					ft_signal_default();
 
-/*
-**Dimention
-*/
-
-void					ft_move_cur(char capa[2], int c, int r);
-void					ft_capa_str(char capa[2]);
-int						ft_putchar_err(int c);
 
 /*
-**Pipes
+** Pipes
 */
-int						ft_pipe(t_pipes *st_pipe, char ***env);
+
+int						ft_pipe(t_pipes *st_pipe);
 void					ft_create_pipes(t_pipes *st_pipes);
-int						ft_apply_pipe(t_pipes *st_pipes, char ***environ);
+int						ft_apply_pipe(t_pipes *st_pipes);
+
 
 /*
-**Lexer
+** Lexer
 */
 
 void					ft_err_lexer(t_pipes *st_pipes);
-void					ft_lexer_quot(t_tokens **st_tokens, char *arg, int *j,
-	int indx);
-void					ft_lexer_red(t_tokens **st_tokens, char *arg, int *j,
-	int indx);
-void					ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j,
-	int indx);
+void					ft_lexer_quot(t_tokens **st_tokens, char *arg, int *j, int indx);
+void					ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx);
+void					ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx);
 t_tokens				*ft_lexer(char **args);
 
-void					ft_fill_token(t_tokens **st_tokens, int token,
-	char *value, int indx);
-void					ft_upd_token(t_tokens *st_tokens, int token,
-	char *value);
+void					ft_fill_token(t_tokens **st_tokens, int token, char *value, int indx);
+void					ft_upd_token(t_tokens *st_tokens, int token, char *value);
 void					ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token);
-void		ft_tokens_args(t_pipes *st_pipe);
-int		ft_count_tokens(t_tokens *st_tokens);
-
+void					ft_tokens_args(t_pipes *st_pipe);
+int						ft_count_tokens(t_tokens *st_tokens);
+int						ft_check_token(t_tokens *st_tokens, int token);
 
 /*
-**Redirection
+** Redirection
 */
 
 void					ft_redi_her(t_redir *st_redir, t_tokens *st_tokens);
@@ -279,39 +302,41 @@ void					ft_apply_hered(t_redir *st_redi);
 void					ft_apply_her_doc(t_jobctr *st_jobctr);
 
 /*
-**Parser Red; ft_read_tokens,ft_apply_redi,ft_update_args
+** Parser Red
 */
 
 int						ft_parse_redir(t_pipes *st_pipes);
 
 /*
-**Execution
+** Execution
 */
 
-void					ft_cmd_exec(t_pipes *st_pipes, char **env);
-int						ft_cmds_setup(char *str_arg, char ***environ);
-void					ft_cmds_exec(t_cmds *st_cmds, char ***environ);
-int			ft_cmd_fork(int fork_it, t_pipes *st_pipes, char ***env);
-int		ft_check_cmd(t_pipes *st_pipes, char **environ);
+int						ft_cmds_setup(char *str_arg, int bl_subsh);
+int						ft_cmd_fork(int fork_it, t_pipes *st_pipes);
+int						ft_check_cmd(t_pipes *st_pipes, char **environ);
+
 
 /*
 ** Exec builtens
 */
 
-int						ft_init_built(t_pipes *st_pipes, char ***env);
-int						ft_call_built(t_pipes *st_pipes, char ***env);
+int						ft_init_built(t_pipes *st_pipes, char ***tmp_env);
+int						ft_call_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_check_built(char *arg);
+
 
 /*
 ** New
 */
 
-t_redir					*ft_new_redir();
-t_tokens				*ft_new_token();
+t_redir					*ft_new_redir(void);
+t_tokens				*ft_new_token(void);
 t_pipes					*ft_new_pipe(void);
 t_logopr				*ft_new_logopr(void);
 t_jobctr				*ft_new_jobctr(void);
-t_cmds					*ft_new_cmds();
+t_cmds					*ft_new_cmds(void);
+t_intern				*ft_new_intern(void);
+t_intern				*new_intern(char *key, char *value);
 
 /*
 ** Free
@@ -327,7 +352,21 @@ void					ft_clear_tokens(t_tokens *st_tokens);
 void					ft_parse_cmd(t_cmds *st_cmds);
 
 
+/*
+** Variable parsing
+*/
 
+int						ft_check_intern(t_pipes *st_pipe);
+void					ft_fill_intern(t_pipes *st_pipe);
+char					**ft_fill_env(char **args);
+char					**ft_tokens_arg_env(t_tokens *st_tokens);
+
+
+/*
+** Sub_shell
+*/
+
+void					ft_apply_subsh(t_cmds *st_cmds);
 
 
 #endif

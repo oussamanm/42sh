@@ -32,6 +32,7 @@
 # define FIL_NU "no such user or named directory: "
 # define FIL_ND "not a directory"
 # define SYN_ER "Syntax error"
+# define IS_DIR "Is a directory"
 
 typedef	struct		s_list
 {

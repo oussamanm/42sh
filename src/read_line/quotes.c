@@ -61,8 +61,7 @@ void	ft_quotes(char **line, t_select *select, t_history *his)
 			ft_read_line(his, select, 10);
 		}
 		(!(g_pos.exit) && g_pos.cmd) ? *line = ft_strjoir(*line, g_pos.cmd, 1) : 0;
-		if ((g_pos.cmd != NULL && (((q = ft_check_quot(*line)) == 0)
-		|| g_pos.cmd[0] == -1)) || g_pos.exit)
+		if ((g_pos.cmd && (!(q = ft_check_quot(*line)) || g_pos.cmd[0] == -1)) || g_pos.exit)
 			break ;
 	}
 }

@@ -109,23 +109,6 @@ int			ft_check_redi(t_pipes *st_pipes)
 }
 
 /*
-** Check if exist token in list tokens
-*/
-
-int			ft_check_token(t_tokens *st_tokens, int token)
-{
-	if (!st_tokens)
-		return (0);
-	while (st_tokens)
-	{
-		if (st_tokens->token == token)
-			return (1);
-		st_tokens = st_tokens->next;
-	}
-	return (0);
-}
-
-/*
 ** Calculate sum of ASCI :
 */
 
@@ -142,4 +125,20 @@ int			ft_sum_asci(char str[])
 		str++;
 	}
 	return (sum);
+}
+
+/*
+** Function remove quote from string
+*/
+
+char		*ft_rm_quot(char *str)
+{
+	char	*rtn;
+
+	rtn = NULL;
+	if (!str)
+		return (NULL);
+	rtn = ft_strdup(&str[1]);
+	rtn[ft_strlen(rtn) - 1] = '\0';
+	return (rtn);
 }

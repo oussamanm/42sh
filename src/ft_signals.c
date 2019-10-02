@@ -37,7 +37,7 @@ void	ft_catch_signal(int signal)
 			ioctl(0, TIOCSTI, "\12");
 		}
 		else
-			ft_putstr("\n\033[0;32m21sh $>\033[0m ");
+			ft_putstr("\n\033[0;32m42sh $>\033[0m ");
 		g_pos.p = 8;
 	}
 }
