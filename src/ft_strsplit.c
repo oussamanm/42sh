@@ -12,6 +12,37 @@
 
 #include "shell.h"
 
+/*
+**	ft_str_split_q : Split with considering D/QUOT and SUB_SHELL
+*/
+
+char			**ft_str_split_q(char *str, char *c)
+{
+	int		i;
+	char	**s_re;
+	char	*temp;
+
+	i = -1;
+	if (!str || !c)
+		return (NULL);
+	temp = ft_strdup(str);
+	while (temp[++i] != '\0')
+	{
+		if (temp[i] == '\\')
+		{
+			i += (temp[i + 1]) ? 1 : 0;
+			continue ;
+		}
+		if (temp[i] == '(' || temp[i] == '"' || temp[i] == '\'')
+			i += find_closed(&temp[i], temp[i]);
+		if (ft_check_char(c, temp[i]))
+			temp[i] = -1;
+	}
+	s_re = ft_strsplit(temp, -1);
+	ft_strdel(&temp);
+	return (s_re);
+}
+
 static int		ft_getlen(char const *str, char *c)
 {
 	int i;
@@ -26,7 +57,7 @@ static int		ft_getlen(char const *str, char *c)
 	return (i);
 }
 
-int				ft_count_word(const char *str, char *c)
+static int		ft_count_word(const char *str, char *c)
 {
 	int i;
 	int rtn;

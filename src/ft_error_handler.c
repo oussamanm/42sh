@@ -13,90 +13,101 @@
 #include "shell.h"
 
 /*
-** Check error syntax of command ;
+** Check errors Syntax (Lexer) resirection, pipe, job_ctr, || , &&
 */
 
-char		**ft_error_syntax(char *str_cmds)
+int			error_syntax_lexer(t_tokens *st_tokens)
 {
-	char	**args;
-	int		i;
+	char tmp[3];
 
-	i = 0;
-	if (ft_error_separ(str_cmds, ';'))
+	ft_bzero(tmp, 3);
+	if (!st_tokens)
+		return (0);
+	if (ft_error_redir(st_tokens))
+		return (1);
+	while (st_tokens)
 	{
-		ft_putstr_fd("syntax error near unexpected token `;' \n", 2);
-		ft_strdel(&str_cmds);
-		return (NULL);
+		if (st_tokens->token == T_PIPE && ((!PREV || !NEXT) || NEXT->token == T_PIPE))
+			ft_strcpy(tmp, "|");
+		else if (st_tokens->token == T_JOBCTR && (!PREV || (NEXT && NEXT->token == T_JOBCTR)))
+			ft_strcpy(tmp, "&");
+		else if (st_tokens->token == T_LOGOPR_AND && ((!PREV || !NEXT) || NEXT->token == T_LOGOPR_AND))
+			ft_strcpy(tmp, "&&");
+		else if (st_tokens->token == T_LOGOPR_OR && ((!PREV || !NEXT) || NEXT->token == T_LOGOPR_OR))
+			ft_strcpy(tmp, "||");
+		if (tmp[0] != 0)
+			break ;
+		st_tokens = st_tokens->next;
 	}
-	if ((args = ft_str_split_q(str_cmds, ";")) == NULL || *args == NULL)
-	{
-		ft_putstr_fd("syntax error near unexpected tokenl `;' \n", 2);
-		ft_strrdel(args);
-		ft_strdel(&str_cmds);
-		return (NULL);
-	}
-	return (args);
+	if (tmp[0] == 0)
+		return (0);
+	ft_print_error(tmp, "42sh: ", "syntax error near unexpected token", 0);
+	return (1);
 }
 
 /*
-** Check error syntax (; and |)
-** 		return 1 in case of error
+** Check error syntax of command ;
 */
 
-int			ft_error_separ(char *str_arg, char c)
+int			error_syntax_semi(char *str_cmds, char **args)
 {
 	int		temp;
-	char	**args;
+	int		i;
 
-	if ((args = ft_str_split_q(str_arg, " ;")) == NULL || *args == NULL)
+	temp = 0;
+	i = -1;
+	if (!args || !*args)
 	{
-		ft_strrdel(args);
+		ft_putstr_fd("syntax error near unexpected tokenl `;' \n", 2);
 		return (1);
 	}
-	ft_strrdel(args);
-	temp = 0;
-	while (*str_arg)
+	while (str_cmds[++i])
 	{
-		if (*str_arg == c)
+		if (str_cmds[i] == ';')
 		{
-			if (temp)
+			if (temp || str_cmds[0] == ';')
+			{
+				ft_putstr_fd("syntax error near unexpected token `;' \n", 2);
 				return (1);
-			str_arg++;
+			}
+			i++;
 			temp = 1;
 			continue ;
 		}
-		if (temp == 1 && *str_arg != ' ' && *str_arg != '\t')
+		if (temp && !ft_isspace(str_cmds[i]))
 			temp = 0;
-		str_arg++;
 	}
 	return (0);
 }
 
 /*
-** Check error syntax of pipe |
+** Check error syntax of sub_shell $() , <() >() 
 */
 
-int			ft_error_pipe(char *str)
+int			error_syntax_expans(char *str_cmds)
 {
-	char	*tmp;
-	int		i;
+	int bl;
+	int i;
 
-	i = 0;
-	if (!str || (str && *str == 0))
+	if (!str_cmds)
 		return (0);
-	if (ft_error_separ(str, '|'))
+	bl = 0;
+	i = -1;
+	while (str_cmds[++i])
 	{
-		ft_putstr_fd("syntax error near unexpected token `|' \n", 2);
-		return (1);
+		if (!bl && str_cmds[i] == '$' && str_cmds[i + 1] == '{' && ++i)
+			bl = 1;
+		else if (bl)
+		{
+			if (str_cmds[i] == '}' && bl)
+				bl = 0;
+			else if (!ft_isalphanum(str_cmds[i]))
+			{
+				ft_print_error("bad substitution", "42sh :", NULL, 0);
+				return (1);
+			}
+		}
 	}
-	tmp = ft_strtrim(str);
-	while (tmp && tmp[i])
-	{
-		if (tmp[i] == '|' && (i == 0 || tmp[i + 1] == '\0'))
-			return (1);
-		i++;
-	}
-	ft_strdel(&tmp);
 	return (0);
 }
 

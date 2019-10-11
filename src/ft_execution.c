@@ -148,9 +148,7 @@ int				ft_check_cmd(t_pipes *st_pipes, char **environ)
 	if (!st_pipes)
 		return (0);
 	rtn = 0;
-	cmd = NULL;
-	if (st_pipes->args)
-		cmd = st_pipes->args[0];
+	cmd = ft_strdup(st_pipes->args[0]);
 	if (!ft_check_char(cmd, '/'))
 		str_arg = ft_find_path(cmd, environ);
 	else
@@ -159,14 +157,34 @@ int				ft_check_cmd(t_pipes *st_pipes, char **environ)
 		if (access(str_arg, F_OK) != 0 && ++rtn)
 			ft_print_error(FIL_NS, "42sh :", str_arg, 2);
 		else if (!lstat(str_arg, &st_stat) && S_ISDIR(st_stat.st_mode) && ++rtn)
-			ft_print_error(IS_DIR, "42sh :", str_arg, 0);
+			ft_print_error(IS_DIR, "42sh :", str_arg, 2);
 	}
 	if (!rtn && str_arg && access(str_arg, X_OK) && ++rtn)
 		ft_print_error(FIL_PD, NULL, str_arg, 2);
-	if (rtn == 0 && str_arg == NULL && ++rtn)
+	if (!rtn && (!str_arg || !ft_strlen(str_arg)) && ++rtn)
 		ft_print_error(CMD_NF, "42sh: ", cmd, 0);
+	(cmd) ? ft_strdel(&cmd) : NULL;
+	(!rtn && str_arg) ? ft_strdel(&str_arg) : NULL;
 	(rtn) ? exit(EXIT_FAILURE) : NULL;
 	return (rtn);
+}
+
+/*
+** Trim all args
+*/
+
+void			ft_strrtrim(char **args)
+{
+	int i;
+
+	i = 0;
+	if (!args || !*args)
+		return ;
+	while (args[i])
+	{
+		args[i] = ft_strtrim_and_free(args[i]);
+		i++;
+	}
 }
 
 /*
@@ -180,8 +198,10 @@ static void		ft_cmd_exec(t_pipes *st_pipes, char **env)
 	str_arg = NULL;
 	if (st_pipes->args == NULL || st_pipes->args[0] == NULL)
 		exit(EXIT_FAILURE);
-	
-	str_arg = ft_find_path(st_pipes->args[0], env);
+	if (ft_check_char(st_pipes->args[0], '/'))
+		str_arg = st_pipes->args[0];
+	else
+		str_arg = ft_find_path(st_pipes->args[0], env);
 	if (str_arg != NULL)
 	{
 		execve(str_arg, st_pipes->args, env);
@@ -189,6 +209,57 @@ static void		ft_cmd_exec(t_pipes *st_pipes, char **env)
 		exit(EXIT_FAILURE);
 	}
 	exit(EXIT_FAILURE);
+}
+
+int				ft_all_quot(char *str)
+{
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		if (!M_CHECK(*str, '\'', '"'))
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+void			remove_backslashs(char **args)
+{
+	int		index;
+	char	*arg;
+	int		i;
+	int		quoted;
+
+	while (args && *args)
+	{
+		arg = *args;
+		i = -1;
+		quoted = 0;
+		if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
+		{
+			args++;
+			continue ;
+		}
+		else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
+			quoted = 1;
+		while (arg[++i] && (index = ft_find_char(&arg[i], '\\')) != -1)
+		{
+			i += index;
+			if (quoted && M_SPEC_CHARC(arg[i + 1]))
+				ft_strcpy(&arg[i],&arg[i + 1]);
+			else if (!quoted)
+				ft_strcpy(&arg[i],&arg[i + 1]);
+		}
+		if (i > 1 && ft_all_quot(arg))
+		{
+			*args = ft_strnew(ft_strlen(arg) + 2);
+			(*args)[0] = '"';
+			ft_strcpy(&(*args)[1], arg);
+			(*args)[ft_strlen(*args)] = '"';
+		}
+		args++;
+	}
 }
 
 /*
@@ -203,12 +274,20 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 
 	pid = 0;
 	rtn = 0;
+	/// remove space from cmd
+	//ft_strrtrim(st_pipes->args);
+
+	/// Remove backslashs
+	remove_backslashs(st_pipes->args);
+
 	/// Remove Quote
 	ft_remove_quot(st_pipes->args);
+	
 	/// Check if tmp_env if exist
 	environ = (st_pipes->tmp_env) ? st_pipes->tmp_env : g_environ;
+	
 	/// Check if Builtens
-	if (st_pipes && ft_check_built((st_pipes->args)[0]))
+	if (st_pipes && ft_check_built(st_pipes->args[0]))
 		return (ft_init_built(st_pipes, &(st_pipes->tmp_env))); ///  add return to ft_init_built
 	/// Fork - Child
 	if (fork_it && (pid = fork()) == -1)
@@ -239,23 +318,27 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 
 	if (str_arg == NULL)
 		return (-1);
-
 	st_cmds = ft_new_cmds();
-
 	/// Fill args
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
-
+	/*
+		ft_putstr("--- start -- \n");
+		ft_put_strr(st_cmds->args);
+		ft_putstr("--- fin -- \n\n");
+	*/
 	/// Apply Lexer
 	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL)
 		return (-1);
-
+	
 	/// Check Error Syntax
-	/*if (ft_error_syntax(st_tokens) == 1)
-	  return (-1);*/
-
+	if (error_syntax_lexer(st_cmds->st_tokens))
+	{
+		//ft_clear_cmds(st_cmds);
+		return (0);
+	}
 	/// Apply sub_shell
-	//ft_apply_subsh(st_cmds);
-
+	apply_subsh(st_cmds->st_tokens);
+	
 	/// Fill Lists of lists
 	ft_parse_cmd(st_cmds);
 
@@ -264,7 +347,6 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 
 	/// Executions
 	ft_cmds_exec(st_cmds);
-
 	/// Clear allocated space
 	//ft_clear_cmds(st_cmds);
 	return (1);

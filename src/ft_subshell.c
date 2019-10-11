@@ -13,105 +13,95 @@
 #include "shell.h"
 #include "read_line.h"
 
-/*
-**	Function read for sub_shell incomplet cyntax 
-*/
-
-static void     ft_read_subsh(char **line, t_select *select, t_history *his)
+char		*exec_subsh(char *cmd)
 {
-	char	*temp;
+	int		fds[2];
+	char	buff[10];
+	char	*result;
 
-	temp = NULL;
-	*line = ft_strjoir(*line, "\n", 1);
-	ft_putstr("sub> ");
-	ft_read_line(his, select, 5);
-	temp = ft_strdup(g_pos.cmd);
-	ft_quotes(&temp, select, his);
-	*line = ft_strjoir(*line, temp, 3);
+
+	fds[0] = 0;
+	fds[1] = 0;
+	if (pipe(fds) == -1)
+		ft_putendl_fd("Error Create Pipe", 2);
+	if (fork() == 0)
+	{
+		close(fds[0]);
+		if (dup2(fds[1] , 1) == -1)
+			ft_putendl_fd("Error in dub STD_OUT in SUB_SHELL", 2);
+		cmd[ft_strlen(cmd) - 1] = 0;
+		ft_strcpy(cmd, &cmd[2]);
+		ft_multi_cmd(cmd, 1);
+		close(fds[1]);
+		exit(EXIT_SUCCESS);
+	}
+	close(fds[1]);
+	result = ft_strnew(0);
+	wait(NULL);
+	while (read(fds[0] , &buff, 10) > 0)
+	{
+		result = ft_strjoir(result, buff, 1);
+		ft_bzero(buff, 10);
+	}
+	close(fds[0]);
+	if (result && result[ft_strlen(result) - 1] == '\n')
+		result[ft_strlen(result) - 1] = '\0';
+	return (result);
 }
 
-/*
-**	Check incomplet syntax of sub_shell and correct it 
-*/
-
-int				ft_check_subsh(int i, char **line, t_select *select, t_history *his)
+char		*change_subsh_quot(char *arg)
 {
-	int			rtn;
-	static int	s_count;
+	char	*result;
+	char	*cmd;
+	char	*value;
+	int		i;
+	int		len;
 
-	rtn = 0;
-	s_count = (!i) ? 0 : s_count;
-	if (i >= (int)ft_strlen(*line) && s_count && !(*line)[i])
-		ft_read_subsh(line, select, his);
-	while ((*line)[i])
+	if (!arg)
+		return (NULL);
+	result = NULL;
+	cmd = NULL;
+	i = 0;
+	len = 0;
+	while (arg[i])
 	{
-		if ((*line)[i] == '(')
+		if (arg[i] == '(' && i && M_SUBSH(arg[i - 1]))
 		{
-			s_count++;
-			rtn = ft_check_subsh(i + 1, line, select, his);
-			i = rtn;
+			if ((len = find_subsh(&arg[i])) != -1)
+				cmd = ft_strsub(arg, i - 1, len + 2);
+			value = exec_subsh(cmd);
+			arg = ft_str_remp(arg, value, i - 1, ft_strlen(cmd));
 		}
-		else if ((*line)[i] == ')')
-		{
-			s_count--;
-			return (i);
-		}
-		if (s_count && !(*line)[i + 1])
-			ft_read_subsh(line, select, his);
 		i++;
 	}
-	return (rtn);
+	return (result);
 }
 
-/*
-**	Apply sub_shell
-*/
-
-void			ft_apply_subsh(t_cmds *st_cmds)
+void		apply_subsh(t_tokens *st_tokens)
 {
-    UNUSED(st_cmds);
-    /*
-    t_tokens	*st_tokens;
-    pid_t		pid;
-    int			fds[2];
-    char		buff[10];
-    char		*str_resu;
+	char	*value;
+	int		i;
 
-    if (!st_cmds)
-        return ;
-    if (!ft_check_token(st_cmds->st_tokens, T_SUBSHL))
-        return ;
-    ft_bzero(&fds, 2);
-    ft_bzero(&buff, 10);
-    st_tokens = st_cmds->st_tokens;
-    while (st_tokens)
-    {
-        if (st_tokens->token == T_SUBSHL)
-        {
-            if (pipe(fds) == -1)
-                ft_putstr_fd("Error in create pipe in sub_shell\n", 2);
-
-            if ((pid = fork()) == 0)
-            {
-                //if (dup2(fds[1], 1) == -1)
-                //	ft_putstr_fd("Error in dup 1 of process\n", 2);
-                sleep(5);
-                ft_putstr_fd("world\n", fds[1]);
-                close(fds[1]);
-                //ft_cmds_setup(st_tokens->value);
-                exit(0);
-            }
-            str_resu = ft_strnew(0);
-            while (read(fds[0], buff, 10) > 0)
-            {
-                str_resu = ft_strjoir(str_resu, buff, 1);
-                ft_bzero(&buff, 10);
-                printf("buff = %s \n",buff);
-            }
-            printf("result = %s \n",str_resu);
-            wait(NULL);
-        }
-        st_tokens = st_tokens->next;
-    }
-    */
+	i = 0;
+	if (!st_tokens)
+		return ;
+	while (st_tokens)
+	{
+		value = NULL;
+		if (st_tokens->token == T_SUBSHL)
+		{
+			value = exec_subsh(st_tokens->value);
+		}
+		else if (st_tokens->token == T_DQUO && st_tokens->value)
+		{
+			if ((i = ft_find_char(st_tokens->value, '(')) != -1 && i && M_SUBSH(st_tokens->value[i - 1]))
+				value = change_subsh_quot(st_tokens->value);
+		}
+		if (value)
+		{
+			//ft_strdel(&st_tokens->value);
+			st_tokens->value = value;
+		}
+		st_tokens = st_tokens->next;
+	}
 }

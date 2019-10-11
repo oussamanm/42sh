@@ -31,20 +31,21 @@
 # define BUFF_SIZE 10
 # define UNUSED(x) (void)(x)
 # define M_CHECK(x , y, z) ((x == y || x == z) ? 1 : 0)
-# define M_C (arg[i][0]==34||arg[i][0]==39)
-# define M_CC (arg[i][ft_strlen(arg[i])-1]==34||arg[i][ft_strlen(arg[i])-1]==39)
+# define IS_QUOTE(x) (x == 34 || x == 39)
 # define M_CHECK_W(C)(C==32||C==9||C==11||C==10||C==13||C==12)
 # define M_REDIR(C) (C == '>' || C == '<')
+# define M_SUBSH(x) (M_REDIR(x) || x == '$')
+# define M_SPEC_CHARC(x) (x=='$'||x=='`'||x=='\\'||x=='"'||x=='\n')
+# define M_ESCAPED(x) (x == '\\')
 # define STR(x)  (*str)[x]
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
 # define PROMPT 3
 # define PATHSIZE 1024
-# define M_QUOTE 34
-# define M_DQUOTE 39
 # define PREV st_tokens->prev
 # define NEXT st_tokens->next
 # define ERRO_IN_AND -12
 
+#define MAX_MAPS 1000
 /*
 **Buttons
 */
@@ -63,14 +64,17 @@
 **Tokens
 */
 
-# define T_TXT 0
-# define T_QUO 1
+# define T_TXT			0
+# define T_QUO			1
+# define T_DQUO			2
 # define T_SUBSHL		117
 # define T_JOBCTR		38
 # define T_LOGOPR_AND	76
 # define T_LOGOPR_OR	248
 # define T_PIPE			124
 # define T_EQUAL		61
+# define T_HIST			33
+# define T_HIST_LAST	66
 # define T_RED_IN_S		-60
 # define T_RED_IN_A		-98
 # define T_RED_IN_B		-143
@@ -133,6 +137,7 @@ typedef struct			s_pipes
 {
 	char				*cmd;
 	int					fds[2];
+	int					status;
 	char				**args;
 	int					bl_jobctr:1;
 	char				**tmp_env;
@@ -213,12 +218,10 @@ int						ft_edit_vrb(char *vrb, char ***env);
 void					ft_print_error(char *msg, char *para1, char *para2, int rm);
 void					ft_err_exit(char *str);
 int						ft_error_cd(char *path, char **arg);
-int						ft_error_semic(char *str_arg, char **args_cmd);
 int						ft_call_lexer(t_pipes *st_pipes);
-int						ft_parse_error(char *str_cmds);
-char					**ft_error_syntax(char *str_cmds);
-int						ft_error_pipe(char *str);
-int						ft_error_separ(char *str_arg, char c);
+int						error_syntax_lexer(t_tokens *st_tokens);
+int						error_syntax_semi(char *str_cmds, char **args);
+int						error_syntax_expans(char *str_cmds);
 int						ft_putchar_err(int c);
 
 /*
@@ -227,19 +230,26 @@ int						ft_putchar_err(int c);
 
 char					**ft_str_split(char const *s, char *c);
 char					**ft_str_split_q(char *str, char *c);
-int						ft_index_of_first_split(char *s1, char *s2);
-char					**ft_strsplit_by_arr(char *str, char *split);
+
+/*
+** Helper Splite
+*/
+
+int			find_dquot(char *str);
+int			find_subsh(char *str);
+int			find_quot(char *str);
+int			find_closed(char *str, char c);
 
 
 /*
-**Helper
+** Helper
 */
 
 char					*ft_find_path(char *arg, char **env);
-int						ft_count_word(const char *str, char *c);
 t_pipes					*ft_strr_list(char **args_pipe);
 int						ft_check_redi(t_pipes *st_pipes);
 int						ft_sum_asci(char str[]);
+int		find_char_escap(char *str, char c);
 
 
 /*
@@ -250,6 +260,7 @@ char					*ft_rm_quot(char *str);
 char					*ft_corr_args(char *argv);
 void					ft_remove_quot(char **args);
 void					ft_update_tokens(t_tokens *st_tokens);
+char			*ft_str_remp(char *str, char *remp, int start, int len);
 
 /*
 ** Signals
@@ -311,6 +322,7 @@ int						ft_parse_redir(t_pipes *st_pipes);
 ** Execution
 */
 
+void					ft_multi_cmd(char *str_cmds, int bl_subsh);
 int						ft_cmds_setup(char *str_arg, int bl_subsh);
 int						ft_cmd_fork(int fork_it, t_pipes *st_pipes);
 int						ft_check_cmd(t_pipes *st_pipes, char **environ);
@@ -363,10 +375,15 @@ char					**ft_tokens_arg_env(t_tokens *st_tokens);
 
 
 /*
+** Line complition
+*/
+
+
+/*
 ** Sub_shell
 */
 
-void					ft_apply_subsh(t_cmds *st_cmds);
+void					apply_subsh(t_tokens *st_tokens);
 
 
 #endif

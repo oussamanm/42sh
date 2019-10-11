@@ -51,7 +51,6 @@ static void		ft_read_tokens(t_pipes *st_pipes, t_tokens *st_tokens)
 			}
 			else
 			{
-				//st_redir = head;
 				st_redir->next = ft_new_redir();
 				st_redir = st_redir->next;
 			}

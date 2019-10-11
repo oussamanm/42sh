@@ -16,31 +16,24 @@
 **	ft_remove_quot : Remove Quote from args :
 */
 
-void		ft_remove_quot(char **args)
+void			ft_remove_quot(char **args)
 {
 	int		j;
 	int		i;
 	char	*arg;
-	int		quote;
 
 	if (args == NULL)
 		return ;
-	i = 0;
-	while (args[i] != NULL)
+	i = -1;
+	while (args[++i] != NULL)
 	{
 		arg = args[i];
 		j = -1;
-		while (arg[++j] != '\0')
+		if ((arg[0] == '\'' || arg[0] == '"') && arg[ft_strlen(arg) - 1] == arg[0])
 		{
-			if (arg[j] == '\'' || arg[j] == '"')
-			{
-				quote = arg[j];
-				ft_strcpy(&arg[j], &arg[j + 1]);
-				if ((j = ft_find_char(arg, quote)) >= 0)
-					ft_strcpy(&arg[j], &arg[j + 1]);
-			}
+			ft_strcpy(arg, &arg[1]);
+			arg[ft_strlen(arg) - 1] = 0;
 		}
-		i++;
 	}
 }
 
@@ -48,7 +41,7 @@ void		ft_remove_quot(char **args)
 **	ft_str_remp : Function to Change sub_string with string :
 */
 
-char		*ft_str_remp(char *str, char *remp, int start, int len)
+char			*ft_str_remp(char *str, char *remp, int start, int len)
 {
 	char	*rtn;
 	int		len_remp;
@@ -75,6 +68,27 @@ char		*ft_str_remp(char *str, char *remp, int start, int len)
 	return (rtn);
 }
 
+char			*get_para_expan(char *arg, int *len_vrb)
+{
+	int i;
+	char	*str_rtn;
+
+	i = 0;
+	str_rtn = NULL;
+	if (!arg)
+		return (NULL);
+	while (arg[i])
+	{
+		if (arg[i] == '}')
+			break ;
+		i++;
+	}
+	*len_vrb += (i + 1);
+	str_rtn = ft_strsub(arg, 0, i);
+	return (str_rtn);
+}
+
+
 /*
 **  ft_swap_vrb : Swap Variable with value :
 **		in case of - $$ replace with PID
@@ -94,13 +108,19 @@ static char		*ft_swap_vrb(char *arg, int *index)
 	j = *index + 1;
 	while (arg[j] && (ft_isalnum(arg[j]) || arg[j] == '_') && ++j)
 		len_vrb++;
-	if (len_vrb == 0 && arg[j] != '$' && ++(*index))
+	
+	if (!len_vrb && arg[j] == '{' && ++len_vrb)
+		temp = get_para_expan(&arg[j + 1], &len_vrb);
+	else if (!len_vrb && arg[j] != '$' && ++(*index))
 		return (arg);
-	temp = ft_strsub(arg, *index + 1, len_vrb);
+	else
+		temp = ft_strsub(arg, *index + 1, len_vrb);
+	printf("temp = %s \n",temp);
 	if (!len_vrb && arg[j] == '$' && ++len_vrb)
 		value = ft_itoa((int)getpid());
 	else if (!(value = ft_get_vrb(temp, g_environ)) && !(value = get_intern_value(temp)))
 		value = ft_strnew(0);
+	
 	ft_strdel(&temp);
 	temp = ft_str_remp(arg, value, *index, len_vrb + 1);
 	*index += ft_strlen(value);
@@ -109,13 +129,27 @@ static char		*ft_swap_vrb(char *arg, int *index)
 	return (temp);
 }
 
+void			remove_backslash(char *cmd)
+{
+	int index;
+
+	index = 0;
+	if (!cmd)
+		return ;
+	
+	while ((index = ft_find_char(cmd, -1)) != -1)
+	{
+		ft_strcpy(&cmd[index],&cmd[index + 1]);
+	}
+}
+
 /*
 **  ft_corr_args : Correction cmd_line by change expansions :
 **				condition replace ~ : -followed by /
 **									: -followed a whitespace
 */
 
-char		*ft_corr_args(char *cmd)
+char			*ft_corr_args(char *cmd)
 {
 	int		i;
 	int		bl_q;
@@ -126,17 +160,20 @@ char		*ft_corr_args(char *cmd)
 		return (NULL);
 	while (cmd[i])
 	{
-		if (cmd[i] == '"')
-			bl_q = (bl_q == 0) ? 1 : 0;
-		i += (!bl_q && cmd[i] == 39) ? ft_find_char(cmd + i + 1, '\'') + 2 : 0;
-		if (cmd[i] == '$' && cmd[i + 1])
+		if (cmd[i] == '\\')
 		{
-			cmd = ft_swap_vrb(cmd, &i);
+			i += (cmd[i + 1]) ? 2 : 1;
 			continue ;
 		}
-		else if (cmd[i] == '~' && ((i) ? (ft_isspace(cmd[i - 1])) : 1) &&
-			(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])) &&
-			((i) ? (cmd[i - 1] != '"') : 1))
+		if (cmd[i] == '"')
+			bl_q = (bl_q == 0) ? 1 : 0;
+		i += (!bl_q && cmd[i] == '\'') ? find_char_escap(cmd + i + 1, '\'') + 2 : 0;
+		/*if (0 && cmd[i] == '!')
+			cmd = expantion_hist(cmd, &i);
+		else*/ if (cmd[i] == '$' && cmd[i + 1])
+			cmd = ft_swap_vrb(cmd, &i);
+		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
+			(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))
 			cmd = ft_str_remp(cmd, ft_get_vrb("HOME", g_environ), i, -1);
 		i += cmd[i] != '\0';
 	}
@@ -147,7 +184,7 @@ char		*ft_corr_args(char *cmd)
 **	ft_update_tokens : update token by remove quotes
 */
 
-void		ft_update_tokens(t_tokens *st_tokens)
+void			ft_update_tokens(t_tokens *st_tokens)
 {
 	char		*temp;
 	t_tokens	*st_temp;
@@ -155,7 +192,7 @@ void		ft_update_tokens(t_tokens *st_tokens)
 	st_temp = st_tokens;
 	while (st_temp)
 	{
-		if (st_temp->token == 1)
+		if (st_temp->token == T_QUO || st_temp->token == T_DQUO)
 		{
 			temp = ft_strsub(st_temp->value, 1, ft_strlen(st_temp->value) - 2);
 			ft_strdel(&(st_temp->value));

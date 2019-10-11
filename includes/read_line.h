@@ -155,4 +155,6 @@ char				*ft_clear(t_cursor *pos, char *s, char *buf);
 */
 int					ft_check_subsh(int i, char **line, t_select *select, t_history *his);
 
+void		compliting_line(char **str_cmds, t_select *select, t_history *his);
+
 #endif

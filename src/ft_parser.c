@@ -153,6 +153,7 @@ static void		ft_fill_args(t_pipes *st_pipes)
 	{
 		/// add condition in function below : ! T_EQUAL T_SUBSHELL
 		ft_tokens_args(st_pipes);
+
 		st_pipes = st_pipes->next;
 	}
 }

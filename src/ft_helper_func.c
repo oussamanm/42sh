@@ -22,6 +22,8 @@ char		*ft_find_path(char *arg, char **env)
 	char	**str_paths;
 	char	*temp;
 
+	if (!arg || !ft_strlen(arg))
+		return (NULL);
 	i = -1;
 	str_paths = NULL;
 	if (env != NULL && *env != NULL && arg)
@@ -142,3 +144,25 @@ char		*ft_rm_quot(char *str)
 	rtn[ft_strlen(rtn) - 1] = '\0';
 	return (rtn);
 }
+
+int		find_char_escap(char *str, char c)
+{
+	int		i;
+
+	i = 0;
+	if (str == NULL)
+		return (-1);
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\\')
+		{
+			i += (str[i + 1]) ? 2 : 1;
+			continue ;
+		}
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+

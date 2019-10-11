@@ -47,7 +47,9 @@ int			ft_put_strr(char **str)
 		return (-1);
 	while (str[i] != NULL)
 	{
+		ft_putstr("---\n");
 		ft_putendl(str[i]);
+		ft_putstr("---\n");
 		i++;
 	}
 	return (i);

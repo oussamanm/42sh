@@ -50,24 +50,30 @@ void		ft_save_address(t_history **his, t_select **select)
 	}
 }
 
+
+
 /*
-** Check Error of syntax , call function_exec
+** Split with ; and Check error syntax , and correction args before start
 */
 
-void		ft_multi_cmd(char *str_cmds)
+void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 {
 	char	**args;
 	int		i;
 
 	i = 0;
-	if ((args = ft_error_syntax(str_cmds)) == NULL)
+	if (!str_cmds)
 		return ;
-	while (args[i] != NULL)
+	args = ft_str_split_q(str_cmds, ";");
+	if (!error_syntax_semi(str_cmds, args) && !error_syntax_expans(str_cmds))
 	{
-		/// Correction args by change expansion
-		args[i] = ft_corr_args(args[i]);
-		ft_cmds_setup(args[i], 0);
-		i++;
+		while (args[i] != NULL)
+		{
+			/// Correction args by change expansion
+			args[i] = ft_corr_args(args[i]);
+			ft_cmds_setup(args[i], bl_subsh);
+			i++;
+		}
 	}
 	ft_strrdel(args);
 	ft_strdel(&str_cmds);
@@ -91,17 +97,16 @@ int			main(void)
 	his->path = ft_get_vrb("PATH", g_environ);
 	while (1337)
 	{
-		ft_putstr("\033[0;32m21sh $>\033[0m ");
+		ft_putstr("\033[0;32m42sh $>\033[0m ");
 		if ((str_cmds = ft_read_line(his, select, 8)) == NULL)
 			continue ;
-		// Check incomplete syntax of Quoting
-		ft_quotes(&str_cmds, select, his);
-		// Check incomplete syntax of Sub_shell
-		ft_check_subsh(0, &str_cmds, select, his);
+		// Check incomplete syntax of Sub_shell or Quoting
+		compliting_line(&str_cmds, select, his);
+
 		ft_stock_history(his->history, str_cmds, his->his_count);
 		his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
 		// Execution
-		(!(g_pos.exit)) ? ft_multi_cmd(str_cmds) : NULL;
+		(!(g_pos.exit)) ? ft_multi_cmd(str_cmds, 0) : NULL;
 	}
 	return (0);
 }

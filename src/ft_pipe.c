@@ -16,7 +16,7 @@
 **	ft_close_pipes : close all pipes created  :
 */
 
-void		ft_close_pipes(t_pipes *st_pipes)
+void			ft_close_pipes(t_pipes *st_pipes)
 {
 	while (st_pipes != NULL)
 	{
@@ -32,7 +32,7 @@ void		ft_close_pipes(t_pipes *st_pipes)
 **	ft_create_pipes : create all pipes needed :
 */
 
-void		ft_create_pipes(t_pipes *st_pipes)
+void			ft_create_pipes(t_pipes *st_pipes)
 {
 	t_pipes *st_head;
 	int		fds[2];
@@ -70,31 +70,37 @@ static void		ft_apply_pipe_h(t_pipes *st_pipes, t_pipes *st_head, int i)
 **	ft_apply_pipe : PIPE :
 */
 
-int			ft_apply_pipe(t_pipes *st_pipes)
+int				ft_apply_pipe(t_pipes *st_pipes)
 {
 	t_pipes	*st_head;
-	int		parent;
 	int		status;
 
 	status = 0;
 	st_head = st_pipes;
-	if ((parent = fork()) == -1)
-		ft_err_exit("Error in Fork \n");
-	(parent == 0) ? ft_create_pipes(st_pipes) : NULL;
-	while (parent == 0 && st_pipes != NULL)
+	ft_create_pipes(st_pipes);
+	while (st_pipes != NULL)
 	{
-		if (!ft_check_cmd(st_pipes, g_environ) && fork() == 0) /// check param g_environ
+		if (fork() == 0)
 		{
-			if (st_pipes != st_head && dup2(st_pipes->fds[0], 0) == -1)
-				ft_putendl_fd("Error in dub STD_IN", 2);
-			ft_apply_pipe_h(st_pipes, st_head, 1);
+			if (st_pipes->next != NULL)
+			{
+				if (st_pipes != st_head && dup2(st_pipes->fds[0], 0) == -1)
+					ft_putendl_fd("Error in dub STD_IN", 2);
+				ft_apply_pipe_h(st_pipes, st_head, 1);
+			}
+			else if (st_pipes->next == NULL)
+				ft_apply_pipe_h(st_pipes, st_head, 0);
+			exit(EXIT_FAILURE);
 		}
 		st_pipes = st_pipes->next;
-		if (st_pipes && st_pipes->next == NULL)
-			ft_apply_pipe_h(st_pipes, st_head, 0);
 	}
-	if (parent > 0)
-		wait(&status);
+	ft_close_pipes(st_head);
+	while (st_head)
+	{
+		wait(&st_head->status);
+		status = st_head->status;
+		st_head = st_head->next;
+	}
 	return ((status) ? 0 : 1);
 }
 
@@ -102,7 +108,7 @@ int			ft_apply_pipe(t_pipes *st_pipes)
 ** exec pipe
 */
 
-int			ft_pipe(t_pipes *st_pipe)
+int				ft_pipe(t_pipes *st_pipe)
 {
 	int status;
 

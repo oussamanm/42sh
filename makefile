@@ -11,11 +11,11 @@ NAME = 42sh
 
 SRC = ./src/
 OBJS = ft_built_env.o ft_builtins.o ft_error_handler.o\
-	ft_helper_func.o ft_quote.o ft_strsplit.o ft_strsplit_q.o\
+	ft_helper_func.o ft_quote.o ft_strsplit.o strsplit_h.o\
 	ft_variable.o minishell.o ft_signals.o ft_lexer_h.o\
 	ft_lexer.o ft_pipe.o ft_execution.o  ft_exec_built.o ft_free.o\
 	ft_parser.o ft_redir_read.o ft_redir_parse.o ft_new.o intern.o\
-	ft_redir_setup.o ft_vrbs_parse.o ft_subshell.o\
+	ft_redir_setup.o ft_vrbs_parse.o ft_subshell.o line_complition.o\
 	builtins_cmd/cd_built.o\
 	builtins_cmd/echo_built.o\
 	builtins_cmd/echo_op_parser.o\
@@ -35,7 +35,6 @@ OBJS = ft_built_env.o ft_builtins.o ft_error_handler.o\
 	read_line/move_by_word.o\
 	read_line/moving_cursor.o\
 	read_line/output.o\
-	read_line/quotes.o\
 	read_line/reset_position.o\
 	read_line/selection1.o\
 	read_line/selection2.o\

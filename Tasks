@@ -12,10 +12,27 @@ Simo    :   -Built-ins and Options
 
 
 should add :    - Redirection in pipe have cmd not exist
-                - setenv d="ls -la"  -> (-la: not a valid identifier)
-                - setenv d="'ls -l'" -> should put 'ls -l' in value of variable
+                + setenv d="ls -la"  -> (-la: not a valid identifier)
+                + setenv d="'ls -l'" -> should put 'ls -l' in value of variable
                 - correct here_doc with quoting
                 - other funct in libft str_trim, 
-                - initial vrb head in redirection
-                -  add check_cmd in last cmd of pipe
+                + add check_cmd in last cmd of pipe
                 - check error redirection	//if (ft_error_redir(st_tokens))
+				- 42sh $>
+					syntax error near unexpected tokenl `;'
+
+- segmentation fault  when comment ft_stock_history and use history in shell
+
+
+The backslash retains its meaning only when followed by
+        - dollar
+        - backtick
+        - double quote
+        - backslash or newline
+
+Within double quotes, the backslashes are removed from the input stream when followed by one of these characters.
+Backslashes preceding characters that don't have a special meaning are left unmodified for processing by the shell interpreter.
+
+
+
+remove condition /* && ((i) ? (cmd[i - 1] != '"') : 1) */ in tilde expansions

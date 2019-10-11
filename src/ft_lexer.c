@@ -20,19 +20,17 @@
 void		ft_lexer_quot(t_tokens **st_tokens, char *arg, int *j, int indx)
 {
 	int i;
-	int quote;
+	int token;
+	int len;
 
 	i = 0;
-	quote = arg[0];
-	while (arg[i] != '\0')
+	len = 0;
+	if ((len = find_closed(arg, arg[0])) != -1)
 	{
-		if (i != 0 && arg[i] == quote)
-		{
-			ft_fill_token(st_tokens, T_QUO, ft_strsub(arg, 0, i + 1), indx);
-			*j += i;
-			return ;
-		}
-		i++;
+		token = (arg[0] == '"') ? T_DQUO : T_QUO;
+		ft_fill_token(st_tokens, token, ft_strsub(arg, 0, len + 1), indx);
+		*j += len;
+		return ;
 	}
 }
 
@@ -101,14 +99,24 @@ void		ft_lexer_logopr(t_tokens **st_tokens, char *arg, int *j, int indx)
 void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 {
 	int		i;
+	int		escaped;
 	char	*temp;
 
 	i = 0;
+	escaped = 0;
 	while (arg[i] != '\0')
 	{
+		if (arg[i] == '\\' && !escaped)
+		{
+			i += (arg[i + 1]) ? 1 : 0;
+			escaped = 1;
+			continue ;
+		}
+		escaped = 0;
 		if (arg[i + 1] == ' ' || arg[i + 1] == '\t' || arg[i + 1] == '\0' ||
 			arg[i + 1] == '&' || arg[i + 1] == '|' ||
-				arg[i + 1] == '>' || arg[i + 1] == '<' || arg[i + 1] == '=')
+				arg[i + 1] == '>' || arg[i + 1] == '<' || arg[i + 1] == '=' ||
+				arg[i + 1] == '"' || arg[i + 1] == '\'')
 		{
 			temp = ft_strsub(arg, 0, i + 1);
 			ft_fill_token(st_tokens, T_TXT, temp, indx);
@@ -123,7 +131,7 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 /*
 **	Lexer sub_shell 
 */
-
+/*
 void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
 {
 	char	*temp;
@@ -158,7 +166,43 @@ void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
 	ft_fill_token(st_tokens, T_SUBSHL, temp, indx);
 	*j += (i - 1);
 }
+*/
 
+void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
+{
+	int len;
+
+	len = 0;
+	if ((len = find_closed(&arg[1], '(')) != -1)
+	{
+		ft_fill_token(st_tokens, T_SUBSHL, ft_strsub(arg, 0, len + 2), indx);
+		*j += (len + 1);
+		return ;
+	}
+}
+
+void		ft_lexer_hist(t_tokens **st_tokens, char *arg, int *j, int indx)
+{
+	int	token;
+	char	*value;
+
+	if (!arg)
+		return ;
+	token = 0;
+	value = NULL;
+	if (arg[1] && arg[1] == '!')
+	{
+		token = T_HIST_LAST;
+		value = ft_strdup("!!");
+		(*j)++;
+	}
+	else
+	{
+		token = T_HIST;
+		value = ft_strdup("!");
+	}
+	ft_fill_token(st_tokens, token, value, indx);
+}
 
 /*
 **  call funct lexer
@@ -173,7 +217,12 @@ void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
 	j = -1;
 	while (arg[++j])
 	{
-	/*Quot*/	if (arg[j] == '"' || arg[j] == '\'')
+				if (arg[j] == '\\')
+				{
+					//j += (arg[j + 1] && !M_SPEC_CHARC(arg[j + 1])) ? 1 : 0;
+					ft_lexer_txt(st_tokens, &arg[j], &j, i);
+				}
+	/*Quot*/	else if (arg[j] == '"' || arg[j] == '\'')
 					ft_lexer_quot(st_tokens, &arg[j], &j, i);
 	/*Redi*/	else if (arg[j] == '&' && ft_check_char("><", arg[j + 1]))
 					ft_lexer_red(st_tokens, &arg[j], &j, i);
@@ -190,8 +239,10 @@ void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
 					ft_fill_token(st_tokens, '&', ft_strdup("&"), i);
 				else if (arg[j] == '=')
 					ft_fill_token(st_tokens, '=', ft_strdup("="), i);
-	/*SUB_SH*/	else if ((arg[j] == '$' || M_CHECK(arg[i], '>', '<')) && arg[j + 1] == '(')
+	/*SUB_SH*/	else if ((arg[j] == '$' || M_CHECK(arg[j], '>', '<')) && arg[j + 1] == '(')
 					ft_lexer_subshl(st_tokens, &arg[j], &j, i);
+				else if (arg[j] == '!')
+					ft_lexer_hist(st_tokens, &arg[j], &j, i);
 	/*Txt*/		else
 					ft_lexer_txt(st_tokens, &arg[j], &j, i);
 	}
@@ -209,6 +260,7 @@ t_tokens	*ft_lexer(char **args)
 	int			i;
 
 	i = -1;
+	//printf("START \n");
 	st_tokens = ft_new_token();
 	st_head = st_tokens;
 	while (args[++i] != '\0')
@@ -228,7 +280,7 @@ t_tokens	*ft_lexer(char **args)
 			st_tokens = st_tokens->next;
 		}
 		dprintf(2,"\n--------------\n");
-		exit(0);*/
+		//exit(0);*/
 	if (i == -1)
 		return (NULL);
 	return (st_head);

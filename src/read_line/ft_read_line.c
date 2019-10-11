@@ -110,6 +110,6 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	}
 	ft_disable();
 	free(g_pos.end);
-	(g_pos.cmd[0] != -1) ? g_pos.cmd = ft_strtrim_and_free(g_pos.cmd) : 0;
+	//(g_pos.cmd[0] != -1) ? g_pos.cmd = ft_strtrim_and_free(g_pos.cmd) : 0;
 	return (g_pos.cmd);
 }

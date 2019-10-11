@@ -13,7 +13,6 @@
 #include "shell.h"
 
 
-
 /*
 ** Fill t_tokens :
 */
@@ -93,7 +92,9 @@ void		ft_tokens_args(t_pipes *st_pipe)
 	while (st_tokens)
 	{
 		if (st_tokens->is_arg != T_EQUAL)
+		{
 			st_pipe->args[i++] = ft_strdup(st_tokens->value);
+		}
 		st_tokens = st_tokens->next;
 	}
 }
