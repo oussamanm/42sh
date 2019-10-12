@@ -36,3 +36,32 @@ Backslashes preceding characters that don't have a special meaning are left unmo
 
 
 remove condition /* && ((i) ? (cmd[i - 1] != '"') : 1) */ in tilde expansions
+
+
+/*
+** export Variable
+*/
+
+void			ft_buil_export(t_tokens *st_tokens)
+{
+    int i;
+    char    *arg;
+
+    i = -1;
+    while (st_tokens)
+    {
+        if (st_tokens->token == T_EQUAL)
+        {
+            arg = ft_strnew(0);
+            if (PREV && PREV->indx == st_tokens->indx)
+                arg = ft_strjoir(arg, PREV->value, 1);
+            arg = ft_strjoir(arg, st_tokens->value, 1);
+            if (NEXT && NEXT->indx == st_tokens->indx)
+                arg = ft_strjoir(arg, NEXT->value, 1);
+            ft_set_alias(arg,...);
+        }
+        else if (NEXT)
+            move_to_env(NEXT->value);
+        st_tokens = st_tokens->next;
+    }
+}

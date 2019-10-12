@@ -15,7 +15,7 @@ OBJS = ft_built_env.o ft_builtins.o ft_error_handler.o\
 	ft_variable.o minishell.o ft_signals.o ft_lexer_h.o\
 	ft_lexer.o ft_pipe.o ft_execution.o  ft_exec_built.o ft_free.o\
 	ft_parser.o ft_redir_read.o ft_redir_parse.o ft_new.o intern.o\
-	ft_redir_setup.o ft_vrbs_parse.o ft_subshell.o line_complition.o\
+	ft_redir_setup.o ft_vrbs_parse.o subshell.o line_complition.o\
 	builtins_cmd/cd_built.o\
 	builtins_cmd/echo_built.o\
 	builtins_cmd/echo_op_parser.o\

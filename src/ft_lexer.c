@@ -115,7 +115,7 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 		escaped = 0;
 		if (arg[i + 1] == ' ' || arg[i + 1] == '\t' || arg[i + 1] == '\0' ||
 			arg[i + 1] == '&' || arg[i + 1] == '|' ||
-				arg[i + 1] == '>' || arg[i + 1] == '<' || arg[i + 1] == '=' ||
+				arg[i + 1] == '>' || arg[i + 1] == '<' || (arg[0] != '=' && arg[i + 1] == '=') ||
 				arg[i + 1] == '"' || arg[i + 1] == '\'')
 		{
 			temp = ft_strsub(arg, 0, i + 1);
@@ -131,42 +131,6 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 /*
 **	Lexer sub_shell 
 */
-/*
-void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
-{
-	char	*temp;
-	int		i;
-	int		z;
-	int		tmp_len;
-	int		len;
-
-	i = 0;
-	len = 0;
-	temp = NULL;
-	while (arg[i])
-	{
-		if (arg[i] == ')')
-			break ;
-		if ((arg[i] == '$' || M_CHECK(arg[i], '>', '<') || arg[i] == '(') && ++i)
-			continue ;
-		z = i;
-		while ((tmp_len = ft_find_char(&arg[z], ')')) > 0)
-		{
-			len += (tmp_len + 1);
-			z += (tmp_len + 1);
-		}
-		if (len != 0)
-		{
-			temp = ft_strsub(&arg[i], 0, len - 1);
-			i += len;
-			break ;
-		}
-		i++;
-	}
-	ft_fill_token(st_tokens, T_SUBSHL, temp, indx);
-	*j += (i - 1);
-}
-*/
 
 void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
 {
@@ -181,28 +145,6 @@ void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
 	}
 }
 
-void		ft_lexer_hist(t_tokens **st_tokens, char *arg, int *j, int indx)
-{
-	int	token;
-	char	*value;
-
-	if (!arg)
-		return ;
-	token = 0;
-	value = NULL;
-	if (arg[1] && arg[1] == '!')
-	{
-		token = T_HIST_LAST;
-		value = ft_strdup("!!");
-		(*j)++;
-	}
-	else
-	{
-		token = T_HIST;
-		value = ft_strdup("!");
-	}
-	ft_fill_token(st_tokens, token, value, indx);
-}
 
 /*
 **  call funct lexer
@@ -237,12 +179,10 @@ void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
 					ft_lexer_logopr(st_tokens, &arg[j], &j, i);
 	/*Jobs*/	else if (arg[j] == '&')
 					ft_fill_token(st_tokens, '&', ft_strdup("&"), i);
-				else if (arg[j] == '=')
+				else if (arg[j] == '=' && (*st_tokens)->prev->token != T_EQUAL)
 					ft_fill_token(st_tokens, '=', ft_strdup("="), i);
 	/*SUB_SH*/	else if ((arg[j] == '$' || M_CHECK(arg[j], '>', '<')) && arg[j + 1] == '(')
 					ft_lexer_subshl(st_tokens, &arg[j], &j, i);
-				else if (arg[j] == '!')
-					ft_lexer_hist(st_tokens, &arg[j], &j, i);
 	/*Txt*/		else
 					ft_lexer_txt(st_tokens, &arg[j], &j, i);
 	}
