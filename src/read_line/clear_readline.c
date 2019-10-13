@@ -24,7 +24,7 @@ void	ft_clear_readline_struct(void)
 
 	his = NULL;
 	select = NULL;
-	ft_save_address(&his, &select);
+	save_address(&his, &select);
 	ft_strdel(&select->save);
 	ft_free_tab(his->history);
 	ft_strdel(&his->path);

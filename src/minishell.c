@@ -17,7 +17,7 @@
 ** Initiale terminle attr , fill struct info and call function Read
 */
 
-void		ft_initial_read_line(t_history **his, t_select **select)
+void		initial_read_line(t_history **his, t_select **select)
 {
 	*his = ft_memalloc(sizeof(t_history));
 	*select = ft_memalloc(sizeof(t_select));
@@ -26,14 +26,14 @@ void		ft_initial_read_line(t_history **his, t_select **select)
 	(*select)->save = NULL;
 	(*his)->history = ft_alloc_tab();
 	(*his)->his_count = 0;
-	ft_save_address(his, select);
+	save_address(his, select);
 }
 
 /*
 ** Save adresse t_history to t_select , to easy access from other function
 */
 
-void		ft_save_address(t_history **his, t_select **select)
+void		save_address(t_history **his, t_select **select)
 {
 	static t_history	*p_his;
 	static t_select		*p_select;
@@ -90,8 +90,8 @@ int			main(void)
 	g_intern = NULL;
 	if (ft_set_termcap() == -1)
 		ft_err_exit("ERROR in setting Termcap parameters\n");
-	ft_initial_read_line(&his, &select);
-	ft_call_signal();
+	initial_read_line(&his, &select);
+	call_signal();
 	// Duplicate environ vrbs
 	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
 	his->path = ft_get_vrb("PATH", g_environ);

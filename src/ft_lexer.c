@@ -88,7 +88,7 @@ void		ft_lexer_logopr(t_tokens **st_tokens, char *arg, int *j, int indx)
 		}
 		i++;
 	}
-	ft_fill_token(st_tokens, ft_sum_asci(temp), ft_strdup(temp), indx);
+	ft_fill_token(st_tokens, ft_sum_asci(temp), temp, indx);
 	*j += i;
 }
 

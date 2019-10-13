@@ -55,16 +55,17 @@ char		*exec_subsh(char *cmd)
 		ft_bzero(buff, 10);
 	}
 	close(fds[0]);
-
 	/// change '\n' with 'space'
 	i = -1;
 	while (result[++i])
 	{
 		if (result[i] == -1 && i)
 		{
-			result[i -1] = ' ';
+			result[i - 1] = ' ';
 			ft_strcpy(&result[i], &result[i + 1]);
 		}
+		else if (i == 0 && result[i] == -1)
+			result[i] = '\0';
 	}
 	return (result);
 }

@@ -60,7 +60,7 @@ char	*ft_rm_char(char *str, int index)
 	return (str);
 }
 
-void	ft_print_error(char *msg, char *para1, char *para2, int rm)
+void	print_error(char *msg, char *para1, char *para2, int rm)
 {
 	if (msg == NULL)
 		return ;

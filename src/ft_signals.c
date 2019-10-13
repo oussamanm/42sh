@@ -42,7 +42,7 @@ void	ft_catch_signal(int signal)
 	}
 }
 
-void	ft_call_signal(void)
+void	call_signal(void)
 {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_catch_signal);

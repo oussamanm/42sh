@@ -41,7 +41,7 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 	}
 	if (tmp[0] == 0)
 		return (0);
-	ft_print_error(tmp, "42sh: ", "syntax error near unexpected token", 0);
+	print_error(tmp, "42sh: ", "syntax error near unexpected token", 0);
 	return (1);
 }
 
@@ -56,7 +56,7 @@ int			error_syntax_semi(char *str_cmds, char **args)
 
 	temp = 0;
 	i = -1;
-	if (!args || !*args)
+	if (!args)
 	{
 		ft_putstr_fd("syntax error near unexpected tokenl `;' \n", 2);
 		return (1);
@@ -81,7 +81,7 @@ int			error_syntax_semi(char *str_cmds, char **args)
 }
 
 /*
-** Check error syntax of sub_shell $() , <() >() 
+** Check error syntax of expansion ${} 
 */
 
 int			error_syntax_expans(char *str_cmds)
@@ -103,7 +103,7 @@ int			error_syntax_expans(char *str_cmds)
 				bl = 0;
 			else if (!ft_isalphanum(str_cmds[i]))
 			{
-				ft_print_error("bad substitution", "42sh :", NULL, 0);
+				print_error(" bad substitution", "42sh :", NULL, 0);
 				return (1);
 			}
 		}

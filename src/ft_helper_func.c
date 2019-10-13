@@ -48,39 +48,6 @@ char		*ft_find_path(char *arg, char **env)
 }
 
 /*
-** Convert table of string to list : O
-*/
-
-t_pipes		*ft_strr_list(char **args_pipe)
-{
-	t_pipes *st_pipes;
-	t_pipes *head;
-
-	if (args_pipe == NULL)
-		return (NULL);
-	st_pipes = NULL;
-	head = NULL;
-	while (*args_pipe)
-	{
-		if (st_pipes == NULL)
-		{
-			st_pipes = ft_new_pipe();
-			head = st_pipes;
-		}
-		st_pipes->cmd = *args_pipe;
-		st_pipes->fds[0] = 0;
-		st_pipes->fds[1] = 1;
-		args_pipe++;
-		if (*args_pipe != NULL)
-		{
-			st_pipes->next = ft_new_pipe();
-			st_pipes = st_pipes->next;
-		}
-	}
-	return (head);
-}
-
-/*
 ** Print error and exit
 */
 
@@ -166,3 +133,16 @@ int		find_char_escap(char *str, char c)
 	return (-1);
 }
 
+
+int				ft_all_quot(char *str)
+{
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		if (!M_CHECK(*str, '\'', '"'))
+			return (0);
+		str++;
+	}
+	return (1);
+}

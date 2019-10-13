@@ -24,6 +24,6 @@ void		ft_built_exit(t_pipes *st_pipes, char ***tmp_env)
 	/// Clear environ globale and temp
  	//ft_strrdel(*env);
 	ft_clear_readline_struct();
-	//ft_clear_cmds(st_pipes);
+	//free_list_cmds(st_pipes);
 	exit(0);
 }

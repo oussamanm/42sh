@@ -155,14 +155,14 @@ int				ft_check_cmd(t_pipes *st_pipes, char **environ)
 	{
 		str_arg = ft_strdup(cmd);
 		if (access(str_arg, F_OK) != 0 && ++rtn)
-			ft_print_error(FIL_NS, "42sh :", str_arg, 2);
+			print_error(FIL_NS, "42sh :", str_arg, 2);
 		else if (!lstat(str_arg, &st_stat) && S_ISDIR(st_stat.st_mode) && ++rtn)
-			ft_print_error(IS_DIR, "42sh :", str_arg, 2);
+			print_error(IS_DIR, "42sh :", str_arg, 2);
 	}
 	if (!rtn && str_arg && access(str_arg, X_OK) && ++rtn)
-		ft_print_error(FIL_PD, NULL, str_arg, 2);
+		print_error(FIL_PD, NULL, str_arg, 2);
 	if (!rtn && (!str_arg || !ft_strlen(str_arg)) && ++rtn)
-		ft_print_error(CMD_NF, "42sh: ", cmd, 0);
+		print_error(CMD_NF, "42sh: ", cmd, 0);
 	(cmd) ? ft_strdel(&cmd) : NULL;
 	(!rtn && str_arg) ? ft_strdel(&str_arg) : NULL;
 	(rtn) ? exit(EXIT_FAILURE) : NULL;
@@ -209,19 +209,6 @@ static void		ft_cmd_exec(t_pipes *st_pipes, char **env)
 		exit(EXIT_FAILURE);
 	}
 	exit(EXIT_FAILURE);
-}
-
-int				ft_all_quot(char *str)
-{
-	if (!str)
-		return (0);
-	while (*str)
-	{
-		if (!M_CHECK(*str, '\'', '"'))
-			return (0);
-		str++;
-	}
-	return (1);
 }
 
 void			remove_backslashs(char **args)
@@ -321,11 +308,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	st_cmds = ft_new_cmds();
 	/// Fill args
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
-	/*
-		ft_putstr("--- start -- \n");
-		ft_put_strr(st_cmds->args);
-		ft_putstr("--- fin -- \n\n");
-	*/
+
 	/// Apply Lexer
 	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL)
 		return (-1);
@@ -333,7 +316,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	/// Check Error Syntax
 	if (error_syntax_lexer(st_cmds->st_tokens))
 	{
-		//ft_clear_cmds(st_cmds);
+		free_list_cmds(st_cmds);
 		return (0);
 	}
 	/// Apply sub_shell
@@ -348,6 +331,6 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	/// Executions
 	ft_cmds_exec(st_cmds);
 	/// Clear allocated space
-	//ft_clear_cmds(st_cmds);
+	free_list_cmds(st_cmds);
 	return (1);
 }
