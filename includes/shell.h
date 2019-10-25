@@ -6,7 +6,7 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/06/22 17:07:50 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/10/25 12:09:53 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ typedef struct s_jobctr
 	t_logopr			*st_logopr;
 	struct s_jobctr		*next;
 }						t_jobctr;
+
 
 typedef	struct s_cmds
 {
