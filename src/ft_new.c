@@ -25,7 +25,6 @@ t_cmds		*ft_new_cmds(void)
 	st_cmds->args = NULL;
 	st_cmds->st_jobctr = NULL;
 	st_cmds->st_tokens = NULL;
-	st_cmds->str_cmd = NULL;
 	return (st_cmds);
 }
 
@@ -93,7 +92,6 @@ t_pipes		*ft_new_pipe(void)
 	if ((st_pipes = (t_pipes *)malloc(sizeof(t_pipes))) == NULL)
 		return (NULL);
 	st_pipes->args = NULL;
-	st_pipes->cmd = NULL;
 	ft_bzero(st_pipes->fds, 2);
 	st_pipes->st_redir = NULL;
 	st_pipes->st_tokens = NULL;

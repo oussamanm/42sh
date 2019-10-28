@@ -21,7 +21,7 @@ char	*ft_read_heredoc(char *eol)
 	his = NULL;
 	select = NULL;
 	line = NULL;
-	ft_save_address(&his, &select);
+	save_address(&his, &select);
 	while (1337)
 	{
 		ft_putstr("heredoc> ");

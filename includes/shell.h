@@ -135,7 +135,6 @@ typedef struct			s_redir
 
 typedef struct			s_pipes
 {
-	char				*cmd;
 	int					fds[2];
 	int					status;
 	char				**args;
@@ -151,15 +150,15 @@ typedef struct 			s_logopr
 {
 	t_tokens			*st_tokens;
 	int					status;
-	int					bl_jobctr:1;
 	t_pipes				*st_pipes;
 	struct s_logopr		*next;
+	int					bl_jobctr:1;
 }						t_logopr;
 
 typedef struct s_jobctr
 {
-	t_tokens			*st_tokens;
 	int					status:1;
+	t_tokens			*st_tokens;
 	t_logopr			*st_logopr;
 	struct s_jobctr		*next;
 }						t_jobctr;
@@ -167,7 +166,6 @@ typedef struct s_jobctr
 
 typedef	struct s_cmds
 {
-	char				*str_cmd;
 	char				**args;
 	t_tokens			*st_tokens;
 	t_jobctr			*st_jobctr;
@@ -216,7 +214,7 @@ int						ft_edit_vrb(char *vrb, char ***env);
 ** Error handler
 */
 
-void					ft_print_error(char *msg, char *para1, char *para2, int rm);
+void					print_error(char *msg, char *para1, char *para2, int rm);
 void					ft_err_exit(char *str);
 int						ft_error_cd(char *path, char **arg);
 int						ft_call_lexer(t_pipes *st_pipes);
@@ -247,10 +245,10 @@ int			find_closed(char *str, char c);
 */
 
 char					*ft_find_path(char *arg, char **env);
-t_pipes					*ft_strr_list(char **args_pipe);
 int						ft_check_redi(t_pipes *st_pipes);
 int						ft_sum_asci(char str[]);
 int		find_char_escap(char *str, char c);
+int				ft_all_quot(char *str);
 
 
 /*
@@ -267,7 +265,7 @@ char			*ft_str_remp(char *str, char *remp, int start, int len);
 ** Signals
 */
 
-void					ft_call_signal();
+void					call_signal();
 void					ft_call_handler();
 void					ft_signal_default();
 
@@ -355,8 +353,8 @@ t_intern				*new_intern(char *key, char *value);
 ** Free
 */
 
-void					ft_clear_cmds(t_pipes *st_pipes);
-void					ft_clear_tokens(t_tokens *st_tokens);
+void					free_list_cmds(t_cmds *st_cmds);
+void					free_tokens(t_tokens *st_tokens, int free_content);
 
 /*
 ** Parse Cmds

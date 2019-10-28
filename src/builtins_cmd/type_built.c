@@ -77,7 +77,7 @@ int type_options(char **arg, int *flag)
         {
            if (t_fake_option(arg[i], &j))
            {
-               ft_print_error(TYPE_OEMSG, "42sh: type: -", &arg[i][j], 0);
+               print_error(TYPE_OEMSG, "42sh: type: -", &arg[i][j], 0);
                return (-1);
            }
            else if (type_options_(&arg[i][1], flag) == -1)

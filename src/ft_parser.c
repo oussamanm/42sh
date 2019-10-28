@@ -6,7 +6,7 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 21:06:25 by onouaman          #+#    #+#             */
-/*   Updated: 2019/10/25 12:04:55 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/10/25 12:17:41 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 			// Fill intern variable and tmp_env
 			if (st_logopr->st_pipes && !st_logopr->st_pipes->next && ft_check_token(st_logopr->st_pipes->st_tokens, T_EQUAL))
 				ft_fill_vrbs(st_logopr->st_pipes);
-
 			/// Fill args without T_EQUAL , T_SUBSHL,
 			ft_fill_args(st_logopr->st_pipes);
 			st_logopr = st_logopr->next;

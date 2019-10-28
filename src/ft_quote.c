@@ -115,7 +115,6 @@ static char		*ft_swap_vrb(char *arg, int *index)
 		return (arg);
 	else
 		temp = ft_strsub(arg, *index + 1, len_vrb);
-	printf("temp = %s \n",temp);
 	if (!len_vrb && arg[j] == '$' && ++len_vrb)
 		value = ft_itoa((int)getpid());
 	else if (!(value = ft_get_vrb(temp, g_environ)) && !(value = get_intern_value(temp)))
@@ -144,9 +143,7 @@ void			remove_backslash(char *cmd)
 }
 
 /*
-**  ft_corr_args : Correction cmd_line by change expansions :
-**				condition replace ~ : -followed by /
-**									: -followed a whitespace
+**  ft_corr_args : Correction cmd_line by change expansions and histr :
 */
 
 char			*ft_corr_args(char *cmd)
@@ -167,10 +164,10 @@ char			*ft_corr_args(char *cmd)
 		}
 		if (cmd[i] == '"')
 			bl_q = (bl_q == 0) ? 1 : 0;
-		i += (!bl_q && cmd[i] == '\'') ? find_char_escap(cmd + i + 1, '\'') + 2 : 0;
+		i += (!bl_q && cmd[i] == '\'') ? ft_find_char(cmd + i + 1, '\'') + 2 : 0;
 		/*if (0 && cmd[i] == '!')
 			cmd = expantion_hist(cmd, &i);
-		else*/ if (cmd[i] == '$' && cmd[i + 1])
+		else*/if (cmd[i] == '$' && cmd[i + 1])
 			cmd = ft_swap_vrb(cmd, &i);
 		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
 			(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))

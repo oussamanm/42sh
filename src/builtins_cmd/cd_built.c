@@ -25,18 +25,18 @@ int			ft_error_cd(char *path, char **arg)
     ft_putendl_fd(path, 2);
 	if (arg[0] != NULL && path != NULL && arg[0][0] == '~' &&
 			ft_isalpha(arg[0][1]) && access(path, F_OK) == -1 && (bl_err = 1))
-		ft_print_error(path, "cd :", FIL_NU, 0);
+		print_error(path, "cd :", FIL_NU, 0);
 	else if (ft_strlen(path) >= 1024 && (bl_err = 1))
-		ft_print_error(path, "cd :", "MAX PATH", 0);
+		print_error(path, "cd :", "MAX PATH", 0);
 	else if (access(path, F_OK) == -1 && (bl_err = 1))
-		ft_print_error(path, "cd :", FIL_NS, 0);
+		print_error(path, "cd :", FIL_NS, 0);
 	else
 	{
 		stat(path, &st_stat);
 		if (!S_ISDIR(st_stat.st_mode) && (bl_err = 1))
-			ft_print_error(FIL_ND, "cd :", path, 0);
+			print_error(FIL_ND, "cd :", path, 0);
 		else if (access(path, X_OK) == -1 && (bl_err = 1))
-			ft_print_error(FIL_PD, "cd :", path, 0);
+			print_error(FIL_PD, "cd :", path, 0);
 	}
 	return (bl_err);
 }
@@ -60,7 +60,7 @@ int cd_options(char **arg, int *flag)
                     *flag = 0 | P_flg;
                 else
                 {
-                    ft_print_error(CD_OEMSG, "42sh: cd: -", &arg[i][j], 0);
+                    print_error(CD_OEMSG, "42sh: cd: -", &arg[i][j], 0);
                     return (-1);
                 }
             }
