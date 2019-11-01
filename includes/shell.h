@@ -47,6 +47,7 @@
 # define ERRO_IN_AND -12
 
 #define MAX_MAPS 1000
+#define MAX_TAB_ADDR 10
 /*
 **Buttons
 */
@@ -353,6 +354,7 @@ t_intern				*new_intern(char *key, char *value);
 
 void					free_list_cmds(t_cmds *st_cmds);
 void					free_tokens(t_tokens *st_tokens, int free_content);
+void		free_addresses(void *table[MAX_TAB_ADDR]);
 
 /*
 ** Parse Cmds

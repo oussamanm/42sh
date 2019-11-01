@@ -10,14 +10,18 @@ _END = \x1b[0m
 NAME = 42sh
 
 SRC = ./src/
-OBJS = ft_error_handler.o\
-	ft_helper_func.o ft_quote.o ft_strsplit.o find_closed.o\
-	ft_variable.o minishell.o ft_signals.o ft_lexer_h.o\
-	ft_lexer.o ft_pipe.o ft_execution.o  ft_exec_built.o ft_free.o\
-	ft_parser.o ft_redir_read.o ft_redir_parse.o ft_new.o intern.o\
-	ft_redir_setup.o ft_vrbs_parse.o subshell.o line_continuation.o\
-	proc_sub.o\
-	builtins_cmd/built_env.o builtins_cmd/ft_builtins.o\
+OBJS = error_handler.o\
+	variable.o shell.o signals.o lexer_h.o\
+	lexer.o execution.o  exec_built.o\
+	parser.o intern.o vrbs_parse.o expansion.o \
+	utility/helper_func.o utility/new.o\
+	utility/free.o utility/ft_strsplit.o\
+	utility/find_closed.o\
+	features/pipe.o features/line_continuation.o\
+	features/proc_sub.o features/redir_parse.o\
+	features/redir_read.o features/redir_setup.o\
+	features/subshell.o\
+	builtins_cmd/built_env.o builtins_cmd/builtins.o\
 	builtins_cmd/cd_built.o builtins_cmd/echo_built.o\
 	builtins_cmd/echo_op_parser.o builtins_cmd/type_built.o\
 	builtins_cmd/type_op_func.o builtins_cmd/type_op_parser.o\
@@ -26,7 +30,7 @@ OBJS = ft_error_handler.o\
 	read_line/copy_paste.o\
 	read_line/ctrl_d.o\
 	read_line/delete.o\
-	read_line/ft_read_line.o\
+	read_line/read_line.o\
 	read_line/history.o\
 	read_line/home_end.o\
 	read_line/initial.o\

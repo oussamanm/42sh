@@ -112,3 +112,21 @@ void		free_list_cmds(t_cmds *st_cmds)
 	free_list_jobctr(st_cmds->st_jobctr);
 	free(st_cmds);
 }
+
+/*
+**	Free table of addresses
+*/
+
+void		free_addresses(void *table[MAX_TAB_ADDR])
+{
+	int i;
+
+	if (!table)
+		return ;
+	i = 0;
+	while (table[i])
+	{
+		ft_strdel(table[i]);
+		i++;
+	}
+}
