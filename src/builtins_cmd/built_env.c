@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_built_env.c                                     :+:      :+:    :+:   */
+/*   built_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/03 06:15:04 by onouaman          #+#    #+#             */
-/*   Updated: 2019/08/03 04:24:20 by onouaman         ###   ########.fr       */
+/*   Created: 2019/10/30 11:56:36 by onouaman          #+#    #+#             */
+/*   Updated: 2019/10/30 11:56:38 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void		move_to_env(char *key)
 **	Builten env
 */
 
-void			ft_buil_env(char **args, char ***tmp_env)
+void			built_env(char **args, char ***tmp_env)
 {
 	int		i;
 
@@ -56,12 +56,14 @@ void			ft_buil_env(char **args, char ***tmp_env)
 ** export Variable
 */
 
-void			ft_buil_export(t_tokens *st_tokens)
+void			built_export(t_tokens *st_tokens)
 {
 	int i;
 	char    *arg;
 
 	i = -1;
+	if (ft_count_tokens(st_tokens) == 1)
+		ft_put_strr(g_environ);
 	while (st_tokens)
 	{
 		if (st_tokens->token == T_EQUAL)
@@ -84,7 +86,7 @@ void			ft_buil_export(t_tokens *st_tokens)
 ** Unset Variable
 */
 
-void			ft_buil_unset(char **args)
+void			built_unset(char **args)
 {
 	int i;
 

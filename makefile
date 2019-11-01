@@ -10,18 +10,17 @@ _END = \x1b[0m
 NAME = 42sh
 
 SRC = ./src/
-OBJS = ft_built_env.o ft_builtins.o ft_error_handler.o\
-	ft_helper_func.o ft_quote.o ft_strsplit.o strsplit_h.o\
+OBJS = ft_error_handler.o\
+	ft_helper_func.o ft_quote.o ft_strsplit.o find_closed.o\
 	ft_variable.o minishell.o ft_signals.o ft_lexer_h.o\
 	ft_lexer.o ft_pipe.o ft_execution.o  ft_exec_built.o ft_free.o\
 	ft_parser.o ft_redir_read.o ft_redir_parse.o ft_new.o intern.o\
-	ft_redir_setup.o ft_vrbs_parse.o subshell.o line_complition.o\
-	builtins_cmd/cd_built.o\
-	builtins_cmd/echo_built.o\
-	builtins_cmd/echo_op_parser.o\
-	builtins_cmd/type_built.o\
-	builtins_cmd/type_op_func.o\
-	builtins_cmd/type_op_parser.o\
+	ft_redir_setup.o ft_vrbs_parse.o subshell.o line_continuation.o\
+	proc_sub.o\
+	builtins_cmd/built_env.o builtins_cmd/ft_builtins.o\
+	builtins_cmd/cd_built.o builtins_cmd/echo_built.o\
+	builtins_cmd/echo_op_parser.o builtins_cmd/type_built.o\
+	builtins_cmd/type_op_func.o builtins_cmd/type_op_parser.o\
 	read_line/addition.o\
 	read_line/auto_completion.o\
 	read_line/copy_paste.o\

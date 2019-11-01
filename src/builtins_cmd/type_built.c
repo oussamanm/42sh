@@ -108,7 +108,7 @@ void   ft_buil_type_(char *args, int flag)
         t_option(args, 0);
 }
 
-int    ft_buil_type(char **args, char **tmpenv)
+int    built_type(char **args, char **tmpenv)
 {
     int     flag;
     int     i;

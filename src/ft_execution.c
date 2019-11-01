@@ -285,12 +285,12 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		if (ft_check_redi(st_pipes) && ft_parse_redir(st_pipes) == PARSE_KO)
 			exit(EXIT_FAILURE);
 		if (!ft_strcmp(st_pipes->args[0], "echo"))
-			ft_buil_echo(st_pipes->args);
+			built_echo(st_pipes->args);
 		else if (!ft_check_cmd(st_pipes, environ)) /// Check if cmd and exist and permission
 			ft_cmd_exec(st_pipes, environ);
 	}
 	g_sign = 1;
-	wait(&rtn);
+	waitpid(pid, &rtn, 0);
 	g_sign = 0;
 	return ((rtn) ? 0 : 1);
 }
@@ -319,9 +319,17 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 		free_list_cmds(st_cmds);
 		return (0);
 	}
+
 	/// Apply sub_shell
 	apply_subsh(st_cmds->st_tokens);
-	
+
+	/// Aplly proc_sub
+	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT))
+	{	
+		proc_substitution(st_cmds->st_tokens);
+		return (0);
+	}
+
 	/// Fill Lists of lists
 	ft_parse_cmd(st_cmds);
 

@@ -39,6 +39,17 @@ typedef struct s_cdpkg
 }              t_cdpkg;
 
 /*
+** Builtins
+*/
+
+void					built_echo(char **arg);
+int						built_cd(char **arg, char **env);
+int						built_type(char **args, char **tmpenv);
+void					built_env(char **args, char ***tmp_env);
+void					built_unset(char **args);
+
+
+/*
 ** - COMMAND (TYPE) FUNCTIONS
 */
 

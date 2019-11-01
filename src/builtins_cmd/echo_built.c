@@ -91,7 +91,7 @@ void	e_interpretation(char *arg, int flag)
 **	Builten echo : O
 */
 
-void		ft_buil_echo(char **arg)
+void		built_echo(char **arg)
 {
 	int		flag;
     int		i;

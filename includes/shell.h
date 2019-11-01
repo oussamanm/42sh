@@ -39,6 +39,7 @@
 # define M_ESCAPED(x) (x == '\\')
 # define STR(x)  (*str)[x]
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
+# define MATCH_CLOSED(x, y)(((x == 'q' || x == 'Q') && x == y) || (x == 'S' && y == 's'))
 # define PROMPT 3
 # define PATHSIZE 1024
 # define PREV st_tokens->prev
@@ -86,6 +87,8 @@
 # define T_RED_APP_M	-169
 # define T_RED_HER_D	-120
 # define T_RED_BOTH		-122
+# define T_PROC_IN		1337
+# define T_PROC_OUT		42
 
 /*
 **Parsing
@@ -178,13 +181,8 @@ char		**g_environ;
 ** Builtins
 */
 
-void					ft_built_exit(t_pipes *st_pipes, char ***env);
-void					ft_buil_echo(char **arg);
-int						ft_buil_cd(char **arg, char **env);
-int						ft_buil_type(char **args, char **tmpenv);
-void					ft_buil_env(char **args, char ***tmp_env);
-void					ft_buil_export(t_tokens *st_tokens);
-void					ft_buil_unset(char **args);
+void					built_exit(t_pipes *st_pipes, char ***env);
+void					built_export(t_tokens *st_tokens);
 
 /*
 ** Intern variable
@@ -383,6 +381,6 @@ char					**ft_tokens_arg_env(t_tokens *st_tokens);
 */
 
 void					apply_subsh(t_tokens *st_tokens);
-
+void    proc_substitution(t_tokens *st_tokens);
 
 #endif

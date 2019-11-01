@@ -115,7 +115,7 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 		escaped = 0;
 		if (arg[i + 1] == ' ' || arg[i + 1] == '\t' || arg[i + 1] == '\0' ||
 			arg[i + 1] == '&' || arg[i + 1] == '|' ||
-				arg[i + 1] == '>' || arg[i + 1] == '<' || (arg[0] != '=' && arg[i + 1] == '=') ||
+				arg[i + 1] == '>' || arg[i + 1] == '<' || arg[i + 1] == '$' || (arg[0] != '=' && arg[i + 1] == '=') ||
 				arg[i + 1] == '"' || arg[i + 1] == '\'')
 		{
 			temp = ft_strsub(arg, 0, i + 1);
@@ -135,11 +135,16 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
 {
 	int len;
+	int token;
 
 	len = 0;
+	if (arg[0] == '$')
+		token = T_SUBSHL;
+	else
+		token = (arg[0] == '<') ? T_PROC_IN : T_PROC_OUT;
 	if ((len = find_closed(&arg[1], '(')) != -1)
 	{
-		ft_fill_token(st_tokens, T_SUBSHL, ft_strsub(arg, 0, len + 2), indx);
+		ft_fill_token(st_tokens, token, ft_strsub(arg, 0, len + 2), indx);
 		*j += (len + 1);
 		return ;
 	}
@@ -213,14 +218,14 @@ t_tokens	*ft_lexer(char **args)
 		st_tokens->prev->next = NULL;
 		free(st_tokens);
 	}
-	/*	st_tokens = st_head;
-		while (st_tokens != NULL)
-		{
-			dprintf(2, "index = %d Token = <%d> : <%s>\n",st_tokens->indx, st_tokens->token,st_tokens->value);
-			st_tokens = st_tokens->next;
-		}
-		dprintf(2,"\n--------------\n");
-		//exit(0);*/
+		// st_tokens = st_head;
+		// while (st_tokens != NULL)
+		// {
+		// 	dprintf(2, "index = %d Token = <%d> : <%s>\n",st_tokens->indx, st_tokens->token,st_tokens->value);
+		// 	st_tokens = st_tokens->next;
+		// }
+		// dprintf(2,"\n--------------\n");
+		//exit(0);
 	if (i == -1)
 		return (NULL);
 	return (st_head);

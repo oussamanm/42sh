@@ -82,6 +82,7 @@ void		ft_tokens_args(t_pipes *st_pipe)
 	t_tokens	*st_tokens;
 	int			len;
 	int			i;
+	int			index;
 
 	if (!st_pipe)
 		return ;
@@ -89,11 +90,20 @@ void		ft_tokens_args(t_pipes *st_pipe)
 	st_tokens = st_pipe->st_tokens;
 	len = ft_count_tokens(st_pipe->st_tokens);
 	st_pipe->args = ft_strr_new(len);
+	index = st_tokens->indx;
 	while (st_tokens)
 	{
 		if (st_tokens->is_arg != T_EQUAL)
 		{
-			st_pipe->args[i++] = ft_strdup(st_tokens->value);
+			if (i != 0 && index == st_tokens->indx)
+			{
+				st_pipe->args[i - 1] = ft_strjoir_rtn(st_pipe->args[i - 1], st_tokens->value, 1);
+			}
+			else
+			{
+				st_pipe->args[i++] = ft_strdup(st_tokens->value);
+				index = st_tokens->indx;
+			}
 		}
 		st_tokens = st_tokens->next;
 	}

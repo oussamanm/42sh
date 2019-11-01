@@ -13,8 +13,7 @@
 #include "shell.h"
 #include "read_line.h"
 
-
-int				get_last_flag(int *maps)
+int			get_last_flag(int *maps)
 {
 	int i;
 
@@ -26,7 +25,7 @@ int				get_last_flag(int *maps)
 	return (i - 1);
 }
 
-int				find_flag(int *maps, int flag)
+int			find_flag(int *maps, int flag)
 {
 	int index;
 
@@ -43,7 +42,7 @@ int				find_flag(int *maps, int flag)
 	return (-1);
 }
 
-void			clean_maps(int *maps)
+void		clean_maps(int *maps)
 {
 	int	i;
 	int	j;
@@ -61,7 +60,7 @@ void			clean_maps(int *maps)
 	ft_bzero(&maps[j], 1000 - j - 1);
 }
 
-int				count_key(int *maps, int key)
+int			count_key(int *maps, int key)
 {
 	int i;
 
@@ -73,10 +72,12 @@ int				count_key(int *maps, int key)
 	return (i);
 }
 
-int				closed_dquot(int *maps)
+int			closed_dquot(int *maps)
 {
 	int i;
 
+	if (!maps)
+		return (-1);
 	i = 0;
 	while (maps[i])
 	{
@@ -89,55 +90,45 @@ int				closed_dquot(int *maps)
 	return (0);
 }
 
-int				correct_maps(int *maps)
+int			correct_maps(int *maps)
 {
 	int i;
-	int d_quoted;
-	int	s_quoted;
+	int quoted[2];
 	int rtn;
 	int temp;
 
 	i = -1;
 	rtn = 0;
-	d_quoted = 0;
-	s_quoted = 0;
+	ft_bzero(quoted, sizeof(int) * 2);
 	while (maps[++i] > 0)
 	{
 		temp = 0;
-		if ((M_CHECK(maps[i], 'q', 'Q') && maps[i] == maps[i + 1]) ||
-			(maps[i] == 'S' && maps[i + 1] == 's'))
-		{
-			rtn++;
-			maps[i] = -1;
-			maps[i + 1] = -1;
-		}
+		if (MATCH_CLOSED(maps[i], maps[i + 1]) && ++rtn)
+			bchar(&maps[i], sizeof(int) * 2, -1);
 		else if (maps[i] == 'Q')
 		{
-			if (!d_quoted)
+			if (!quoted[1])
 			{
 				temp = count_key(&maps[i + 1], 'q');
 				temp = (temp == 0) ? closed_dquot(&maps[i + 1]) : temp;
 			}
-			d_quoted = (d_quoted) ? 0 : 1;
+			quoted[1] = (quoted[1]) ? 0 : 1;
 		}
-		else if (maps[i] == 'q' && !d_quoted)
+		else if (maps[i] == 'q' && !quoted[1])
 		{
 			if ((temp = find_flag(&maps[i + 1], 'q')) == -1)
-				temp = (!s_quoted) ? get_last_flag(&maps[i]) : temp;
-			s_quoted = (s_quoted) ? 0 : 1;
+				temp = (!quoted[0]) ? get_last_flag(&maps[i]) : temp;
+			quoted[0] = (quoted[0]) ? 0 : 1;
 		}
 		else if (maps[i] == 'S')
-		{
-			d_quoted = 0;
-			s_quoted = 0;
-		}
+			ft_bzero(quoted, sizeof(int) * 2);
 		while (temp-- > 0 && ++rtn)
 			maps[++i] = -1;
 	}
 	return (rtn);
 }
 
-void			fill_maps(char *str_cmd, int *maps, int j)
+void		fill_maps(char *str_cmd, int *maps, int j)
 {
 	int i;
 	int quoted;
@@ -148,41 +139,29 @@ void			fill_maps(char *str_cmd, int *maps, int j)
 	quoted = 0;
 	while (str_cmd[i])
 	{
-		if (str_cmd[i] == '\\' && (str_cmd[i + 1] != '\'' || (quoted == 0 || !j || (j && maps[j - 1] != 'q'))))
+		if (str_cmd[i] == '\\' &&
+			(str_cmd[i + 1] != '\'' || quoted == 0 || !j))/*|| (j && maps[j - 1] != 'q')))*/
 		{
-			i += (str_cmd[i + 1]) ? 2 : 1;
-			continue ;
+			i += (str_cmd[i + 1]) ? 1 : 0;
 		}
-		if (str_cmd[i] == '"')
+		else if (str_cmd[i] == '"')
 			maps[j++] = 'Q';
 		else if (str_cmd[i] == '\'')
 		{
 			quoted = (quoted) ? 0 : 1;
 			maps[j++] = 'q';
 		}
-		else if (str_cmd[i] == '(')
+		else if (M_SUBSH(str_cmd[i]) && str_cmd[++i] == '(')
 			maps[j++] = 'S';
 		else if (str_cmd[i] == ')')
 			maps[j++] = 's';
-		i++;
+		i += (str_cmd[i] != '\0');
 	}
-	/*
-		puts("\n----- in fill Maps ----\n");
-		ft_putnbrs(maps);
-		puts("\n----- in fill fin ----\n");
-	*/
 	while (correct_maps(maps))
-	{
-		/*
-			puts("\n********* After cleaned  ********n");
-			ft_putnbrs(maps);
-			puts("\n*** fin ***\n");
-		*/
 		clean_maps(maps);
-	}
 }
 
-static void		ft_read_subsh(char **line, t_select *select, t_history *his)
+static void	ft_read_subsh(char **line, t_select *select, t_history *his)
 {
 	if (!line || !(*line))
 		return ;
@@ -193,7 +172,8 @@ static void		ft_read_subsh(char **line, t_select *select, t_history *his)
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
 }
 
-static void		ft_read_quote(char **line, int quote, t_select *select, t_history *his)
+static void	ft_read_quote(char **line, int quote,
+	t_select *select, t_history *his)
 {
 	if (!line || !(*line))
 		return ;
@@ -212,7 +192,7 @@ static void		ft_read_quote(char **line, int quote, t_select *select, t_history *
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
 }
 
-void			compliting_line(char **str_cmds, t_select *select, t_history *his)
+void		compliting_line(char **str_cmds, t_select *select, t_history *his)
 {
 	int	*maps;
 	int	i;
@@ -222,11 +202,6 @@ void			compliting_line(char **str_cmds, t_select *select, t_history *his)
 		return ;
 	ft_bzero(maps, MAX_MAPS);
 	fill_maps(*str_cmds, maps, 0);
-	/*
-		 puts("\n----- Maps ----\n");
-		 ft_putnbrs(maps);
-		 puts("\n----- fin ----\n");
-	*/
 	i = get_last_flag(maps);
 	while (i >= 0 && !g_pos.exit)
 	{
@@ -236,15 +211,12 @@ void			compliting_line(char **str_cmds, t_select *select, t_history *his)
 			if (maps[i] == 'S')
 				ft_read_subsh(str_cmds, select, his);
 			else
-				ft_read_quote(str_cmds, (maps[i] == 'Q') ? '"' : '\'',select, his);
+				ft_read_quote(str_cmds, (maps[i] == 'Q') ? '"' : '\'', select, his);
 			fill_maps(&(*str_cmds)[index], maps, i + 1);
-				// puts("\n----- Maps 2 ----\n");
-				// ft_putnbrs(maps);
-				// puts("\n----- fin 2 ----\n");
 			i = get_last_flag(maps);
 			continue ;
 		}
 		i--;
 	}
-    free(maps);
+	free(maps);
 }

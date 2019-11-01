@@ -182,7 +182,7 @@ void    cd_ordlink(char **pwd, char **oldpwd, t_cdpkg v, char ***env, int *var)
     *var = 0;
 }
 
-int		ft_buil_cd(char **arg, char **env)
+int		built_cd(char **arg, char **env)
 {
     t_cdpkg		v;
     static char	*pwd;

@@ -47,17 +47,17 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	if (ft_check_redi(st_pipes) && ft_parse_redir(st_pipes) == PARSE_KO)
 		return (REDI_KO);
 	if (ft_strcmp((st_pipes->args)[0], "exit") == 0)
-		ft_built_exit(st_pipes, tmp_env);
+		built_exit(st_pipes, tmp_env);
 	if (ft_strcmp((st_pipes->args)[0], "env") == 0 && (rtn = 1))
-		ft_buil_env(&(st_pipes->args)[1], tmp_env);
+		built_env(&(st_pipes->args)[1], tmp_env);
 	else if (ft_strcmp((st_pipes->args)[0], "export") == 0 && (rtn = 1))
-		ft_buil_export(st_pipes->st_tokens);
+		built_export(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "unset") == 0 && (rtn = 1))
-		ft_buil_unset(&(st_pipes->args)[1]);
+		built_unset(&(st_pipes->args)[1]);
 	else if (ft_strcmp((st_pipes->args)[0], "cd") == 0 && (rtn = 1))
-		ft_buil_cd(&(st_pipes->args)[1], *tmp_env);
+		built_cd(&(st_pipes->args)[1], *tmp_env);
 	else if (ft_strcmp((st_pipes->args)[0], "type") == 0 && (rtn = 1))
-		ft_buil_type(&(st_pipes->args)[1], *tmp_env);
+		built_type(&(st_pipes->args)[1], *tmp_env);
 	while (st_pipes->st_redir != NULL)
 	{
 		if (st_pipes->st_redir->fd_des != -1)
