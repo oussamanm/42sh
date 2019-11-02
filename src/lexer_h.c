@@ -14,7 +14,7 @@
 
 
 /*
-** Fill t_tokens :
+** Fill t_tokens
 */
 
 void		ft_fill_token(t_tokens **st_tokens, int token,
@@ -22,6 +22,8 @@ void		ft_fill_token(t_tokens **st_tokens, int token,
 {
 	t_tokens	*prev;
 
+	if (st_tokens == NULL || (*st_tokens) == NULL)
+		return ;
 	(*st_tokens)->token = token;
 	(*st_tokens)->value = value;
 	(*st_tokens)->indx = indx;
@@ -32,7 +34,7 @@ void		ft_fill_token(t_tokens **st_tokens, int token,
 }
 
 /*
-**  append - to redirection if separated :
+**  append "-"" to redirection if separated
 */
 
 void		ft_upd_token(t_tokens *st_tokens, int token, char *value)
@@ -55,15 +57,16 @@ void		ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token)
 	t_tokens *st_temp;
 
 	st_temp = NULL;
-	if (!st_token || !st_src)
+	if (!st_token || !(*st_token) || !st_src)
 		return ;
 	(*st_token)->token = st_src->token;
 	(*st_token)->value = st_src->value;
 	(*st_token)->indx = st_src->indx;
 	(*st_token)->is_arg = st_src->is_arg;
+	/// ditermine if need to create next token or not
 	if (st_src->next && st_src->next->token != token)
 	{
-		if (M_CHECK(token, T_LOGOPR_AND, T_LOGOPR_AND) &&
+		if (token == T_LOGOPR_AND && st_src->next &&
 			M_CHECK(st_src->next->token, T_LOGOPR_AND, T_LOGOPR_OR))
 			return ;
 		(*st_token)->next = ft_new_token();

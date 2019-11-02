@@ -49,7 +49,7 @@ char			*ft_str_remp(char *str, char *remp, int start, int len)
 
 static char		*get_para_expan(char *arg, int *len_vrb)
 {
-	int i;
+	int		i;
 	char	*str_rtn;
 
 	if (!arg)
@@ -62,11 +62,10 @@ static char		*get_para_expan(char *arg, int *len_vrb)
 			break ;
 		i++;
 	}
+	str_rtn = ft_strsub(arg, 1, i - 1);
 	*len_vrb += (i + 1);
-	str_rtn = ft_strsub(arg, 0, i);
 	return (str_rtn);
 }
-
 
 /*
 **  ft_swap_vrb : Swap Variable with value :
@@ -87,11 +86,11 @@ static char		*ft_swap_vrb(char *arg, int *index)
 	len_vrb = 0;
 	j = *index + 1;
 	/// get len of variable
-	while (arg[j] && (ft_isalnum(arg[j]) || arg[j] == '_') && ++j && ++len_vrb);
-
+	while (arg[j] && (ft_isalnum(arg[j]) || arg[j] == '_') && ++len_vrb)
+		j++;
 	/// get variable
-	if (!len_vrb && arg[j] == '{' && ++len_vrb)
-		variable = get_para_expan(&arg[j + 1], &len_vrb);
+	if (!len_vrb && arg[j] == '{')
+		variable = get_para_expan(&arg[j], &len_vrb);
 	else if (!len_vrb && arg[j] != '$' && ++(*index))
 		return (arg);
 	else
@@ -105,7 +104,7 @@ static char		*ft_swap_vrb(char *arg, int *index)
 	
 	/// get result
 	result = ft_str_remp(arg, value, *index, len_vrb + 1);
-	*index += ft_strlen(value);
+	*index += (ft_strlen(value) - 1);
 	free_addresses((void *[MAX_TAB_ADDR]){&variable, &value, &arg, NULL});
 	return (result);
 }
@@ -136,58 +135,10 @@ char			*ft_corr_args(char *cmd)
 			cmd = expantion_hist(cmd, &i);*/
 		else if (cmd[i] == '$' && cmd[i + 1])
 			cmd = ft_swap_vrb(cmd, &i);
-		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) && (cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))
+		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
+			(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))
 			cmd = ft_str_remp(cmd, ft_get_vrb("HOME", g_environ), i, -1);
 		i += cmd[i] != '\0';
 	}
 	return (cmd);
-}
-
-
-/*
-**	ft_remove_quot : Remove Quote from args :
-*/
-
-void			ft_remove_quot(char **args)
-{
-	int		j;
-	int		i;
-	char	*arg;
-
-	if (args == NULL)
-		return ;
-	i = -1;
-	while (args[++i] != NULL)
-	{
-		arg = args[i];
-		j = -1;
-		if ((arg[0] == '\'' || arg[0] == '"') && arg[ft_strlen(arg) - 1] == arg[0])
-		{
-			ft_strcpy(arg, &arg[1]);
-			arg[ft_strlen(arg) - 1] = 0;
-		}
-	}
-}
-
-
-/*
-**	ft_update_tokens : update token by remove quotes
-*/
-
-void			ft_update_tokens(t_tokens *st_tokens)
-{
-	char		*temp;
-	t_tokens	*st_temp;
-
-	st_temp = st_tokens;
-	while (st_temp)
-	{
-		if (st_temp->token == T_QUO || st_temp->token == T_DQUO)
-		{
-			temp = ft_strsub(st_temp->value, 1, ft_strlen(st_temp->value) - 2);
-			ft_strdel(&(st_temp->value));
-			st_temp->value = temp;
-		}
-		st_temp = st_temp->next;
-	}
 }

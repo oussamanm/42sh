@@ -14,7 +14,7 @@
 #include "read_line.h"
 
 /*
-** ft_lexer_quot : lexer for quote
+** lexer for quote
 */
 
 void		ft_lexer_quot(t_tokens **st_tokens, char *arg, int *j, int indx)
@@ -35,7 +35,7 @@ void		ft_lexer_quot(t_tokens **st_tokens, char *arg, int *j, int indx)
 }
 
 /*
-** ft_lexer_red : lexer for all redirection
+** lexer for all redirection
 */
 
 void		ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx)
@@ -55,7 +55,7 @@ void		ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx)
 			str[k++] = ERRO_IN_AND;
 		else if ((arg[i] == '>' || arg[i] == '<') && (str[k++] = arg[i]))
 		{
-			if (arg[i + 1] && arg[i + 1] == arg[i])
+			if (arg[i + 1] == arg[i])
 				str[k++] = arg[++i];
 		}
 		else if (arg[i] == '-' && k == 2 && str[1] == '&')
@@ -80,7 +80,8 @@ void		ft_lexer_logopr(t_tokens **st_tokens, char *arg, int *j, int indx)
 	temp = NULL;
 	while (arg[i])
 	{
-		if ((arg[i] == '|' && arg[i + 1] == '|') || (arg[i] == '&' && arg[i + 1] == '&'))
+		if ((arg[i] == '|' && arg[i + 1] == '|')
+			|| (arg[i] == '&' && arg[i + 1] == '&'))
 		{
 			temp = (arg[i] == '|') ? ft_strdup("||") : ft_strdup("&&");
 			i++;
@@ -93,7 +94,7 @@ void		ft_lexer_logopr(t_tokens **st_tokens, char *arg, int *j, int indx)
 }
 
 /*
-** ft_lexer_txt : lexer for any txt
+** lexer for txt
 */
 
 void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
@@ -102,9 +103,9 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 	int		escaped;
 	char	*temp;
 
-	i = 0;
+	i = -1;
 	escaped = 0;
-	while (arg[i] != '\0')
+	while (arg[++i] != '\0')
 	{
 		if (arg[i] == '\\' && !escaped)
 		{
@@ -113,29 +114,26 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 			continue ;
 		}
 		escaped = 0;
-		if (arg[i + 1] == ' ' || arg[i + 1] == '\t' || arg[i + 1] == '\0' ||
-			arg[i + 1] == '&' || arg[i + 1] == '|' ||
-				arg[i + 1] == '>' || arg[i + 1] == '<' || arg[i + 1] == '$' || (arg[0] != '=' && arg[i + 1] == '=') ||
-				arg[i + 1] == '"' || arg[i + 1] == '\'')
+		if (arg[i + 1] == ' ' || arg[i + 1] == '\t' || !arg[i + 1] ||
+			arg[i + 1] == '&' || arg[i + 1] == '|' || M_REDIR(arg[i + 1]) ||
+			arg[i + 1] == '$' || (arg[0] != '=' && arg[i + 1] == '=') || IS_QUOTE(arg[i + 1]))
 		{
 			temp = ft_strsub(arg, 0, i + 1);
 			ft_fill_token(st_tokens, T_TXT, temp, indx);
 			break ;
 		}
-		i++;
 	}
 	*j += i;
 }
 
-
 /*
-**	Lexer sub_shell 
+**	Lexer sub_shell
 */
 
 void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
 {
-	int len;
-	int token;
+	int	len;
+	int	token;
 
 	len = 0;
 	if (arg[0] == '$')
@@ -150,9 +148,8 @@ void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
 	}
 }
 
-
 /*
-**  call funct lexer
+**  call functions for lexer
 */
 
 void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
@@ -164,16 +161,13 @@ void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
 	j = -1;
 	while (arg[++j])
 	{
-				if (arg[j] == '\\')
-				{
-					//j += (arg[j + 1] && !M_SPEC_CHARC(arg[j + 1])) ? 1 : 0;
+	/*Esca_ch*/	if (arg[j] == '\\')
 					ft_lexer_txt(st_tokens, &arg[j], &j, i);
-				}
-	/*Quot*/	else if (arg[j] == '"' || arg[j] == '\'')
+	/*Quot*/	else if (IS_QUOTE(arg[j]))
 					ft_lexer_quot(st_tokens, &arg[j], &j, i);
-	/*Redi*/	else if (arg[j] == '&' && ft_check_char("><", arg[j + 1]))
+	/*Redi*/	else if (arg[j] == '&' && M_CHECK(arg[j + 1], '>', '<'))
 					ft_lexer_red(st_tokens, &arg[j], &j, i);
-				else if ((arg[j] == '>' || arg[j] == '<') && arg[j + 1] != '(')
+				else if (M_CHECK(arg[j], '>', '<') && arg[j + 1] != '(')
 					ft_lexer_red(st_tokens, &arg[j], &j, i);
 				else if ((*st_tokens)->prev && (*st_tokens)->prev->token == T_RED_OUT_A
 					&& arg[j] == '-' && j && arg[j - 1] == '&')
@@ -183,9 +177,9 @@ void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
 	/*Logi*/	else if ((arg[j] == '&' && arg[j + 1] == '&') || (arg[j] == '|' && arg[j + 1] == '|'))
 					ft_lexer_logopr(st_tokens, &arg[j], &j, i);
 	/*Jobs*/	else if (arg[j] == '&')
-					ft_fill_token(st_tokens, '&', ft_strdup("&"), i);
-				else if (arg[j] == '=' && (*st_tokens)->prev->token != T_EQUAL)
-					ft_fill_token(st_tokens, '=', ft_strdup("="), i);
+					ft_fill_token(st_tokens, T_JOBCTR, ft_strdup("&"), i);
+				else if (arg[j] == '=' && (*st_tokens)->prev && (*st_tokens)->prev->token != T_EQUAL)
+					ft_fill_token(st_tokens, T_EQUAL, ft_strdup("="), i);
 	/*SUB_SH*/	else if ((arg[j] == '$' || M_CHECK(arg[j], '>', '<')) && arg[j + 1] == '(')
 					ft_lexer_subshl(st_tokens, &arg[j], &j, i);
 	/*Txt*/		else
@@ -194,24 +188,24 @@ void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
 }
 
 /*
-** ft_lexer : Lexer
+** Lexer
 */
 
 t_tokens	*ft_lexer(char **args)
 {
-	char		*arg;
 	t_tokens	*st_tokens;
 	t_tokens	*st_head;
 	int			i;
 
-	i = -1;
-	//printf("START \n");
+	i = 0;
+	if (args == NULL)
+		return (NULL);
 	st_tokens = ft_new_token();
 	st_head = st_tokens;
-	while (args[++i] != '\0')
+	while (args[i] != '\0')
 	{
-		arg = args[i];
-		ft_lexer_h(&st_tokens, arg, i);
+		ft_lexer_h(&st_tokens, args[i], i);
+		i++;
 	}
 	if (st_tokens != NULL && st_tokens->prev != NULL)
 	{
@@ -225,8 +219,8 @@ t_tokens	*ft_lexer(char **args)
 		// 	st_tokens = st_tokens->next;
 		// }
 		// dprintf(2,"\n--------------\n");
-		//exit(0);
-	if (i == -1)
+		// exit(0);
+	if (i == 0)
 		return (NULL);
 	return (st_head);
 }
