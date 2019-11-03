@@ -64,7 +64,7 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	i = 0;
 	if (!str_cmds)
 		return ;
-	args = ft_str_split_q(str_cmds, ";");
+	args = ft_str_split_q(str_cmds, "; \t\n");
 	if (!error_syntax_semi(str_cmds, args) && !error_syntax_expans(str_cmds))
 	{
 		while (args[i] != NULL)

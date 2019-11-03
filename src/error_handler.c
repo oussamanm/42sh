@@ -35,6 +35,8 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 			ft_strcpy(tmp, "&&");
 		else if (st_tokens->token == T_LOGOPR_OR && ((!PREV || !NEXT) || NEXT->token == T_LOGOPR_OR))
 			ft_strcpy(tmp, "||");
+		else if (M_BRACKET(st_tokens->token))
+			tmp[0] = st_tokens->token;
 		if (tmp[0] != 0)
 			break ;
 		st_tokens = st_tokens->next;
@@ -56,9 +58,9 @@ int			error_syntax_semi(char *str_cmds, char **args)
 
 	temp = 0;
 	i = -1;
-	if (!args)
+	if (!args || !(*args))
 	{
-		ft_putstr_fd("syntax error near unexpected tokenl `;' \n", 2);
+		print_error("syntax error near unexpected tokenl `;'", "42sh :", NULL, 0);
 		return (1);
 	}
 	while (str_cmds[++i])
@@ -67,7 +69,7 @@ int			error_syntax_semi(char *str_cmds, char **args)
 		{
 			if (temp || str_cmds[0] == ';')
 			{
-				ft_putstr_fd("syntax error near unexpected token `;' \n", 2);
+				print_error("syntax error near unexpected token `;'", "42sh :", NULL, 0);
 				return (1);
 			}
 			i++;

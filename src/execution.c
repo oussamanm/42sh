@@ -325,7 +325,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 
 	/// Aplly proc_sub
 	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT))
-	{	
+	{
 		proc_substitution(st_cmds->st_tokens);
 		return (0);
 	}

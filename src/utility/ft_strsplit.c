@@ -19,10 +19,12 @@
 char			**ft_str_split_q(char *str, char *c)
 {
 	int		i;
+	int		j;
 	char	**s_re;
 	char	*temp;
 
 	i = -1;
+	j = 0;
 	if (!str || !c)
 		return (NULL);
 	temp = ft_strdup(str);
@@ -33,8 +35,8 @@ char			**ft_str_split_q(char *str, char *c)
 			i += (temp[i + 1]) ? 1 : 0;
 			continue ;
 		}
-		if (temp[i] == '(' || temp[i] == '"' || temp[i] == '\'')
-			i += find_closed(&temp[i], temp[i]);
+		if ((temp[i] == '(' || IS_QUOTE(temp[i])) && (j = find_closed(&temp[i], temp[i])) != -1)
+			i += j;
 		if (ft_check_char(c, temp[i]))
 			temp[i] = -1;
 	}

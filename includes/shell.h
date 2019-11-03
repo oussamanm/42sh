@@ -30,6 +30,8 @@
 
 # define BUFF_SIZE 10
 # define UNUSED(x) (void)(x)
+# define DEBUG(msg) puts(msg)
+# define DEBUGF(msg,...) printf(msg, __VA_ARGS__)
 # define M_CHECK(x , y, z) ((x == y || x == z) ? 1 : 0)
 # define IS_QUOTE(x) (x == 34 || x == 39)
 # define M_CHECK_W(C)(C==32||C==9||C==11||C==10||C==13||C==12)
@@ -37,6 +39,7 @@
 # define M_SUBSH(x) (M_REDIR(x) || x == '$')
 # define M_SPEC_CHARC(x) (x=='$'||x=='`'||x=='\\'||x=='"'||x=='\n')
 # define M_ESCAPED(x) (x == '\\')
+# define M_BRACKET(x) (x == '(' || x == ')')
 # define STR(x)  (*str)[x]
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
 # define MATCH_CLOSED(x, y)(((x == 'q' || x == 'Q') && x == y) || (x == 'S' && y == 's'))
@@ -77,6 +80,8 @@
 # define T_EQUAL		61
 # define T_HIST			33
 # define T_HIST_LAST	66
+# define T_BRACKET_O	40
+# define T_BRACKET_C	41
 # define T_RED_IN_S		-60
 # define T_RED_IN_A		-98
 # define T_RED_IN_B		-143
@@ -120,9 +125,9 @@ typedef struct			s_filedes
 
 typedef struct    s_intern
 {
-    char    *key;
-    char    *value;
-    struct s_intern *next;
+	char    *key;
+	char    *value;
+	struct s_intern *next;
 }                t_intern;
 
 

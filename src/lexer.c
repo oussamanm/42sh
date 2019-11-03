@@ -114,7 +114,7 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 			continue ;
 		}
 		escaped = 0;
-		if (arg[i + 1] == ' ' || arg[i + 1] == '\t' || !arg[i + 1] ||
+		if (arg[i + 1] == ' ' || arg[i + 1] == '\t' || !arg[i + 1] || M_BRACKET(arg[i + 1]) ||
 			arg[i + 1] == '&' || arg[i + 1] == '|' || M_REDIR(arg[i + 1]) ||
 			arg[i + 1] == '$' || (arg[0] != '=' && arg[i + 1] == '=') || IS_QUOTE(arg[i + 1]))
 		{
@@ -172,6 +172,8 @@ void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
 				else if ((*st_tokens)->prev && (*st_tokens)->prev->token == T_RED_OUT_A
 					&& arg[j] == '-' && j && arg[j - 1] == '&')
 					ft_upd_token((*st_tokens)->prev, T_RED_OUT_B, ">&-");
+	/*Brack*/	else if (M_BRACKET(arg[j]))
+					ft_fill_token(st_tokens, arg[j], ft_strdup((char [2]){arg[j], '\0'}), i);
 	/*Pipe*/	else if (arg[j] == '|' && arg[j + 1] != '|')
 					ft_fill_token(st_tokens, T_PIPE, ft_strdup("|"), i);
 	/*Logi*/	else if ((arg[j] == '&' && arg[j + 1] == '&') || (arg[j] == '|' && arg[j + 1] == '|'))
