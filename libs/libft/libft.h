@@ -146,6 +146,8 @@ int					ft_isallalphanum(char *str);
 int					ft_isallprint(char *str);
 void				print_error(char *msg, char *para1, char *para2, int rm);
 char				*ft_strtrim_and_free(char *s);
+void				ft_strr_trim(char **args);
+char				*ft_str_trim(char *str);
 int					ft_putnbrs(int *table);
 
 #endif

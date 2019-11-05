@@ -64,7 +64,8 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	i = 0;
 	if (!str_cmds)
 		return ;
-	args = ft_str_split_q(str_cmds, "; \t\n");
+	args = ft_str_split_q(str_cmds, ";");
+	ft_strr_trim(args);
 	if (!error_syntax_semi(str_cmds, args) && !error_syntax_expans(str_cmds))
 	{
 		while (args[i] != NULL)
@@ -102,7 +103,6 @@ int			main(void)
 			continue ;
 		// Check incomplete syntax of Sub_shell or Quoting
 		compliting_line(&str_cmds, select, his);
-
 		ft_stock_history(his->history, str_cmds, his->his_count);
 		his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
 		// Execution

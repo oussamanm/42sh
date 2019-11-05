@@ -27,13 +27,13 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 		return (1);
 	while (st_tokens)
 	{
-		if (st_tokens->token == T_PIPE && ((!PREV || !NEXT) || NEXT->token == T_PIPE))
+		if (st_tokens->token == T_PIPE && (!PREV || !NEXT || NEXT->token == T_PIPE))
 			ft_strcpy(tmp, "|");
 		else if (st_tokens->token == T_JOBCTR && (!PREV || (NEXT && NEXT->token == T_JOBCTR)))
 			ft_strcpy(tmp, "&");
-		else if (st_tokens->token == T_LOGOPR_AND && ((!PREV || !NEXT) || NEXT->token == T_LOGOPR_AND))
+		else if (st_tokens->token == T_LOGOPR_AND && (!PREV || !NEXT || NEXT->token == T_LOGOPR_AND))
 			ft_strcpy(tmp, "&&");
-		else if (st_tokens->token == T_LOGOPR_OR && ((!PREV || !NEXT) || NEXT->token == T_LOGOPR_OR))
+		else if (st_tokens->token == T_LOGOPR_OR && (!PREV || !NEXT || NEXT->token == T_LOGOPR_OR))
 			ft_strcpy(tmp, "||");
 		else if (M_BRACKET(st_tokens->token))
 			tmp[0] = st_tokens->token;
@@ -58,9 +58,9 @@ int			error_syntax_semi(char *str_cmds, char **args)
 
 	temp = 0;
 	i = -1;
-	if (!args || !(*args))
+	if (!args || !(*args) || (*args)[0] == '\0')
 	{
-		print_error("syntax error near unexpected tokenl `;'", "42sh :", NULL, 0);
+		print_error("syntax error near unexpected token `;'", "42sh :", NULL, 0);
 		return (1);
 	}
 	while (str_cmds[++i])
@@ -94,8 +94,8 @@ int			error_syntax_expans(char *str_cmds)
 	if (!str_cmds)
 		return (0);
 	bl = 0;
-	i = -1;
-	while (str_cmds[++i])
+	i = 0;
+	while (str_cmds[i])
 	{
 		if (!bl && str_cmds[i] == '$' && str_cmds[i + 1] == '{' && ++i)
 			bl = 1;
@@ -109,54 +109,43 @@ int			error_syntax_expans(char *str_cmds)
 				return (1);
 			}
 		}
+		i += (str_cmds[i] != '\0');
 	}
 	return (0);
 }
 
-/*
-** ft_error_redir_h: helper funct for ft_error_redir :
-*/
-
-int			ft_error_redir_h(t_tokens *st_tokens)
-{
-	if (st_tokens->token == T_RED_APP_S && NEXT && NEXT->token == T_TXT)
-		if (NEXT->indx != st_tokens->indx &&
-			NEXT->next && NEXT->next->token < 0)
-			return (ft_putendl_fd("syntax error near unexpected token ", 2));
-	if (st_tokens->token < T_RED_APP_M)
-		return (ft_putendl_fd("syntax error near unexpected token ", 2));
-	if (st_tokens->token <= -122 && !ft_strncmp(st_tokens->value, "><", 2))
-		return (ft_putendl_fd("syntax error near unexpected token `<'", 2));
-	return (0);
-}
 
 /*
-** ft_error_redir: Check Error syntax of redirection
+** Check Error syntax of redirection
 */
 
 int			ft_error_redir(t_tokens *st_tokens)
 {
+	char msg_err[50];
+
+	ft_bzero(msg_err, 50);
 	while (st_tokens != NULL)
 	{
-		if (st_tokens->token == T_RED_OUT_S && NEXT && NEXT->token == T_TXT &&
-			NEXT->value && NEXT->value[0] == '&')
-			return (ft_putendl_fd("syntax error near unexpected token `&'", 2));
-		if (ft_error_redir_h(st_tokens))
-			return (1);
-		if (st_tokens->token < 0 &&
-			ft_check_char(st_tokens->value, ERRO_IN_AND))
-			return (ft_putendl_fd("syntax error near unexpected token `&'", 2));
-		if (st_tokens->token < 0 && (NEXT == NULL || NEXT->token < 0) &&
-			st_tokens->token != -145 && st_tokens->token != -143)
-			return (ft_putendl_fd("syntax error near unexpected token", 2));
-		if (st_tokens->token == T_RED_OUT_A && NEXT &&
-			!ft_isalldigit(NEXT->value) && PREV && PREV->indx == st_tokens->indx
-			&& ft_isalldigit(PREV->value) && ft_atoi(PREV->value) != 1)
-			return (ft_putendl_fd("ambiguous redirect", 2));
-		if ((st_tokens->token == T_RED_OUT_A || st_tokens->token == T_RED_HER_D)
-			&& NEXT && NEXT->value && NEXT->value[0] == '&')
-			return (ft_putendl_fd("syntax error near unexpected token `&'", 2));
+		/// check  case redirection followed by NULL or a token not TXT
+		if (st_tokens->token < 0 && (NEXT == NULL || NEXT->token != T_TXT))
+			ft_strcpy(msg_err, "42sh: syntax error near unexpected token");
+		/// check token not exist
+		else if (st_tokens->token < T_RED_APP_A)
+			ft_strcpy(msg_err, "42sh: syntax error near unexpected token");
+		/// check unexpected & in redirection
+		else if (st_tokens->token < 0 && ft_check_char(st_tokens->value, ERRO_IN_AND))
+			ft_strcpy(msg_err, "42sh: syntax error near unexpected token `&'");
+		/// check  case "echo hello 3>&file" => "ambiguous redirect"
+		else if (st_tokens->token == T_RED_OUT_A && NEXT && PREV &&
+			!ft_isalldigit(NEXT->value) && PREV->indx == st_tokens->indx &&
+			ft_isalldigit(PREV->value) && ft_atoi(PREV->value) != 1)
+			ft_strcpy(msg_err, "42sh: ambiguous redirect");
+		/// check case token >< 
+		else if (st_tokens->token <= -122 && !ft_strncmp(st_tokens->value, "><", 2))
+			ft_strcpy(msg_err, "42sh: syntax error near unexpected token `<'");
 		st_tokens = NEXT;
 	}
+	if (msg_err[0] != 0)
+		return (1);
 	return (0);
 }

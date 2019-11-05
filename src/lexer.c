@@ -49,9 +49,9 @@ void		ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx)
 	ft_bzero(str, 5);
 	while (arg[++i] != '\0')
 	{
-		if (arg[i] == '&' && i != 2)
+		if (arg[i] == '&')
 			str[k++] = '&';
-		else if (arg[i] == '&')
+		else if (arg[i] == '&' && i > 2)
 			str[k++] = ERRO_IN_AND;
 		else if ((arg[i] == '>' || arg[i] == '<') && (str[k++] = arg[i]))
 		{

@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "../libft.h"
+#include <stdio.h>
+
 
 char		**alloc_chain(char **env, int nbr)
 {
@@ -80,4 +82,38 @@ char		*ft_strfreejoin(char *s1, char *s2)
 	free(s1);
 	free(s2);
 	return (result);
+}
+
+char		*ft_str_trim(char *str)
+{
+	int	i;
+	int	len_spc;
+
+	i = 0;
+	len_spc = 0;
+	if (!str)
+		return (NULL);
+	if (!ft_isspace(str[0]) && !ft_isspace(str[ft_strlen(str) - 1]))
+		return (str);
+	while (ft_isspace(str[i++]))
+		len_spc++;
+	if (len_spc != 0)
+		str = ft_strcpy(str, &str[len_spc]);
+	len_spc = 0;
+	if ((i = ft_strlen(str) - 1) > 0)
+	{
+		while (i >= 0 && ft_isspace(str[i]))
+			str[i--] = 0;
+	}
+	return (str);
+}
+void		ft_strr_trim(char **args)
+{
+	if (!args)
+		return ;
+	while (*args)
+	{
+		*args = ft_str_trim(*args);
+		args++;
+	}
 }
