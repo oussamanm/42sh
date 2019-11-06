@@ -202,7 +202,7 @@ t_tokens	*ft_lexer(char **args)
 	i = 0;
 	if (args == NULL)
 		return (NULL);
-	st_tokens = ft_new_token();
+	st_tokens = (ft_strrlen(args) > 0) ? ft_new_token() : NULL;
 	st_head = st_tokens;
 	while (args[i] != '\0')
 	{

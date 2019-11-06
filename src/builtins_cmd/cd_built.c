@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-**	Check Error cd builten : O
+**	Check Error cd builten
 */
 
 int			ft_error_cd(char *path, char **arg)
@@ -22,7 +22,7 @@ int			ft_error_cd(char *path, char **arg)
 	struct stat	st_stat;
 
 	bl_err = 0;
-    ft_putendl_fd(path, 2);
+    //ft_putendl_fd(path, 2);
 	if (arg[0] != NULL && path != NULL && arg[0][0] == '~' &&
 			ft_isalpha(arg[0][1]) && access(path, F_OK) == -1 && (bl_err = 1))
 		print_error(path, "cd :", FIL_NU, 0);

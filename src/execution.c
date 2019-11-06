@@ -139,33 +139,31 @@ static void		ft_cmds_exec(t_cmds *st_cmds)
 ** Check if exist Cmd : check if Ok and permission
 */
 
-int				ft_check_cmd(t_pipes *st_pipes, char **environ)
+int				ft_check_cmd(char *cmd, char **environ)
 {
 	int			rtn;
-	char		*str_arg;
-	char		*cmd;
+	char		*path_exec;
 	struct stat	st_stat;
 
-	if (!st_pipes)
+	if (!cmd)
 		return (0);
 	rtn = 0;
-	cmd = ft_strdup(st_pipes->args[0]);
-	if (!ft_check_char(cmd, '/'))
-		str_arg = ft_find_path(cmd, environ);
-	else
+	if (!ft_check_char(cmd, '/'))	/// case of cmd
+		path_exec = ft_find_path(cmd, environ);
+	else							/// case of PATH exec
 	{
-		str_arg = ft_strdup(cmd);
-		if (access(str_arg, F_OK) != 0 && ++rtn)
-			print_error(FIL_NS, "42sh :", str_arg, 2);
-		else if (!lstat(str_arg, &st_stat) && S_ISDIR(st_stat.st_mode) && ++rtn)
-			print_error(IS_DIR, "42sh :", str_arg, 2);
+		path_exec = ft_strdup(cmd);
+		if (access(cmd, F_OK) != 0 && ++rtn)
+			print_error(FIL_NS, NULL, cmd, 0);
+		else if (!lstat(cmd, &st_stat) && S_ISDIR(st_stat.st_mode) && ++rtn)
+			print_error(IS_DIR, NULL, cmd, 0);
 	}
-	if (!rtn && str_arg && access(str_arg, X_OK) && ++rtn)
-		print_error(FIL_PD, NULL, str_arg, 2);
-	if (!rtn && (!str_arg || !ft_strlen(str_arg)) && ++rtn)
-		print_error(CMD_NF, "42sh: ", cmd, 0);
-	(cmd) ? ft_strdel(&cmd) : NULL;
-	(!rtn && str_arg) ? ft_strdel(&str_arg) : NULL;
+	if (!rtn && path_exec && (access(path_exec, X_OK) ||
+		access(path_exec, R_OK)) && ++rtn)
+		print_error(FIL_PD, NULL, cmd, 0);
+	if (!rtn && (!path_exec || !ft_strlen(path_exec)) && ++rtn)
+		print_error(CMD_NF, NULL, cmd, 0);
+	free(path_exec);
 	(rtn) ? exit(EXIT_FAILURE) : NULL;
 	return (rtn);
 }
@@ -189,25 +187,24 @@ void			ft_strrtrim(char **args)
 }
 
 /*
-** Execute Cmd
+** Execute of Cmd
 */
 
-static void		ft_cmd_exec(t_pipes *st_pipes, char **env)
+static void		ft_cmd_exec(char **args, char **env)
 {
 	char	*str_arg;
 
 	str_arg = NULL;
-	if (st_pipes->args == NULL || st_pipes->args[0] == NULL)
+	if (!args || !args[0])
 		exit(EXIT_FAILURE);
-	if (ft_check_char(st_pipes->args[0], '/'))
-		str_arg = st_pipes->args[0];
+	if (ft_check_char(args[0], '/'))
+		str_arg = args[0];
 	else
-		str_arg = ft_find_path(st_pipes->args[0], env);
+		str_arg = ft_find_path(args[0], env);
 	if (str_arg != NULL)
 	{
-		execve(str_arg, st_pipes->args, env);
+		execve(str_arg, args, env);
 		ft_strdel(&str_arg);
-		exit(EXIT_FAILURE);
 	}
 	exit(EXIT_FAILURE);
 }
@@ -262,8 +259,6 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 
 	pid = 0;
 	rtn = 0;
-	/// remove space from cmd
-	//ft_strrtrim(st_pipes->args);
 
 	/// Remove backslashs
 	remove_backslashs(st_pipes->args);
@@ -271,7 +266,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	/// Remove Quote
 	ft_remove_quot(st_pipes->args);
 	
-	/// Check if tmp_env if exist
+	/// Check if tmp_env exist
 	environ = (st_pipes->tmp_env) ? st_pipes->tmp_env : g_environ;
 	
 	/// Check if Builtens
@@ -283,17 +278,18 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	if (pid == 0)
 	{
 		ft_signal_default();
+		/// Apply redirection
 		if (ft_check_redi(st_pipes) && ft_parse_redir(st_pipes) == PARSE_KO)
 			exit(EXIT_FAILURE);
 		if (!ft_strcmp(st_pipes->args[0], "echo"))
 			built_echo(st_pipes->args);
-		else if (!ft_check_cmd(st_pipes, environ)) /// Check if cmd and exist and permission
-			ft_cmd_exec(st_pipes, environ);
+		else if (!ft_check_cmd(st_pipes->args[0], environ)) /// Check if cmd exist , permission
+			ft_cmd_exec(st_pipes->args, environ);
 	}
 	g_sign = 1;
 	waitpid(pid, &rtn, 0);
 	g_sign = 0;
-	return ((rtn) ? 0 : 1);
+	return (rtn ? 0 : 1);
 }
 
 /*
@@ -310,15 +306,12 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	/// Fill args
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
-	/// Apply Lexer
-	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL)
-		return (-1);
-	
-	/// Check Error Syntax
-	if (error_syntax_lexer(st_cmds->st_tokens))
+	/// Apply Lexer && Check Error Syntax
+	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL 
+		|| error_syntax_lexer(st_cmds->st_tokens))
 	{
 		free_list_cmds(st_cmds);
-		return (0);
+		return (-1);
 	}
 
 	/// Apply sub_shell
@@ -328,6 +321,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT))
 	{
 		proc_substitution(st_cmds->st_tokens);
+		free_list_cmds(st_cmds);
 		return (0);
 	}
 
