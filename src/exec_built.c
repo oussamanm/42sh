@@ -50,6 +50,8 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 		built_exit(st_pipes, tmp_env);
 	if (ft_strcmp((st_pipes->args)[0], "env") == 0 && (rtn = 1))
 		built_env(&(st_pipes->args)[1], tmp_env);
+	else if (ft_strcmp((st_pipes->args)[0], "alias") == 0 && (rtn = 1))
+		ft_buil_alias(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "export") == 0 && (rtn = 1))
 		built_export(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "unset") == 0 && (rtn = 1))

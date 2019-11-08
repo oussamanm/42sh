@@ -16,6 +16,10 @@
 #define TYPE_OEMSG	"invalid option\ntype: usage: type [-afptP] name [name ...]"
 #define CD_OEMSG	"invalid option\ncd: usage: cd [-L][-P] dir]"
 
+typedef struct s_alias t_alias;
+typedef struct s_aliaspkg t_aliaspkg;
+typedef struct s_cdpkg t_cdpkg;
+
 enum flags{
 	n_flg = 1,
 	e_flg = 2,
@@ -29,14 +33,29 @@ enum flags{
 	f_flg = 1024
 };
 
-typedef struct s_cdpkg
+struct s_cdpkg
 {
     char	*path;
     struct  stat buf;
 	char	buff[1024];
     int		flag;
     int     index;
-}              t_cdpkg;
+};
+
+struct s_alias
+{
+	char *shortcut;
+	char *cmd;
+	int  flag;
+	t_alias *next;
+};
+
+struct s_aliaspkg 
+{
+	int fd;
+	t_alias *head_ref;
+	t_alias *tail_ref;
+};
 
 /*
 ** Builtins
@@ -72,4 +91,16 @@ void	buil_putstr(char *arg, char *s1, char *s2, int fd);
 */
 
 int echo_options(char **arg, int *flag);
+
+/*
+** ALIAS FUNCTIONS
+*/
+
+t_aliaspkg *storeaddrstruct(t_aliaspkg *addr);
+void pushtolist(char *string, int flag);
+int removealiasbyelemorbyflag(char *shortcut, int check);
+void importaliasfilecontent();
+void createaliasfile();
+void aliasmatched(char **args);
+char *handleqoutes(char *str);
 #endif

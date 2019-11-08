@@ -35,6 +35,8 @@
 # define SYN_ER "Syntax error"
 # define IS_DIR "Is a directory"
 
+#define BUFFER_SIZE 10
+
 typedef	struct		s_list
 {
 	void			*content;
@@ -151,4 +153,5 @@ void				ft_strr_trim(char **args);
 char				*ft_str_trim(char *str);
 int					ft_putnbrs(int *table);
 
+int				get_next_line(const int fd, char **line);
 #endif

@@ -131,7 +131,7 @@ static void		ft_update_args(t_pipes *st_pipes)
 
 int				ft_parse_redir(t_pipes *st_pipes)
 {
-	ft_update_tokens(st_pipes->st_tokens);
+	//ft_update_tokens(st_pipes->st_tokens);
 	ft_read_tokens(st_pipes, st_pipes->st_tokens);
 	if (ft_apply_redi(st_pipes) == REDI_KO)
 		return (PARSE_KO);

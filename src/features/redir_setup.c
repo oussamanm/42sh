@@ -46,16 +46,16 @@ void		ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens)
 	if (PREV && PREV->indx == st_tokens->indx &&
 		ft_isalldigit(PREV->value) && (PREV->is_arg = 1))
 		st_redir->fd_red = ft_atoi(PREV->value);
-	if ((st_tokens->value)[1] == '&' && ft_isalldigit(st_tokens->next->value))
-		st_redir->fd_des = ft_atoi(st_tokens->next->value);
+	if ((st_tokens->value)[1] == '&' && ft_isalldigit(NEXT->value))
+		st_redir->fd_des = ft_atoi(NEXT->value);
 	else
 	{
 		st_redir->fd_red = 1;
 		st_redir->fd_err = 2;
 		st_redir->fd_des = -2;
-		st_redir->fd_file = st_tokens->next->value;
+		st_redir->fd_file = NEXT->value;
 	}
-	st_tokens->next->is_arg = 1;
+	NEXT->is_arg = 1;
 }
 
 /*

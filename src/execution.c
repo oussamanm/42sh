@@ -306,6 +306,9 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	/// Fill args
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
+	/// Check if cmd is alias and change it
+	//aliasmatched(st_cmds->args);
+
 	/// Apply Lexer && Check Error Syntax
 	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL 
 		|| error_syntax_lexer(st_cmds->st_tokens))
@@ -313,6 +316,8 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 		free_list_cmds(st_cmds);
 		return (-1);
 	}
+	/// update token by remove expansions
+	ft_update_tokens(st_cmds->st_tokens);
 
 	/// Apply sub_shell
 	apply_subsh(st_cmds->st_tokens);

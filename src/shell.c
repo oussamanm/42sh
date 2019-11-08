@@ -80,6 +80,15 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	ft_strdel(&str_cmds);
 }
 
+void init_alias_hash()
+{
+	t_aliaspkg *data;
+
+	data = ft_memalloc(sizeof(data));
+	storeaddrstruct(data);
+	createaliasfile();
+	importaliasfilecontent();
+}
 
 int			main(void)
 {
@@ -96,6 +105,8 @@ int			main(void)
 	// Duplicate environ vrbs
 	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
 	his->path = ft_get_vrb("PATH", g_environ);
+	// Initial Alias && HASH
+	init_alias_hash();
 	while (1337)
 	{
 		ft_putstr("\033[0;32m42sh $>\033[0m ");

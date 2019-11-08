@@ -25,6 +25,8 @@ OBJS = error_handler.o\
 	builtins_cmd/cd_built.o builtins_cmd/echo_built.o\
 	builtins_cmd/echo_op_parser.o builtins_cmd/type_built.o\
 	builtins_cmd/type_op_func.o builtins_cmd/type_op_parser.o\
+	builtins_cmd/alias_built.o builtins_cmd/alias_func.o\
+	builtins_cmd/unaliase_built.o\
 	read_line/addition.o\
 	read_line/auto_completion.o\
 	read_line/copy_paste.o\

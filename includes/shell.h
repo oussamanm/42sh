@@ -390,4 +390,10 @@ char					**ft_tokens_arg_env(t_tokens *st_tokens);
 void					apply_subsh(t_tokens *st_tokens);
 void    proc_substitution(t_tokens *st_tokens);
 
+/*
+** Alias
+*/
+
+void            ft_buil_alias(t_tokens *st_tokens);
+
 #endif

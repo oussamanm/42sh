@@ -100,7 +100,7 @@ char	*ft_strjoir_rtn(char *s1, char *s2, int rm)
 		return (NULL);
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
-	new_str = ft_strnew(s1_len + s2_len + 1);
+	new_str = ft_strnew(s1_len + s2_len);
 	if (!new_str)
 		return (NULL);
 	i = -1;
