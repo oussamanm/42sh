@@ -25,26 +25,33 @@ char *handleqoutes(char *str)
 	return (str);
 }
 
-void aliasmatched(char **args)
+char	**aliasmatched(char **args)
 {
-	t_aliaspkg *data;
-	t_alias *curr;
-	char *tmp;
+	t_aliaspkg	*data;
+	t_alias		*curr;
+	char		*temp;
+	char		**rtn;
 
 	data = storeaddrstruct(NULL);
-	tmp = ft_strjoin(args[0], "=");
+	temp = ft_strjoin(args[0], "=");
 	curr = data->head_ref;
+	rtn = NULL;
 	while (curr)
 	{
-		if (ft_strcmp(curr->shortcut, tmp) == 0)
+		if (ft_strcmp(curr->shortcut, temp) == 0)
 		{
-			ft_strdel(&args[0]);
-			args[0] = handleqoutes(ft_strdup(curr->cmd));
-			// args[0] = ft_strdup(curr->cmd);
-			break ;
+			ft_strdel(&temp);
+			temp = handleqoutes(ft_strdup(curr->cmd));
+			rtn = ft_str_split_q(temp, " \t\n");
+			rtn = ft_strr_join(rtn, &args[1], 1);
+			ft_strrdel(args);
 		}
 		curr = curr->next;
 	}
+	ft_strdel(&temp);
+	if (rtn)
+		return (rtn);
+	return (args);
 }
 
 void printlist()

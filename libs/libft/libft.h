@@ -128,7 +128,7 @@ char				*ft_escap_str(char *str, char c);
 void				ft_bchar(char *str, size_t n, char c);
 int					ft_putstrr(char *s, int free_str);
 char				**alloc_chain(char **env, int nbr);
-char				**ft_strr_join(char **str1, char **str2);
+char				**ft_strr_join(char **str1, char **str2, int rm);
 int					ft_put_strr(char **str);
 char				**ft_strr_dup(char **chaine, int len);
 int					ft_strrlen(char **argv);

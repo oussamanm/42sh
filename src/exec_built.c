@@ -86,5 +86,7 @@ int			ft_check_built(char *arg)
 		rtn++;
 	else if (!ft_strcmp(arg, "cd") || !ft_strcmp(arg, "type"))
 		rtn++;
+	else if (!ft_strcmp(arg, "alias"))
+		rtn++;
 	return (rtn);
 }

@@ -307,7 +307,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
 	/// Check if cmd is alias and change it
-	//aliasmatched(st_cmds->args);
+	st_cmds->args = aliasmatched(st_cmds->args);
 
 	/// Apply Lexer && Check Error Syntax
 	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL 
