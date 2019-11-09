@@ -314,6 +314,8 @@ void					ft_init_redi(t_redir *st_redir, int type_red);
 void					ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_apply_hered(t_redir *st_redi);
 void					ft_apply_her_doc(t_jobctr *st_jobctr);
+char					*get_value_next(t_tokens *st_token);
+
 
 /*
 ** Parser Red

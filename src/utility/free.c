@@ -23,6 +23,7 @@ void		free_list_redir(t_redir *st_redir)
 	while (st_redir)
 	{
 		temp = st_redir->next;
+		/// free file variable
 		free(st_redir);
 		st_redir = temp;
 	}

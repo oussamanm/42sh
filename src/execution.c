@@ -339,6 +339,6 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	/// Executions
 	ft_cmds_exec(st_cmds);
 	/// Clear allocated space
-	free_list_cmds(st_cmds);
+	//free_list_cmds(st_cmds);
 	return (1);
 }

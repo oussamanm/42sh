@@ -43,19 +43,21 @@ void		ft_init_redi(t_redir *st_redir, int type_red)
 
 void		ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens)
 {
+	char *temp;
+
 	if (PREV && PREV->indx == st_tokens->indx &&
 		ft_isalldigit(PREV->value) && (PREV->is_arg = 1))
 		st_redir->fd_red = ft_atoi(PREV->value);
-	if ((st_tokens->value)[1] == '&' && ft_isalldigit(NEXT->value))
-		st_redir->fd_des = ft_atoi(NEXT->value);
+	temp = get_value_next(NEXT);
+	if ((st_tokens->value)[1] == '&' && ft_isalldigit(temp))
+		st_redir->fd_des = ft_atoi(temp);
 	else
 	{
 		st_redir->fd_red = 1;
 		st_redir->fd_err = 2;
 		st_redir->fd_des = -2;
-		st_redir->fd_file = NEXT->value;
+		st_redir->fd_file = temp;
 	}
-	NEXT->is_arg = 1;
 }
 
 /*
@@ -110,4 +112,31 @@ void		ft_apply_her_doc(t_jobctr *st_jobctr)
 		}
 		st_jobctr = st_jobctr->next;
 	}
+}
+
+/*
+	get next value : helper function to get value next of redirection
+*/
+
+char	*get_value_next(t_tokens *st_token)
+{
+	int	index;
+	char *str_rtn;
+
+	if (!st_token)
+		return (NULL);
+	str_rtn = ft_strdup(st_token->value);
+	st_token->is_arg = 1;
+	index = st_token->indx;
+	st_token = st_token->next;
+	while (st_token && CHECK_TOKEN(st_token->token, T_TXT, T_QUO, T_DQUO))
+	{
+		if (st_token->indx != index)
+			break ;
+		str_rtn = ft_strjoir(str_rtn, st_token->value, 1);
+		st_token->is_arg = 1;
+		st_token = st_token->next;
+	}
+	ft_putendl(str_rtn);
+	return (str_rtn);
 }
