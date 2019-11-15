@@ -180,7 +180,6 @@ static void		ft_cmd_exec(t_pipes *st_pipes, char **env)
 	str_arg = NULL;
 	if (st_pipes->args == NULL || st_pipes->args[0] == NULL)
 		exit(EXIT_FAILURE);
-	
 	str_arg = ft_find_path(st_pipes->args[0], env);
 	if (str_arg != NULL)
 	{

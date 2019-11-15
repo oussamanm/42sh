@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_built_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:15:04 by onouaman          #+#    #+#             */
-/*   Updated: 2019/08/03 04:24:20 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/10/12 19:45:35 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,33 @@ void			ft_buil_export(t_tokens *st_tokens)
     int i;
     char    *arg;
 
-    i = -1;
+    i = 1;
+    st_tokens = st_tokens->next;
     while (st_tokens)
     {
-        if (st_tokens->token == T_EQUAL)
+        if (st_tokens->indx == i)
+        {
+            if (st_tokens->token == T_EQUAL)
+            {
+                if (PREV && PREV->indx == i)
+                {
+                    arg = ft_strjoin(PREV->value, st_tokens->value);
+                    if (NEXT && NEXT->indx == st_tokens->indx)
+                        arg = ft_strjoir(arg, NEXT->value, 1);   
+                    ft_set_vrb(arg, &g_environ, 1);
+                }
+                else
+                    //print error
+            }
+            else if (ft_isallalphanum(st_tokens->value) && (!NEXT || (NEXT && NEXT->indx != i)) && PREV->indx != i)
+                move_to_env(NEXT->value);
+            else if (IDENTIFIER(st_tokens->value)) //check bad identifiers
+                //print error
+            st_tokens = NEXT;
+        }
+        else
+            i++;
+        /*if (st_tokens->token == T_EQUAL)
         {
             arg = ft_strnew(0);
             if (PREV && PREV->indx == st_tokens->indx)
@@ -72,13 +95,16 @@ void			ft_buil_export(t_tokens *st_tokens)
             arg = ft_strjoir(arg, st_tokens->value, 1);
             if (NEXT && NEXT->indx == st_tokens->indx)
                 arg = ft_strjoir(arg, NEXT->value, 1);
+                
             ft_set_vrb(arg, &g_environ, 1);
         }
         else if (NEXT)
-            move_to_env(NEXT->value);
-        st_tokens = st_tokens->next;
+            move_to_env(NEXT->value);*/
+ //       st_tokens = st_tokens->next;
     }
 }
+
+void
 
 /*
 ** Unset Variable

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/07/07 14:42:43 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/10/05 18:02:53 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,3 +73,4 @@ void	ft_print_history(t_history *his, char *buf, char **s, t_cursor *pos)
 	ft_strdel(s);
 	*s = ft_strdup(his->history[his->his_count]);
 }
+

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/11 12:42:31 by onouaman          #+#    #+#             */
-/*   Updated: 2018/10/20 20:56:18 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/10/08 21:22:47 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef	struct		s_list
 	struct s_list	*next;
 }					t_list;
 
+int	ft_strrchrindex(const char *s, int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 char				*ft_strstr(const char *haystack, const char *needle);

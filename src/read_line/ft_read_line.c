@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_and_split.c                                   :+:      :+:    :+:   */
+/*   ft_read_line.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/07/18 12:31:36 by abiri            ###   ########.fr       */
+/*   Updated: 2019/10/05 18:45:32 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** - move the cursor in the last of the line.
 */
 
-void	ft_enter(t_cursor *pos, char *s, t_select *select)
+void	ft_enter(t_history *history, t_cursor *pos, char *s, t_select *select)
 {
 	if (select->start != -1 && select->end != -1)
 	{
@@ -27,6 +27,7 @@ void	ft_enter(t_cursor *pos, char *s, t_select *select)
 	}
 	ft_putstr_term(pos->num_col, s + pos->index, pos);
 	ft_putchar('\n');
+	//insert to history
 }
 
 void	ft_clear_selection(t_select *select, t_cursor *pos, char *s, char *buf)
@@ -100,7 +101,7 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	{
 		if (ENTER == CAST(buf))
 		{
-			ft_enter(&g_pos, g_pos.cmd, select);
+			ft_enter(&his, &g_pos, g_pos.cmd, select);
 			break ;
 		}
 		if (!(g_pos.cmd = ft_key_call_func(his, select, g_pos.cmd, buf))

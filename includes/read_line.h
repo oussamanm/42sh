@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   jojwahdsh.h                                        :+:      :+:    :+:   */
+/*   read_line.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/07/18 12:33:48 by abiri            ###   ########.fr       */
+/*   Updated: 2019/11/13 16:03:42 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@
 
 # define CAST(x) *((int *)x)
 
+typedef struct s_history t_history;
+
 typedef struct		s_cursor
 {
 	int				index;
@@ -88,12 +90,28 @@ typedef	struct		s_select
 	char			*save;
 }					t_select;
 
-typedef	struct		s_history
+/*typedef	struct		s_history
 {
 	char			**history;
 	int				his_count;
 	char			*path;
-}					t_history;
+}					t_history;*/
+typedef	struct s_info
+{
+	int index;
+	char *cmd;
+	struct s_info *prev;
+	struct s_info *next;
+}			t_info;
+
+struct s_history
+{
+	struct s_info *head;
+	struct s_info *tail;
+	int len;
+	int bg;
+};
+
 
 t_cursor			g_pos;
 
@@ -154,5 +172,17 @@ char				*ft_clear(t_cursor *pos, char *s, char *buf);
 ** read for sub_shell
 */
 int					ft_check_subsh(int i, char **line, t_select *select, t_history *his);
+
+
+/*
+**	history readline, expansion and builtuin
+*/
+t_info  *new_history(int index, char *cmd, t_info *prev);
+void    insert_history(t_history *history, char *cmd);
+t_info  *history_index(t_info *history, int index, int len);
+t_info  *history_keyword(t_info *tail, char *keyword, int dir);
+t_info  *history_value(t_history his, char *keyword);
+void init_history(t_history *history);
+void    history_readline(t_history *history, int key, char *cmd, t_cursor *cursor);
 
 #endif
