@@ -19,11 +19,14 @@
 
 void		built_exit(t_pipes *st_pipes, char ***tmp_env)
 {
+
 	UNUSED(st_pipes);
 	UNUSED(tmp_env);
 	/// Clear environ globale and temp
  	//ft_strrdel(*env);
 	ft_clear_readline_struct();
 	//free_list_cmds(st_pipes);
+	// here free of hash and alias
+		// free_hash_and_alias();
 	exit(0);
 }

@@ -52,6 +52,8 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 		built_env(&(st_pipes->args)[1], tmp_env);
 	else if (ft_strcmp((st_pipes->args)[0], "alias") == 0 && (rtn = 1))
 		ft_buil_alias(st_pipes->st_tokens);
+	else if (ft_strcmp((st_pipes->args)[0], "unalias") == 0 && (rtn = 1))
+		ft_buil_unalias(st_pipes->st_tokens, 0);
 	else if (ft_strcmp((st_pipes->args)[0], "export") == 0 && (rtn = 1))
 		built_export(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "unset") == 0 && (rtn = 1))
@@ -60,6 +62,10 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 		built_cd(&(st_pipes->args)[1], *tmp_env);
 	else if (ft_strcmp((st_pipes->args)[0], "type") == 0 && (rtn = 1))
 		built_type(&(st_pipes->args)[1], *tmp_env);
+	else if (ft_strcmp((st_pipes->args)[0], "hash") == 0 && (rtn = 1))
+		hash_table(&(st_pipes->args)[1]);
+	else if (ft_strcmp((st_pipes->args)[0], "source") == 0 && (rtn = 1)) // ******* don't Remove this instructions *******
+		ft_buil_updatealias(&(st_pipes->args)[1]);
 	while (st_pipes->st_redir != NULL)
 	{
 		if (st_pipes->st_redir->fd_des != -1)
@@ -82,11 +88,15 @@ int			ft_check_built(char *arg)
 		return (-1);
 	if (!ft_strcmp(arg, "exit") || !ft_strcmp(arg, "env"))
 		rtn++;
+	else if (!ft_strcmp(arg, "echo"))
+		rtn++;
 	else if (!ft_strcmp(arg, "export") || !ft_strcmp(arg, "unset"))
 		rtn++;
 	else if (!ft_strcmp(arg, "cd") || !ft_strcmp(arg, "type"))
 		rtn++;
-	else if (!ft_strcmp(arg, "alias"))
+	else if (!ft_strcmp(arg, "alias") || !ft_strcmp(arg, "unalias"))
+		rtn++;
+	else if (!ft_strcmp(arg, "source") || !ft_strcmp(arg, "hash"))
 		rtn++;
 	return (rtn);
 }

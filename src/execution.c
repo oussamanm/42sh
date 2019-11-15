@@ -164,7 +164,6 @@ int				ft_check_cmd(char *cmd, char **environ)
 	if (!rtn && (!path_exec || !ft_strlen(path_exec)) && ++rtn)
 		print_error(CMD_NF, NULL, cmd, 0);
 	free(path_exec);
-	(rtn) ? exit(EXIT_FAILURE) : NULL;
 	return (rtn);
 }
 
@@ -200,7 +199,12 @@ static void		ft_cmd_exec(char **args, char **env)
 	if (ft_check_char(args[0], '/'))
 		str_arg = args[0];
 	else
-		str_arg = ft_find_path(args[0], env);
+	{
+		/// Check if exist in HASH_TABLE
+		// puts("here before lookup_hash\n");
+		if (!(str_arg = lookup_hash(args[0])))
+			str_arg = ft_find_path(args[0], env);
+	}
 	if (str_arg != NULL)
 	{
 		execve(str_arg, args, env);
@@ -270,8 +274,13 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	environ = (st_pipes->tmp_env) ? st_pipes->tmp_env : g_environ;
 	
 	/// Check if Builtens
-	if (st_pipes && ft_check_built(st_pipes->args[0]))
+	if (st_pipes && ft_check_built(st_pipes->args[0]) && ft_strcmp(st_pipes->args[0], "echo"))
 		return (ft_init_built(st_pipes, &(st_pipes->tmp_env))); ///  add return to ft_init_built
+	
+	/// insertion in hash_table
+	if (!ft_check_cmd(st_pipes->args[0], environ))
+		insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
+
 	/// Fork - Child
 	if (fork_it && (pid = fork()) == -1)
 		ft_err_exit("Error in Fork new process \n");
@@ -285,6 +294,8 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 			built_echo(st_pipes->args);
 		else if (!ft_check_cmd(st_pipes->args[0], environ)) /// Check if cmd exist , permission
 			ft_cmd_exec(st_pipes->args, environ);
+		else
+			exit(EXIT_FAILURE);
 	}
 	g_sign = 1;
 	waitpid(pid, &rtn, 0);

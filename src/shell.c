@@ -83,11 +83,18 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 void init_alias_hash()
 {
 	t_aliaspkg *data;
+	t_hash **hash_arr;
 
 	data = ft_memalloc(sizeof(data));
 	storeaddrstruct(data);
 	createaliasfile();
 	importaliasfilecontent();
+	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
+	int i = -1;
+	while (++i < SIZE)
+		hash_arr[i] =  NULL;
+	store_addr_of_hash(hash_arr, 1);
+	// printf("addr of hash_arr %p\n", hash_arr);
 }
 
 int			main(void)
