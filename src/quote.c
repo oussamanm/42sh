@@ -44,18 +44,13 @@ void			ft_remove_quot(char **args)
 
 void			ft_update_tokens(t_tokens *st_tokens)
 {
-	char		*temp;
-	t_tokens	*st_temp;
-
-	st_temp = st_tokens;
-	while (st_temp)
+	while (st_tokens)
 	{
-		if (st_temp->token == T_QUO || st_temp->token == T_DQUO)
+		if (st_tokens->token == T_QUO || st_tokens->token == T_DQUO)
 		{
-			temp = ft_strsub(st_temp->value, 1, ft_strlen(st_temp->value) - 2);
-			ft_strdel(&(st_temp->value));
-			st_temp->value = temp;
+			if (ft_strcpy(st_tokens->value, &(st_tokens->value)[1]))
+				st_tokens->value[ft_strlen(st_tokens->value) - 1] = 0;
 		}
-		st_temp = st_temp->next;
+		st_tokens = st_tokens->next;
 	}
 }

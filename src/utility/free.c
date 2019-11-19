@@ -24,6 +24,7 @@ void		free_list_redir(t_redir *st_redir)
 	{
 		temp = st_redir->next;
 		/// free file variable
+		ft_strdel(&st_redir->fd_file);
 		free(st_redir);
 		st_redir = temp;
 	}
@@ -60,7 +61,8 @@ void		free_list_pipe(t_pipes *st_pipes)
 	temp = NULL;
 	while (st_pipes)
 	{
-		free_list_redir(st_pipes->st_redir);
+		// moved to redirection function
+		//free_list_redir(st_pipes->st_redir);
 		temp = st_pipes->next;
 		free_tokens(st_pipes->st_tokens, 0);
 		ft_strrdel(st_pipes->tmp_env);

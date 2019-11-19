@@ -68,11 +68,15 @@
 /*
 **Tokens
 */
+#define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
+#define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
 
 # define T_TXT			0
 # define T_QUO			1
 # define T_DQUO			2
 # define T_SUBSHL		117
+# define T_PROC_IN		1337
+# define T_PROC_OUT		42
 # define T_JOBCTR		38
 # define T_LOGOPR_AND	76
 # define T_LOGOPR_OR	248
@@ -93,8 +97,7 @@
 # define T_RED_APP_M	-169
 # define T_RED_HER_D	-120
 # define T_RED_BOTH		-122
-# define T_PROC_IN		1337
-# define T_PROC_OUT		42
+
 
 /*
 **Parsing
@@ -362,6 +365,7 @@ t_intern				*new_intern(char *key, char *value);
 void					free_list_cmds(t_cmds *st_cmds);
 void					free_tokens(t_tokens *st_tokens, int free_content);
 void		free_addresses(void *table[MAX_TAB_ADDR]);
+void		free_list_redir(t_redir *st_redir);
 
 /*
 ** Parse Cmds

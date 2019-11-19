@@ -16,7 +16,7 @@
 **	ft_call_redire : calls function redirection
 */
 
-void			ft_call_redire(t_redir *st_redir, t_tokens *st_tokens)
+static void			call_redire(t_redir *st_redir, t_tokens *st_tokens)
 {
 	if (CHECK_TOKEN(st_tokens->token, T_RED_OUT_S, T_RED_OUT_A, T_RED_OUT_B))
 		ft_redi_out(st_redir, st_tokens);
@@ -33,12 +33,14 @@ void			ft_call_redire(t_redir *st_redir, t_tokens *st_tokens)
 **	ft_read_tokens : Read token and fill struct t_redir with redirection
 */
 
-static void		ft_read_tokens(t_pipes *st_pipes, t_tokens *st_tokens)
+static void		read_tokens(t_pipes *st_pipes)
 {
 	t_redir		*st_redir;
+	t_tokens	*st_tokens;
 	t_redir		*head;
 
 	head = st_pipes->st_redir;
+	st_tokens = st_pipes->st_tokens;
 	st_redir = head;
 	while (st_tokens != NULL)
 	{
@@ -54,7 +56,7 @@ static void		ft_read_tokens(t_pipes *st_pipes, t_tokens *st_tokens)
 				st_redir->next = ft_new_redir();
 				st_redir = st_redir->next;
 			}
-			ft_call_redire(st_redir, st_tokens);
+			call_redire(st_redir, st_tokens);
 		}
 		st_tokens = st_tokens->next;
 	}
@@ -107,7 +109,7 @@ static void		ft_update_args(t_pipes *st_pipes)
 	count = 0;
 	i = 0;
 	st_temp = st_pipes->st_tokens;
-	while (st_temp != NULL && st_temp->value != NULL)
+	while (st_temp && st_temp->value)
 	{
 		if (!(st_temp->token < 0 || st_temp->is_arg == 1) && st_temp->is_arg != T_EQUAL)
 			count++;
@@ -116,13 +118,12 @@ static void		ft_update_args(t_pipes *st_pipes)
 	st_temp = st_pipes->st_tokens;
 	ft_strrdel(st_pipes->args);
 	st_pipes->args = ft_strr_new(count);
-	while (st_temp != NULL && st_temp->value != NULL)
+	while (st_temp && st_temp->value)
 	{
 		if (!(st_temp->token < 0 || st_temp->is_arg))
 			(st_pipes->args)[i++] = ft_strdup(st_temp->value);
 		st_temp = st_temp->next;
 	}
-	(st_pipes->args)[i] = NULL;
 }
 
 /*
@@ -131,10 +132,14 @@ static void		ft_update_args(t_pipes *st_pipes)
 
 int				ft_parse_redir(t_pipes *st_pipes)
 {
-	//ft_update_tokens(st_pipes->st_tokens);
-	ft_read_tokens(st_pipes, st_pipes->st_tokens);
+	//ft_update_tokens(st_pipes->st_tokens); this function already called in cmd_setup
+	if (!st_pipes)
+		return (PARSE_KO);
+	read_tokens(st_pipes);
 	if (ft_apply_redi(st_pipes) == REDI_KO)
 		return (PARSE_KO);
 	ft_update_args(st_pipes);
+	free_list_redir(st_pipes->st_redir);
+	st_pipes->st_redir = NULL;
 	return (PARSE_OK);
 }

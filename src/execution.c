@@ -268,7 +268,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	remove_backslashs(st_pipes->args);
 
 	/// Remove Quote
-	ft_remove_quot(st_pipes->args);
+	//ft_remove_quot(st_pipes->args);
 	
 	/// Check if tmp_env exist
 	environ = (st_pipes->tmp_env) ? st_pipes->tmp_env : g_environ;
@@ -321,35 +321,34 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	st_cmds->args = aliasmatched(st_cmds->args);
 
 	/// Apply Lexer && Check Error Syntax
-	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL 
-		|| error_syntax_lexer(st_cmds->st_tokens))
+	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL || error_syntax_lexer(st_cmds->st_tokens))
 	{
 		free_list_cmds(st_cmds);
 		return (-1);
 	}
-	/// update token by remove expansions
+	/// update token by remove quotes *
 	ft_update_tokens(st_cmds->st_tokens);
 
-	/// Apply sub_shell
+	/// Apply sub_shell *
 	apply_subsh(st_cmds->st_tokens);
 
-	/// Aplly proc_sub
-	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT))
+	/// Aplly proc_sub *
+	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT)) //// why only T_PROC_IN 
 	{
 		proc_substitution(st_cmds->st_tokens);
 		free_list_cmds(st_cmds);
 		return (0);
 	}
 
-	/// Fill Lists of lists
+	/// Fill Lists of lists *
 	ft_parse_cmd(st_cmds);
 
 	/// Apply here_doc (do not applied in case of comming from SUB_SHELL)
 	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;
 
-	/// Executions
+	/// Executions *
 	ft_cmds_exec(st_cmds);
 	/// Clear allocated space
-	//free_list_cmds(st_cmds);
+	free_list_cmds(st_cmds);
 	return (1);
 }

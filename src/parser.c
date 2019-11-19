@@ -125,7 +125,7 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 ** Fill Intern and Temp variables
 */
 
-static void		ft_fill_vrbs(t_pipes *st_pipes)
+static void		fill_vrbs(t_pipes *st_pipes)
 {
 	char		**tmp_env;
 
@@ -145,15 +145,14 @@ static void		ft_fill_vrbs(t_pipes *st_pipes)
 ** Fill args with token except T_EQUAL
 */
 
-static void		ft_fill_args(t_pipes *st_pipes)
+static void		fill_args(t_pipes *st_pipes)
 {
 	if (!st_pipes)
 		return ;
 	while (st_pipes)
 	{
-		/// add condition in function below : ! T_EQUAL T_SUBSHELL
+		/// add condition in function below : ! T_EQUAL
 		ft_tokens_args(st_pipes);
-
 		st_pipes = st_pipes->next;
 	}
 }
@@ -179,9 +178,9 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 			ft_fill_pipe(st_logopr);
 			// Fill intern variable and tmp_env
 			if (st_logopr->st_pipes && !st_logopr->st_pipes->next && ft_check_token(st_logopr->st_pipes->st_tokens, T_EQUAL))
-				ft_fill_vrbs(st_logopr->st_pipes);
+				fill_vrbs(st_logopr->st_pipes);
 			/// Fill args without T_EQUAL , T_SUBSHL,
-			ft_fill_args(st_logopr->st_pipes);
+			fill_args(st_logopr->st_pipes);
 			st_logopr = st_logopr->next;
 		}
 		st_jobctr = st_jobctr->next;

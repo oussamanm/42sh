@@ -127,8 +127,9 @@ int			ft_error_redir(t_tokens *st_tokens)
 	temp = NULL;
 	while (st_tokens != NULL)
 	{
-		/// check  case redirection followed by NULL(except <&- , >&-) or a token not TXT
-		if (st_tokens->token < 0 && (NEXT == NULL || NEXT->token != T_TXT) && !M_CHECK(st_tokens->token, T_RED_IN_B, T_RED_OUT_B))
+		/// check  case redirection followed by NULL(except <&- , >&-) or a token (not TXT and not sub_shell)
+		if (st_tokens->token < 0 &&
+			((!NEXT && !M_CHECK(st_tokens->token, T_RED_IN_B, T_RED_OUT_B)) || (!T_IS_TXT(NEXT->token) && !T_IS_SUBSHELL(NEXT->token))))
 			ft_strcpy(msg_err, "syntax error near unexpected token");
 		/// check token not exist
 		else if (st_tokens->token < T_RED_APP_A)
