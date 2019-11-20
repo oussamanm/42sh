@@ -125,6 +125,7 @@ int			main(void)
 		his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
 		// Execution
 		(!(g_pos.exit)) ? ft_multi_cmd(str_cmds, 0) : NULL;
+		ft_job_processing();
 	}
 	return (0);
 }

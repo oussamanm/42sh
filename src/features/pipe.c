@@ -73,15 +73,22 @@ static void		ft_apply_pipe_h(t_pipes *st_pipes, t_pipes *st_head, int i)
 int				ft_apply_pipe(t_pipes *st_pipes)
 {
 	t_pipes	*st_head;
+	t_job	*job;
 	int		status;
+	int		pid;
+	int		add;
 
 	status = 0;
+	add = 0;
 	st_head = st_pipes;
+	signal(SIGCHLD, SIG_DFL);
 	ft_create_pipes(st_pipes);
+	job = ft_inisial_job();
 	while (st_pipes != NULL)
 	{
-		if (fork() == 0)
+		if ((pid = fork()) == 0)
 		{
+			ft_signal_default();
 			if (st_pipes->next != NULL)
 			{
 				if (st_pipes != st_head && dup2(st_pipes->fds[0], 0) == -1)
@@ -92,15 +99,13 @@ int				ft_apply_pipe(t_pipes *st_pipes)
 				ft_apply_pipe_h(st_pipes, st_head, 0);
 			exit(EXIT_FAILURE);
 		}
+		else
+			ft_single_proc(job, st_pipes, pid, &add);
 		st_pipes = st_pipes->next;
 	}
 	ft_close_pipes(st_head);
-	while (st_head)
-	{
-		wait(&st_head->status);
-		status = st_head->status;
-		st_head = st_head->next;
-	}
+	ft_pipe_job_man(job, st_head, &status, add);
+	signal(SIGCHLD, ft_catch_sigchild);
 	return ((status) ? 0 : 1);
 }
 

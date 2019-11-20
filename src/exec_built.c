@@ -66,6 +66,12 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 		hash_table(&(st_pipes->args)[1]);
 	else if (ft_strcmp((st_pipes->args)[0], "source") == 0 && (rtn = 1)) // ******* don't Remove this instructions *******
 		ft_buil_updatealias(&(st_pipes->args)[1]);
+	else if (!ft_strcmp(st_pipes->args[0], "fg"))
+		ft_foreground();
+	else if (!ft_strcmp(st_pipes->args[0], "bg"))
+		ft_continue();
+	else if (!ft_strcmp(st_pipes->args[0], "jobs"))
+		ft_jobs_built();
 	while (st_pipes->st_redir != NULL)
 	{
 		if (st_pipes->st_redir->fd_des != -1)
@@ -97,6 +103,8 @@ int			ft_check_built(char *arg)
 	else if (!ft_strcmp(arg, "alias") || !ft_strcmp(arg, "unalias"))
 		rtn++;
 	else if (!ft_strcmp(arg, "source") || !ft_strcmp(arg, "hash"))
+		rtn++;
+	else if (!ft_strcmp(arg, "fg") || !ft_strcmp(arg, "bg") || !ft_strcmp(arg, "jobs"))
 		rtn++;
 	return (rtn);
 }
