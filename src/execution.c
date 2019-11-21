@@ -276,6 +276,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	if (st_pipes && ft_check_built(st_pipes->args[0]) && ft_strcmp(st_pipes->args[0], "echo"))
 		return (ft_init_built(st_pipes, &(st_pipes->tmp_env))); ///  add return to ft_init_built
 
+	(fork_it) ? signal(SIGCHLD, SIG_DFL) : 0;
 	/// Fork - Child
 	if (fork_it && (pid = fork()) == -1)
 		ft_err_exit("Error in Fork new process \n");
@@ -292,9 +293,9 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		else
 			exit(EXIT_FAILURE);
 	}
-	g_sign = 1;
-	waitpid(pid, &rtn, 0);
-	g_sign = 0;
+	else if (fork_it)
+		ft_manage_jobs(pid, st_pipes, &rtn);
+	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
 	/// insertion in hash_table
 	//if (rtn == EXIT_SUCCESS)
 	//	insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));

@@ -72,7 +72,6 @@ static void     ft_fill_logopr(t_jobctr *st_jobctr)
 			ft_dup_token(&st_token, st_temp, T_LOGOPR_AND);
 		else
 		{
-			st_logopr->bl_jobctr = (st_jobctr->status) ? 1 : 0;
 			st_logopr->status = st_temp->token;
 			if (st_temp->next) // if exist more tokens
 			{
@@ -84,6 +83,7 @@ static void     ft_fill_logopr(t_jobctr *st_jobctr)
 		}
 		st_temp = st_temp->next;
 	}
+	st_logopr->bl_jobctr = st_jobctr->status;
 }
 
 static void     ft_fill_pipe(t_logopr *st_logopr)
@@ -103,11 +103,11 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 	st_temp = st_logopr->st_tokens;
 	while (st_temp)
 	{
+		st_pipes->bl_jobctr = st_logopr->bl_jobctr; 
 		if (st_temp->token != T_PIPE)
 			ft_dup_token(&st_token, st_temp, T_PIPE);
 		else
 		{
-			st_pipes->bl_jobctr = (st_logopr->bl_jobctr) ? 1 : 0; 
 			if (st_temp->next) // if exist more tokens
 			{
 				st_pipes->next = ft_new_pipe();

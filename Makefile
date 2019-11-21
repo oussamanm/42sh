@@ -48,7 +48,17 @@ OBJS = error_handler.o\
 	read_line/clear_readline.o\
 	read_line/heredoc_line.o\
 	read_line/cut.o\
-	read_line/clear_line_or_window.o
+	read_line/clear_line_or_window.o\
+	job_control/add_remove.o\
+	job_control/built.o\
+	job_control/index_up.o\
+	job_control/init.o\
+	job_control/job_execution.o\
+	job_control/job_processing.o\
+	job_control/msg_sig.o\
+	job_control/output.o\
+	job_control/update_status.o
+
 
 FLAG = -Wall -Wextra -Werror 
 INCL = ./includes
@@ -61,18 +71,19 @@ OBJS_21SH = $(addprefix ./src/, $(OBJS))
 all : LBT $(NAME)
 
 $(NAME) : $(OBJS_21SH) $(LIBFT_PATH)$(LIBFT)
-	@echo "$(_lGREEN)										"
-	@echo " ▄▄▄▄▄▄▄▄▄▄▄    ▄▄▄▄     ▄▄▄▄▄▄▄▄▄▄▄ ▄         ▄ "
-	@echo "▐░░░░░░░░░░░▌ ▄█░░░░▌   ▐░░░░░░░░░░░▐░▌       ▐░▌"
-	@echo " ▀▀▀▀▀▀▀▀▀█░▌▐░░▌▐░░▌   ▐░█▀▀▀▀▀▀▀▀▀▐░▌       ▐░▌"
-	@echo "          ▐░▌ ▀▀ ▐░░▌   ▐░▌         ▐░▌       ▐░▌"
-	@echo "          ▐░▌    ▐░░▌   ▐░█▄▄▄▄▄▄▄▄▄▐░█▄▄▄▄▄▄▄█░▌"
-	@echo " ▄▄▄▄▄▄▄▄▄█░▌    ▐░░▌   ▐░░░░░░░░░░░▐░░░░░░░░░░░▌"
-	@echo "▐░░░░░░░░░░░▌    ▐░░▌    ▀▀▀▀▀▀▀▀▀█░▐░█▀▀▀▀▀▀▀█░▌"
-	@echo "▐░█▀▀▀▀▀▀▀▀▀     ▐░░▌             ▐░▐░▌       ▐░▌"
-	@echo "▐░█▄▄▄▄▄▄▄▄▄ ▄▄▄▄█░░█▄▄▄ ▄▄▄▄▄▄▄▄▄█░▐░▌       ▐░▌"
-	@echo "▐░░░░░░░░░░░▐░░░░░░░░░░░▐░░░░░░░░░░░▐░▌       ▐░▌"
-	@echo " ▀▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀▀ ▀         ▀  $(_END)"
+	@echo "$(_lGREEN)											"
+	@echo "	 ▄         ▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄         ▄ "
+	@echo "	▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌"
+	@echo "	▐░▌       ▐░▌ ▀▀▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀▀▀ ▐░▌       ▐░▌"
+	@echo "	▐░▌       ▐░▌          ▐░▌▐░▌          ▐░▌       ▐░▌"
+	@echo "	▐░█▄▄▄▄▄▄▄█░▌          ▐░▌▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄█░▌"
+	@echo "	▐░░░░░░░░░░░▌ ▄▄▄▄▄▄▄▄▄█░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌"
+	@echo "	 ▀▀▀▀▀▀▀▀▀█░▌▐░░░░░░░░░░░▌ ▀▀▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌"
+	@echo "	          ▐░▌▐░█▀▀▀▀▀▀▀▀▀           ▐░▌▐░▌       ▐░▌"
+	@echo "	          ▐░▌▐░█▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄█░▌▐░▌       ▐░▌"
+	@echo "	          ▐░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌"
+	@echo "	           ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀ "
+	@echo "	                                                 $(_END)"
 	@echo "$(_lBLUE)gcc $(FLAG) -I $(INCL)  -I $(LIBFT_PATH) $(_END) $(_lGREEN)$(OBJS_21SH)$(_END) $(_lYELLOW)$(LIBFT_PATH)$(LIBFT)$(_END) -o $(_BOLD)$(NAME)$(_END) -ltermcap"
 	@gcc $(FLAG) -I $(INCL) -I $(LIBFT_PATH) $(OBJS_21SH) $(LIBFT_PATH)$(LIBFT) -o $(NAME) -ltermcap
 

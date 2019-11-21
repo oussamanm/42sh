@@ -136,6 +136,7 @@ int			main(void)
 
 		// Execution
 		(!(g_pos.exit)) ? ft_multi_cmd(ft_strdup(g_pos.cmd), 0) : NULL;
+		ft_job_processing();
 		ft_strdel(&g_pos.cmd);
 	}
 	return (0);

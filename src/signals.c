@@ -13,6 +13,12 @@
 #include "shell.h"
 #include "read_line.h"
 
+void	ft_catch_sigchild(int sig)
+{
+	sig = 0;
+	ft_wait(NULL);
+}
+
 /*
 ** ft_catch_signal : CTR + c
 */
@@ -47,9 +53,17 @@ void	call_signal(void)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_catch_signal);
 	signal(SIGWINCH, ft_win_change);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGCHLD, ft_catch_sigchild);
 }
 
 void	ft_signal_default(void)
 {
 	signal(SIGQUIT, SIG_DFL);
+	signal(SIGTTIN, SIG_DFL);
+	signal(SIGTTOU, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGTSTP, SIG_DFL);
 }
