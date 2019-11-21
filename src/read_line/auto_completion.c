@@ -42,15 +42,18 @@ char	*ft_search_in_dir(char *begin, char *dirname)
 	DIR				*dir;
 	struct dirent	*dp;
 	int				ret;
+	char			*result;
 
+	result = NULL;
 	if (!(dir = opendir(dirname)))
 		return (NULL);
 	while ((dp = readdir(dir)))
 	{
 		if ((ret = ft_looks_like(dp->d_name, begin)) > 0)
 		{
+			result = ft_strdup(&dp->d_name[ret]);
 			closedir(dir);
-			return (ft_strdup(dp->d_name + ret));
+			return (result);
 		}
 	}
 	closedir(dir);
