@@ -44,7 +44,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	rtn = 0;
 	if (st_pipes == NULL || st_pipes->args == NULL)
 		return (-1);
-	if (ft_check_redi(st_pipes) && ft_parse_redir(st_pipes) == PARSE_KO)
+	if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 		return (REDI_KO);
 	if (ft_strcmp((st_pipes->args)[0], "exit") == 0)
 		built_exit(st_pipes, tmp_env);

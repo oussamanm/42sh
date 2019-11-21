@@ -214,13 +214,13 @@ t_tokens	*ft_lexer(char **args)
 		st_tokens->prev->next = NULL;
 		free(st_tokens);
 	}
-		st_tokens = st_head;
-		while (st_tokens != NULL)
-		{
-			dprintf(2, "index = %d Token = <%d> : <%s>\n",st_tokens->indx, st_tokens->token,st_tokens->value);
-			st_tokens = st_tokens->next;
-		}
-		dprintf(2,"\n--------------\n");
+		// st_tokens = st_head;
+		// while (st_tokens != NULL)
+		// {
+		// 	dprintf(2, "index = %d Token = <%d> : <%s>\n",st_tokens->indx, st_tokens->token,st_tokens->value);
+		// 	st_tokens = st_tokens->next;
+		// }
+		// dprintf(2,"\n--------------\n");
 		//exit(0);
 	if (i == 0)
 		return (NULL);

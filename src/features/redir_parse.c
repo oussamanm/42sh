@@ -127,10 +127,10 @@ static void		ft_update_args(t_pipes *st_pipes)
 }
 
 /*
-**	ft_parse_redir : read tokens and apply redirection
+** read tokens and apply redirection
 */
 
-int				ft_parse_redir(t_pipes *st_pipes)
+int				parse_redir(t_pipes *st_pipes)
 {
 	//ft_update_tokens(st_pipes->st_tokens); this function already called in cmd_setup
 	if (!st_pipes)
@@ -139,7 +139,5 @@ int				ft_parse_redir(t_pipes *st_pipes)
 	if (ft_apply_redi(st_pipes) == REDI_KO)
 		return (PARSE_KO);
 	ft_update_args(st_pipes);
-	free_list_redir(st_pipes->st_redir);
-	st_pipes->st_redir = NULL;
 	return (PARSE_OK);
 }

@@ -66,6 +66,7 @@ void	ft_init_size_end_line(t_cursor *pos)
 
 void	ft_initial(int p)
 {
+	ft_strdel(&g_pos.cmd);
 	g_pos.cmd = ft_strnew(0);
 	g_pos.index = 0;
 	g_pos.p = p;

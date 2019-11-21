@@ -201,8 +201,7 @@ static void		ft_cmd_exec(char **args, char **env)
 	else
 	{
 		/// Check if exist in HASH_TABLE
-		// puts("here before lookup_hash\n");
-		if (!(str_arg = lookup_hash(args[0])))
+		//if (!(str_arg = lookup_hash(args[0])))
 			str_arg = ft_find_path(args[0], env);
 	}
 	if (str_arg != NULL)
@@ -276,10 +275,6 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	/// Check if Builtens
 	if (st_pipes && ft_check_built(st_pipes->args[0]) && ft_strcmp(st_pipes->args[0], "echo"))
 		return (ft_init_built(st_pipes, &(st_pipes->tmp_env))); ///  add return to ft_init_built
-	
-	/// insertion in hash_table
-	if (!ft_check_cmd(st_pipes->args[0], environ))
-		insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
 
 	/// Fork - Child
 	if (fork_it && (pid = fork()) == -1)
@@ -288,7 +283,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	{
 		ft_signal_default();
 		/// Apply redirection
-		if (ft_check_redi(st_pipes) && ft_parse_redir(st_pipes) == PARSE_KO)
+		if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 			exit(EXIT_FAILURE);
 		if (!ft_strcmp(st_pipes->args[0], "echo"))
 			built_echo(st_pipes->args);
@@ -300,6 +295,9 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	g_sign = 1;
 	waitpid(pid, &rtn, 0);
 	g_sign = 0;
+	/// insertion in hash_table
+	//if (rtn == EXIT_SUCCESS)
+	//	insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
 	return (rtn ? 0 : 1);
 }
 
@@ -318,7 +316,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
 	/// Check if cmd is alias and change it
-	st_cmds->args = aliasmatched(st_cmds->args);
+	//st_cmds->args = aliasmatched(st_cmds->args);
 
 	/// Apply Lexer && Check Error Syntax
 	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL || error_syntax_lexer(st_cmds->st_tokens))

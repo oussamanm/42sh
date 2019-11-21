@@ -324,7 +324,7 @@ char					*get_value_next(t_tokens *st_token);
 ** Parser Red
 */
 
-int						ft_parse_redir(t_pipes *st_pipes);
+int						parse_redir(t_pipes *st_pipes);
 
 /*
 ** Execution

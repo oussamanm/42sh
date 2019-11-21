@@ -97,10 +97,19 @@ void init_alias_hash()
 	// printf("addr of hash_arr %p\n", hash_arr);
 }
 
+void	handle_history(t_history *his, char *cmd_line)
+{
+	if (his == NULL || cmd_line == NULL)
+		return ;
+	ft_stock_history(his->history, g_pos.cmd, his->his_count);
+	/// change history with value
+	
+	his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
+}
+
 int			main(void)
 {
 	extern char	**environ;
-	char		*str_cmds;
 	t_history	*his;
 	t_select	*select;
 
@@ -113,18 +122,21 @@ int			main(void)
 	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
 	his->path = ft_get_vrb("PATH", g_environ);
 	// Initial Alias && HASH
-	init_alias_hash();
+	//init_alias_hash();
 	while (1337)
 	{
 		ft_putstr("\033[0;32m42sh $>\033[0m ");
-		if ((str_cmds = ft_read_line(his, select, 8)) == NULL)
+		if ((ft_read_line(his, select, 8)) == NULL || !g_pos.cmd[0])
 			continue ;
 		// Check incomplete syntax of Sub_shell or Quoting
-		compliting_line(&str_cmds, select, his);
-		ft_stock_history(his->history, str_cmds, his->his_count);
-		his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
+		g_pos.cmd = compliting_line(g_pos.cmd, select, his);
+		
+		// add command to history
+		handle_history(his, g_pos.cmd);
+
 		// Execution
-		(!(g_pos.exit)) ? ft_multi_cmd(str_cmds, 0) : NULL;
+		(!(g_pos.exit)) ? ft_multi_cmd(ft_strdup(g_pos.cmd), 0) : NULL;
+		ft_strdel(&g_pos.cmd);
 	}
 	return (0);
 }

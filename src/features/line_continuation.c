@@ -169,7 +169,10 @@ static void	ft_read_subsh(char **line, t_select *select, t_history *his)
 	ft_putstr("sub> ");
 	ft_read_line(his, select, 5);
 	if (g_pos.cmd)
+	{
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
+		g_pos.cmd = NULL;
+	}
 }
 
 static void	ft_read_quote(char **line, int quote,
@@ -189,34 +192,38 @@ static void	ft_read_quote(char **line, int quote,
 		ft_read_line(his, select, 10);
 	}
 	if (!g_pos.exit && g_pos.cmd)
+	{
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
+		g_pos.cmd = NULL;
+	}
 }
 
-void		compliting_line(char **str_cmds, t_select *select, t_history *his)
+char		*compliting_line(char *str_cmds, t_select *select, t_history *his)
 {
 	int	*maps;
 	int	i;
 	int	index;
 
 	if (!(maps = (int *)malloc(sizeof(int) * MAX_MAPS)))
-		return ;
+		return (str_cmds);
 	ft_bzero(maps, MAX_MAPS);
-	fill_maps(*str_cmds, maps, 0);
+	fill_maps(str_cmds, maps, 0);
 	i = get_last_flag(maps);
 	while (i >= 0 && !g_pos.exit)
 	{
 		if (maps[i] == 'Q' || maps[i] == 'q' || maps[i] == 'S')
 		{
-			index = ft_strlen(*str_cmds);
+			index = ft_strlen(str_cmds);
 			if (maps[i] == 'S')
-				ft_read_subsh(str_cmds, select, his);
+				ft_read_subsh(&str_cmds, select, his);
 			else
-				ft_read_quote(str_cmds, (maps[i] == 'Q') ? '"' : '\'', select, his);
-			fill_maps(&(*str_cmds)[index], maps, i + 1);
+				ft_read_quote(&str_cmds, (maps[i] == 'Q') ? '"' : '\'', select, his);
+			fill_maps(&str_cmds[index], maps, i + 1);
 			i = get_last_flag(maps);
 			continue ;
 		}
 		i--;
 	}
 	free(maps);
+	return (str_cmds);
 }
