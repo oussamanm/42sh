@@ -51,6 +51,37 @@ void		save_address(t_history **his, t_select **select)
 }
 
 
+void		init_alias_hash()
+{
+	t_aliaspkg *data;
+	t_hash **hash_arr;
+
+	data = ft_memalloc(sizeof(data));
+	storeaddrstruct(data);
+	createaliasfile();
+	importaliasfilecontent();
+	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
+	int i = -1;
+	while (++i < SIZE)
+		hash_arr[i] =  NULL;
+	store_addr_of_hash(hash_arr, 1);
+	// printf("addr of hash_arr %p\n", hash_arr);
+}
+
+/*
+** handling of history by stock cmd_line in history, and change expansion history
+*/
+
+void		handle_history(t_history *his, char *cmd_line)
+{
+	if (his == NULL || cmd_line == NULL)
+		return ;
+	ft_stock_history(his->history, g_pos.cmd, his->his_count);
+	/// change history with value
+	/// call_function_ayoub
+	his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
+}
+
 
 /*
 ** Split with ; and Check error syntax , and correction args before start
@@ -78,33 +109,6 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	}
 	ft_strrdel(args);
 	ft_strdel(&str_cmds);
-}
-
-void init_alias_hash()
-{
-	t_aliaspkg *data;
-	t_hash **hash_arr;
-
-	data = ft_memalloc(sizeof(data));
-	storeaddrstruct(data);
-	createaliasfile();
-	importaliasfilecontent();
-	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
-	int i = -1;
-	while (++i < SIZE)
-		hash_arr[i] =  NULL;
-	store_addr_of_hash(hash_arr, 1);
-	// printf("addr of hash_arr %p\n", hash_arr);
-}
-
-void	handle_history(t_history *his, char *cmd_line)
-{
-	if (his == NULL || cmd_line == NULL)
-		return ;
-	ft_stock_history(his->history, g_pos.cmd, his->his_count);
-	/// change history with value
-	
-	his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
 }
 
 int			main(void)

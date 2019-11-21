@@ -61,7 +61,6 @@ void		free_list_pipe(t_pipes *st_pipes)
 	temp = NULL;
 	while (st_pipes)
 	{
-		// moved to redirection function
 		free_list_redir(st_pipes->st_redir);
 		temp = st_pipes->next;
 		free_tokens(st_pipes->st_tokens, 0);

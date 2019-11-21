@@ -16,11 +16,11 @@ OBJS = error_handler.o\
 	parser.o intern.o vrbs_parse.o expansion.o \
 	utility/helper_func.o utility/new.o\
 	utility/free.o utility/ft_strsplit.o\
-	utility/find_closed.o\
+	utility/find_closed.o utility/helper_exec.o\
 	features/pipe.o features/line_continuation.o\
 	features/proc_sub.o features/redir_parse.o\
 	features/redir_read.o features/redir_setup.o\
-	features/subshell.o\
+	features/subshell.o features/logical_opr.o\
 	builtins_cmd/built_env.o builtins_cmd/builtins.o\
 	builtins_cmd/cd_built.o builtins_cmd/echo_built.o\
 	builtins_cmd/echo_op_parser.o builtins_cmd/type_built.o\
@@ -49,14 +49,10 @@ OBJS = error_handler.o\
 	read_line/heredoc_line.o\
 	read_line/cut.o\
 	read_line/clear_line_or_window.o\
-	job_control/add_remove.o\
-	job_control/built.o\
-	job_control/index_up.o\
-	job_control/init.o\
-	job_control/job_execution.o\
-	job_control/job_processing.o\
-	job_control/msg_sig.o\
-	job_control/output.o\
+	job_control/add_remove.o job_control/built.o\
+	job_control/index_up.o job_control/init.o\
+	job_control/job_execution.o job_control/job_processing.o\
+	job_control/msg_sig.o job_control/output.o\
 	job_control/update_status.o
 
 
@@ -71,6 +67,7 @@ OBJS_21SH = $(addprefix ./src/, $(OBJS))
 all : LBT $(NAME)
 
 $(NAME) : $(OBJS_21SH) $(LIBFT_PATH)$(LIBFT)
+	@echo "$(_lBLUE)gcc $(FLAG) -I $(INCL)  -I $(LIBFT_PATH) $(_END) $(_lGREEN)$(OBJS_21SH)$(_END) $(_lYELLOW)$(LIBFT_PATH)$(LIBFT)$(_END) -o $(_BOLD)$(NAME)$(_END) -ltermcap"
 	@echo "$(_lGREEN)											"
 	@echo "	 ▄         ▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄         ▄ "
 	@echo "	▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌"
@@ -84,7 +81,6 @@ $(NAME) : $(OBJS_21SH) $(LIBFT_PATH)$(LIBFT)
 	@echo "	          ▐░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░▌       ▐░▌"
 	@echo "	           ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀ "
 	@echo "	                                                 $(_END)"
-	@echo "$(_lBLUE)gcc $(FLAG) -I $(INCL)  -I $(LIBFT_PATH) $(_END) $(_lGREEN)$(OBJS_21SH)$(_END) $(_lYELLOW)$(LIBFT_PATH)$(LIBFT)$(_END) -o $(_BOLD)$(NAME)$(_END) -ltermcap"
 	@gcc $(FLAG) -I $(INCL) -I $(LIBFT_PATH) $(OBJS_21SH) $(LIBFT_PATH)$(LIBFT) -o $(NAME) -ltermcap
 
 %.o : %.c

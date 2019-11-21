@@ -14,127 +14,6 @@
 #include "shell.h"
 #include "read_line.h"
 
-///******* Function just for Debuging *****/
-void	ft_print_pipe(t_pipes *st_pipes)
-{
-	t_tokens *st_tokens;
-
-	st_tokens = NULL;
-	while (st_pipes)
-	{
-		dprintf(2,"\n\t\t------- Start Pipe-------\n\t\t");
-		st_tokens = st_pipes->st_tokens;
-		while (st_tokens != NULL)
-		{
-			dprintf(2, "<%s>  ",st_tokens->value);
-			st_tokens = st_tokens->next;
-		}
-		dprintf(2,"\n\t\t--------------\n");		
-		st_pipes = st_pipes->next;
-	}
-}
-void	ft_print_logopr(t_logopr *st_logopr)
-{
-	t_tokens *st_tokens;
-
-	st_tokens = NULL;
-	while (st_logopr)
-	{
-		dprintf(2,"\n\t------- Start LOG_OPR -------\n\t");
-		st_tokens = st_logopr->st_tokens;
-		while (st_tokens != NULL)
-		{
-			dprintf(2, "<%s>  ",st_tokens->value);
-			st_tokens = st_tokens->next;
-		}
-		dprintf(2,"\n\t--------------\n");
-		ft_print_pipe(st_logopr->st_pipes);
-		st_logopr = st_logopr->next;
-	}
-}
-void	ft_print_jobctr(t_jobctr *st_jobctr)
-{
-	t_tokens *st_tokens;
-
-	st_tokens = NULL;
-	while (st_jobctr)
-	{
-		dprintf(2,"\n------- Start job_ctr-------\n");
-		st_tokens = st_jobctr->st_tokens;
-		while (st_tokens != NULL)
-		{
-			dprintf(2, " <%s>  ",st_tokens->value);
-			st_tokens = st_tokens->next;
-		}
-		dprintf(2,"\n--------------\n");
-		ft_print_logopr(st_jobctr->st_logopr);
-		st_jobctr = st_jobctr->next;
-	}
-}
-void	ft_print_tokens(t_cmds *st_cmds)
-{
-	t_jobctr *st_jobctr;
-
-	if (!st_cmds)
-		return ;
-	st_jobctr = st_cmds->st_jobctr;
-	ft_print_jobctr(st_jobctr);
-}
-
-///******* End print *****/
-
-/*
- ** Execute Logical Operateur
- */
-
-static void		logical_ops(t_logopr *st_logopr)
-{
-	int		cmp;
-	int		state;
-
-	state = -1;
-	while (st_logopr != NULL)
-	{
-		state = ft_pipe(st_logopr->st_pipes);
-		if ((st_logopr->status == 248 && state == 0) ||
-				(st_logopr->status == 76 && state == 1))
-			st_logopr = st_logopr->next;
-		else
-		{
-			cmp = st_logopr->status;
-			st_logopr = st_logopr->next;
-			while (st_logopr != NULL)
-			{
-				if (st_logopr->status != cmp)
-				{
-					st_logopr = st_logopr->next;
-					break;
-				}
-				st_logopr = st_logopr->next;
-			}
-		}
-	}
-}
-
-/*
- ** Execute cmds
- */
-
-static void		ft_cmds_exec(t_cmds *st_cmds)
-{
-	t_jobctr	*st_jobctr;
-
-	if (!st_cmds)
-		return ;
-	st_jobctr = st_cmds->st_jobctr;
-	while (st_jobctr)
-	{
-		logical_ops(st_jobctr->st_logopr);
-		st_jobctr = st_jobctr->next;
-	}
-}
-
-
 /*
 ** Check if exist Cmd : check if Ok and permission
 */
@@ -168,22 +47,23 @@ int				ft_check_cmd(char *cmd, char **environ)
 }
 
 /*
-** Trim all args
-*/
+ ** Execute all cmds
+ */
 
-void			ft_strrtrim(char **args)
+static void		ft_cmds_exec(t_cmds *st_cmds)
 {
-	int i;
+	t_jobctr	*st_jobctr;
 
-	i = 0;
-	if (!args || !*args)
+	if (!st_cmds)
 		return ;
-	while (args[i])
+	st_jobctr = st_cmds->st_jobctr;
+	while (st_jobctr)
 	{
-		args[i] = ft_strtrim_and_free(args[i]);
-		i++;
+		logical_ops(st_jobctr->st_logopr);
+		st_jobctr = st_jobctr->next;
 	}
 }
+
 
 /*
 ** Execute of Cmd
@@ -210,44 +90,6 @@ static void		ft_cmd_exec(char **args, char **env)
 		ft_strdel(&str_arg);
 	}
 	exit(EXIT_FAILURE);
-}
-
-void			remove_backslashs(char **args)
-{
-	int		index;
-	char	*arg;
-	int		i;
-	int		quoted;
-
-	while (args && *args)
-	{
-		arg = *args;
-		i = -1;
-		quoted = 0;
-		if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
-		{
-			args++;
-			continue ;
-		}
-		else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
-			quoted = 1;
-		while (arg[++i] && (index = ft_find_char(&arg[i], '\\')) != -1)
-		{
-			i += index;
-			if (quoted && M_SPEC_CHARC(arg[i + 1]))
-				ft_strcpy(&arg[i],&arg[i + 1]);
-			else if (!quoted)
-				ft_strcpy(&arg[i],&arg[i + 1]);
-		}
-		if (i > 1 && ft_all_quot(arg))
-		{
-			*args = ft_strnew(ft_strlen(arg) + 2);
-			(*args)[0] = '"';
-			ft_strcpy(&(*args)[1], arg);
-			(*args)[ft_strlen(*args)] = '"';
-		}
-		args++;
-	}
 }
 
 /*
@@ -286,6 +128,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		/// Apply redirection
 		if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 			exit(EXIT_FAILURE);
+		/// execution
 		if (!ft_strcmp(st_pipes->args[0], "echo"))
 			built_echo(st_pipes->args);
 		else if (!ft_check_cmd(st_pipes->args[0], environ)) /// Check if cmd exist , permission
@@ -296,9 +139,9 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	else if (fork_it)
 		ft_manage_jobs(pid, st_pipes, &rtn);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
-	/// insertion in hash_table
+	/// insertion in hash_table in case of exit_proccess = SUCCESS
 	//if (rtn == EXIT_SUCCESS)
-	//	insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
+		//insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
 	return (rtn ? 0 : 1);
 }
 

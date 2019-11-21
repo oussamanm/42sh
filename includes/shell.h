@@ -371,6 +371,8 @@ void					ft_multi_cmd(char *str_cmds, int bl_subsh);
 int						ft_cmds_setup(char *str_arg, int bl_subsh);
 int						ft_cmd_fork(int fork_it, t_pipes *st_pipes);
 int				ft_check_cmd(char *cmd, char **environ);
+void		logical_ops(t_logopr *st_logopr);
+void			remove_backslashs(char **args);
 
 
 /*
