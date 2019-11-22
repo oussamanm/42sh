@@ -56,7 +56,7 @@ void		init_alias_hash()
 	t_aliaspkg *data;
 	t_hash **hash_arr;
 
-	data = ft_memalloc(sizeof(data));
+	data = (t_aliaspkg *)ft_memalloc(sizeof(t_aliaspkg));
 	storeaddrstruct(data);
 	createaliasfile();
 	importaliasfilecontent();
@@ -95,6 +95,7 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	i = 0;
 	if (!str_cmds)
 		return ;
+	str_cmds = ft_strdup(str_cmds);
 	args = ft_str_split_q(str_cmds, ";");
 	ft_strr_trim(args);
 	if (!error_syntax_semi(str_cmds, args) && !error_syntax_expans(str_cmds))
@@ -126,7 +127,7 @@ int			main(void)
 	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
 	his->path = ft_get_vrb("PATH", g_environ);
 	// Initial Alias && HASH
-	//init_alias_hash();
+	init_alias_hash();
 	while (1337)
 	{
 		ft_putstr("\033[0;32m42sh $>\033[0m ");
@@ -139,7 +140,7 @@ int			main(void)
 		handle_history(his, g_pos.cmd);
 
 		// Execution
-		(!(g_pos.exit)) ? ft_multi_cmd(ft_strdup(g_pos.cmd), 0) : NULL;
+		(!(g_pos.exit)) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
 		ft_job_processing();
 		ft_strdel(&g_pos.cmd);
 	}
