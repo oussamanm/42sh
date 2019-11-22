@@ -1,0 +1,6 @@
+cat -e <(ls)
+ls $(echo ..)
+cat  <(pwd) | cat -e 
+echo $()
+cat <()
+

@@ -5,7 +5,7 @@ import time
 
 
 #Path to the commands file
-CMD_PATH = "/Users/mfetoui/crash/crash.conf"
+CMD_PATH = "/Users/hlamhidr/Desktop/last_work/conf"
 #Path to fifo
 FIFO_PATH = "/tmp/crash.fifo"
 

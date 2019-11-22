@@ -109,6 +109,7 @@
 # define REDI_OK 1
 # define REDI_KO 0
 
+
 /*
 ** Job control
 */
@@ -140,6 +141,8 @@ typedef struct			s_job
 }						t_job;
 
 t_list					*jobs;
+pid_t					g_shellpid;
+char					g_proc_sub;
 
 
 /*
@@ -217,6 +220,7 @@ typedef struct s_jobctr
 typedef	struct s_cmds
 {
 	char				**args;
+	int					*fd;
 	t_tokens			*st_tokens;
 	t_jobctr			*st_jobctr;
 }						t_cmds;
@@ -435,8 +439,8 @@ char					**ft_tokens_arg_env(t_tokens *st_tokens);
 */
 
 void					apply_subsh(t_tokens *st_tokens);
-void    proc_substitution(t_tokens *st_tokens);
-
+void					proc_substitution(t_cmds *st_cmds);
+void					procsub_close(int *fd);
 /*
 ** Alias
 */

@@ -108,11 +108,16 @@ int			main(void)
 	//his->path = ft_get_vrb("PATH", g_environ);?????
 	// Initial Alias && HASH
 	init_alias_hash();
+	g_shellpid = getpid();
+	g_proc_sub = 0;
 	while (1337)
     {
         ft_putstr("\033[0;32m42sh $>\033[0m ");
         if ((ft_read_line(&g_history, select, 8)) == NULL || !g_pos.cmd[0])
-            continue ;
+        {
+			ft_job_processing();
+			continue ;
+		}   
         // Check incomplete syntax of Sub_shell or Quoting
         g_pos.cmd = compliting_line(g_pos.cmd, select, &g_history);
         // add command to history
