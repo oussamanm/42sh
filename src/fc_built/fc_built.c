@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/22 15:00:25 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/22 18:47:42 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ void    exec_fc()
 }
 
 
-void    fc_built(char **args, t_history history)
+void    fc_built(char **args, t_history *history)
 {
     char *flags;
     char c;
     int pos;
 
-    if (!history.head || !history.tail)
+    if (!history->head || !history->tail)
         return ;
     if ((pos = read_fc_flags(args, &flags, &c)) == -1)
     {
@@ -82,14 +82,14 @@ void    fc_built(char **args, t_history history)
         return ;
     }
     if (!flags)
-        fc_edit(history, NULL, args);
+        fc_edit(*history, NULL, args);
     else
     {
         if (ft_strchr(flags, 's'))//reexecute the command take just first arg
             fc_flag_s(history, *(args + pos));
         else if (ft_strchr(flags, 'l'))//list of history
-            fc_flag_l(history, flags, args + pos);
+            fc_flag_l(*history, flags, args + pos);
         else if (ft_strchr(flags, 'e')) //set editor text
-            fc_flag_e(history, args + pos);
+            fc_flag_e(*history, args + pos);
     }
 }

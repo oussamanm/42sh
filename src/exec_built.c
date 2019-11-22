@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 06:25:57 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/22 15:13:10 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/22 18:55:00 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	else if (ft_strcmp((st_pipes->args)[0], "history") == 0 && (rtn = 1))
 		display_his_list(g_history, 1);
 	else if (ft_strcmp((st_pipes->args)[0], "fc") == 0 && (rtn = 1))
-		fc_built(st_pipes->args + 1, g_history);
+		fc_built(st_pipes->args + 1, &g_history);
 	else if (ft_strcmp((st_pipes->args)[0], "source") == 0 && (rtn = 1)) // ******* don't Remove this instructions *******
 		ft_buil_updatealias(&(st_pipes->args)[1]);
 	else if (!ft_strcmp(st_pipes->args[0], "fg"))

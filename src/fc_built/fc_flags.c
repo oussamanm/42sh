@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 11:05:50 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/22 14:54:04 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/22 18:46:31 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,20 +88,20 @@ void    fc_flag_e(t_history his, char **args)
         exec_fc();
 }
 
-void    fc_flag_s(t_history his, char *arg)
+void    fc_flag_s(t_history *his, char *arg)
 {
     char *cmd;
     t_info *val;
 
     cmd = NULL;
     if (!arg)
-        cmd = his.tail->cmd;
-    else if ((val = fc_value(his, arg)))
+        cmd = ft_strdup(his->tail->cmd);
+    else if ((val = fc_value(*his, arg)))
         cmd = ft_strdup(val->cmd);
     if (cmd)
     {
         ft_putendl(cmd);
-        insert_history(&g_history, cmd);
+        insert_history(his, cmd);
         ft_multi_cmd(cmd, 0);
         //exit??
     }

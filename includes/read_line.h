@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/22 15:13:27 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/22 18:57:35 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,13 +194,15 @@ char    *history_expansion(t_history his, char *keyword);
 char    is_shell_delimiter(char c);
 char *get_delimiter(char *keyword);
 char    *str_notnumber(char *keyword);
+
 /* fc buit */
+
 char    *read_fc();
 void    write_fc(char *content);
 void    fc_flag_l(t_history history, char *flags, char **args);
-void    fc_built(char **args, t_history history);
+void    fc_built(char **args, t_history *history);
 void    fc_flag_l(t_history history, char *flags, char **args);
-void    fc_flag_s(t_history his, char *arg);
+void    fc_flag_s(t_history *his, char *arg);
 void    fc_flag_e(t_history his, char **args);
 t_info  *fc_value(t_history his, char *keyword);
 int    read_fc_flags(char **args, char **fl, char *err);
@@ -208,4 +210,5 @@ int		fc_exec_flag(char *str_cmds);
 void    fc_usage(char c);
 int    fc_edit(t_history his, char *editor, char **args);
 void    exec_fc();
+
 #endif
