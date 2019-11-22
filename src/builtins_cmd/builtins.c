@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_builtins.c                                      :+:      :+:    :+:   */
+/*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:34:51 by onouaman          #+#    #+#             */
-/*   Updated: 2019/08/03 04:16:23 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/11/17 05:12:36 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 void		built_exit(t_pipes *st_pipes, char ***tmp_env)
 {
 
+	save_history(&g_history);
 	UNUSED(st_pipes);
 	UNUSED(tmp_env);
 	/// Clear environ globale and temp

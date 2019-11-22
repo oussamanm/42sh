@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 21:02:13 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/01 21:02:16 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/11/20 09:51:12 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+#include "read_line.h"
 
 /*
 **  Function to Change sub_string with string :
@@ -129,10 +130,8 @@ char			*ft_corr_args(char *cmd)
 			i += (cmd[i + 1]) ? 1 : 0;
 		else if (cmd[i] == '"')
 			bl_q = (bl_q == 0) ? 1 : 0;
-		else if (cmd[i] == '\'' && !bl_q)
+ 		else if (cmd[i] == '\'' && !bl_q)
 			i += ft_find_char(cmd + i + 1, '\'') + 2;
-		/*else if (0 && cmd[i] == '!')
-			cmd = expantion_hist(cmd, &i);*/
 		else if (cmd[i] == '$' && cmd[i + 1])
 			cmd = ft_swap_vrb(cmd, &i);
 		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
@@ -142,3 +141,4 @@ char			*ft_corr_args(char *cmd)
 	}
 	return (cmd);
 }
+//?? corr args

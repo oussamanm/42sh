@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/10/25 12:09:53 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/17 05:10:55 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 # define PREV st_tokens->prev
 # define NEXT st_tokens->next
 # define ERRO_IN_AND -12
+# define IDENTIFIER(x) (x=="?"||x=="-"||x=="@"||x=="%"||x=="~"||x==":"||x==".")
 
 #define MAX_MAPS 1000
 #define MAX_TAB_ADDR 10
@@ -191,7 +192,7 @@ typedef struct			s_pipes
 	char				**tmp_env;
 	t_tokens			*st_tokens;
 	t_redir				*st_redir;
-	t_intern			*st_intern;
+	//t_intern			*st_intern;
 	struct s_pipes		*next;
 }						t_pipes;
 
@@ -220,6 +221,8 @@ typedef	struct s_cmds
 	t_jobctr			*st_jobctr;
 }						t_cmds;
 
+
+
 t_intern	*g_intern;
 char		**g_environ;
 
@@ -237,7 +240,6 @@ void					built_export(t_tokens *st_tokens);
 void					add_intern_var(char *key, char *value);
 void					delete_intern_var(char *key, t_intern **head);
 char					**ft_fill_env(char **args);
-char					**parse_var(char *line);
 char					*get_intern_value(char *key);
 t_intern				get_key_value(t_tokens *st_tokens);
 
@@ -251,7 +253,7 @@ void					ft_set_vrb(char *vrb, char ***env, int rm);
 void					ft_add_vrb(char *arg, char ***env);
 void					ft_unset_vrb(char *vrb, char ***env);
 void					ft_insert_vrb(char *vrb, char ***env, int rm);
-int						ft_edit_vrb(char *vrb, char ***env);
+int						ft_edit_vrb(char *vrb, char ***env, int rm);
 
 
 /*

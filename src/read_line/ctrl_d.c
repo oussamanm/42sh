@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ctrl_d.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 17:14:32 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/07/17 17:14:33 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/11/16 03:35:39 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ int		ft_read_exit(t_cursor *pos, t_history *his, t_select *select, char **s)
 		free(pos->cmd);
 	if (select->save)
 		free(select->save);
-	if (his->history)
-		ft_free_tab(his->history);
+	//if (his->history)
+	//	ft_free_tab(his->history);
+	save_history(his);
 	ft_disable();
 	exit(0);
 	return (1);

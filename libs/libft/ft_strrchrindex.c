@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clear_readline.c                                   :+:      :+:    :+:   */
+/*   ft_strrchrindex.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/03 22:52:04 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/16 03:47:27 by aboukhri         ###   ########.fr       */
+/*   Created: 2019/04/17 19:56:03 by aboukhri          #+#    #+#             */
+/*   Updated: 2019/05/19 12:51:50 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "read_line.h"
+#include "libft.h"
 
-/*
-** - function free the structs of the historys and selections when we exit
-** from our shell
-*/
-
-void	ft_clear_readline_struct(void)
+int	ft_strrchrindex(const char *s, int c)
 {
-	t_history	*his;
-	t_select	*select;
+	int		len;
 
-	his = NULL;
-	select = NULL;
-	save_address(&his, &select);
-	ft_strdel(&select->save);
-	//ft_free_tab(his->history);
-	//ft_strdel(&his->path);
-	(his != NULL) ? free(his) : 0;
-	(select != NULL) ? free(select) : 0;
+	len = ft_strlen(s);
+	while (len >= 0)
+	{
+		if (s[len] == c)
+			return (len + 1);
+		len--;
+	}
+	return (-1);
 }
