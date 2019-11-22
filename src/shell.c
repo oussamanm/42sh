@@ -48,6 +48,24 @@ void		save_address(t_history **his, t_select **select)
 	}
 }
 
+
+void		init_alias_hash()
+{
+	t_aliaspkg *data;
+	t_hash **hash_arr;
+
+	data = (t_aliaspkg *)ft_memalloc(sizeof(t_aliaspkg));
+	storeaddrstruct(data);
+	createaliasfile();
+	importaliasfilecontent();
+	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
+	int i = -1;
+	while (++i < SIZE)
+		hash_arr[i] =  NULL;
+	store_addr_of_hash(hash_arr, 1);
+	// printf("addr of hash_arr %p\n", hash_arr);
+}
+
 /*
 ** Split with ; and Check error syntax , and correction args before start
 */
@@ -60,6 +78,7 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	i = 0;
 	if (!str_cmds)
 		return ;
+	str_cmds = ft_strdup(str_cmds);
 	args = ft_str_split_q(str_cmds, ";");
 	ft_strr_trim(args);
 	if (!error_syntax_semi(str_cmds, args) && !error_syntax_expans(str_cmds))
@@ -74,23 +93,6 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	}
 	ft_strrdel(args);
 	ft_strdel(&str_cmds);
-}
-
-void init_alias_hash()
-{
-	t_aliaspkg *data;
-	t_hash **hash_arr;
-
-	data = ft_memalloc(sizeof(data));
-	storeaddrstruct(data);
-	createaliasfile();
-	importaliasfilecontent();
-	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
-	int i = -1;
-	while (++i < SIZE)
-		hash_arr[i] =  NULL;
-	store_addr_of_hash(hash_arr, 1);
-	// printf("addr of hash_arr %p\n", hash_arr);
 }
 
 int			main(void)
@@ -120,13 +122,15 @@ int			main(void)
 		}   
         // Check incomplete syntax of Sub_shell or Quoting
         g_pos.cmd = compliting_line(g_pos.cmd, select, &g_history);
+
         // add command to history
         if (!history_handling(&g_pos.cmd))
 			continue ;
-        // Execution
-        (!(g_pos.exit)) ? ft_multi_cmd(ft_strdup(g_pos.cmd), 0) : NULL;
-        ft_job_processing();
-        ft_strdel(&g_pos.cmd);
+
+		// Execution
+		(!(g_pos.exit)) ? ft_multi_cmd(ft_strdup(g_pos.cmd), 0) : NULL;
+		ft_job_processing();
+		ft_strdel(&g_pos.cmd);
     }
 	return (0);
 }

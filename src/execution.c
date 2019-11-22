@@ -81,7 +81,7 @@ static void		ft_cmd_exec(char **args, char **env)
 	else
 	{
 		/// Check if exist in HASH_TABLE
-		//if (!(str_arg = lookup_hash(args[0])))
+		if (!(str_arg = lookup_hash(args[0])))
 			str_arg = ft_find_path(args[0], env);
 	}
 	if (str_arg != NULL)
@@ -140,8 +140,8 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		ft_manage_jobs(pid, st_pipes, &rtn);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
 	/// insertion in hash_table in case of exit_proccess = SUCCESS
-	//if (rtn == EXIT_SUCCESS)
-		//insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
+	if (rtn == EXIT_SUCCESS)
+		insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
 	return (rtn ? 0 : 1);
 }
 
@@ -160,7 +160,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
 	/// Check if cmd is alias and change it
-	//st_cmds->args = aliasmatched(st_cmds->args);
+	st_cmds->args = aliasmatched(st_cmds->args);
 
 	/// Apply Lexer && Check Error Syntax
 	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL || error_syntax_lexer(st_cmds->st_tokens))
