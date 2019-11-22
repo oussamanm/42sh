@@ -41,7 +41,8 @@ char	**aliasmatched(char **args)
 	char		**rtn;
 
 	data = storeaddrstruct(NULL);
-	temp = ft_strjoin(args[0], "=");
+	temp = ft_strjoin(args[0], "=\0");
+	/// where did you initial this variable head_ref
 	curr = data->head_ref;
 	rtn = NULL;
 	while (curr)
@@ -49,6 +50,7 @@ char	**aliasmatched(char **args)
 		if (ft_strcmp(curr->shortcut, temp) == 0)
 		{
 			ft_strdel(&temp);
+			/// get value of alias 
 			temp = handleqoutes(ft_strdup(curr->cmd));
 			rtn = ft_str_split_q(temp, " \t\n");
 			rtn = ft_strr_join(rtn, &args[1], 1);

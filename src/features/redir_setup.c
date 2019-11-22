@@ -137,6 +137,5 @@ char	*get_value_next(t_tokens *st_token)
 		st_token->is_arg = 1;
 		st_token = st_token->next;
 	}
-	ft_putendl(str_rtn);
 	return (str_rtn);
 }

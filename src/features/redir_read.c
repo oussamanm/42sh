@@ -148,8 +148,6 @@ void	ft_redi_her(t_redir *st_redir, t_tokens *st_tokens)
 	{
 		temp = get_value_next(NEXT);
 		content = ft_read_heredoc(temp);
-		//ft_strdel(&(NEXT->value));
-		//NEXT->value = content;
 		st_redir->fd_file = content;
 		st_redir->fd_des = -2;
 		free(temp);

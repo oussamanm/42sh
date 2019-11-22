@@ -26,16 +26,46 @@ char	*ft_read_heredoc(char *eol)
 	{
 		ft_putstr("heredoc> ");
 		ft_read_line(his, select, 9);
-		if (ft_strequ(g_pos.cmd, eol) ||
-			(g_pos.cmd != NULL && g_pos.cmd[0] == -1) || g_pos.exit)
+		if (ft_strequ(g_pos.cmd, eol) || (g_pos.cmd != NULL && g_pos.cmd[0] == -1) || g_pos.exit)
 		{
 			ft_strdel(&g_pos.cmd);
 			break ;
 		}
 		(!line) ? (line = ft_strnew(0)) : 0;
 		(!g_pos.cmd) ? (g_pos.cmd = ft_strnew(0)) : 0;
-		line = ft_strjoir(line, g_pos.cmd, 1);
+		line = ft_strjoir(line, g_pos.cmd, 3);
+		g_pos.cmd = NULL;
 		line = ft_strjoir(line, "\n", 1);
 	}
 	return (line);
 }
+/*
+char	*ft_read_heredoc(char *eol)
+{
+	char		*s;
+	char		*line;
+	t_history	*his;
+	t_select	*select;
+
+	his = NULL;
+	select = NULL;
+	line = NULL;
+	save_address(&his, &select);
+	while (1337)
+	{
+		ft_putstr("heredoc> ");
+		s = ft_read_line(his, select, 9);
+		if ((ft_strequ(s, eol) || (s != NULL && s[0] == -1) || g_pos.exit)
+			|| (!s && *eol == 0))
+		{
+			ft_strdel(&s);
+			break ;
+		}
+		(!line) ? (line = ft_strnew(0)) : 0;
+		(!s) ? (s = ft_strnew(0)) : 0;
+		line = ft_strjoir(line, s, 3);
+		line = ft_strjoir(line, "\n", 1);
+	}
+	return (line);
+}
+*/

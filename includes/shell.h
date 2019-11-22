@@ -69,11 +69,15 @@
 /*
 **Tokens
 */
+#define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
+#define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
 
 # define T_TXT			0
 # define T_QUO			1
 # define T_DQUO			2
 # define T_SUBSHL		117
+# define T_PROC_IN		1337
+# define T_PROC_OUT		42
 # define T_JOBCTR		38
 # define T_LOGOPR_AND	76
 # define T_LOGOPR_OR	248
@@ -94,8 +98,7 @@
 # define T_RED_APP_M	-169
 # define T_RED_HER_D	-120
 # define T_RED_BOTH		-122
-# define T_PROC_IN		1337
-# define T_PROC_OUT		42
+
 
 /*
 **Parsing
@@ -105,6 +108,43 @@
 # define PARSE_OK 1
 # define REDI_OK 1
 # define REDI_KO 0
+
+/*
+** Job control
+*/
+
+# define RUN 11
+# define STOPED 22
+# define TERMINATED 33
+# define EXITED 44
+
+typedef	struct			s_process
+{
+	pid_t				pid;
+	int					status;
+	int					exit_status;
+}						t_process;
+
+typedef struct			s_job
+{
+	pid_t				pgid;
+	int					index;
+	int					status;
+	t_list				*proc;
+	int					background;
+	int 				mark_stop;
+	int					sig_term;
+	char 				*cmd;
+	char				p;
+	struct termios		term_child;
+}						t_job;
+
+t_list					*jobs;
+
+
+/*
+** job control
+*/
 
 typedef struct termios	t_termios;
 
@@ -148,7 +188,7 @@ typedef struct			s_pipes
 	int					fds[2];
 	int					status;
 	char				**args;
-	int					bl_jobctr:1;
+	int					bl_jobctr;
 	char				**tmp_env;
 	t_tokens			*st_tokens;
 	t_redir				*st_redir;
@@ -162,12 +202,12 @@ typedef struct 			s_logopr
 	int					status;
 	t_pipes				*st_pipes;
 	struct s_logopr		*next;
-	int					bl_jobctr:1;
+	int					bl_jobctr;
 }						t_logopr;
 
 typedef struct s_jobctr
 {
-	int					status:1;
+	int					status;
 	t_tokens			*st_tokens;
 	t_logopr			*st_logopr;
 	struct s_jobctr		*next;
@@ -323,7 +363,7 @@ char					*get_value_next(t_tokens *st_token);
 ** Parser Red
 */
 
-int						ft_parse_redir(t_pipes *st_pipes);
+int						parse_redir(t_pipes *st_pipes);
 
 /*
 ** Execution
@@ -333,6 +373,8 @@ void					ft_multi_cmd(char *str_cmds, int bl_subsh);
 int						ft_cmds_setup(char *str_arg, int bl_subsh);
 int						ft_cmd_fork(int fork_it, t_pipes *st_pipes);
 int				ft_check_cmd(char *cmd, char **environ);
+void		logical_ops(t_logopr *st_logopr);
+void			remove_backslashs(char **args);
 
 
 /*
@@ -364,6 +406,7 @@ t_intern				*new_intern(char *key, char *value);
 void					free_list_cmds(t_cmds *st_cmds);
 void					free_tokens(t_tokens *st_tokens, int free_content);
 void		free_addresses(void *table[MAX_TAB_ADDR]);
+void		free_list_redir(t_redir *st_redir);
 
 /*
 ** Parse Cmds
@@ -400,6 +443,38 @@ void    proc_substitution(t_tokens *st_tokens);
 
 void            ft_buil_alias(t_tokens *st_tokens);
 int			ft_buil_unalias(t_tokens *st_token, int flag);
+
+/*
+** job
+*/
+
+void					ft_foreground(void);
+void					ft_continue(void);
+void					ft_catch_sigchild(int sig);
+void					ft_manage_jobs(int pid, t_pipes *st_pipes, int *rtn);
+void					ft_add_job(t_job *job);
+void					ft_job_processing(void);
+void					ft_fill_process(int pid, t_job *job);
+void    ft_collect_job_status(void);
+void	ft_printstatus(int status);
+void	ft_putjoblst(int pgid, int pid, int status);
+int		ft_termsig_fore(int sig, char *name);
+void 	ft_wait(t_job *current);
+int			ft_job_index(void);
+t_job			*ft_inisial_job(void);
+char 			*ft_cmd_value(t_tokens *st_tokens, char *cmd);
+int		ft_print_termsig_back(int sig, char *name, int index, char p);
+void	ft_jobs_built(void);
+void		ft_update_p(void);
+void		ft_update_index(void);
+void	ft_print_pid(int index, int pgid);
+void 			ft_foreground_job(t_job *job);
+void	ft_remove_node(t_list *tmp, t_list *pr);
+void	ft_free_job(t_job *job);
+void			ft_single_proc(t_job *job, t_pipes *st_pipes, int pid, int *add);
+void			ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add);
+char	*ft_strsignal(int sig);
+void	ft_print_backcmd(t_job *job);
 
 
 #endif

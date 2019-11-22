@@ -117,3 +117,21 @@ void		ft_strr_trim(char **args)
 		args++;
 	}
 }
+
+/*
+** Trim all args
+*/
+
+void			ft_strrtrim(char **args)
+{
+	int i;
+
+	i = 0;
+	if (!args || !*args)
+		return ;
+	while (args[i])
+	{
+		args[i] = ft_strtrim_and_free(args[i]);
+		i++;
+	}
+}

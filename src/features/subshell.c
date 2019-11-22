@@ -19,9 +19,9 @@
 
 void	value_to_token(char *value, t_tokens **st_tokens)
 {
-	char **args;
-	int	index;
-	int i;
+	char		**args;
+	int			index;
+	int			i;
 	t_tokens	*save_next;
 
 	if (!st_tokens || !(*st_tokens))
@@ -36,9 +36,8 @@ void	value_to_token(char *value, t_tokens **st_tokens)
 		index++;
 		i++;
 	}
-	if (i != 0)
+	if (i != 0 && ((*st_tokens) = (*st_tokens)->prev))
 	{
-		(*st_tokens) = (*st_tokens)->prev;
 		free((*st_tokens)->next);
 		(*st_tokens)->next = save_next;
 		if (save_next)
@@ -164,6 +163,7 @@ void		apply_subsh(t_tokens *st_tokens)
 	char	*value;
 	char	*temp;
 	int		i;
+	//t_tokens *st_head = st_tokens;
 
 	i = 0;
 	while (st_tokens)
@@ -177,6 +177,7 @@ void		apply_subsh(t_tokens *st_tokens)
 			ft_strdel(&st_tokens->value);
 			/// correction value by remove \n in last
 			value = correct_result(value);
+			//DEBUGF("value of result sub_shell = %s \n",value);
 			/// split value and fill tokens
 			value_to_token(value, &st_tokens);
 			ft_strdel(&value);
@@ -191,4 +192,11 @@ void		apply_subsh(t_tokens *st_tokens)
 		}
 		st_tokens = st_tokens->next;
 	}
+		// dprintf(2,"\n------ After sub_shel --------\n");
+		// while (st_head != NULL)
+		// {
+		// 	dprintf(2, "index = %d Token = <%d> : <%s>\n",st_head->indx, st_head->token,st_head->value);
+		// 	st_head = st_head->next;
+		// }
+		// dprintf(2,"\n--------fin------\n");
 }

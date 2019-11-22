@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/22 14:35:00 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/22 15:25:33 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void init_alias_hash()
 int			main(void)
 {
 	extern char	**environ;
-	char		*str_cmds;
 	t_select	*select;
 
 	g_intern = NULL;
@@ -110,20 +109,19 @@ int			main(void)
 	// Initial Alias && HASH
 	init_alias_hash();
 	while (1337)
-	{
-		/*puts("pid = ");
-		ft_putnbr(getpid());
-		puts("\n");*/
-		ft_putstr("\033[0;32m42sh $>\033[0m ");
-		if ((str_cmds = ft_read_line(&g_history, select, 8)) == NULL)
+    {
+        ft_putstr("\033[0;32m42sh $>\033[0m ");
+        if ((ft_read_line(&g_history, select, 8)) == NULL || !g_pos.cmd[0])
+            continue ;
+        // Check incomplete syntax of Sub_shell or Quoting
+        g_pos.cmd = compliting_line(g_pos.cmd, select, &g_history);
+        // add command to history
+        if (!history_handling(&g_pos.cmd))
 			continue ;
-		// Check incomplete syntax of Sub_shell or Quoting
-		//compliting_line(&str_cmds, select, his);
-		//ft_stock_history(his->history, str_cmds, his->his_count);
-		//his->his_count += (his->his_count < MAX_HISTORY) ? 1 : 0;
-		// Execution
-		if (history_handling(&str_cmds))
-			(!(g_pos.exit)) ? ft_multi_cmd(str_cmds, 0) : NULL;
-	}
+        // Execution
+        (!(g_pos.exit)) ? ft_multi_cmd(ft_strdup(g_pos.cmd), 0) : NULL;
+        ft_job_processing();
+        ft_strdel(&g_pos.cmd);
+    }
 	return (0);
 }

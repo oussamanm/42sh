@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 06:25:57 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/18 22:39:29 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/22 15:13:10 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	rtn = 0;
 	if (st_pipes == NULL || st_pipes->args == NULL)
 		return (-1);
-	if (ft_check_redi(st_pipes) && ft_parse_redir(st_pipes) == PARSE_KO)
+	if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 		return (REDI_KO);
 	if (ft_strcmp((st_pipes->args)[0], "exit") == 0)
 		built_exit(st_pipes, tmp_env);
@@ -70,6 +70,12 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 		fc_built(st_pipes->args + 1, g_history);
 	else if (ft_strcmp((st_pipes->args)[0], "source") == 0 && (rtn = 1)) // ******* don't Remove this instructions *******
 		ft_buil_updatealias(&(st_pipes->args)[1]);
+	else if (!ft_strcmp(st_pipes->args[0], "fg"))
+		ft_foreground();
+	else if (!ft_strcmp(st_pipes->args[0], "bg"))
+		ft_continue();
+	else if (!ft_strcmp(st_pipes->args[0], "jobs"))
+		ft_jobs_built();
 	while (st_pipes->st_redir != NULL)
 	{
 		if (st_pipes->st_redir->fd_des != -1)
@@ -103,6 +109,8 @@ int			ft_check_built(char *arg)
 	else if (!ft_strcmp(arg, "source") || !ft_strcmp(arg, "hash"))
 		rtn++;
 	else if (!ft_strcmp(arg, "history") || !ft_strcmp(arg, "fc"))
+		rtn++;
+	else if (!ft_strcmp(arg, "fg") || !ft_strcmp(arg, "bg") || !ft_strcmp(arg, "jobs"))
 		rtn++;
 	return (rtn);
 }

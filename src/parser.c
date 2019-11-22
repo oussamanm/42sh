@@ -72,7 +72,6 @@ static void     ft_fill_logopr(t_jobctr *st_jobctr)
 			ft_dup_token(&st_token, st_temp, T_LOGOPR_AND);
 		else
 		{
-			st_logopr->bl_jobctr = (st_jobctr->status) ? 1 : 0;
 			st_logopr->status = st_temp->token;
 			if (st_temp->next) // if exist more tokens
 			{
@@ -84,6 +83,7 @@ static void     ft_fill_logopr(t_jobctr *st_jobctr)
 		}
 		st_temp = st_temp->next;
 	}
+	st_logopr->bl_jobctr = st_jobctr->status;
 }
 
 static void     ft_fill_pipe(t_logopr *st_logopr)
@@ -103,11 +103,11 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 	st_temp = st_logopr->st_tokens;
 	while (st_temp)
 	{
+		st_pipes->bl_jobctr = st_logopr->bl_jobctr; 
 		if (st_temp->token != T_PIPE)
 			ft_dup_token(&st_token, st_temp, T_PIPE);
 		else
 		{
-			st_pipes->bl_jobctr = (st_logopr->bl_jobctr) ? 1 : 0; 
 			if (st_temp->next) // if exist more tokens
 			{
 				st_pipes->next = ft_new_pipe();
@@ -125,7 +125,7 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 ** Fill Intern and Temp variables
 */
 
-static void		ft_fill_vrbs(t_pipes *st_pipes)
+static void		fill_vrbs(t_pipes *st_pipes)
 {
 	char		**tmp_env;
 
@@ -145,15 +145,14 @@ static void		ft_fill_vrbs(t_pipes *st_pipes)
 ** Fill args with token except T_EQUAL
 */
 
-static void		ft_fill_args(t_pipes *st_pipes)
+static void		fill_args(t_pipes *st_pipes)
 {
 	if (!st_pipes)
 		return ;
 	while (st_pipes)
 	{
-		/// add condition in function below : ! T_EQUAL T_SUBSHELL
+		/// add condition in function below : ! T_EQUAL
 		ft_tokens_args(st_pipes);
-
 		st_pipes = st_pipes->next;
 	}
 }
@@ -179,9 +178,9 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 			ft_fill_pipe(st_logopr);
 			// Fill intern variable and tmp_env
 			if (st_logopr->st_pipes && !st_logopr->st_pipes->next && ft_check_token(st_logopr->st_pipes->st_tokens, T_EQUAL))
-				ft_fill_vrbs(st_logopr->st_pipes);
+				fill_vrbs(st_logopr->st_pipes);
 			/// Fill args without T_EQUAL , T_SUBSHL,
-			ft_fill_args(st_logopr->st_pipes);
+			fill_args(st_logopr->st_pipes);
 			st_logopr = st_logopr->next;
 		}
 		st_jobctr = st_jobctr->next;

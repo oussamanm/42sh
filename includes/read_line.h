@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/22 14:35:44 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/22 15:13:27 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,6 @@ typedef	struct		s_select
 	char			*save;
 }					t_select;
 
-/*typedef	struct		s_history
-{
-	char			**history;
-	int				his_count;
-	char			*path;
-}					t_history;*/
 typedef	struct s_info
 {
 	int index;
@@ -192,6 +186,8 @@ void    rev_his_list(t_history *lst);
 void    display_his_list(t_history his, int order);
 int		history_handling(char **str_cmds);
 char    *history_content(t_history his);
+
+char		*compliting_line(char *str_cmds, t_select *select, t_history *his);
 
 /*history expansion */
 char    *history_expansion(t_history his, char *keyword);

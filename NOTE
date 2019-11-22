@@ -1,0 +1,6 @@
+- check signal and g_pos.cmd varaible 
+- check history implementation in shell.c
+- check implementation of alias
+- check free of all variables
+
+- review if should add flag for ctr-c in parsing

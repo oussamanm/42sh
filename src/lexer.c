@@ -114,9 +114,9 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 			continue ;
 		}
 		escaped = 0;
-		if (arg[i + 1] == ' ' || arg[i + 1] == '\t' || !arg[i + 1] || M_BRACKET(arg[i + 1]) ||
-			arg[i + 1] == '&' || arg[i + 1] == '|' || M_REDIR(arg[i + 1]) ||
-			arg[i + 1] == '$' || (arg[0] != '=' && arg[i + 1] == '=') || IS_QUOTE(arg[i + 1]))
+		if (!arg[i + 1] || M_CHECK(arg[i + 1], ' ', '\t') || M_BRACKET(arg[i + 1]) ||
+			M_CHECK(arg[i + 1], '&', '|') || M_REDIR(arg[i + 1]) || arg[i + 1] == '$'||
+			(arg[0] != '=' && arg[i + 1] == '=') || IS_QUOTE(arg[i + 1]))
 		{
 			temp = ft_strsub(arg, 0, i + 1);
 			ft_fill_token(st_tokens, T_TXT, temp, indx);
@@ -180,7 +180,7 @@ void		ft_lexer_h(t_tokens **st_tokens, char *arg, int i)
 					ft_lexer_logopr(st_tokens, &arg[j], &j, i);
 	/*Jobs*/	else if (arg[j] == '&')
 					ft_fill_token(st_tokens, T_JOBCTR, ft_strdup("&"), i);
-				else if (arg[j] == '=' && (*st_tokens)->prev && (*st_tokens)->prev->token != T_EQUAL)
+	/*Equa*/	else if (arg[j] == '=' && (*st_tokens)->prev && (*st_tokens)->prev->token != T_EQUAL)
 					ft_fill_token(st_tokens, T_EQUAL, ft_strdup("="), i);
 	/*SUB_SH*/	else if ((arg[j] == '$' || M_CHECK(arg[j], '>', '<')) && arg[j + 1] == '(')
 					ft_lexer_subshl(st_tokens, &arg[j], &j, i);
@@ -204,7 +204,7 @@ t_tokens	*ft_lexer(char **args)
 		return (NULL);
 	st_tokens = (ft_strrlen(args) > 0) ? ft_new_token() : NULL;
 	st_head = st_tokens;
-	while (args[i] != '\0')
+	while (args[i])
 	{
 		ft_lexer_h(&st_tokens, args[i], i);
 		i++;
@@ -214,14 +214,14 @@ t_tokens	*ft_lexer(char **args)
 		st_tokens->prev->next = NULL;
 		free(st_tokens);
 	}
-		st_tokens = st_head;
-		while (st_tokens != NULL)
-		{
-			dprintf(2, "index = %d Token = <%d> : <%s>\n",st_tokens->indx, st_tokens->token,st_tokens->value);
-			st_tokens = st_tokens->next;
-		}
-		dprintf(2,"\n--------------\n");
-		// exit(0);
+		// st_tokens = st_head;
+		// while (st_tokens != NULL)
+		// {
+		// 	dprintf(2, "index = %d Token = <%d> : <%s>\n",st_tokens->indx, st_tokens->token,st_tokens->value);
+		// 	st_tokens = st_tokens->next;
+		// }
+		// dprintf(2,"\n--------------\n");
+		//exit(0);
 	if (i == 0)
 		return (NULL);
 	return (st_head);

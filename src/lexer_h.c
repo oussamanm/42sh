@@ -99,9 +99,7 @@ void		ft_tokens_args(t_pipes *st_pipe)
 		if (st_tokens->is_arg != T_EQUAL)
 		{
 			if (i != 0 && index == st_tokens->indx)
-			{
 				st_pipe->args[i - 1] = ft_strjoir_rtn(st_pipe->args[i - 1], st_tokens->value, 1);
-			}
 			else
 			{
 				st_pipe->args[i++] = ft_strdup(st_tokens->value);

@@ -24,6 +24,7 @@ void		free_list_redir(t_redir *st_redir)
 	{
 		temp = st_redir->next;
 		/// free file variable
+		ft_strdel(&st_redir->fd_file);
 		free(st_redir);
 		st_redir = temp;
 	}

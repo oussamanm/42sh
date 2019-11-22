@@ -19,18 +19,23 @@ char		**ft_strr_join(char **str1, char **str2, int rm)
 	int		l2;
 	char	**new_chaine;
 
-	i = -1;
-	if (str1 == NULL || str2 == NULL)
+	i = 0;
+	if (str1 == NULL && str2 == NULL)
 		return (NULL);
 	l1 = ft_strrlen(str1);
 	l2 = ft_strrlen(str2);
-	if ((new_chaine = (char **)malloc(sizeof(char **) * (l1 + l2 + 1))) == NULL)
+	if ((new_chaine = (char **)malloc(sizeof(char *) * (l1 + l2 + 1))) == NULL)
 		return (NULL);
-	while (str1[++i] != NULL)
-		new_chaine[i] = ft_strdup(str1[i]);
+	if (str1)
+		while (str1[i] != NULL)
+		{
+			new_chaine[i] = ft_strdup(str1[i]);
+			i++;
+		}
 	l2 = 0;
-	while (str2[l2] != NULL)
-		new_chaine[i++] = ft_strdup(str2[l2++]);
+	if (str2)
+		while (str2[l2] != NULL)
+			new_chaine[i++] = ft_strdup(str2[l2++]);
 	new_chaine[i] = NULL;
 	if (rm == 1 || rm == 3)
 		ft_strrdel(str1);
@@ -83,7 +88,7 @@ int			ft_strrlen(char **argv)
 
 	i = 0;
 	if (argv == NULL)
-		return (-1);
+		return (0);
 	while (*argv && *argv != NULL)
 	{
 		i++;
