@@ -3,6 +3,7 @@
 import os
 import time
 
+
 #Path to the commands file
 CMD_PATH = "/Users/mfetoui/crash/crash.conf"
 #Path to fifo

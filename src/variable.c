@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_variable.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:24:55 by onouaman          #+#    #+#             */
-/*   Updated: 2019/05/03 06:26:21 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/10/05 16:19:40 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ void		ft_insert_vrb(char *vrb, char ***env, int rm)
     (rm == 1) ? ft_strdel(&vrb) : NULL;
 }
 
-int			ft_edit_vrb(char *vrb, char ***env)
+int			ft_edit_vrb(char *vrb, char ***env, int rm)
 {
     int        i;
     int        len_vrb;
@@ -165,8 +165,10 @@ int			ft_edit_vrb(char *vrb, char ***env)
         {
             ft_strdel(&temp[i]);
             temp[i] = ft_strdup(vrb);
+			(rm == 1) ? ft_strdel(&vrb) : NULL;
             return (1);
         }
     }
+	(rm == 1) ? ft_strdel(&vrb) : NULL;
     return (0);
 }

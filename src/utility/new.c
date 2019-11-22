@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_new.c                                           :+:      :+:    :+:   */
+/*   new.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/07 05:20:40 by onouaman          #+#    #+#             */
-/*   Updated: 2019/08/07 05:20:41 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/11/16 03:43:11 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_pipes		*ft_new_pipe(void)
 	ft_bzero(st_pipes->fds, 2);
 	st_pipes->st_redir = NULL;
 	st_pipes->st_tokens = NULL;
-	st_pipes->st_intern = NULL;
+	//st_pipes->st_intern = NULL;
 	st_pipes->tmp_env = NULL;
 	st_pipes->next = NULL;
 	return (st_pipes);

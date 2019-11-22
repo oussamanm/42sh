@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exec_built.c                                    :+:      :+:    :+:   */
+/*   exec_built.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 06:25:57 by onouaman          #+#    #+#             */
-/*   Updated: 2019/08/07 06:10:18 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/11/22 18:55:00 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shell.h"
-
+#include "../includes/shell.h"
+#include "../includes/read_line.h"
 /*
 ** initail builtens : duplicate STD_* , Call builtens , Resete STD_*
 */
@@ -64,6 +64,10 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 		built_type(&(st_pipes->args)[1], *tmp_env);
 	else if (ft_strcmp((st_pipes->args)[0], "hash") == 0 && (rtn = 1))
 		hash_table(&(st_pipes->args)[1]);
+	else if (ft_strcmp((st_pipes->args)[0], "history") == 0 && (rtn = 1))
+		display_his_list(g_history, 1);
+	else if (ft_strcmp((st_pipes->args)[0], "fc") == 0 && (rtn = 1))
+		fc_built(st_pipes->args + 1, &g_history);
 	else if (ft_strcmp((st_pipes->args)[0], "source") == 0 && (rtn = 1)) // ******* don't Remove this instructions *******
 		ft_buil_updatealias(&(st_pipes->args)[1]);
 	else if (!ft_strcmp(st_pipes->args[0], "fg"))
@@ -103,6 +107,8 @@ int			ft_check_built(char *arg)
 	else if (!ft_strcmp(arg, "alias") || !ft_strcmp(arg, "unalias"))
 		rtn++;
 	else if (!ft_strcmp(arg, "source") || !ft_strcmp(arg, "hash"))
+		rtn++;
+	else if (!ft_strcmp(arg, "history") || !ft_strcmp(arg, "fc"))
 		rtn++;
 	else if (!ft_strcmp(arg, "fg") || !ft_strcmp(arg, "bg") || !ft_strcmp(arg, "jobs"))
 		rtn++;

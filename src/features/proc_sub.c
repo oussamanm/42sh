@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   proc_substitution.c                                :+:      :+:    :+:   */
+/*   proc_sub.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfetoui <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 12:07:11 by mfetoui           #+#    #+#             */
-/*   Updated: 2019/10/25 12:09:43 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/20 13:14:36 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*token_implode(t_tokens *st_tokens){
 		str = ft_strjoir(str, ft_strjoir(st_tokens->value, " ", 0), 3);
 		st_tokens = st_tokens->next;
 	}
+	printf("addr = %p \n", &str);
+
 	return (str);
 }
 
@@ -37,8 +39,8 @@ int     exec_subs(char *cmd, bool type)
 		dup2(fd[type], type);
 		close(fd[type]);
 		tmp_cmd[ft_strlen(tmp_cmd) - 1] = 0;
-		tmp_cmd = ft_strcpy(tmp_cmd , &tmp_cmd[2]);
-		ft_multi_cmd(tmp_cmd, 0);
+		ft_strcpy(tmp_cmd , &tmp_cmd[2]);
+		ft_multi_cmd(tmp_cmd , 0);
 		exit(0);
 	}
 	close(fd[type]);

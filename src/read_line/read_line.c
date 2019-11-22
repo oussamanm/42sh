@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_and_split.c                                   :+:      :+:    :+:   */
+/*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/22 19:26:09 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/22 19:37:41 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ char	*ft_call_complete(t_select *select, char *s, char *buf)
 	return (s);
 }
 
+void	tab_mode(char **s)
+{
+	char buf[6];
+
+	ft_bzero(buf, 6);
+	read(0, buf, 6);
+	ft_print_touch_and_join(&g_pos, buf, s);
+}
+
 /*
 ** - function call the functions needed to edit our line.
 */
@@ -66,9 +75,13 @@ char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 	&& select->start != -1 && select->end != -1)
 		ft_clear_selection(select, &g_pos, s, buf);
 	if (TAB == CAST(buf))
-		s = ft_auto_completion(&g_pos, his, s);
+		s = ft_auto_completion(&g_pos, s);
 	else if (CTRL_D == CAST(buf))
 		s = ft_ctrl_d(&g_pos, his, select, s);
+	else if (CTRL_T == CAST(buf))
+		tab_mode(&s);
+	//else if (CTRL_R == CAST(buf))
+	//	history_search();
 	else if (ALT_UP == CAST(buf) || ALT_DO == CAST(buf))
 		ft_move_by_lines(&g_pos, s, buf);
 	else if (HOME == CAST(buf) || END == CAST(buf))
@@ -78,7 +91,7 @@ char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 	else if (DEL == CAST(buf))
 		s = ft_delcolomn(s, &g_pos);
 	else if (UP == CAST(buf) || DO == CAST(buf))
-		ft_print_history(his, buf, &s, &g_pos);
+		history_readline(his, CAST(buf), &s);
 	else
 		s = ft_call_complete(select, s, buf);
 	return (s);
@@ -97,9 +110,11 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	int crash;
 	
 	crash = 0;
-	// To test only uncomment this line and close it at the end of the function
-//	crash = open("/tmp/crash.fifo", O_RDONLY);
+	//  To test only uncomment this line and close the fd at the end of
+	//  the function and run crash.py before 42sh
+	//	crash = open("/tmp/crash.fifo", O_RDONLY);
 	 
+	select->end = 1;
 	ft_initial(p);
 	ft_bzero(buf, 6);
 	ft_enable();
@@ -118,6 +133,6 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	ft_disable();
 	free(g_pos.end);
 	///(g_pos.cmd[0] != -1) ? g_pos.cmd = ft_strtrim_and_free(g_pos.cmd) : 0;
-//	close(crash);
+	//	close(crash);
 	return (g_pos.cmd);
 }

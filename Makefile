@@ -47,14 +47,17 @@ OBJS = error_handler.o\
 	read_line/termcap.o\
 	read_line/clear_readline.o\
 	read_line/heredoc_line.o\
-	read_line/cut.o\
-	read_line/clear_line_or_window.o\
+	read_line/cut.o read_line/clear_line_or_window.o\
+	history/history_expansion.o\
+	history/history_file.o history/history_readline.o\
+	history/manage_history.o history/history_other.o history/history_content.o\
+	fc_built/fc_built.o fc_built/fc_file.o fc_built/fc_flag_l.o\
+	fc_built/fc_flags.o\
 	job_control/add_remove.o job_control/built.o\
 	job_control/index_up.o job_control/init.o\
 	job_control/job_execution.o job_control/job_processing.o\
 	job_control/msg_sig.o job_control/output.o\
 	job_control/update_status.o
-
 
 FLAG = -Wall -Wextra -Werror 
 INCL = ./includes
