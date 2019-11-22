@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/10/13 22:38:41 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/17 05:10:55 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,28 @@
 
 # define BUFF_SIZE 10
 # define UNUSED(x) (void)(x)
+# define DEBUG(msg) puts(msg)
+# define DEBUGF(msg,...) printf(msg, __VA_ARGS__)
 # define M_CHECK(x , y, z) ((x == y || x == z) ? 1 : 0)
-# define M_C (arg[i][0]==34||arg[i][0]==39)
-# define M_CC (arg[i][ft_strlen(arg[i])-1]==34||arg[i][ft_strlen(arg[i])-1]==39)
+# define IS_QUOTE(x) (x == 34 || x == 39)
 # define M_CHECK_W(C)(C==32||C==9||C==11||C==10||C==13||C==12)
 # define M_REDIR(C) (C == '>' || C == '<')
+# define M_SUBSH(x) (M_REDIR(x) || x == '$')
+# define M_SPEC_CHARC(x) (x=='$'||x=='`'||x=='\\'||x=='"'||x=='\n')
+# define M_ESCAPED(x) (x == '\\')
+# define M_BRACKET(x) (x == '(' || x == ')')
 # define STR(x)  (*str)[x]
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
+# define MATCH_CLOSED(x, y)(((x == 'q' || x == 'Q') && x == y) || (x == 'S' && y == 's'))
 # define PROMPT 3
 # define PATHSIZE 1024
-# define M_QUOTE 34
-# define M_DQUOTE 39
 # define PREV st_tokens->prev
 # define NEXT st_tokens->next
 # define ERRO_IN_AND -12
 # define IDENTIFIER(x) (x=="?"||x=="-"||x=="@"||x=="%"||x=="~"||x==":"||x==".")
 
+#define MAX_MAPS 1000
+#define MAX_TAB_ADDR 10
 /*
 **Buttons
 */
@@ -64,14 +70,19 @@
 **Tokens
 */
 
-# define T_TXT 0
-# define T_QUO 1
+# define T_TXT			0
+# define T_QUO			1
+# define T_DQUO			2
 # define T_SUBSHL		117
 # define T_JOBCTR		38
 # define T_LOGOPR_AND	76
 # define T_LOGOPR_OR	248
 # define T_PIPE			124
 # define T_EQUAL		61
+# define T_HIST			33
+# define T_HIST_LAST	66
+# define T_BRACKET_O	40
+# define T_BRACKET_C	41
 # define T_RED_IN_S		-60
 # define T_RED_IN_A		-98
 # define T_RED_IN_B		-143
@@ -83,6 +94,8 @@
 # define T_RED_APP_M	-169
 # define T_RED_HER_D	-120
 # define T_RED_BOTH		-122
+# define T_PROC_IN		1337
+# define T_PROC_OUT		42
 
 /*
 **Parsing
@@ -113,9 +126,9 @@ typedef struct			s_filedes
 
 typedef struct    s_intern
 {
-    char    *key;
-    char    *value;
-    struct s_intern *next;
+	char    *key;
+	char    *value;
+	struct s_intern *next;
 }                t_intern;
 
 
@@ -132,8 +145,8 @@ typedef struct			s_redir
 
 typedef struct			s_pipes
 {
-	char				*cmd;
 	int					fds[2];
+	int					status;
 	char				**args;
 	int					bl_jobctr:1;
 	char				**tmp_env;
@@ -147,22 +160,22 @@ typedef struct 			s_logopr
 {
 	t_tokens			*st_tokens;
 	int					status;
-	int					bl_jobctr:1;
 	t_pipes				*st_pipes;
 	struct s_logopr		*next;
+	int					bl_jobctr:1;
 }						t_logopr;
 
 typedef struct s_jobctr
 {
-	t_tokens			*st_tokens;
 	int					status:1;
+	t_tokens			*st_tokens;
 	t_logopr			*st_logopr;
 	struct s_jobctr		*next;
 }						t_jobctr;
 
+
 typedef	struct s_cmds
 {
-	char				*str_cmd;
 	char				**args;
 	t_tokens			*st_tokens;
 	t_jobctr			*st_jobctr;
@@ -177,13 +190,8 @@ char		**g_environ;
 ** Builtins
 */
 
-void					ft_built_exit(t_pipes *st_pipes, char ***env);
-void					ft_buil_echo(char **arg);
-int						ft_buil_cd(char **arg, char **env);
-int						ft_buil_type(char **args, char **tmpenv);
-void					ft_buil_env(char **args, char ***tmp_env);
-void					ft_buil_export(t_tokens *st_tokens);
-void					ft_buil_unset(char **args);
+void					built_exit(t_pipes *st_pipes, char ***env);
+void					built_export(t_tokens *st_tokens);
 
 /*
 ** Intern variable
@@ -212,15 +220,13 @@ int						ft_edit_vrb(char *vrb, char ***env, int rm);
 ** Error handler
 */
 
-void					ft_print_error(char *msg, char *para1, char *para2, int rm);
+void					print_error(char *msg, char *para1, char *para2, int rm);
 void					ft_err_exit(char *str);
 int						ft_error_cd(char *path, char **arg);
-int						ft_error_semic(char *str_arg, char **args_cmd);
 int						ft_call_lexer(t_pipes *st_pipes);
-int						ft_parse_error(char *str_cmds);
-char					**ft_error_syntax(char *str_cmds);
-int						ft_error_pipe(char *str);
-int						ft_error_separ(char *str_arg, char c);
+int						error_syntax_lexer(t_tokens *st_tokens);
+int						error_syntax_semi(char *str_cmds, char **args);
+int						error_syntax_expans(char *str_cmds);
 int						ft_putchar_err(int c);
 
 /*
@@ -229,19 +235,26 @@ int						ft_putchar_err(int c);
 
 char					**ft_str_split(char const *s, char *c);
 char					**ft_str_split_q(char *str, char *c);
-int						ft_index_of_first_split(char *s1, char *s2);
-char					**ft_strsplit_by_arr(char *str, char *split);
+
+/*
+** Helper Splite
+*/
+
+int			find_dquot(char *str);
+int			find_subsh(char *str);
+int			find_quot(char *str);
+int			find_closed(char *str, char c);
 
 
 /*
-**Helper
+** Helper
 */
 
 char					*ft_find_path(char *arg, char **env);
-int						ft_count_word(const char *str, char *c);
-t_pipes					*ft_strr_list(char **args_pipe);
 int						ft_check_redi(t_pipes *st_pipes);
 int						ft_sum_asci(char str[]);
+int		find_char_escap(char *str, char c);
+int				ft_all_quot(char *str);
 
 
 /*
@@ -252,12 +265,13 @@ char					*ft_rm_quot(char *str);
 char					*ft_corr_args(char *argv);
 void					ft_remove_quot(char **args);
 void					ft_update_tokens(t_tokens *st_tokens);
+char			*ft_str_remp(char *str, char *remp, int start, int len);
 
 /*
 ** Signals
 */
 
-void					ft_call_signal();
+void					call_signal();
 void					ft_call_handler();
 void					ft_signal_default();
 
@@ -302,6 +316,8 @@ void					ft_init_redi(t_redir *st_redir, int type_red);
 void					ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_apply_hered(t_redir *st_redi);
 void					ft_apply_her_doc(t_jobctr *st_jobctr);
+char					*get_value_next(t_tokens *st_token);
+
 
 /*
 ** Parser Red
@@ -313,9 +329,10 @@ int						ft_parse_redir(t_pipes *st_pipes);
 ** Execution
 */
 
+void					ft_multi_cmd(char *str_cmds, int bl_subsh);
 int						ft_cmds_setup(char *str_arg, int bl_subsh);
 int						ft_cmd_fork(int fork_it, t_pipes *st_pipes);
-int						ft_check_cmd(t_pipes *st_pipes, char **environ);
+int				ft_check_cmd(char *cmd, char **environ);
 
 
 /*
@@ -344,8 +361,9 @@ t_intern				*new_intern(char *key, char *value);
 ** Free
 */
 
-void					ft_clear_cmds(t_pipes *st_pipes);
-void					ft_clear_tokens(t_tokens *st_tokens);
+void					free_list_cmds(t_cmds *st_cmds);
+void					free_tokens(t_tokens *st_tokens, int free_content);
+void		free_addresses(void *table[MAX_TAB_ADDR]);
 
 /*
 ** Parse Cmds
@@ -365,10 +383,23 @@ char					**ft_tokens_arg_env(t_tokens *st_tokens);
 
 
 /*
+** Line complition
+*/
+
+
+/*
 ** Sub_shell
 */
 
-void					ft_apply_subsh(t_cmds *st_cmds);
+void					apply_subsh(t_tokens *st_tokens);
+void    proc_substitution(t_tokens *st_tokens);
+
+/*
+** Alias
+*/
+
+void            ft_buil_alias(t_tokens *st_tokens);
+int			ft_buil_unalias(t_tokens *st_token, int flag);
 
 
 #endif

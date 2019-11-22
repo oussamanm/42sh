@@ -60,10 +60,11 @@ char	*ft_rm_char(char *str, int index)
 	return (str);
 }
 
-void	ft_print_error(char *msg, char *para1, char *para2, int rm)
+void	print_error(char *msg, char *para1, char *para2, int rm)
 {
 	if (msg == NULL)
 		return ;
+	ft_putstr_fd("42sh: ", 2);
 	if (para1 != NULL)
 		ft_putstr_fd(para1, 2);
 	if (para2 != NULL)

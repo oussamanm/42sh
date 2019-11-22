@@ -15,7 +15,7 @@
 int		e_fake_option(char *str)
 {
 	while (*++str)
-		if (!(*str == 'n'||\
+		if (!(*str == 'n' ||\
 					*str == 'e' ||\
 					*str == 'E'))
 			return (1);

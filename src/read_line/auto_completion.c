@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   auto_completion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/19 13:31:48 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/07/19 13:31:50 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/11/16 03:44:01 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	*ft_search_in_thepath(char *path, char *begin)
 	return (NULL);
 }
 
-char	*ft_auto_completion(t_cursor *pos, t_history *his, char *s)
+char	*ft_auto_completion(t_cursor *pos, char *s)
 {
 	char	*begin;
 	char	*complete;
@@ -88,8 +88,8 @@ char	*ft_auto_completion(t_cursor *pos, t_history *his, char *s)
 	if (pos->index != (int)ft_strlen(s) || !(begin = ft_complete_thename(s)))
 		return (s);
 	complete = ft_search_in_dir(begin, ".");
-	if (!complete)
-		complete = ft_search_in_thepath(his->path, begin);
+	//if (!complete)
+//		complete = ft_search_in_thepath(his->path, begin);
 	if (!complete)
 		return (s);
 	len = ft_strlen(complete);

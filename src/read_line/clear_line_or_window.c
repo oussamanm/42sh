@@ -17,7 +17,7 @@ void	ft_ctrl_l(t_cursor *pos, char *s)
 	int save;
 
 	tputs(tgetstr("cl", NULL), 1, my_outc);
-	(pos->p == 8) ? ft_putstr("\033[0;32m21sh $>\033[0m ") : 0;
+	(pos->p == 8) ? ft_putstr("\033[0;32m42sh $>\033[0m ") : 0;
 	(pos->p == 9) ? ft_putstr("heredoc> ") : 0;
 	(pos->p == 7) ? ft_putstr("quote> ") : 0;
 	(pos->p == 10) ? ft_putstr("dquotes>> ") : 0;

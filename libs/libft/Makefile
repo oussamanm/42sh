@@ -6,7 +6,7 @@
 #    By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/08 18:38:53 by onouaman          #+#    #+#              #
-#    Updated: 2019/10/08 21:23:04 by aboukhri         ###   ########.fr        #
+#    Updated: 2019/11/20 11:21:23 by aboukhri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ ft_putstr_fd.c ft_strcat.c ft_strchr.c ft_strclr.c ft_strcmp.c ft_strcpy.c\
 ft_strdel.c ft_strdup.c ft_strequ.c ft_striter.c ft_striteri.c ft_strjoin.c\
 ft_strlcat.c ft_strlen.c ft_strmap.c ft_strmapi.c ft_strncat.c ft_strncmp.c\
 ft_strncpy.c ft_strnequ.c ft_strnew.c ft_strnstr.c ft_strrchr.c ft_strsplit.c\
-ft_strstr.c ft_strsub.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_chrlen.c ft_strrchrindex.c
+ft_strstr.c ft_strsub.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_chrlen.c\
+bchar.c ft_strrchrindex.c ft_strchrindex.c ft_isalpha_exist.c get_next_line.c\
 
 SRC_H = ft_func_h_file.c ft_func_h_str2.c\
 ft_func_h_strr.c ft_func_h_upd.c ft_func_h_str.c ft_func_h_str3.c\
@@ -42,6 +43,7 @@ all: $(NAME)
 $(NAME): $(OBJS) $(OBJ_H)
 	@ar rc $(NAME) $(OBJS) $(OBJ_H)
 	@ranlib $(NAME)
+
 %.o : %.c
 	@gcc $(FLAG) -I $(INCLD) -c $< -o $@
 

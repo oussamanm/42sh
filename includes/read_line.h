@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/13 16:03:42 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/22 14:35:44 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@
 # define ALT_UP 1096489755
 # define ALT_DO 1113266971
 # define CTRL_D 4
+# define CTRL_T 20
 # define TAB 9
 # define CTRL_U 21
 # define CTRL_L 12
+# define CTRL_R 18
 
 # define CAST(x) *((int *)x)
 
@@ -114,6 +116,7 @@ struct s_history
 
 
 t_cursor			g_pos;
+t_history 			g_history;
 
 int					g_sign;
 
@@ -156,8 +159,8 @@ void				ft_print_touch_and_join(t_cursor *pos, char *buf, char **s);
 void				ft_move_right(int n);
 char				*ft_ctrl_d(t_cursor *pos, \
 t_history *his, t_select *select, char *s);
-char				*ft_auto_completion(t_cursor *pos, t_history *his, char *s);
-void				ft_save_address(t_history **his, t_select **select);
+char				*ft_auto_completion(t_cursor *pos, char *s);
+void				save_address(t_history **his, t_select **select);
 void				ft_clear_readline_struct(void);
 char				*ft_read_heredoc(char *eol);
 void				ft_cut(t_cursor *pos, t_select *select, char **s);
@@ -173,16 +176,40 @@ char				*ft_clear(t_cursor *pos, char *s, char *buf);
 */
 int					ft_check_subsh(int i, char **line, t_select *select, t_history *his);
 
-
 /*
-**	history readline, expansion and builtuin
+**	history readline, '!' expansion and fc builtuin
 */
-t_info  *new_history(int index, char *cmd, t_info *prev);
+
 void    insert_history(t_history *history, char *cmd);
 t_info  *history_index(t_info *history, int index, int len);
-t_info  *history_keyword(t_info *tail, char *keyword, int dir);
-t_info  *history_value(t_history his, char *keyword);
+t_info  *history_keyword(t_info *history, char *keyword, int dir);
+void    history_readline(t_history *history, int key, char **cmd);
 void init_history(t_history *history);
-void    history_readline(t_history *history, int key, char *cmd, t_cursor *cursor);
+void    restore_history(t_history *history);
+void    save_history(t_history *history);
+t_info  *history_value(t_history his, char *keyword);
+void    rev_his_list(t_history *lst);
+void    display_his_list(t_history his, int order);
+int		history_handling(char **str_cmds);
+char    *history_content(t_history his);
 
+/*history expansion */
+char    *history_expansion(t_history his, char *keyword);
+char    is_shell_delimiter(char c);
+char *get_delimiter(char *keyword);
+char    *str_notnumber(char *keyword);
+/* fc buit */
+char    *read_fc();
+void    write_fc(char *content);
+void    fc_flag_l(t_history history, char *flags, char **args);
+void    fc_built(char **args, t_history history);
+void    fc_flag_l(t_history history, char *flags, char **args);
+void    fc_flag_s(t_history his, char *arg);
+void    fc_flag_e(t_history his, char **args);
+t_info  *fc_value(t_history his, char *keyword);
+int    read_fc_flags(char **args, char **fl, char *err);
+int		fc_exec_flag(char *str_cmds);
+void    fc_usage(char c);
+int    fc_edit(t_history his, char *editor, char **args);
+void    exec_fc();
 #endif

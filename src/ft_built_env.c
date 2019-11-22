@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:15:04 by onouaman          #+#    #+#             */
-/*   Updated: 2019/10/12 19:45:35 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/15 23:35:08 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,6 @@ void			ft_buil_export(t_tokens *st_tokens)
  //       st_tokens = st_tokens->next;
     }
 }
-
-void
-
 /*
 ** Unset Variable
 */

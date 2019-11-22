@@ -35,3 +35,21 @@ void	ft_putnbr(int n)
 	else if (n <= 9)
 		ft_putchar(n + '0');
 }
+
+
+int			ft_putnbrs(int *table)
+{
+	int i;
+
+	i = 0;
+	if (!table)
+		return (0);
+	while (*table)
+	{
+		ft_putnbr(*table);
+		ft_putchar('\n');
+		table++;
+		i++;
+	}
+	return (i);
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/07/07 14:42:43 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/11/17 02:53:20 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft_win_change(int sig)
 	{
 		g_pos.num_col = ft_get_size_windz();
 		tputs(tgetstr("cl", NULL), 0, my_outc);
-		ft_putstr("\033[0;32m21sh $>\033[0m ");
+		ft_putstr("\033[0;32m42sh $>\033[0m ");
 		ft_putstr(g_pos.cmd);
 		ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
 		g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, \
@@ -101,6 +101,22 @@ char	*ft_putline(char c, char *s, t_cursor *pos)
 	return (new);
 }
 
+void	print_tab(char **s, t_cursor *pos)
+{
+	int len;
+	int spaces;
+	int i;
+
+	len = ft_strlen(*s);
+	spaces = 8 - (len % 8);
+	i = -1;
+	while (++i < spaces)
+	{
+		if (!(*s = ft_putline(' ', *s, pos)))
+			return ;
+	}
+}
+
 /*
 ** - function filter the key pressed by the user and call the function
 ** ft_putline.
@@ -111,7 +127,11 @@ void	ft_print_touch_and_join(t_cursor *pos, char *buf, char **s)
 	int i;
 
 	i = 0;
+	if (ft_strcmp(buf, "\t") == 0)
+		print_tab(s, pos);
 	while ((ft_isprint(buf[i]) || buf[i] == '\n') && i < 6)
+	{
 		if (!(*s = ft_putline(buf[i++], *s, pos)))
 			return ;
+	}
 }

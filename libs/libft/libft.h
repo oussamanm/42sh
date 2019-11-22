@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/11 12:42:31 by onouaman          #+#    #+#             */
-/*   Updated: 2019/10/08 21:22:47 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/20 11:21:32 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 /*
 **	Error Message
 */
+
 # define FIL_NS "No such file or directory"
 # define FIL_PD "Permission denied"
 # define VRB_IA "Invalid argument"
@@ -34,6 +35,8 @@
 # define SYN_ER "Syntax error"
 # define IS_DIR "Is a directory"
 
+#define BUFFER_SIZE 10
+
 typedef	struct		s_list
 {
 	void			*content;
@@ -41,7 +44,9 @@ typedef	struct		s_list
 	struct s_list	*next;
 }					t_list;
 
+int	ft_strchrindex(const char *s, int c);
 int	ft_strrchrindex(const char *s, int c);
+int     ft_isalpha_exist(char *str);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 char				*ft_strstr(const char *haystack, const char *needle);
@@ -74,6 +79,7 @@ int					ft_isascii(int c);
 int					ft_isalpha(int c);
 int					ft_isalnum(int c);
 void				ft_bzero(void *s, size_t n);
+void	bchar(void *s, size_t n, char c);
 int					ft_atoi(const char *str);
 void				ft_memdel(void **ap);
 void				ft_striter(char *s, void (*f)(char *));
@@ -125,7 +131,7 @@ char				*ft_escap_str(char *str, char c);
 void				ft_bchar(char *str, size_t n, char c);
 int					ft_putstrr(char *s, int free_str);
 char				**alloc_chain(char **env, int nbr);
-char				**ft_strr_join(char **str1, char **str2);
+char				**ft_strr_join(char **str1, char **str2, int rm);
 int					ft_put_strr(char **str);
 char				**ft_strr_dup(char **chaine, int len);
 int					ft_strrlen(char **argv);
@@ -133,6 +139,7 @@ void				ft_strrdel(char **str);
 char				**ft_strr_new(int len);
 char				*ft_strnew_char(size_t size, char c);
 char				*ft_strjoir(char *s1, char *s2, int rm);
+char				*ft_strjoir_rtn(char *s1, char *s2, int rm);
 int					ft_isspace(char c);
 int					ft_check_charr(char *src, int str[], int exept);
 void				ft_repeat_char(int c, int n);
@@ -143,7 +150,11 @@ char				*ft_strfreejoin(char *s1, char *s2);
 int					ft_isalldigit(char *str);
 int					ft_isallalphanum(char *str);
 int					ft_isallprint(char *str);
-void				ft_print_error(char *msg, char *para1, char *para2, int rm);
+void				print_error(char *msg, char *para1, char *para2, int rm);
 char				*ft_strtrim_and_free(char *s);
+void				ft_strr_trim(char **args);
+char				*ft_str_trim(char *str);
+int					ft_putnbrs(int *table);
 
+int				get_next_line(const int fd, char **line);
 #endif

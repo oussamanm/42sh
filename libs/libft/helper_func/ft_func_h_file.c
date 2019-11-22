@@ -48,12 +48,12 @@ int			ft_check_file(char *file, int mode)
 	if (access(file, F_OK) == 0)
 	{
 		if (lstat(file, &st_stat) == 0 && S_ISDIR(st_stat.st_mode) && ++bl)
-			ft_print_error("Is a directory", "42sh :", file, 0);
+			print_error("Is a directory", "42sh :", file, 0);
 		else if (access(file, mode) != 0 && ++bl)
-			ft_print_error(FIL_PD, "42sh :", file, 0);
+			print_error(FIL_PD, "42sh :", file, 0);
 	}
-	else if ((mode == R_OK || (file && !ft_strlen(file))) && ++bl)
-		ft_print_error(FIL_NS, "42sh :", file, 0);
+	else if ((mode == R_OK || !ft_strlen(file)) && ++bl)
+		print_error(FIL_NS, "42sh :", file, 0);
 	return (bl);
 }
 
@@ -69,7 +69,7 @@ int			ft_open_file(char *file, int type)
 	flag = 0;
 	if (file == NULL)
 	{
-		ft_print_error("No such file or directory", "42sh :", " ", 0);
+		print_error("No such file or directory", "42sh :", " ", 0);
 		return (-1);
 	}
 	fd = -1;
@@ -77,23 +77,27 @@ int			ft_open_file(char *file, int type)
 	{
 		if (type == 1)
 			flag = type | O_TRUNC;
-		if (type == 0)
+		else if (type == 0)
 			flag = 0;
 		else if (type == 2)
 			flag = type | O_APPEND;
 		else if (type == 3)
 			flag = O_RDWR;
 		if ((fd = open(file, flag | O_CREAT, 0644)) == -1)
-			ft_putendl_fd("Error in open File ", 2);
+			print_error("Error in open File ", "42sh :", " ", 0);
 	}
 	return (fd);
 }
+
+/*
+** Check exist file descriptor
+*/
 
 int			ft_exist_fd(int fd)
 {
 	if (read(fd, NULL, 0) == -1 && write(fd, NULL, 0) == -1)
 	{
-		ft_print_error("Bad file descriptor", "42sh :", ft_itoa(fd), 2);
+		print_error("Bad file descriptor", "42sh :", ft_itoa(fd), 2);
 		return (0);
 	}
 	return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/10 16:11:05 by onouaman          #+#    #+#             */
-/*   Updated: 2018/10/20 01:42:57 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/11/22 06:51:30 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strchr(const char *s, int c)
 	unsigned char	*n_s;
 	size_t			len;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	n_s = (unsigned char *)s;
 	len = ft_strlen(s);

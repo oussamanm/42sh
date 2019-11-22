@@ -1,0 +1,11 @@
+42sh
+42sh.dSYM
+42shrc
+Makefile
+README.md
+author
+includes
+libs
+ls
+rev_search.c
+src

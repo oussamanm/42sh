@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_func_h_strr.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 03:37:32 by onouaman          #+#    #+#             */
-/*   Updated: 2019/05/03 06:31:51 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/11/21 14:30:13 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-char		**ft_strr_join(char **str1, char **str2)
+char		**ft_strr_join(char **str1, char **str2, int rm)
 {
 	int		i;
 	int		l1;
@@ -30,11 +30,12 @@ char		**ft_strr_join(char **str1, char **str2)
 		new_chaine[i] = ft_strdup(str1[i]);
 	l2 = 0;
 	while (str2[l2] != NULL)
-	{
-		new_chaine[i++] = ft_strdup(str2[l2]);
-		l2++;
-	}
+		new_chaine[i++] = ft_strdup(str2[l2++]);
 	new_chaine[i] = NULL;
+	if (rm == 1 || rm == 3)
+		ft_strrdel(str1);
+	if (rm == 2 || rm == 3)
+		ft_strrdel(str2);
 	return (new_chaine);
 }
 
