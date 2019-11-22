@@ -6,7 +6,7 @@
 /*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/07/18 12:31:36 by abiri            ###   ########.fr       */
+/*   Updated: 2019/11/22 19:26:09 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,21 @@ char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 ** needed to edit the line returned to our shell.
 */
 
+
+
 char	*ft_read_line(t_history *his, t_select *select, int p)
 {
 	char	buf[6];
-
+	int crash;
+	
+	crash = 0;
+	// To test only uncomment this line and close it at the end of the function
+//	crash = open("/tmp/crash.fifo", O_RDONLY);
+	 
 	ft_initial(p);
 	ft_bzero(buf, 6);
 	ft_enable();
-	while (read(0, buf, 6) > 0)
+	while (read(crash, buf, 6) > 0)
 	{
 		if (ENTER == CAST(buf))
 		{
@@ -110,6 +117,7 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	}
 	ft_disable();
 	free(g_pos.end);
-	//(g_pos.cmd[0] != -1) ? g_pos.cmd = ft_strtrim_and_free(g_pos.cmd) : 0;
+	///(g_pos.cmd[0] != -1) ? g_pos.cmd = ft_strtrim_and_free(g_pos.cmd) : 0;
+//	close(crash);
 	return (g_pos.cmd);
 }
