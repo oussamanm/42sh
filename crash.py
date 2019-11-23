@@ -2,10 +2,9 @@
 
 import os
 import time
+import sys
 
 
-#Path to the commands file
-CMD_PATH = "/Users/mfetoui/crash/crash.conf"
 #Path to fifo
 FIFO_PATH = "/tmp/crash.fifo"
 
@@ -14,6 +13,7 @@ def crash():
         os.remove(FIFO_PATH)
     except OSError:
         pass
+    CMD_PATH = sys.argv[1]
     os.mkfifo(FIFO_PATH)
     f = open(CMD_PATH, 'r')
     
@@ -26,5 +26,6 @@ def crash():
         fifo.close()
         time.sleep(0.2)
     os.system('/usr/bin/pkill 42sh')
+
 if __name__ == "__main__":
     crash()

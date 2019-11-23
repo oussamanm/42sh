@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 12:07:11 by mfetoui           #+#    #+#             */
-/*   Updated: 2019/11/20 13:14:36 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/22 23:11:15 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ char	*token_implode(t_tokens *st_tokens){
 		str = ft_strjoir(str, ft_strjoir(st_tokens->value, " ", 0), 3);
 		st_tokens = st_tokens->next;
 	}
-	printf("addr = %p \n", &str);
-
 	return (str);
 }
 
@@ -34,7 +32,6 @@ int     exec_subs(char *cmd, bool type)
 	pipe(fd);
 	if (fork() == 0) {
 		tmp_cmd = ft_strdup(cmd);
-		setpgid(0, 0);
 		close(fd[!type]);
 		dup2(fd[type], type);
 		close(fd[type]);
