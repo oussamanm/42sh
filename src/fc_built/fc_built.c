@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/23 18:00:32 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/23 18:10:52 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static char *history_getcmds(t_history his, char **args, int r)
             rev_his_list(&value);
         content = history_content(value);
     }
+	return (content);
 }
 
 /*  edit commands given from arguments(index, string) by the editor given and re-execute them*/
@@ -46,7 +47,7 @@ int    fc_edit(t_history his, char *editor, char *flags, char **args)
         return (0);
     }
     (flags) && (args++);
-    if (!(content = history_getcmds(his, args, (ft_strchr(flags, 'r')))))
+    if (!(content = history_getcmds(his, args, (ft_strchr(flags, 'r') ? 1 : 0))))
     {
         ft_putendl_fd("42sh: fc: history specification out of range", 2);
         return (0);
@@ -85,7 +86,6 @@ void    fc_built(char **args, t_history *history)
     char *flags;
     char c;
     int pos;
-    char *editor;
 
     if (!history->head || !history->tail)
         return ;

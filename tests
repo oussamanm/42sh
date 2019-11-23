@@ -1,0 +1,2 @@
+grep -r ft_wait *
+cat -e <(ls) <(pwd) <(date)
