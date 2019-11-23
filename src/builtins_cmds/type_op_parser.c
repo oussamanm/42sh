@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** - those down funcs follwed to parser function
+*/
+
 int	a_op(char ch, int flag)
 {
 	if (ch == 'a' && (flag == (t_flg | maj_p_flg)))

@@ -6,13 +6,17 @@
 /*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:17:27 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/09/25 12:17:33 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/11/15 18:28:34 by mfilahi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include  "shell.h"
+#include "shell.h"
 
-char	echo_meta_char(c)
+/*
+** - check of metacharacters;
+*/
+
+int		echo_meta_char(char c)
 {
 	if (c == 'a')
 		return ('\a');
@@ -33,6 +37,10 @@ char	echo_meta_char(c)
 	return (c);
 }
 
+/*
+** - comparison of chars;
+*/
+
 char	echo_charcmp(char c, char *str)
 {
 	while (*str)
@@ -42,6 +50,10 @@ char	echo_charcmp(char c, char *str)
 	}
 	return (c);
 }
+
+/*
+** this functinon serve option echo -n;
+*/
 
 void	n_flag(char *arg, int flag)
 {
@@ -53,6 +65,10 @@ void	n_flag(char *arg, int flag)
 		ft_putstr_fd("\033[m\n", 1);
 	}
 }
+
+/*
+** this functinon serve option echo -e;
+*/
 
 void	e_interpretation(char *arg, int flag)
 {
@@ -78,28 +94,22 @@ void	e_interpretation(char *arg, int flag)
 			}
 		}
 	}
-	while (*arg)
-	{
-		if (!(*(arg) == -1))
-			ft_putchar_fd(*arg, 1);
-		arg++;
-	}
-    (flag) ? n_flag(arg, 0) : 0;
+	e_interpretation_1(arg, flag);
 }
 
 /*
-**	Builten echo : O
+**	Builten echo
 */
 
-void		built_echo(char **arg)
+void	built_echo(char **arg)
 {
 	int		flag;
-    int		i;
+	int		i;
 
 	flag = 0;
-    arg += 1;
-    if (!((i = echo_options(arg, &flag)) == -1))
-        arg += i;
+	arg += (arg) ? 1 : 0;
+	if (!((i = echo_options(arg, &flag)) == -1))
+		arg += i;
 	while (*(arg))
 	{
 		if (flag == n_flg && !*(arg + 1))
@@ -111,7 +121,7 @@ void		built_echo(char **arg)
 		else
 			ft_putstr_fd(*arg, 1);
 		(*(arg + 1) != NULL) ? ft_putchar_fd(' ', 1) : 0;
-        arg++;
+		arg++;
 	}
 	if (flag != n_flg && (flag != ((e_flg | n_flg))))
 		ft_putchar_fd('\n', 1);

@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** - lookup for a value by a hashed key;
+*/
+
 char	*lookup_hash(char *key)
 {
 	t_hash			**hash_arr;
@@ -28,6 +32,10 @@ char	*lookup_hash(char *key)
 	return (NULL);
 }
 
+/*
+** - lookup for a value by a hashed key;
+*/
+
 t_hash	*lookup_hash_2(char *key)
 {
 	t_hash			**hash_arr;
@@ -41,6 +49,10 @@ t_hash	*lookup_hash_2(char *key)
 		curr = curr->next;
 	return (curr);
 }
+
+/*
+** - insertion key and value in list
+*/
 
 void	insert_hash_2(t_hash *node, t_hash **hash_arr, char *key, char *value)
 {
@@ -64,6 +76,10 @@ void	insert_hash_2(t_hash *node, t_hash **hash_arr, char *key, char *value)
 	}
 }
 
+/*
+** - insertion key and value into a hashed key in list.
+*/
+
 void	insert_hash(char *key, char *value)
 {
 	t_hash	*node;
@@ -79,6 +95,10 @@ void	insert_hash(char *key, char *value)
 		return ;
 	insert_hash_2(node, hash_arr, key, value);
 }
+
+/*
+** - Remove element of hash array;
+*/
 
 void	erase_hash_table(void)
 {

@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** - call this function when type cmd has no options;
+*/
+
 void	no_options(char *arg, int *flag)
 {
 	char *path;
@@ -31,6 +35,10 @@ void	no_options(char *arg, int *flag)
 	ft_strdel(&path);
 }
 
+/*
+** - serve -a option for cmd type
+*/
+
 void	a_option(char *arg)
 {
 	char *path;
@@ -42,6 +50,10 @@ void	a_option(char *arg)
 		buil_putstr(arg, " is ", path, 1);
 }
 
+/*
+** - serve -p option for cmd type
+*/
+
 void	p_option(char *arg, int maj_p)
 {
 	char *path;
@@ -49,10 +61,15 @@ void	p_option(char *arg, int maj_p)
 	path = NULL;
 	if ((path = ft_find_path(arg, g_environ)) && !ft_check_built(arg))
 		buil_putstr(path, NULL, NULL, 1);
-	else if ((path = ft_find_path(arg, g_environ)) && ft_check_built(arg) && maj_p)
+	else if ((path = ft_find_path(arg, g_environ)) && \
+	ft_check_built(arg) && maj_p)
 		buil_putstr(path, NULL, NULL, 1);
 	ft_strdel(&path);
 }
+
+/*
+** - serve -t option for cmd type
+*/
 
 void	t_option(char *arg, int flag)
 {
@@ -65,6 +82,10 @@ void	t_option(char *arg, int flag)
 		buil_putstr("file", NULL, NULL, 1);
 	ft_strdel(&path);
 }
+
+/*
+** - serve -at option for cmd type
+*/
 
 void	at_option(char *arg)
 {

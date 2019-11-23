@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:34:51 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 01:02:37 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/08/03 04:16:23 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@
 void		built_exit(t_pipes *st_pipes, char ***tmp_env)
 {
 
-	save_history(&g_history);
 	UNUSED(st_pipes);
 	UNUSED(tmp_env);
 	/// Clear environ globale and temp
  	//ft_strrdel(*env);
-//	ft_clear_readline_struct();
+	// ft_clear_readline_struct();
 	//free_list_cmds(st_pipes);
 	// here free of hash and alias
-		// free_hash_and_alias();
+	free_hash_and_alias();
 	exit(0);
 }

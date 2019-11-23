@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** - store add of list that relate to alias for easy free;
+*/
+
 t_aliaspkg	*storeaddrstruct(t_aliaspkg *addr)
 {
 	static t_aliaspkg *ret;
@@ -22,6 +26,10 @@ t_aliaspkg	*storeaddrstruct(t_aliaspkg *addr)
 		ret = addr;
 	return (ret);
 }
+
+/*
+** - push alias into list;
+*/
 
 void		pushtolist(char *string, int flag)
 {
@@ -51,53 +59,72 @@ void		pushtolist(char *string, int flag)
 	}
 }
 
+/*
+** - print all aliases;
+*/
+
+void		printlist(void)
+{
+	t_aliaspkg	*data;
+	t_alias		*curr;
+
+	data = storeaddrstruct(NULL);
+	curr = data->head_ref;
+	while (curr)
+	{
+		ft_putstr_fd("alias ", 1);
+		ft_putstr_fd(curr->shortcut, 1);
+		(curr->cmd[0] != '\'') ? ft_putchar_fd('\'', 1) : 0;
+		ft_putstr_fd(curr->cmd, 1);
+		(curr->cmd[ft_strlen(curr->cmd) - 1] != '\'') ? ft_putendl_fd("\'", 1)\
+		: ft_putchar_fd('\n', 1);
+		curr = curr->next;
+	}
+}
+
+/*
+** - create file of aliases for permanent aliases
+*/
+
 void		createaliasfile(void)
 {
+	int fd;
+
+	fd = 0;
 	if (!(access("42shrc", F_OK) == 0))
-		open("42shrc", O_CREAT, 0777);
+	{
+		fd = open("42shrc", O_CREAT, 0777);
+		close(fd);
+	}
 }
+
+/*
+** - import alias content file to list;
+*/
 
 void		importaliasfilecontent(void)
 {
 	char	*line;
-	char	*tmp;
 	int		i;
+	int		count;
 	int		fd;
 
 	line = NULL;
+	count = 0;
 	fd = open("42shrc", O_RDONLY);
 	while (get_next_line(fd, &line))
 	{
-		i = 0;
-		while (line[i] && line[i] != '=')
-			i++;
-		tmp = ft_strsub(line, 0, i);
-		removealiasbyelemorbyflag(tmp, 0);
-		pushtolist(line, 1);
+		if (ft_strcmp(line, "") == 0)
+			continue ;
+		else
+		{
+			i = 0;
+			while (line[i] && line[i] != '=')
+				i++;
+			rm_alias_by_elem_flag(ft_strsub(line, 0, i), NULL, 0, 0);
+			pushtolist(line, 1);
+			ft_strdel(&line);
+		}
 	}
-}
-
-char		*handleqoutes(char *str)
-{
-	char	*tmp;
-	int		i;
-	int		j;
-	int		a;
-
-	if (str[0] != '\'' && str[0] != '"')
-		return (str);
-	else
-	{
-		j = 0;
-		while (str[j] && (str[j] == '\'' || str[j] == '"'))
-			j++;
-		a = str[j - 1];
-		i = j - 1;
-		while (str[++i] && str[i] != a)
-			;
-	}
-	tmp = str;
-	str = ft_strsub(str, j, i - j);
-	ft_strdel(&tmp);
-	return (str);
+	close(fd);
 }

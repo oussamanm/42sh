@@ -6,32 +6,15 @@
 /*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 14:45:31 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/09 14:45:56 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/11/15 18:10:31 by mfilahi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-// void	aliasmatched(char **args)
-// {
-	// 	t_aliaspkg	*data;
-	// 	t_alias		*curr;
-	// 	char		*tmp;
-	// 	data = storeaddrstruct(NULL);
-	// 	tmp = ft_strjoin(args[0], "=");
-	// 	curr = data->head_ref;
-	// 	while (curr)
-	// 	{
-	// 		if (ft_strcmp(curr->shortcut, tmp) == 0)
-	// 		{
-	// 			ft_strdel(&args[0]);
-	// 			args[0] = handleqoutes(ft_strdup(curr->cmd));
-	// 			ft_strdel(&tmp);
-	// 			break ;
-	// 		}
-	// 		curr = curr->next;
-	// 	}
-// }
+/*
+** look if arg has an alias and return him;
+*/
 
 char	**aliasmatched(char **args)
 {
@@ -41,8 +24,7 @@ char	**aliasmatched(char **args)
 	char		**rtn;
 
 	data = storeaddrstruct(NULL);
-	temp = ft_strjoin(args[0], "=\0");
-	/// where did you initial this variable head_ref
+	temp = ft_strjoin(args[0], "=");
 	curr = data->head_ref;
 	rtn = NULL;
 	while (curr)
@@ -50,7 +32,6 @@ char	**aliasmatched(char **args)
 		if (ft_strcmp(curr->shortcut, temp) == 0)
 		{
 			ft_strdel(&temp);
-			/// get value of alias 
 			temp = handleqoutes(ft_strdup(curr->cmd));
 			rtn = ft_str_split_q(temp, " \t\n");
 			rtn = ft_strr_join(rtn, &args[1], 1);
@@ -64,23 +45,9 @@ char	**aliasmatched(char **args)
 	return (args);
 }
 
-void	printlist(void)
-{
-	t_aliaspkg	*data;
-	t_alias		*curr;
-
-	data = storeaddrstruct(NULL);
-	curr = data->head_ref;
-	while (curr)
-	{
-		ft_putstr_fd(curr->shortcut, 1);
-		(curr->cmd[0] != '\'') ? ft_putchar_fd('\'', 1) : 0;
-		ft_putstr_fd(curr->cmd, 1);
-		(curr->cmd[ft_strlen(curr->cmd) - 1] != '\'') ? ft_putendl_fd("\'", 1)\
-		: ft_putchar_fd('\n', 1);
-		curr = curr->next;
-	}
-}
+/*
+** Print a specific aliase for ex:cmd alias "x";
+*/
 
 void	printelement(char *shortcut)
 {
@@ -110,7 +77,7 @@ void	printelement(char *shortcut)
 }
 
 /*
- ** export alias
+** push alias to list for example w="who";
 */
 
 void	ft_built_alias_3(t_tokens *st_tokens, char *arg)
@@ -126,11 +93,15 @@ void	ft_built_alias_3(t_tokens *st_tokens, char *arg)
 	while (arg[j] && arg[j] != '=')
 		j++;
 	tmp = ft_strsub(arg, 0, j);
-	removealiasbyelemorbyflag(tmp, 0);
+	rm_alias_by_elem_flag(tmp, NULL, 0, 0);
 	pushtolist(arg, 0);
 	ft_strdel(&tmp);
 	ft_strdel(&arg);
 }
+
+/*
+** this func call to functions to push alias in list or to print all aliases;
+*/
 
 void	ft_buil_alias_2(t_tokens *st_tokens, char *arg)
 {
@@ -150,6 +121,10 @@ void	ft_buil_alias_2(t_tokens *st_tokens, char *arg)
 		st_tokens = st_tokens->next;
 	}
 }
+
+/*
+** the main function of alias;
+*/
 
 void	ft_buil_alias(t_tokens *st_tokens)
 {

@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** - store @ of hash array;
+*/
+
 t_hash			**store_addr_of_hash(t_hash **hash_arr, int flag)
 {
 	static t_hash **tmp_arr;
@@ -21,6 +25,10 @@ t_hash			**store_addr_of_hash(t_hash **hash_arr, int flag)
 	return (tmp_arr);
 }
 
+/*
+** - hash a key;
+*/
+
 unsigned int	hash(char *key)
 {
 	int value;
@@ -28,6 +36,10 @@ unsigned int	hash(char *key)
 	value = key[0] - 'a';
 	return (value % SIZE);
 }
+
+/*
+** - display hash array content;
+*/
 
 void			display_hash_table_2(t_hash **hash_arr, int *flag)
 {
@@ -56,6 +68,10 @@ void			display_hash_table_2(t_hash **hash_arr, int *flag)
 	}
 }
 
+/*
+** - display hash array content;
+*/
+
 void			display_hash_table(void)
 {
 	t_hash	**hash_arr;
@@ -67,6 +83,10 @@ void			display_hash_table(void)
 	if (!flag)
 		ft_putendl_fd("hash: hash table empty", 1);
 }
+
+/*
+** main func called in shell
+*/
 
 void			hash_table(char **args)
 {

@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** - check for fake option;
+*/
+
 int		e_fake_option(char *str)
 {
 	while (*++str)
@@ -21,6 +25,10 @@ int		e_fake_option(char *str)
 			return (1);
 	return (0);
 }
+
+/*
+** echo option parser;
+*/
 
 int		echo_options_(char *arg, int *flag)
 {
@@ -45,6 +53,10 @@ int		echo_options_(char *arg, int *flag)
 	return (1);
 }
 
+/*
+** - verified options of echo;
+*/
+
 int		echo_options(char **arg, int *flag)
 {
 	int i;
@@ -63,4 +75,15 @@ int		echo_options(char **arg, int *flag)
 		i++;
 	}
 	return (i);
+}
+
+void	e_interpretation_1(char *arg, int flag)
+{
+	while (*arg)
+	{
+		if (!(*(arg) == -1))
+			ft_putchar_fd(*arg, 1);
+		arg++;
+	}
+	(flag) ? n_flag(arg, 0) : 0;
 }

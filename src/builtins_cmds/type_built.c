@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** - display a message
+*/
+
 void	buil_putstr(char *arg, char *s1, char *s2, int fd)
 {
 	if (!s1 && !s2)
@@ -28,6 +32,10 @@ void	buil_putstr(char *arg, char *s1, char *s2, int fd)
 		ft_putendl_fd(s2, fd);
 	}
 }
+
+/*
+** - Parser options of cmd type;
+*/
 
 int		type_options_(char *arg, int *flag)
 {
@@ -90,6 +98,10 @@ void	ft_buil_type_(char *args, int flag)
 	else if (flag == (maj_p_flg | t_flg))
 		t_option(args, 0);
 }
+
+/*
+** - the main func called in shell
+*/
 
 int		built_type(char **args, char **tmpenv)
 {
