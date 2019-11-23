@@ -23,6 +23,7 @@ t_cmds		*ft_new_cmds(void)
 	if ((st_cmds = (t_cmds *)malloc(sizeof(t_cmds))) == NULL)
 		return (NULL);
 	st_cmds->args = NULL;
+	st_cmds->fd = NULL;
 	st_cmds->st_jobctr = NULL;
 	st_cmds->st_tokens = NULL;
 	return (st_cmds);

@@ -6,7 +6,7 @@
 /*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 19:32:46 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/09/24 19:32:48 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/11/22 22:24:55 by hlamhidr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	ft_wait(t_job *current)
 	{
 		if ((pid = waitpid(-1, &status, WNOHANG | WUNTRACED)) < 0)
 			break ;
+		
 		if (pid == 0 && current)
 			continue;
 		else if (pid == 0)
