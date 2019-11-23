@@ -136,7 +136,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		else
 			exit(EXIT_FAILURE);
 	}
-	else if (fork_it)
+	else if (fork_it && !g_proc_sub)
 		ft_manage_jobs(pid, st_pipes, &rtn);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
 	/// insertion in hash_table in case of exit_proccess = SUCCESS
@@ -176,12 +176,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 
 	/// Aplly proc_sub *
 	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT)) //// why only T_PROC_IN 
-	{
-		proc_substitution(st_cmds->st_tokens);
-		free_list_cmds(st_cmds);
-		return (0);
-	}
-
+	 	proc_substitution(st_cmds);
 	/// Fill Lists of lists *
 	ft_parse_cmd(st_cmds);
 
@@ -189,7 +184,9 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;
 
 	/// Executions *
+	//printf("%s|%d\n", st_cmds->args[0], getpid());
 	ft_cmds_exec(st_cmds);
+	procsub_close(st_cmds->fd);
 	/// Clear allocated space
 	free_list_cmds(st_cmds);
 	return (1);

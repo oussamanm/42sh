@@ -78,15 +78,16 @@ char		*exec_subsh(char *cmd)
 	int		fds[2];
 	char	buff[11];
 	char	*result;
+	pid_t	pid;
 
 	ft_bzero(fds, 2);
 	if (pipe(fds) == -1)
 		ft_putendl_fd("Error Create Pipe", 2);
-	if (fork() == 0)
+	if ((pid = fork()) == 0)
 		child_subsh(fds, cmd);
 	result = ft_strnew(0);
 	close(fds[1]);
-	wait(NULL);
+	waitpid(pid, NULL, 0);
 	ft_bzero(buff, 11);
 	while (read(fds[0] , &buff, 10) > 0)
 	{

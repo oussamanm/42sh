@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/22 19:37:41 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/23 00:59:29 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,8 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	int crash;
 	
 	crash = 0;
-	//  To test only uncomment this line and close the fd at the end of
-	//  the function and run crash.py before 42sh
-		// crash = open("/tmp/crash.fifo", O_RDONLY);
+	//  To test only uncomment this line and run crash.py before 42sh
+	//crash = open("/tmp/crash.fifo", O_RDONLY);
 	 
 	select->end = 1;
 	ft_initial(p);
@@ -133,6 +132,7 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	ft_disable();
 	free(g_pos.end);
 	///(g_pos.cmd[0] != -1) ? g_pos.cmd = ft_strtrim_and_free(g_pos.cmd) : 0;
-	// close(crash);
+	if (crash != 0)
+		close(crash);
 	return (g_pos.cmd);
 }
