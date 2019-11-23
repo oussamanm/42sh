@@ -18,7 +18,7 @@ int		ft_termsig_fore(int sig, char *name)
 	char	*msg;
 
 	msg = ft_strsignal(sig);
-	if (msg && sig != 2 && sig != 13)
+	if (msg && sig != 2)
 	{
 		ft_putstr("42sh : ");
 		ft_putstr(msg);

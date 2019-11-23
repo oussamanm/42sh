@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 01:02:15 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/22 15:25:33 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,16 +110,11 @@ int			main(void)
 	//his->path = ft_get_vrb("PATH", g_environ);?????
 	// Initial Alias && HASH
 	init_alias_hash();
-	g_shellpid = getpid();
-	g_proc_sub = 0;
 	while (1337)
     {
         ft_putstr("\033[0;32m42sh $>\033[0m ");
         if ((ft_read_line(&g_history, select, 8)) == NULL || !g_pos.cmd[0])
-        {
-			ft_job_processing();
-			continue ;
-		}   
+            continue ;
         // Check incomplete syntax of Sub_shell or Quoting
         g_pos.cmd = compliting_line(g_pos.cmd, select, &g_history);
 

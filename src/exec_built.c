@@ -53,7 +53,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	else if (ft_strcmp((st_pipes->args)[0], "alias") == 0 && (rtn = 1))
 		ft_buil_alias(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "unalias") == 0 && (rtn = 1))
-		ft_buil_unalias(st_pipes->st_tokens, 0);
+		ft_buil_unalias(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "export") == 0 && (rtn = 1))
 		built_export(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "unset") == 0 && (rtn = 1))

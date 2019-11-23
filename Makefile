@@ -21,13 +21,14 @@ OBJS = error_handler.o\
 	features/proc_sub.o features/redir_parse.o\
 	features/redir_read.o features/redir_setup.o\
 	features/subshell.o features/logical_opr.o\
-	builtins_cmd/built_env.o builtins_cmd/builtins.o\
-	builtins_cmd/cd_built.o builtins_cmd/echo_built.o\
-	builtins_cmd/echo_op_parser.o builtins_cmd/type_built.o\
-	builtins_cmd/type_op_func.o builtins_cmd/type_op_parser.o\
-	builtins_cmd/alias_built.o builtins_cmd/alias_func.o \
-	builtins_cmd/hash_built.o builtins_cmd/hash_func.o \
-	builtins_cmd/unaliase_built.o\
+	builtins_cmds/built_env.o builtins_cmds/builtins.o\
+	builtins_cmds/cd_built.o builtins_cmds/echo_built.o\
+	builtins_cmds/echo_op_parser.o builtins_cmds/type_built.o\
+	builtins_cmds/type_op_func.o builtins_cmds/type_op_parser.o\
+	builtins_cmds/alias_built.o builtins_cmds/alias_func.o \
+	builtins_cmds/hash_built.o builtins_cmds/hash_func.o\
+	builtins_cmds/free_hash_and_alias.o builtins_cmds/unaliase_built.o\
+	builtins_cmds/cd_built_symb.o builtins_cmds/built_srcs.o\
 	read_line/addition.o\
 	read_line/auto_completion.o\
 	read_line/copy_paste.o\

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/22 22:42:18 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/17 05:10:55 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@
 # define REDI_OK 1
 # define REDI_KO 0
 
-
 /*
 ** Job control
 */
@@ -139,10 +138,8 @@ typedef struct			s_job
 	char				p;
 	struct termios		term_child;
 }						t_job;
-pid_t					g_shellpid;
+
 t_list					*jobs;
-pid_t					g_shellpid;
-char					g_proc_sub;
 
 
 /*
@@ -220,7 +217,6 @@ typedef struct s_jobctr
 typedef	struct s_cmds
 {
 	char				**args;
-	int					*fd;
 	t_tokens			*st_tokens;
 	t_jobctr			*st_jobctr;
 }						t_cmds;
@@ -439,14 +435,14 @@ char					**ft_tokens_arg_env(t_tokens *st_tokens);
 */
 
 void					apply_subsh(t_tokens *st_tokens);
-void					proc_substitution(t_cmds *st_cmds);
-void					procsub_close(int *fd);
+void    proc_substitution(t_tokens *st_tokens);
+
 /*
 ** Alias
 */
 
 void            ft_buil_alias(t_tokens *st_tokens);
-int			ft_buil_unalias(t_tokens *st_token, int flag);
+int			ft_buil_unalias(t_tokens *st_token);
 
 /*
 ** job
