@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 11:05:50 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/22 18:46:31 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/23 11:17:02 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void    fc_flag_s(t_history *his, char *arg)
     {
         ft_putendl(cmd);
         insert_history(his, cmd);
+        history_readline(his, 0, NULL);
         ft_multi_cmd(cmd, 0);
         //exit??
     }
