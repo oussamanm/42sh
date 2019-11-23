@@ -80,7 +80,9 @@ void	ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add)
 
 void	ft_single_proc(t_job *job, t_pipes *st_pipes, int pid, int *add)
 {
+	printf("pid pipe manage == %d\n", pid);
 	job->cmd = ft_cmd_value(st_pipes->st_tokens, job->cmd);
+	printf("cmd == %s\n", job->cmd);
 	if (st_pipes->next)
 		job->cmd = ft_strjoir_rtn(job->cmd, " | ", 1);
 	if (job->pgid == -1)
