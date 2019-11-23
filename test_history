@@ -1,0 +1,7 @@
+!ls
+pwd
+env
+ifconfig
+!l;;;;;;;pwd
+!l;!p
+fc -s

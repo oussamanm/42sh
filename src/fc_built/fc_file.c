@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 00:18:39 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/22 01:40:19 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/23 11:59:50 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void    write_fc(char *content)
 
     if ((fd = open(".42sh-fc", O_WRONLY | O_TRUNC | O_CREAT, 00600)))
     {
-        ft_putstr_fd(content, fd);
+        ft_putendl_fd(content, fd);
         close(fd);
     }
 }

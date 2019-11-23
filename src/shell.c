@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 01:02:15 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/23 12:30:21 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		initial_read_line(t_history *his, t_select **select)
 ** Save adresse t_history to t_select , to easy access from other function
 */
 
-void		save_address(t_history **his, t_select **select)
+void		save_address(t_history **his, t_select **select)//??
 {
 	static t_history	*p_his;
 	static t_select		*p_select;
@@ -107,6 +107,7 @@ int			main(void)
 	call_signal();
 	// Duplicate environ vrbs
 	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
+	init_fc_built();
 	//his->path = ft_get_vrb("PATH", g_environ);?????
 	// Initial Alias && HASH
 	init_alias_hash();

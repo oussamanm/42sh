@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/22 22:42:18 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/23 16:01:28 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,7 @@ char		**g_environ;
 */
 
 void					built_exit(t_pipes *st_pipes, char ***env);
-void					built_export(t_tokens *st_tokens);
+void					built_export(char **args);
 
 /*
 ** Intern variable

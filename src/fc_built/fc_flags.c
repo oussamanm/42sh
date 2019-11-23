@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 11:05:50 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/23 11:17:02 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/23 16:53:07 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int		fc_exec_flag(char *str_cmds)
 		sp_args = ft_str_split_q(pv_args[i], "\n \t");
 		if (sp_args && ft_strcmp(sp_args[0], "fc") == 0)
 		{
-			if (read_fc_flags(sp_args + 1, &fl, NULL) &&
-			(ft_strchr(fl, 'e') || ft_strchr(fl, 's')))
+            read_fc_flags(sp_args + 1, &fl, NULL);
+			if (ft_strchr(fl, 'e') || ft_strchr(fl, 's') || !ft_strchr(fl, 'l'))
 				return (1);
 		}
         ft_strrdel(sp_args);
@@ -75,7 +75,7 @@ void    fc_usage(char c)
     ft_putstr_fd("42sh: fc: -", 2);
     ft_putchar_fd(c, 2);
     ft_putendl_fd(": invalid option\nfc: usage: fc [-e ename] [-nlr] [fisrt] [last]", 2);
-}
+}   
 
 void    fc_flag_e(t_history his, char **args)
 {
@@ -84,7 +84,7 @@ void    fc_flag_e(t_history his, char **args)
         fc_usage('e');
         return ;
     }
-    else if (fc_edit(his, args[0], args + 1))
+    else if (fc_edit(his, args[0], NULL, args + 1))
         exec_fc();
 }
 
@@ -104,7 +104,7 @@ void    fc_flag_s(t_history *his, char *arg)
         insert_history(his, cmd);
         history_readline(his, 0, NULL);
         ft_multi_cmd(cmd, 0);
-        //exit??
+        free(cmd);
     }
     else
         ft_putendl_fd("42sh: fc: no command found", 2);

@@ -6,20 +6,18 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/22 18:47:42 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/23 18:00:32 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/read_line.h"
 #include "../../includes/shell.h"
 
-/*  edit commands given from arguments(index, string) by the editor given and re-execute them*/
-int    fc_edit(t_history his, char *editor, char **args)
+static char *history_getcmds(t_history his, char **args, int r)
 {
-    char *content;
     int len;
+    char *content;
     t_history value;
-    char *cmd;
 
     len = ft_strrlen(args);
     content = NULL;
@@ -30,9 +28,25 @@ int    fc_edit(t_history his, char *editor, char **args)
     else if (len > 1)
     {
         value = (t_history){fc_value(his, args[0]), fc_value(his, args[1]), 0, 0};
+        if (r)
+            rev_his_list(&value);
         content = history_content(value);
     }
-    if (!content)
+}
+
+/*  edit commands given from arguments(index, string) by the editor given and re-execute them*/
+int    fc_edit(t_history his, char *editor, char *flags, char **args)
+{
+    char *content;
+    char *cmd;
+
+    if (editor == NULL)
+    {
+        ft_putendl_fd("42sh: must specify editor in FCEDIT" , 2);
+        return (0);
+    }
+    (flags) && (args++);
+    if (!(content = history_getcmds(his, args, (ft_strchr(flags, 'r')))))
     {
         ft_putendl_fd("42sh: fc: history specification out of range", 2);
         return (0);
@@ -41,6 +55,7 @@ int    fc_edit(t_history his, char *editor, char **args)
     free(content);
     cmd = ft_strjoin(editor, " .42sh-fc");
     ft_multi_cmd(cmd, 0);
+    free(cmd);
     return (1);
 }
 
@@ -53,7 +68,6 @@ void    exec_fc()
 
     if (!(content = read_fc()))
         return ;
-    //ft_putendl(content);
     cmds = ft_strsplit(content, '\n');
     i = -1;
     while (cmds && cmds[++i])
@@ -63,16 +77,15 @@ void    exec_fc()
         ft_putendl(cmds[i]);
         ft_multi_cmd(cmds[i], 0);
     }
-    if (cmds)
-        free(cmds);
+    ft_strrdel(cmds);
 }
-
 
 void    fc_built(char **args, t_history *history)
 {
     char *flags;
     char c;
     int pos;
+    char *editor;
 
     if (!history->head || !history->tail)
         return ;
@@ -81,15 +94,15 @@ void    fc_built(char **args, t_history *history)
         fc_usage(c);
         return ;
     }
-    if (!flags)
-        fc_edit(*history, NULL, args);
+    if (!flags || (!ft_strchr(flags, 's') && !ft_strchr(flags, 'e')))
+        fc_edit(*history, ft_get_vrb("FCEDIT", g_environ), flags, args);
     else
     {
         if (ft_strchr(flags, 's'))//reexecute the command take just first arg
             fc_flag_s(history, *(args + pos));
-        else if (ft_strchr(flags, 'l'))//list of history
-            fc_flag_l(*history, flags, args + pos);
         else if (ft_strchr(flags, 'e')) //set editor text
             fc_flag_e(*history, args + pos);
+        else if (ft_strchr(flags, 'l'))//list of history
+            fc_flag_l(*history, flags, args + pos);
     }
 }

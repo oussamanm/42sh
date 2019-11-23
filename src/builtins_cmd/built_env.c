@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   built_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 11:56:36 by onouaman          #+#    #+#             */
-/*   Updated: 2019/10/30 11:56:38 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/11/23 17:41:14 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void		move_to_env(char *key)
+void		move_to_env(char *key)
 {
 	t_intern    *lst;
 	char        *vrb;
@@ -52,33 +52,42 @@ void			built_env(char **args, char ***tmp_env)
 	}
 }
 
+static int		export_valid_identifier(char *arg)
+{
+	int i;
+
+	i = -1;
+	while (arg[++i])
+	{
+		if ((!ft_isalphanum(arg[i]) && arg[i] != '=' && arg[i] != '\\') || arg[i] == '.' || arg[i] == '/' || (i == 0 && arg[0] == '='))
+		{
+			ft_putstr_fd("42sh: export: `", 2);
+			ft_putstr_fd(arg, 2);
+			ft_putendl_fd("': not a valid identifier", 2);
+			return (0);
+		}
+	}
+	return (1);
+}
+
 /*
 ** export Variable
 */
 
-void			built_export(t_tokens *st_tokens)
+void			built_export(char **args)
 {
 	int i;
-	char    *arg;
 
 	i = -1;
-	if (ft_count_tokens(st_tokens) == 1)
-		ft_put_strr(g_environ);
-	while (st_tokens)
+	while (args && args[++i])
 	{
-		if (st_tokens->token == T_EQUAL)
+		if (export_valid_identifier(args[i]))
 		{
-			arg = ft_strnew(0);
-			if (PREV && PREV->indx == st_tokens->indx)
-				arg = ft_strjoir(arg, PREV->value, 1);
-			arg = ft_strjoir(arg, st_tokens->value, 1);
-			if (NEXT && NEXT->indx == st_tokens->indx)
-				arg = ft_strjoir(arg, NEXT->value, 1);
-			ft_set_vrb(arg, &g_environ, 1);
+			if (ft_strchr(args[i], '='))
+				ft_set_vrb(args[i], &g_environ, 0);
+			else
+				move_to_env(args[i]);
 		}
-		else if (NEXT)
-			move_to_env(NEXT->value);
-		st_tokens = st_tokens->next;
 	}
 }
 

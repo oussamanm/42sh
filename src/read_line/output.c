@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/17 02:53:20 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/23 17:21:26 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	ft_print_touch_and_join(t_cursor *pos, char *buf, char **s)
 
 	i = 0;
 	if (ft_strcmp(buf, "\t") == 0)
-		print_tab(s, pos);
+		*s = ft_putline('\t', *s, pos);
 	while ((ft_isprint(buf[i]) || buf[i] == '\n') && i < 6)
 	{
 		if (!(*s = ft_putline(buf[i++], *s, pos)))

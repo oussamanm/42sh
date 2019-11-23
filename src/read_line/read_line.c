@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/23 00:59:29 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/23 17:27:52 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,15 @@ char	*ft_call_complete(t_select *select, char *s, char *buf)
 void	tab_mode(char **s)
 {
 	char buf[6];
-
+	g_pos.disable.c_lflag &= ~(ICANON);
+	tcsetattr(0, TCSANOW, &g_pos.disable);
 	ft_bzero(buf, 6);
 	read(0, buf, 6);
+	//ft_putstr(buf);
 	ft_print_touch_and_join(&g_pos, buf, s);
+	ft_enable();
+	g_pos.disable.c_lflag |= ICANON;
+	//(void)s;
 }
 
 /*
