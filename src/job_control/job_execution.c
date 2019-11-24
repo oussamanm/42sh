@@ -38,7 +38,7 @@ void	ft_manage_jobs(int pid, t_pipes *st_pipes, int *rtn)
 	ft_fill_process(pid, job);
 	if (!st_pipes->bl_jobctr)
 		ft_foreground_job(job);
-	else
+	else if (g_proc_sub != 2)
 	{
 		job->background = 1;
 		ft_print_pid(job->index, job->pgid);

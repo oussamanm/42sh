@@ -32,7 +32,7 @@ int     exec_subs(char *cmd, bool type)
 	pipe(fd);
 	if (fork() == 0) {
 		tmp_cmd = ft_strdup(cmd);
-		//setpgid(0, 0);
+	//	setpgid(0, 0);
 		close(fd[!type]);
 		dup2(fd[type], type);
 		close(fd[type]);

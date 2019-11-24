@@ -112,6 +112,7 @@ int			main(void)
 	init_alias_hash();
 	g_shellpid = getpid();
 	g_proc_sub = 0;
+	printf("hi === %d\n", STDIN_FILENO);
 	while (1337)
     {
         ft_putstr("\033[0;32m42sh $>\033[0m ");

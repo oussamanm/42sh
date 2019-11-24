@@ -81,13 +81,23 @@ char		*exec_subsh(char *cmd)
 	pid_t	pid;
 
 	ft_bzero(fds, 2);
+	g_proc_sub = 1;
 	if (pipe(fds) == -1)
 		ft_putendl_fd("Error Create Pipe", 2);
 	if ((pid = fork()) == 0)
+	{
+		call_signal();
 		child_subsh(fds, cmd);
+	}
+	else
+	{
+		setpgid(pid, pid);
+		tcsetpgrp(0, pid);
+	}
 	result = ft_strnew(0);
 	close(fds[1]);
 	waitpid(pid, NULL, 0);
+	tcsetpgrp(0, g_shellpid);
 	ft_bzero(buff, 11);
 	while (read(fds[0] , &buff, 10) > 0)
 	{
@@ -95,6 +105,7 @@ char		*exec_subsh(char *cmd)
 		ft_bzero(buff, 10);
 	}
 	close(fds[0]);
+	g_proc_sub = 0;
 	return (result);
 }
 
