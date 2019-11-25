@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 12:07:11 by mfetoui           #+#    #+#             */
-/*   Updated: 2019/11/23 01:02:25 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/25 02:28:38 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ char	*token_join(t_tokens *st_tokens){
 }
 
 int     exec_subs(char *cmd, bool type)
- {
+{
 	int     fd[2];
 	char	*tmp_cmd;
 
-	pipe(fd);
+	if (pipe(fd) == -1)
+		ft_putstr_fd( "broken pipe", 2);
 	if (fork() == 0) {
 		tmp_cmd = ft_strdup(cmd);
-		//setpgid(0, 0);
 		close(fd[!type]);
 		dup2(fd[type], type);
 		close(fd[type]);
@@ -45,19 +45,6 @@ int     exec_subs(char *cmd, bool type)
 	close(fd[type]);
 	return (fd[!type]);
 }
-
-/*void	main_proc(t_tokens *st_tokens) {
-	int     i;
-	int     child;
-
-	i = 0;
-	if ((child = fork()) == 0)
-	{
-		ft_multi_cmd(token_implode(st_tokens), 0);
-		exit(0);
-	}
-	waitpid(child, NULL, 0);
-}*/
 
 int		count_subs(t_tokens *st_tokens) {
 	int	count;
@@ -98,7 +85,8 @@ void    proc_substitution(t_cmds *st_cmds) {
 		{
 			st_cmds->fd[i] = exec_subs(st_tokens->value, (st_tokens->token == T_PROC_OUT) ? 0 : 1);
 			ft_strdel(&st_tokens->value);
-			st_tokens->value = ft_strjoir("/dev/fd/", (char [2]){st_cmds->fd[i++] + '0', 0}, 0);
+			st_tokens->value = ft_strjoir("/dev/fd/", ft_itoa(st_cmds->fd[i++]), 0);
+			//puts(st_tokens->value);
 		}
 		st_tokens = st_tokens->next;
 	}

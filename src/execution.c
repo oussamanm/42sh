@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,7 +6,7 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/09/23 00:58:29 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/25 02:28:41 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,21 +109,28 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 
 	/// Remove Quote
 	//ft_remove_quot(st_pipes->args);
-	
+
 	/// Check if tmp_env exist
 	environ = (st_pipes->tmp_env) ? st_pipes->tmp_env : g_environ;
-	
+
 	/// Check if Builtens
 	if (st_pipes && ft_check_built(st_pipes->args[0]) && ft_strcmp(st_pipes->args[0], "echo"))
 		return (ft_init_built(st_pipes, &(st_pipes->tmp_env))); ///  add return to ft_init_built
 
 	(fork_it) ? signal(SIGCHLD, SIG_DFL) : 0;
+	
 	/// Fork - Child
 	if (fork_it && (pid = fork()) == -1)
 		ft_err_exit("Error in Fork new process \n");
 	if (pid == 0)
 	{
 		ft_signal_default();
+		if (g_proc_sub && st_pipes->bl_jobctr)
+		{
+			dup2(open("/dev/null", O_RDONLY), 0);
+			if (g_proc_sub == 1)
+				signal(SIGINT, SIG_IGN);
+		}
 		/// Apply redirection
 		if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 			exit(EXIT_FAILURE);
@@ -138,6 +144,8 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	}
 	else if (fork_it && !g_proc_sub)
 		ft_manage_jobs(pid, st_pipes, &rtn);
+	else if (fork_it && g_proc_sub && !st_pipes->bl_jobctr)
+		waitpid(pid, NULL, 0);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
 	/// insertion in hash_table in case of exit_proccess = SUCCESS
 	if (rtn == EXIT_SUCCESS)
@@ -176,7 +184,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 
 	/// Aplly proc_sub *
 	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT)) //// why only T_PROC_IN 
-	 	proc_substitution(st_cmds);
+		proc_substitution(st_cmds);
 	/// Fill Lists of lists *
 	ft_parse_cmd(st_cmds);
 

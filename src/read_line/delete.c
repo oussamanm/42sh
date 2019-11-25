@@ -81,15 +81,15 @@ char	*ft_delcolomn(char *s, t_cursor *pos)
 {
 	char	*new;
 	int		len;
-	int		fd;
+	//int		fd;
 
-	fd = open("/dev/ttys002", O_WRONLY);
+	//fd = open("/dev/ttys002", O_WRONLY);
 	len = ft_strlen(s);
 	pos->num_col = ft_get_size_windz();
-	ft_putchar_fd(s[pos->index - 1], fd);
+	//ft_putchar_fd(s[pos->index - 1], fd);
 	if (s[pos->index - 1] == '\t')
 	{
-		ft_putendl_fd("tab", fd);
+		//ft_putendl_fd("tab", fd);
 		delete_tab();
 	}
 	if (pos->index <= len && pos->index > 0)

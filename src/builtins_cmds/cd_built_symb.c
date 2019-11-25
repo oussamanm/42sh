@@ -142,8 +142,8 @@ void		cd_symblink(char **pwd, char **oldpwd, int *var)
 	ft_strdel(oldpwd);
 	*pwd = ft_get_vrb("PWD", g_environ);
 	*oldpwd = ft_get_vrb("OLDPWD", g_environ);
-	ft_putendl(v->path);
-	ft_putendl(v->tmppath);
+	//ft_putendl(v->path);
+	//ft_putendl(v->tmppath);
 	chdir((flag == 3) ? v->tmppath : v->path);
 	*var = 1;
 }

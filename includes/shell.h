@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 16:01:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/24 19:48:48 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,11 +139,9 @@ typedef struct			s_job
 	char				p;
 	struct termios		term_child;
 }						t_job;
-pid_t					g_shellpid;
 t_list					*jobs;
 pid_t					g_shellpid;
-char					g_proc_sub;
-
+int						g_proc_sub;
 
 /*
 ** job control

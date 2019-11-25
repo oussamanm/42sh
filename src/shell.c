@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 12:30:21 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/24 18:56:22 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ int			main(void)
 	//his->path = ft_get_vrb("PATH", g_environ);?????
 	// Initial Alias && HASH
 	init_alias_hash();
+	//start new session for shell
+	setsid();
 	g_shellpid = getpid();
 	g_proc_sub = 0;
 	while (1337)
