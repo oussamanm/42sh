@@ -6,7 +6,7 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 23:42:21 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/25 02:28:36 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/25 03:01:53 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	value_to_token(char *value, t_tokens **st_tokens)
 
 void		child_subsh(int fds[2], char *cmd)
 {
-//	signal(SIGCHLD, sub_handler);
 	close(fds[0]);
 	if (dup2(fds[1] , 1) == -1)
 		ft_putendl_fd("Error in dub STD_OUT in SUB_SHELL", 2);
@@ -90,6 +89,7 @@ char		*exec_subsh(char *cmd)
 	if ((pid = fork()) == 0)
 		child_subsh(fds, cmd);
 	waitpid(pid, NULL, 0);
+
 	close(fds[1]);
 	result = ft_strnew(0);
 	ft_bzero(buff, 11);

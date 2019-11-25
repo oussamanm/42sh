@@ -6,7 +6,7 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/25 02:28:41 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/25 18:43:12 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,10 +181,11 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 
 	/// Apply sub_shell *
 	apply_subsh(st_cmds->st_tokens);
-
+	
 	/// Aplly proc_sub *
 	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT)) //// why only T_PROC_IN 
 		proc_substitution(st_cmds);
+	
 	/// Fill Lists of lists *
 	ft_parse_cmd(st_cmds);
 
@@ -195,6 +196,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	//printf("%s|%d\n", st_cmds->args[0], getpid());
 	ft_cmds_exec(st_cmds);
 	procsub_close(st_cmds->fd);
+	
 	/// Clear allocated space
 	free_list_cmds(st_cmds);
 	return (1);
