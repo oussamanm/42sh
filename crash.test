@@ -1,0 +1,15 @@
+ls <(cat )
+cat -e <(ls)
+ls $(cat)
+pwd
+echo '' | ls
+ls || pwd
+dfv $()
+
+alias cd= ls 
+unalias cd
+cd
+NAME=VALUE
+echo $NAME
+unset NAME
+echo $NAME

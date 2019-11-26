@@ -52,6 +52,7 @@ OBJS = error_handler.o\
 	history/history_expansion.o\
 	history/history_file.o history/history_readline.o\
 	history/manage_history.o history/history_other.o history/history_content.o\
+	history/history_search.o\
 	fc_built/fc_built.o fc_built/fc_file.o fc_built/fc_flag_l.o\
 	fc_built/fc_flags.o\
 	job_control/add_remove.o job_control/built.o\

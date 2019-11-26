@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_execution.c                                     :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/25 02:28:41 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/26 16:01:37 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	if (str_arg == NULL)
 		return (-1);
 	st_cmds = ft_new_cmds();
+	//garbage_mem(st_cmds, &g_garbage, 3);//env, history, alias
 	/// Fill args
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
@@ -178,10 +179,11 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 
 	/// Apply sub_shell *
 	apply_subsh(st_cmds->st_tokens);
-
+	
 	/// Aplly proc_sub *
 	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT))
 		proc_substitution(st_cmds);
+	
 	/// Fill Lists of lists *
 	ft_parse_cmd(st_cmds);
 
@@ -192,7 +194,10 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	(!g_pos.exit) ? ft_cmds_exec(st_cmds) : NULL;
 
 	procsub_close(st_cmds->fd);
+	
 	/// Clear allocated space
+//	delete_garbarge(st_cmds);//??
 	free_list_cmds(st_cmds);
+
 	return (1);
 }

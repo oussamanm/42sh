@@ -6,7 +6,7 @@
 /*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 19:32:46 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/09/24 19:32:48 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/11/25 19:43:36 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	ft_foreground(void)
 	while (tmp)
 	{
 		job = tmp->content;
-		if (job->status == STOPED)
+		if (job->status == RUN)
 		{
 			ft_foreg_wait(job, tmp, pr);
 			break ;

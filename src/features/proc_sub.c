@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 12:07:11 by mfetoui           #+#    #+#             */
-/*   Updated: 2019/11/25 02:28:38 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/25 17:29:58 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void    proc_substitution(t_cmds *st_cmds) {
 			st_cmds->fd[i] = exec_subs(st_tokens->value, (st_tokens->token == T_PROC_OUT) ? 0 : 1);
 			ft_strdel(&st_tokens->value);
 			st_tokens->value = ft_strjoir("/dev/fd/", ft_itoa(st_cmds->fd[i++]), 0);
-			//puts(st_tokens->value);
 		}
 		st_tokens = st_tokens->next;
 	}
