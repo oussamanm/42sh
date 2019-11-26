@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/23 12:57:10 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/25 23:44:27 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ char				*ft_clear(t_cursor *pos, char *s, char *buf);
 ** read for sub_shell
 */
 int					ft_check_subsh(int i, char **line, t_select *select, t_history *his);
-
+char		*compliting_line(char *str_cmds, t_select *select, t_history *his);
 /*
 **	history readline, '!' expansion and fc builtuin
 */
@@ -186,15 +186,13 @@ void    rev_his_list(t_history *lst);
 void    display_his_list(t_history his, int order);
 int		history_handling(char **str_cmds);
 char    *history_content(t_history his);
-
-char		*compliting_line(char *str_cmds, t_select *select, t_history *his);
-
+void	his_new_line(char *line, char **cmd, t_cursor *pos);
+char	*str_notnumber(char *keyword);
+void    history_search(t_history his, char **s);
 /*history expansion */
 char    *history_expansion(t_history his, char *keyword);
 char    is_shell_delimiter(char c);
 char *get_delimiter(char *keyword);
-char    *str_notnumber(char *keyword);
-
 /* fc buit */
 
 char    *read_fc();

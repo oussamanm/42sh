@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 12:30:21 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/24 12:17:34 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int			main(void)
         {
 			ft_job_processing();
 			continue ;
-		}   
+		}
         // Check incomplete syntax of Sub_shell or Quoting
         g_pos.cmd = compliting_line(g_pos.cmd, select, &g_history);
 

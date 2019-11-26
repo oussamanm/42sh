@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_parser.c                                        :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 21:06:25 by onouaman          #+#    #+#             */
-/*   Updated: 2019/10/25 12:17:41 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/25 23:54:57 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,19 +125,17 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 ** Fill Intern and Temp variables
 */
 
-static void		fill_vrbs(t_pipes *st_pipes)
+static void		fill_vrbs(t_pipes *st_pipes, char **args)
 {
-	char		**tmp_env;
+	int			len;
 
-	if (!st_pipes)
+	if (!args)
 		return ;
-	if (!ft_check_intern(st_pipes))	/// Fill intern variable
-		ft_fill_intern(st_pipes);
-	else										/// temp environ
-	{
-		tmp_env = ft_tokens_arg_env(st_pipes->st_tokens);
-		st_pipes->tmp_env = ft_fill_env(tmp_env);
-	}
+	ft_put_strr(args);
+	if ((len = ft_check_tmp(args)) > 0)
+		st_pipes->tmp_env = ft_fill_env(args, len);
+	else
+		ft_fill_intern(args);
 }
 
 
@@ -178,7 +176,7 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 			ft_fill_pipe(st_logopr);
 			// Fill intern variable and tmp_env
 			if (st_logopr->st_pipes && !st_logopr->st_pipes->next && ft_check_token(st_logopr->st_pipes->st_tokens, T_EQUAL))
-				fill_vrbs(st_logopr->st_pipes);
+				fill_vrbs(st_logopr->st_pipes, st_cmds->args);
 			/// Fill args without T_EQUAL , T_SUBSHL,
 			fill_args(st_logopr->st_pipes);
 			st_logopr = st_logopr->next;

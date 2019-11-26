@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 16:01:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/26 00:55:11 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,10 +242,10 @@ void					built_export(char **args);
 */
 
 void					add_intern_var(char *key, char *value);
-void					delete_intern_var(char *key, t_intern **head);
-char					**ft_fill_env(char **args);
+int					delete_intern_var(char *key, t_intern **head);
+char					**ft_fill_env(char **args, int len);
 char					*get_intern_value(char *key);
-t_intern				get_key_value(t_tokens *st_tokens);
+char				**get_key_value(char *arg);
 
 
 /*
@@ -411,7 +411,7 @@ void					free_list_cmds(t_cmds *st_cmds);
 void					free_tokens(t_tokens *st_tokens, int free_content);
 void		free_addresses(void *table[MAX_TAB_ADDR]);
 void		free_list_redir(t_redir *st_redir);
-
+void    delete_intern();
 /*
 ** Parse Cmds
 */
@@ -423,10 +423,9 @@ void					ft_parse_cmd(t_cmds *st_cmds);
 ** Variable parsing
 */
 
-int						ft_check_intern(t_pipes *st_pipe);
-void					ft_fill_intern(t_pipes *st_pipe);
-char					**ft_fill_env(char **args);
-char					**ft_tokens_arg_env(t_tokens *st_tokens);
+int						ft_check_tmp(char **args);
+void					ft_fill_intern(char **args);
+char					**ft_fill_env(char **args, int len);
 
 
 /*

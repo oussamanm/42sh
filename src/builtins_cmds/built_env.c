@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 11:56:36 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 17:41:14 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/26 00:53:27 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void			built_unset(char **args)
 	i = -1;
 	while (args[++i])
 	{
-		delete_intern_var(args[i], &g_intern);
-		ft_unset_vrb(args[i], &g_environ);
+		if (!delete_intern_var(args[i], &g_intern))
+			ft_unset_vrb(args[i], &g_environ);
 	}
 }

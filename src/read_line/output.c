@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/23 17:21:26 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/25 18:39:28 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,18 +103,13 @@ char	*ft_putline(char c, char *s, t_cursor *pos)
 
 void	print_tab(char **s, t_cursor *pos)
 {
-	int len;
 	int spaces;
 	int i;
 
-	len = ft_strlen(*s);
-	spaces = 8 - (len % 8);
+	spaces = 8 - (pos->index % 8);
+	ft_putline(spaces * -1, *s, pos);
 	i = -1;
-	while (++i < spaces)
-	{
-		if (!(*s = ft_putline(' ', *s, pos)))
-			return ;
-	}
+	his_new_line(*s, s, pos);
 }
 
 /*
