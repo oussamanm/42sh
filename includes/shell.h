@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 01:35:35 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/26 15:53:08 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,17 +223,23 @@ typedef	struct s_cmds
 	t_jobctr			*st_jobctr;
 }						t_cmds;
 
-
+typedef	struct	s_garbage
+{
+	void				*mem_ptr;
+	int					flag;
+	struct s_garbage	*next;
+	struct s_garbage	*tail;
+}				t_garbage;
 
 t_intern	*g_intern;
 char		**g_environ;
-
+t_garbage	*g_garbage;
 /*
 ** Builtins
 */
 
 void					built_exit(t_pipes *st_pipes, char ***env);
-void					built_export(char **args);
+void					built_export(t_tokens *st_tokens);
 
 /*
 ** Intern variable
@@ -386,7 +392,7 @@ void			remove_backslashs(char **args);
 int						ft_init_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_call_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_check_built(char *arg);
-
+void					built_set();
 
 /*
 ** New
@@ -477,5 +483,10 @@ void			ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add);
 char	*ft_strsignal(int sig);
 void	ft_print_backcmd(t_job *job);
 
+
+/* gerbage collector */
+void			garbage_mem(void *mem, t_garbage **grb);
+void			free_garbage(t_garbage **head);
+void			exit_program(int fd, char *msg, t_garbage **grb);
 
 #endif
