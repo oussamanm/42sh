@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 21:06:25 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/25 23:54:57 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/26 01:43:29 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,6 @@ static void		fill_vrbs(t_pipes *st_pipes, char **args)
 
 	if (!args)
 		return ;
-	ft_put_strr(args);
 	if ((len = ft_check_tmp(args)) > 0)
 		st_pipes->tmp_env = ft_fill_env(args, len);
 	else

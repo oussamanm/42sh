@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/24 12:17:34 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/26 01:39:19 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void		initial_read_line(t_history *his, t_select **select)
 	(*select)->start = -1;
 	(*select)->end = -1;
 	(*select)->save = NULL;
-//	save_address(his, select); ????
+	save_address(&his, select); //????
 }
 
 /*
@@ -111,6 +111,8 @@ int			main(void)
 	//his->path = ft_get_vrb("PATH", g_environ);?????
 	// Initial Alias && HASH
 	init_alias_hash();
+	//start new session for shell
+	setsid();
 	g_shellpid = getpid();
 	g_proc_sub = 0;
 	while (1337)

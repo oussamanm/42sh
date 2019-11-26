@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 21:35:32 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/22 10:40:36 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/25 03:01:50 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ void	ft_catch_signal(int signal)
 		g_pos.num_col = ft_get_size_windz();
 		ft_strdel(&(g_pos.cmd));
 		g_pos.cmd = ft_strnew(0);
+		
 		if (g_pos.p != 8)
 		{
 			g_pos.exit = 1;
 			ioctl(0, TIOCSTI, "\12");
 		}
 		else
-			ft_putstr("\n\033[0;32m42sh $>\033[0m ");
+			ft_putstr_fd("\n\033[0;32m42sh $>\033[0m ", 2);
 		g_pos.p = 8;
 		history_readline(&g_history, 0, NULL);
 	}
@@ -60,11 +61,16 @@ void	call_signal(void)
 	signal(SIGCHLD, ft_catch_sigchild);
 }
 
+void sig_han(int sig){
+	dprintf(2, "%d SIG RECIEVED", sig);
+}
+
 void	ft_signal_default(void)
 {
+	signal(SIGHUP, SIG_DFL);
+	signal(SIGCONT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGTSTP, SIG_DFL);
+	signal(SIGTSTP,SIG_DFL);
 }

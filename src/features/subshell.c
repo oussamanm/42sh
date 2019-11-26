@@ -6,7 +6,7 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 23:42:21 by onouaman          #+#    #+#             */
-/*   Updated: 2019/10/02 23:42:22 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/11/25 03:01:53 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,14 @@ void	value_to_token(char *value, t_tokens **st_tokens)
 ** Exection of cmd sub_stitu
 */
 
+
+
 void		child_subsh(int fds[2], char *cmd)
 {
 	close(fds[0]);
 	if (dup2(fds[1] , 1) == -1)
 		ft_putendl_fd("Error in dub STD_OUT in SUB_SHELL", 2);
+	close(fds[1]);
 	char **args;
 	int i= 0;
 	args = ft_str_split_q(cmd,"\n");
@@ -62,10 +65,10 @@ void		child_subsh(int fds[2], char *cmd)
 	{
 		if (i != 0)
 			ft_putchar(-1);
+		g_proc_sub = 2;
 		ft_multi_cmd(args[i], 1);
 		i++;
 	}
-	close(fds[1]);
 	exit(EXIT_SUCCESS);
 }
 
@@ -85,9 +88,10 @@ char		*exec_subsh(char *cmd)
 		ft_putendl_fd("Error Create Pipe", 2);
 	if ((pid = fork()) == 0)
 		child_subsh(fds, cmd);
-	result = ft_strnew(0);
-	close(fds[1]);
 	waitpid(pid, NULL, 0);
+
+	close(fds[1]);
+	result = ft_strnew(0);
 	ft_bzero(buff, 11);
 	while (read(fds[0] , &buff, 10) > 0)
 	{

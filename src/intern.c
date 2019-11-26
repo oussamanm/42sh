@@ -92,7 +92,6 @@ char		*get_intern_value(char *key)
     lst = g_intern;
     while (lst)
     {
-        ft_putendl(lst->key);
         if (ft_strcmp(key, lst->key) == 0)
             return (ft_strdup(lst->value));
         lst = lst->next;
