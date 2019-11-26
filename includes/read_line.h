@@ -187,7 +187,7 @@ void    display_his_list(t_history his, int order);
 int		history_handling(char **str_cmds);
 char    *history_content(t_history his);
 
-char		*compliting_line(char *str_cmds, t_select *select, t_history *his);
+char		*completing_line(char *str_cmds, t_select *select, t_history *his);
 
 /*history expansion */
 char    *history_expansion(t_history his, char *keyword);

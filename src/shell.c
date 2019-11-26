@@ -19,12 +19,12 @@
 
 void		initial_read_line(t_history *his, t_select **select)
 {
-	restore_history(his);
-	*select = ft_memalloc(sizeof(t_select));
+	//restore_history(his);
+	*select = (t_select *)ft_memalloc(sizeof(t_select));
 	(*select)->start = -1;
 	(*select)->end = -1;
 	(*select)->save = NULL;
-//	save_address(his, select); ????
+	save_address(&his, select); 
 }
 
 /*
@@ -110,7 +110,7 @@ int			main(void)
 	init_fc_built();
 	//his->path = ft_get_vrb("PATH", g_environ);?????
 	// Initial Alias && HASH
-	init_alias_hash();
+	//init_alias_hash();
 	//start new session for shell
 	setsid();
 	g_shellpid = getpid();
@@ -122,16 +122,16 @@ int			main(void)
         {
 			ft_job_processing();
 			continue ;
-		}   
+		}
         // Check incomplete syntax of Sub_shell or Quoting
-        g_pos.cmd = compliting_line(g_pos.cmd, select, &g_history);
+        g_pos.cmd = completing_line(g_pos.cmd, select, &g_history);
 
         // add command to history
-        if (!history_handling(&g_pos.cmd))
-			continue ;
+        //if (!history_handling(&g_pos.cmd))
+		//	continue ;
 
 		// Execution
-		(!(g_pos.exit)) ? ft_multi_cmd(ft_strdup(g_pos.cmd), 0) : NULL;
+		(!(g_pos.exit)) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
 		ft_job_processing();
 		ft_strdel(&g_pos.cmd);
     }

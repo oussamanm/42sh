@@ -46,7 +46,7 @@ int				ft_check_cmd(char *cmd, char **environ)
 }
 
 /*
- ** Execute all cmds
+ ** Execute all cmds 
  */
 
 static void		ft_cmds_exec(t_cmds *st_cmds)
@@ -80,7 +80,7 @@ static void		ft_cmd_exec(char **args, char **env)
 	else
 	{
 		/// Check if exist in HASH_TABLE
-		if (!(str_arg = lookup_hash(args[0])))
+		//if (!(str_arg = lookup_hash(args[0])))
 			str_arg = ft_find_path(args[0], env);
 	}
 	if (str_arg != NULL)
@@ -106,9 +106,6 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 
 	/// Remove backslashs
 	remove_backslashs(st_pipes->args);
-
-	/// Remove Quote
-	//ft_remove_quot(st_pipes->args);
 
 	/// Check if tmp_env exist
 	environ = (st_pipes->tmp_env) ? st_pipes->tmp_env : g_environ;
@@ -148,8 +145,8 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		waitpid(pid, NULL, 0);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
 	/// insertion in hash_table in case of exit_proccess = SUCCESS
-	if (rtn == EXIT_SUCCESS)
-		insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
+	//if (rtn == EXIT_SUCCESS)
+	//	insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
 	return (rtn ? 0 : 1);
 }
 
@@ -168,7 +165,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
 	/// Check if cmd is alias and change it
-	st_cmds->args = aliasmatched(st_cmds->args);
+	//st_cmds->args = aliasmatched(st_cmds->args);
 
 	/// Apply Lexer && Check Error Syntax
 	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL || error_syntax_lexer(st_cmds->st_tokens))
@@ -183,7 +180,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	apply_subsh(st_cmds->st_tokens);
 
 	/// Aplly proc_sub *
-	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT)) //// why only T_PROC_IN 
+	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT))
 		proc_substitution(st_cmds);
 	/// Fill Lists of lists *
 	ft_parse_cmd(st_cmds);
@@ -191,9 +188,9 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	/// Apply here_doc (do not applied in case of comming from SUB_SHELL)
 	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;
 
-	/// Executions *
-	//printf("%s|%d\n", st_cmds->args[0], getpid());
-	ft_cmds_exec(st_cmds);
+	/// Executions * (apply execution if (Ctr + c) doesn't pressed)
+	(!g_pos.exit) ? ft_cmds_exec(st_cmds) : NULL;
+
 	procsub_close(st_cmds->fd);
 	/// Clear allocated space
 	free_list_cmds(st_cmds);

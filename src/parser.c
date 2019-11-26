@@ -92,11 +92,11 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 	t_tokens	*st_token;
 	t_tokens	*st_temp;
 
-	// alloc st_logopr
+	// alloc list of logopr
 	st_logopr->st_pipes = ft_new_pipe();
 	st_pipes = st_logopr->st_pipes;
 
-	// alloc t_tokens in st_token
+	// alloc list of tokens
 	st_pipes->st_tokens = ft_new_token();
 	st_token = st_pipes->st_tokens;
 

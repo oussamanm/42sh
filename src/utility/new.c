@@ -96,7 +96,6 @@ t_pipes		*ft_new_pipe(void)
 	ft_bzero(st_pipes->fds, 2);
 	st_pipes->st_redir = NULL;
 	st_pipes->st_tokens = NULL;
-	//st_pipes->st_intern = NULL;
 	st_pipes->tmp_env = NULL;
 	st_pipes->next = NULL;
 	return (st_pipes);

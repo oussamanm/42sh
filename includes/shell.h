@@ -193,7 +193,6 @@ typedef struct			s_pipes
 	char				**tmp_env;
 	t_tokens			*st_tokens;
 	t_redir				*st_redir;
-	//t_intern			*st_intern;
 	struct s_pipes		*next;
 }						t_pipes;
 

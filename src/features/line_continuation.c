@@ -197,11 +197,11 @@ static void	ft_read_quote(char **line, int quote,
 	}
 }
 
-char		*compliting_line(char *str_cmds, t_select *select, t_history *his)
+char		*completing_line(char *str_cmds, t_select *select, t_history *his)
 {
-	int	*maps;
-	int	i;
-	int	index;
+	int		*maps;
+	int		i;
+	int		index;
 	char	*cmd;
 
 	if (!(maps = (int *)ft_memalloc(sizeof(int) * MAX_MAPS)))

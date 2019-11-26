@@ -125,7 +125,7 @@ char			*ft_corr_args(char *cmd)
 		return (NULL);
 	while (cmd[i])
 	{
-		// Conditions ( \ , ", ', $, !, ~ ) respectively
+		printf("i = %d \n",i);
 		if (cmd[i] == '\\')
 			i += (cmd[i + 1]) ? 1 : 0;
 		else if (cmd[i] == '"')
@@ -137,7 +137,7 @@ char			*ft_corr_args(char *cmd)
 		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
 			(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))
 			cmd = ft_str_remp(cmd, ft_get_vrb("HOME", g_environ), i, -1);
-		i += cmd[i] != '\0';
+		i += (cmd[i] != '\0');
 	}
 	return (cmd);
 }
