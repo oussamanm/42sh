@@ -125,7 +125,6 @@ char			*ft_corr_args(char *cmd)
 		return (NULL);
 	while (cmd[i])
 	{
-		printf("i = %d \n",i);
 		if (cmd[i] == '\\')
 			i += (cmd[i + 1]) ? 1 : 0;
 		else if (cmd[i] == '"')

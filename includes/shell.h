@@ -119,6 +119,15 @@
 # define TERMINATED 33
 # define EXITED 44
 
+/*
+** Flags garbage_collector
+*/
+
+#define GARB_POIN 1
+#define GARB_ARGS 2
+#define GARB_CMDS 3
+
+
 typedef	struct			s_process
 {
 	pid_t				pid;
@@ -237,7 +246,7 @@ t_garbage	*g_garbage;
 ** Builtins
 */
 
-void					built_exit(t_pipes *st_pipes, char ***env);
+void		built_exit();
 void					built_export(t_tokens *st_tokens);
 
 /*
@@ -415,6 +424,7 @@ void					free_tokens(t_tokens *st_tokens, int free_content);
 void		free_addresses(void *table[MAX_TAB_ADDR]);
 void		free_list_redir(t_redir *st_redir);
 void    delete_intern();
+void		free_list_pipe(t_pipes *st_pipes);
 /*
 ** Parse Cmds
 */
@@ -484,8 +494,9 @@ void	ft_print_backcmd(t_job *job);
 
 
 /* gerbage collector */
-void			garbage_mem(void *mem, t_garbage **grb);
+void			garbage_mem(void *mem, int flag,t_garbage **grb);
 void			free_garbage(t_garbage **head);
+void			garbage_detach(void *ptr, t_garbage **grb);
 void			exit_program(int fd, char *msg, t_garbage **grb);
 
 #endif

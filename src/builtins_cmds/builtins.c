@@ -17,19 +17,8 @@
 **	Builten exit : free env , free readline, clear struct t_pipes
 */
 
-void		built_exit(t_pipes *st_pipes, char ***tmp_env)
+void		built_exit()
 {
-
-	UNUSED(st_pipes);
-	UNUSED(tmp_env);
-	/// Clear environ globale and temp
- 	ft_strrdel(*tmp_env);
- 	ft_strrdel(g_environ);
-	ft_clear_readline_struct();
-	//free_list_cmds(st_pipes);
-	// here free of hash and alias
-	//ft_read_exit()??
 	save_history(&g_history);
-	free_hash_and_alias();
 	exit(0);
 }

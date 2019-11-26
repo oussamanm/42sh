@@ -161,7 +161,6 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	if (str_arg == NULL)
 		return (-1);
 	st_cmds = ft_new_cmds();
-	//garbage_mem(st_cmds, &g_garbage, 3);//env, history, alias
 	/// Fill args
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
@@ -190,13 +189,12 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	/// Apply here_doc (do not applied in case of comming from SUB_SHELL)
 	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;
 
-	/// Executions * (apply execution if (Ctr + c) doesn't pressed)
-	(!g_pos.exit) ? ft_cmds_exec(st_cmds) : NULL;
+	/// Executions * (apply execution if (Ctr + c) doesn't pressed)  *** (!g_pos.exit) ? 
+	ft_cmds_exec(st_cmds);
 
 	procsub_close(st_cmds->fd);
 	
 	/// Clear allocated space
-//	delete_garbarge(st_cmds);//??
 	free_list_cmds(st_cmds);
 
 	return (1);
