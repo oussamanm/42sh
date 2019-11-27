@@ -31,7 +31,7 @@ t_hash			**store_addr_of_hash(t_hash **hash_arr, int flag)
 
 unsigned int	hash(char *key)
 {
-	int value;
+	unsigned int value;
 
 	value = key[0] - 'a';
 	return (value % SIZE);
@@ -88,13 +88,17 @@ void			display_hash_table(void)
 ** main func called in shell
 */
 
-void			hash_table(char **args)
+int				hash_table(char **args)
 {
-	if (ft_strcmp(args[0], "-r") == 0)
-	{
-		erase_hash_table();
-		return ;
-	}
-	else if (!args[0])
+	if (!args[0])
 		display_hash_table();
+	else if (ft_strcmp(args[0], "-r") == 0)
+		erase_hash_table();
+	else
+	{
+		print_error("invalid option ", "42sh: hash: ", args[0], 0);
+		print_error("hash [-r]", NULL, "hash: usage: ", 0);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }

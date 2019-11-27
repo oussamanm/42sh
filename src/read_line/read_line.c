@@ -112,8 +112,7 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	
 	crash = 0;
 	//  To test only uncomment this line and run crash.py before 42sh
-//	crash = open("/tmp/crash.fifo", O_RDONLY);
-	 
+    //  crash = open("/tmp/crash.fifo", O_RDONLY);
 	select->end = 1;
 	ft_initial(p);
 	ft_bzero(buf, 6);

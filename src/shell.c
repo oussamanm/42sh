@@ -58,7 +58,7 @@ void		init_alias_hash()
 	data = (t_aliaspkg *)ft_memalloc(sizeof(t_aliaspkg));
 	storeaddrstruct(data);
 	createaliasfile();
-	importaliasfilecontent();
+	importaliasfilecontent(NULL);
 	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
 	int i = -1;
 	while (++i < SIZE)
