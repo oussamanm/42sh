@@ -6,7 +6,7 @@
 /*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:17:40 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/16 11:58:00 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/11/25 21:02:37 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		cd_options(char **arg, int j, int *flag)
 					*flag = 0 | P_flg;
 				else
 				{
-					print_error(CD_OEMSG, "42sh: cd: -", &arg[i][j], 0);
+					print_error(CD_OEMSG, "cd: -", &arg[i][j], 0);
 					return (-1);
 				}
 			}

@@ -6,7 +6,7 @@
 /*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:18:15 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/22 22:05:40 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/11/25 19:53:34 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define BUILTINS_H
 
 # define TYPE_OEMSG	"invalid option\ntype: usage: type [-afptP] name [name ...]"
-# define CD_OEMSG	"invalid option\ncd: usage: cd [-L][-P] dir]"
+# define CD_OEMSG	"invalid option\ncd: usage: cd [-L][-P] [dir]"
 # define SIZE 50
 
 typedef struct s_alias		t_alias;

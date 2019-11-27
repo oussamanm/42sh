@@ -13,3 +13,4 @@ NAME=VALUE
 echo $NAME
 unset NAME
 echo $NAME
+hello

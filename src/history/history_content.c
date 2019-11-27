@@ -14,6 +14,7 @@
 
 int		history_handling(char **str_cmds)
 {
+
 	if (ft_strchr(*str_cmds, '!'))
 	{
 		if (!(*str_cmds = history_expansion(g_history, *str_cmds)))

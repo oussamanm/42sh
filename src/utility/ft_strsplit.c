@@ -36,7 +36,10 @@ char			**ft_str_split_q(char *str, char *c)
 			continue ;
 		}
 		if ((temp[i] == '(' || IS_QUOTE(temp[i])) && (j = find_closed(&temp[i], temp[i])) != -1)
+		{
+			printf("j = %d \n",j);
 			i += j;
+		}
 		if (ft_check_char(c, temp[i]))
 			temp[i] = -1;
 	}

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/25 15:30:19 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/26 19:58:35 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	int crash;
 	
 	crash = 0;
-	//  To test only uncomment this line and run crash.py before 42sh
-//	crash = open("/tmp/crash.fifo", O_RDONLY);
+	//  To test only uncomment this line and run [./crash.py test_file && ./42sh]
+	//crash = open("/tmp/crash.fifo", O_RDONLY);
 	 
 	select->end = 1;
 	ft_initial(p);
