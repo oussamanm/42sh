@@ -114,7 +114,7 @@ int		built_type(char **args, char **tmpenv)
 	if (!((i = type_options(args, &flag)) == -1))
 		args += i;
 	else
-		return (0);
+		return (EXIT_FAILURE);
 	var = 0;
 	while (*args)
 	{
@@ -124,5 +124,5 @@ int		built_type(char **args, char **tmpenv)
 			ft_buil_type_(*args, flag);
 		args++;
 	}
-	return ((var) ? 1 : 0);
+	return ((var) ? EXIT_FAILURE : EXIT_SUCCESS);
 }

@@ -58,7 +58,7 @@ void		init_alias_hash()
 	data = (t_aliaspkg *)ft_memalloc(sizeof(t_aliaspkg));
 	storeaddrstruct(data);
 	createaliasfile();
-	importaliasfilecontent();
+	importaliasfilecontent(NULL);
 	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
 	int i = -1;
 	while (++i < SIZE)
@@ -128,14 +128,14 @@ int			main(void)
         // Check incomplete syntax of Sub_shell or Quoting
         g_pos.cmd = completing_line(g_pos.cmd, select, &g_history);
 
-        // add command to history
-        //if (!history_handling(&g_pos.cmd))
-		//	continue ;
+        // add command to history	
+	  	// if (!history_handling(&g_pos.cmd))
+		// 	continue ;
 
 		// Execution
 		(!(g_pos.exit)) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
 		ft_job_processing();
 		ft_strdel(&g_pos.cmd);
-    }
+	}
 	return (0);
 }
