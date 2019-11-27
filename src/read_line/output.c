@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/23 17:21:26 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/26 15:00:50 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,27 +47,60 @@ void	ft_win_change(int sig)
 	}
 }
 
+void	print_tab(char spaces, int num_col, int *x)
+{
+	int i;
+
+	i = -1;
+	while (++i < spaces)
+	{
+		if (*x == num_col - 1)
+		{
+			tputs(tgetstr("do", NULL), 0, my_outc);
+			*x = 0;
+			break;
+		}
+		else
+		{
+			ft_putchar(' ');
+			*x += 1;
+		}
+	}
+}
+
 void	ft_putstr_term(int num_col, char *s, t_cursor *pos)
 {
 	int i;
 	int x;
 
+int fd = open("/dev/ttys006", O_WRONLY);
 	i = 0;
 	x = pos->x;
+	dprintf(fd, "begin\n");
 	while (s[i])
 	{
-		ft_putchar(s[i]);
-		if (x == num_col - 1 || s[i] == '\n')
+		if (s[i] < 0)
 		{
-			if (x == num_col - 1 && s[i] != '\n')
-				tputs(tgetstr("do", NULL), 0, my_outc);
-			x = 0;
+			dprintf(fd, "put : %d | num_col: %d\n", s[i], num_col);
+			print_tab(s[i] * -1, num_col, &x);
 		}
 		else
-			x++;
+		{
+			ft_putchar(s[i]);
+			if (x == num_col - 1 || s[i] == '\n')
+			{
+				if (x == num_col - 1 && s[i] != '\n')
+					tputs(tgetstr("do", NULL), 0, my_outc);
+				x = 0;
+			}
+			else
+				x++;
+		}
 		i++;
 	}
 }
+
+
 
 /*
 ** - function print and join the enter characters set the new cursor
@@ -101,20 +134,37 @@ char	*ft_putline(char c, char *s, t_cursor *pos)
 	return (new);
 }
 
-void	print_tab(char **s, t_cursor *pos)
+void	put_tab(char **s, t_cursor *pos)
 {
-	int len;
 	int spaces;
 	int i;
 
-	len = ft_strlen(*s);
-	spaces = 8 - (len % 8);
+	//int fd = open("/dev/ttys006", O_WRONLY);
+	//dprintf(fd, "|col: %d|\n", pos->x);
+	spaces = 8 - (pos->x % 8);
+	//dprintf(fd, "|%d|\n", spaces * -1);
 	i = -1;
 	while (++i < spaces)
 	{
-		if (!(*s = ft_putline(' ', *s, pos)))
-			return ;
+		if (pos->x == pos->num_col - 1)
+		{
+			pos->end[pos->y] = pos->x;
+			tputs(tgetstr("do", NULL), 0, my_outc);
+			pos->x = 0;
+			pos->y++;
+			break;
+		}
+		else
+		{
+			pos->x++;
+			pos->end[pos->y] = pos->x;
+		}
 	}
+	pos->index++;
+	*s = ft_strjoir(*s, (char[2]){spaces * -1, '\0'}, 1);
+	ft_move_cursor_zero(*pos);
+	tputs(tgetstr("cd", NULL), 0, my_outc);
+	ft_putstr_term(pos->num_col, *s, pos);
 }
 
 /*
@@ -127,8 +177,12 @@ void	ft_print_touch_and_join(t_cursor *pos, char *buf, char **s)
 	int i;
 
 	i = 0;
+
 	if (ft_strcmp(buf, "\t") == 0)
-		*s = ft_putline('\t', *s, pos);
+	{
+		put_tab(s, pos);
+		return ;
+	}
 	while ((ft_isprint(buf[i]) || buf[i] == '\n') && i < 6)
 	{
 		if (!(*s = ft_putline(buf[i++], *s, pos)))

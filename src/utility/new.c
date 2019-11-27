@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/07 05:20:40 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/16 03:43:11 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/25 19:00:11 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,8 @@ t_intern	*new_intern(char *key, char *value)
 
     if (!(new = (t_intern*)malloc(sizeof(t_intern))))
         return (NULL);
-    new->key = (key) ? ft_strdup(key) : NULL;
-    new->value = (value) ? ft_strdup(value) : NULL;
+    new->key = ft_strdup(key);
+    new->value = ft_strdup(value);
     new->next = NULL;
     return (new);
 }

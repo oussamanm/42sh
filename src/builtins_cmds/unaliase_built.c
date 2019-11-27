@@ -43,7 +43,7 @@ int		removeal_2(t_aliaspkg *data, t_alias *curr, t_alias *prev, int flag)
 ** - remove a specific alias or all aliases;
 */
 
-int		rm_alias_by_elem_flag(char *shortcut, char *tmp, int check, int flag)
+int		rm_alias_by_elem_flag(char *shortcut, int check, int flag)
 {
 	t_aliaspkg	*data;
 	t_alias		*curr;
@@ -54,7 +54,6 @@ int		rm_alias_by_elem_flag(char *shortcut, char *tmp, int check, int flag)
 		return (0);
 	curr = data->head_ref;
 	prev = curr;
-	tmp = shortcut;
 	(!check) ? (shortcut = ft_strjoin(shortcut, "=")) : 0;
 	while (curr)
 	{
@@ -64,28 +63,10 @@ int		rm_alias_by_elem_flag(char *shortcut, char *tmp, int check, int flag)
 		prev = curr;
 		curr = curr->next;
 	}
-	(!check && tmp) ? ft_strdel(&tmp) : 0;
-	ft_strdel(&shortcut);
+	(!check) ? ft_strdel(&shortcut) : 0;
 	if (removeal_2(data, curr, prev, flag))
 		return (1);
 	return (0);
-}
-
-/*
-** - import content from file 42shrc to list
-** we can do that with this cmd : source 42shrc.
-*/
-
-void	ft_buil_updatealias(char **args)
-{
-	if (!(ft_strcmp(*args, "42shrc") == 0))
-		print_error("No such file or directory", NULL, *args, 0);
-	else
-	{
-		while (rm_alias_by_elem_flag(NULL, NULL, 1, 0))
-			;
-		importaliasfilecontent();
-	}
 }
 
 /*
@@ -125,7 +106,7 @@ int		ft_buil_unalias_1(t_tokens *st_token)
 			print_error("not found", "unalias: ", arg, 0);
 		else
 		{
-			if (!(rm_alias_by_elem_flag(arg, NULL, 0, 0)) && (flag = 1))
+			if (!(rm_alias_by_elem_flag(arg, 0, 0)) && (flag = 1))
 				print_error("not found", "unalias: ", arg, 0);
 		}
 		st_token = st_token->next;
@@ -145,17 +126,17 @@ int		ft_buil_unalias(t_tokens *st_token)
 	if (!st_token)
 	{
 		print_error("[-a] [name[=value] ... ]", NULL, "unalias: usage: ", 0);
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	else if ((ft_strcmp(st_token->value, "-a") == 0))
 	{
 		freealiaslist();
-		return (0);
+		return (EXIT_SUCCESS);
 	}
-	// else
-	// 	return (alias_invalid_option(st_token->value));
+	else if (st_token->value[0] == '-')
+		return (alias_invalid_option(st_token->value));
 	flag = ft_buil_unalias_1(st_token);
 	if (flag)
-		return (1);
-	return (0);
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/25 19:43:32 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/26 15:53:08 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,27 +223,33 @@ typedef	struct s_cmds
 	t_jobctr			*st_jobctr;
 }						t_cmds;
 
-
+typedef	struct	s_garbage
+{
+	void				*mem_ptr;
+	int					flag;
+	struct s_garbage	*next;
+	struct s_garbage	*tail;
+}				t_garbage;
 
 t_intern	*g_intern;
 char		**g_environ;
-
+t_garbage	*g_garbage;
 /*
 ** Builtins
 */
 
 void					built_exit(t_pipes *st_pipes, char ***env);
-void					built_export(char **args);
+void					built_export(t_tokens *st_tokens);
 
 /*
 ** Intern variable
 */
 
 void					add_intern_var(char *key, char *value);
-void					delete_intern_var(char *key, t_intern **head);
-char					**ft_fill_env(char **args);
+int					delete_intern_var(char *key, t_intern **head);
+char					**ft_fill_env(char **args, int len);
 char					*get_intern_value(char *key);
-t_intern				get_key_value(t_tokens *st_tokens);
+char				**get_key_value(char *arg);
 
 
 /*
@@ -386,7 +392,7 @@ void			remove_backslashs(char **args);
 int						ft_init_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_call_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_check_built(char *arg);
-
+void					built_set();
 
 /*
 ** New
@@ -409,7 +415,7 @@ void					free_list_cmds(t_cmds *st_cmds);
 void					free_tokens(t_tokens *st_tokens, int free_content);
 void		free_addresses(void *table[MAX_TAB_ADDR]);
 void		free_list_redir(t_redir *st_redir);
-
+void    delete_intern();
 /*
 ** Parse Cmds
 */
@@ -421,10 +427,9 @@ void					ft_parse_cmd(t_cmds *st_cmds);
 ** Variable parsing
 */
 
-int						ft_check_intern(t_pipes *st_pipe);
-void					ft_fill_intern(t_pipes *st_pipe);
-char					**ft_fill_env(char **args);
-char					**ft_tokens_arg_env(t_tokens *st_tokens);
+int						ft_check_tmp(char **args);
+void					ft_fill_intern(char **args);
+char					**ft_fill_env(char **args, int len);
 
 
 /*
@@ -443,8 +448,8 @@ void					procsub_close(int *fd);
 ** Alias
 */
 
-void            ft_buil_alias(t_tokens *st_tokens);
-int			ft_buil_unalias(t_tokens *st_token);
+int						ft_buil_alias(t_tokens *st_tokens);
+int						ft_buil_unalias(t_tokens *st_token);
 
 /*
 ** job
@@ -478,5 +483,10 @@ void			ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add);
 char	*ft_strsignal(int sig);
 void	ft_print_backcmd(t_job *job);
 
+
+/* gerbage collector */
+void			garbage_mem(void *mem, t_garbage **grb);
+void			free_garbage(t_garbage **head);
+void			exit_program(int fd, char *msg, t_garbage **grb);
 
 #endif

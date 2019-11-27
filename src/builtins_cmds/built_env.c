@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 11:56:36 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 17:41:14 by aboukhri         ###   ########.fr       */
+	/*   Updated: 2019/11/26 15:33:43 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,12 @@ static int		export_valid_identifier(char *arg)
 {
 	int i;
 
+	if (!arg)
+		return (0);
 	i = -1;
 	while (arg[++i])
 	{
-		if ((!ft_isalphanum(arg[i]) && arg[i] != '=' && arg[i] != '\\') || arg[i] == '.' || arg[i] == '/' || (i == 0 && arg[0] == '='))
+		if (!ft_isalphanum(arg[i]) || arg[i] == '.' || arg[i] == '/' || arg[0] == '=')
 		{
 			ft_putstr_fd("42sh: export: `", 2);
 			ft_putstr_fd(arg, 2);
@@ -74,9 +76,40 @@ static int		export_valid_identifier(char *arg)
 ** export Variable
 */
 
-void			built_export(char **args)
+void			built_export(t_tokens *st_tokens)
 {
 	int i;
+	char *temp;
+
+	st_tokens = NEXT;
+	if (!st_tokens)
+		return ;
+	temp = NULL;
+	i = 1;
+	while (st_tokens)
+	{
+		if (st_tokens->indx == i)
+		{
+			if (!export_valid_identifier(st_tokens->value))
+				return ;
+			if (NEXT && NEXT->token == T_EQUAL && NEXT->indx == i)
+			{
+				temp = ft_strjoir(st_tokens->value, "=", 0);
+				if (NEXT->next && NEXT->next->indx == i && T_IS_TXT(NEXT->next->token))
+					temp = ft_strjoir(temp, NEXT->next->value, 0);
+				ft_set_vrb(temp, &g_environ, 1);
+				i++;
+			}
+			else
+			{
+				move_to_env(st_tokens->value);
+				i++;
+			}
+		}
+		st_tokens = NEXT;
+	}
+	
+/*	int i;
 
 	i = -1;
 	while (args && args[++i])
@@ -88,9 +121,26 @@ void			built_export(char **args)
 			else
 				move_to_env(args[i]);
 		}
-	}
+	}*/
 }
 
+/*
+** display intern variables buitin
+*/
+
+void			built_set()
+{
+	t_intern *lst;
+
+	lst = g_intern;
+	while (lst)
+	{
+		ft_putstr(lst->key);
+		ft_putchar('=');
+		ft_putendl(lst->value);
+		lst = lst->next;
+	}
+}
 /*
 ** Unset Variable
 */
@@ -104,7 +154,7 @@ void			built_unset(char **args)
 	i = -1;
 	while (args[++i])
 	{
-		delete_intern_var(args[i], &g_intern);
-		ft_unset_vrb(args[i], &g_environ);
+		if (!delete_intern_var(args[i], &g_intern))
+			ft_unset_vrb(args[i], &g_environ);
 	}
 }

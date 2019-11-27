@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/26 19:58:35 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/26 01:37:30 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,11 @@ char	*ft_call_complete(t_select *select, char *s, char *buf)
 void	tab_mode(char **s)
 {
 	char buf[6];
-	g_pos.disable.c_lflag &= ~(ICANON);
-	tcsetattr(0, TCSANOW, &g_pos.disable);
+	
 	ft_bzero(buf, 6);
 	read(0, buf, 6);
-	//ft_putstr(buf);
 	ft_print_touch_and_join(&g_pos, buf, s);
-	ft_enable();
-	g_pos.disable.c_lflag |= ICANON;
-	//(void)s;
+	
 }
 
 /*
@@ -85,8 +81,8 @@ char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 		s = ft_ctrl_d(&g_pos, his, select, s);
 	else if (CTRL_T == CAST(buf))
 		tab_mode(&s);
-	//else if (CTRL_R == CAST(buf))
-	//	history_search();
+	else if (CTRL_R == CAST(buf))
+		history_search(*his, &s);
 	else if (ALT_UP == CAST(buf) || ALT_DO == CAST(buf))
 		ft_move_by_lines(&g_pos, s, buf);
 	else if (HOME == CAST(buf) || END == CAST(buf))
@@ -117,7 +113,6 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	crash = 0;
 	//  To test only uncomment this line and run [./crash.py test_file && ./42sh]
 	//crash = open("/tmp/crash.fifo", O_RDONLY);
-	 
 	select->end = 1;
 	ft_initial(p);
 	ft_bzero(buf, 6);

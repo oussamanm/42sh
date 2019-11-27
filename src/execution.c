@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_execution.c                                     :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 19:55:22 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/26 16:01:37 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	if (str_arg == NULL)
 		return (-1);
 	st_cmds = ft_new_cmds();
+	//garbage_mem(st_cmds, &g_garbage, 3);//env, history, alias
 	/// Fill args
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
@@ -198,6 +199,8 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	procsub_close(st_cmds->fd);
 	
 	/// Clear allocated space
+//	delete_garbarge(st_cmds);//??
 	free_list_cmds(st_cmds);
+
 	return (1);
 }

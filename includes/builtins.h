@@ -15,7 +15,7 @@
 
 # define TYPE_OEMSG	"invalid option\ntype: usage: type [-afptP] name [name ...]"
 # define CD_OEMSG	"invalid option\ncd: usage: cd [-L][-P] [dir]"
-# define SIZE 50
+# define SIZE 100
 
 typedef struct s_alias		t_alias;
 typedef struct s_aliaspkg	t_aliaspkg;
@@ -38,7 +38,6 @@ enum	e_flags {
 struct	s_cdpkg
 {
 	char		*path;
-	char		*tmppath;
 	struct stat	buf;
 	char		buff[1024];
 	int			flag;
@@ -71,9 +70,10 @@ struct	s_hash
 ** CALL OF BUILT
 */
 
-void					built_echo(char **arg);
 int						built_cd(char **arg, char **env);
 int						built_type(char **args, char **tmpenv);
+int						hash_table(char **args);
+void					built_echo(char **arg);
 void					built_env(char **args, char ***tmp_env);
 void					built_unset(char **args);
 
@@ -109,10 +109,9 @@ void					n_flag(char *arg, int flag);
 
 t_aliaspkg				*storeaddrstruct(t_aliaspkg *addr);
 void					pushtolist(char *string, int flag);
-int						rm_alias_by_elem_flag(char *shortcut, char *tmp,\
-int check, int flag);
+int						rm_alias_by_elem_flag(char *shortcut, int check, int flag);
 char					*handleqoutes(char *str);
-void					importaliasfilecontent();
+void					importaliasfilecontent(char *tmp);
 char					**aliasmatched(char **args);
 void					ft_buil_updatealias(char **args);
 void					printlist();
@@ -125,7 +124,6 @@ void					createaliasfile(void);
 t_hash					**store_addr_of_hash(t_hash **hash_arr, int flag);
 void					insert_hash(char *key, char *value);
 char					*lookup_hash(char *key);
-void					hash_table(char **args);
 void					erase_hash_table();
 unsigned int			hash(char *key);
 void					display_hash_table();
@@ -140,13 +138,14 @@ void					free_hash_and_alias();
 ** CD FUNCTIONS
 */
 
-void					cd_symblink(char **pwd, char **oldpwd, int *var);
-t_cdpkg					*store_addr_ofcdpkg(t_cdpkg *v);
+void					cd_symblink(char **pwd, char **oldpwd, int *var, t_cdpkg v);
 char					*dot_dot_path(char *s, char *pwd);
+char					*dot_dot_path_2(char **arr, int cnt);
 
 /*
 ** HELPER FUNCTIONS
 */
 
 int						alias_invalid_option(char *str);
+void					ft_free2d(char **p);
 #endif

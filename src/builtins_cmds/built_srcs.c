@@ -20,7 +20,7 @@ int		alias_invalid_option(char *str)
 {
 	print_error("invalid option ", "unalias: ", str, 0);
 	print_error("[-a] [name[=value] ... ]", NULL, "unalias: usage: ", 0);
-	return (1);
+	return (EXIT_FAILURE);
 }
 
 /*
@@ -50,4 +50,36 @@ char	*handleqoutes(char *str)
 	str = ft_strsub(str, j, i - j);
 	ft_strdel(&tmp);
 	return (str);
+}
+
+/*
+** - free 2d array;
+*/
+
+void	ft_free2d(char **p)
+{
+	int	i;
+
+	i = 0;
+	while (p[i])
+		ft_strdel(&p[i++]);
+	free(p);
+	p = NULL;
+}
+
+/*
+** - import content from file 42shrc to list
+** we can do that with this cmd : source 42shrc.
+*/
+
+void	ft_buil_updatealias(char **args)
+{
+	if (!(ft_strcmp(*args, "42shrc") == 0))
+		print_error("No such file or directory", NULL, *args, 0);
+	else
+	{
+		while (rm_alias_by_elem_flag(NULL, 1, 0))
+			;
+		importaliasfilecontent(NULL);
+	}
 }

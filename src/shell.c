@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 21:57:45 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/26 15:44:28 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void		initial_read_line(t_history *his, t_select **select)
 	(*select)->start = -1;
 	(*select)->end = -1;
 	(*select)->save = NULL;
-//	save_address(his, select); ????
+	save_address(&his, select); //????
+	g_garbage = NULL;
 }
 
 /*
@@ -57,7 +58,7 @@ void		init_alias_hash()
 	data = (t_aliaspkg *)ft_memalloc(sizeof(t_aliaspkg));
 	storeaddrstruct(data);
 	createaliasfile();
-	importaliasfilecontent();
+	importaliasfilecontent(NULL);
 	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
 	int i = -1;
 	while (++i < SIZE)
@@ -112,6 +113,7 @@ int			main(void)
 	// Initial Alias && HASH
 	init_alias_hash();
 	//start new session for shell
+	
 	setsid();
 	g_shellpid = getpid();
 	g_proc_sub = 0;
@@ -122,7 +124,7 @@ int			main(void)
         {
 			ft_job_processing();
 			continue ;
-		}   
+		}
         // Check incomplete syntax of Sub_shell or Quoting
         g_pos.cmd = compliting_line(g_pos.cmd, select, &g_history);
 

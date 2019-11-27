@@ -1,16 +1,70 @@
-ls <(cat )
-cat -e <(ls)
-ls $(cat)
-pwd
-echo '' | ls
-ls || pwd
-dfv $()
-
-alias cd= ls 
-unalias cd
+alias w="whoami"
+alias w="who"
+alias w="ls"
+alias w w w w w w
+unalias w
+alias w w w w w w
+alias w fd fd
+alias
+alias *
+unalias *
+alias m="mohamed"
+alias m
+m
+alias alias
+echo "ll="ls -la"" >> 42shrc
+echo "ll="ls -la"" >> 42shrc
+source 42shrc
+ll
+hash
+hash -a
+hash -j
+hash -
+hash *
+type who pwd echo
+alias who=whoami
+type who
+type -t who
+type -at who
+type -atp *
+type -atp pwd echo cd rm fdf 
+HOME=/tmp cd
+cd ../../
+cd .
+cd ~
+cd -
+cd ~/Desktop
+cd cd ..
+cd -
+cd ~/Desktop/42sh
+cd 42shrc
+cd includes
+echo -n "hello world\n"
+echo -en "\n\n\n\n\n\nnhello\v\v\v\v\v\v\v\v\v\v\v\v\ world\n\t\t\t\t"
+OLDPWD=~/Desktop cd -
 cd
 NAME=VALUE
 echo $NAME
 unset NAME
 echo $NAME
 hello
+ls
+cat < 42shrc
+cd -
+cd ~/Desktop/42sh
+hash -r
+hash -a
+type hash
+source 42shrc
+type -pta _ who ls
+cd .
+cd ~
+cd Desktop
+cd -P /tmp
+cd -L /tmp
+cd ..
+cd -
+cd ~
+cd ~/Desktop/42sh
+cd symb
+cd ../42sh

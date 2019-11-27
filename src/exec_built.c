@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 06:25:57 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/23 15:43:52 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/26 15:29:34 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ int			ft_init_built(t_pipes *st_pipes, char ***tmp_env)
 int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 {
 	int		rtn;
+	int     status;
 
 	rtn = 0;
+	status = 0;
 	if (st_pipes == NULL || st_pipes->args == NULL)
 		return (-1);
 	if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
@@ -51,24 +53,26 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	if (ft_strcmp((st_pipes->args)[0], "env") == 0 && (rtn = 1))
 		built_env(&(st_pipes->args)[1], tmp_env);
 	else if (ft_strcmp((st_pipes->args)[0], "alias") == 0 && (rtn = 1))
-		ft_buil_alias(st_pipes->st_tokens);
+		status = ft_buil_alias(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "unalias") == 0 && (rtn = 1))
-		ft_buil_unalias(st_pipes->st_tokens);
+		status = ft_buil_unalias(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "export") == 0 && (rtn = 1))
-		built_export(st_pipes->args + 1);
+		built_export(st_pipes->st_tokens);
+	else if (ft_strcmp((st_pipes->args)[0], "set") == 0 && (rtn = 1))
+		built_set();
 	else if (ft_strcmp((st_pipes->args)[0], "unset") == 0 && (rtn = 1))
 		built_unset(&(st_pipes->args)[1]);
 	else if (ft_strcmp((st_pipes->args)[0], "cd") == 0 && (rtn = 1))
-		built_cd(&(st_pipes->args)[1], *tmp_env);
+		status = built_cd(&(st_pipes->args)[1], *tmp_env);
 	else if (ft_strcmp((st_pipes->args)[0], "type") == 0 && (rtn = 1))
-		built_type(&(st_pipes->args)[1], *tmp_env);
+		status = built_type(&(st_pipes->args)[1], *tmp_env);
 	else if (ft_strcmp((st_pipes->args)[0], "hash") == 0 && (rtn = 1))
-		hash_table(&(st_pipes->args)[1]);
+		status = hash_table(&(st_pipes->args)[1]);
 	else if (ft_strcmp((st_pipes->args)[0], "history") == 0 && (rtn = 1))
 		display_his_list(g_history, 1);
 	else if (ft_strcmp((st_pipes->args)[0], "fc") == 0 && (rtn = 1))
 		fc_built(st_pipes->args + 1, &g_history);
-	else if (ft_strcmp((st_pipes->args)[0], "source") == 0 && (rtn = 1)) // ******* don't Remove this instructions *******
+	else if (ft_strcmp((st_pipes->args)[0], "source") == 0 && (rtn = 1))
 		ft_buil_updatealias(&(st_pipes->args)[1]);
 	else if (!ft_strcmp(st_pipes->args[0], "fg"))
 		ft_foreground();
@@ -100,7 +104,7 @@ int			ft_check_built(char *arg)
 		rtn++;
 	else if (!ft_strcmp(arg, "echo"))
 		rtn++;
-	else if (!ft_strcmp(arg, "export") || !ft_strcmp(arg, "unset"))
+	else if (!ft_strcmp(arg, "export") || !ft_strcmp(arg, "unset") || !ft_strcmp(arg, "set"))
 		rtn++;
 	else if (!ft_strcmp(arg, "cd") || !ft_strcmp(arg, "type"))
 		rtn++;
