@@ -6,7 +6,7 @@
 /*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:17:40 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/16 11:58:00 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/11/25 21:02:37 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		cd_options(char **arg, int j, int *flag)
 					*flag = 0 | P_flg;
 				else
 				{
-					print_error(CD_OEMSG, "42sh: cd: -", &arg[i][j], 0);
+					print_error(CD_OEMSG, "cd: -", &arg[i][j], 0);
 					return (-1);
 				}
 			}
@@ -74,7 +74,7 @@ int		cd_options(char **arg, int j, int *flag)
 }
 
 /*
-** - get home or OLDPWD path;
+** - get HOME or OLDPWD path;
 */
 
 char	*get_path(char **arg, char **tmpenv, int flag)
@@ -92,23 +92,28 @@ char	*get_path(char **arg, char **tmpenv, int flag)
 **	this func work with normal path
 */
 
-void	cd_ordlink(char **pwd, char **oldpwd, int *var)
+void	cd_ordlink(char **pwd, char **oldpwd, int *var, t_cdpkg v)
 {
-	t_cdpkg *v;
+	char *tmp;
 
-	v = store_addr_ofcdpkg(NULL);
+	tmp = v.path;
+	ft_putendl_fd("ordinary\n", 1);
 	if (*var)
 		ft_set_vrb(ft_strjoir("OLDPWD=", *pwd, 0), &g_environ, 1);
 	else if (!*var)
-		ft_set_vrb(ft_strjoir("OLDPWD=", getcwd(v->buff, 1024), 0)\
+		ft_set_vrb(ft_strjoir("OLDPWD=", getcwd(v.buff, 1024), 0)\
 		, &g_environ, 1);
-	if (ft_strncmp(v->path, "..", 2) == 0 && *var)
-		v->path = dot_dot_path(v->path, *pwd);
-	chdir(v->path);
+	if ((ft_strncmp(v.path, "..", 2) == 0) && *var)
+	{
+		v.path = dot_dot_path(v.path, *pwd);
+		// ft_strdel(&tmp);
+	}
+	ft_putendl_fd(v.path, 1);
+	chdir(v.path);
 	if (*var && !(ft_strcmp(*oldpwd, *pwd) == 0))
-		ft_set_vrb(ft_strjoir("PWD=", v->path, 0), &g_environ, 1);
+		ft_set_vrb(ft_strjoir("PWD=", v.path, 0), &g_environ, 1);
 	else
-		ft_set_vrb(ft_strjoir("PWD=", getcwd(v->buff, 1024), 0)\
+		ft_set_vrb(ft_strjoir("PWD=", getcwd(v.buff, 1024), 0)\
 		, &g_environ, 1);
 	*var = 0;
 }
@@ -126,21 +131,24 @@ int		built_cd(char **arg, char **env)
 
 	v.flag = 0;
 	ft_bzero(v.buff, sizeof(v.buff));
-	store_addr_ofcdpkg(&v);
 	if ((v.index = cd_options(arg, 0, &v.flag)) == -1)
-		return (0);
+		return (EXIT_FAILURE);
 	if (!(v.path = get_path(arg + v.index, env, v.flag)))
-		return (0);
+		return (EXIT_FAILURE);
 	if (ft_error_cd(v.path, arg + 0))
-		return (0);
+	{
+		ft_strdel(&v.path);
+		return (EXIT_FAILURE);
+	}
+// 	ft_putendl_fd(v.path,1);
 	lstat(v.path, &v.buf);
 	if ((S_ISLNK(v.buf.st_mode) && !(v.flag == P_flg)) ||\
 	(!(v.flag == P_flg) && var &&\
 	(ft_strcmp(v.path, ".") == 0 ||\
 	ft_strcmp(v.path, "./") == 0)))
-		cd_symblink(&pwd, &oldpwd, &var);
+		cd_symblink(&pwd, &oldpwd, &var, v);
 	else
-		cd_ordlink(&pwd, &oldpwd, &var);
-	ft_bzero(v.buff, sizeof(v.buff));
-	return (1);
+		cd_ordlink(&pwd, &oldpwd, &var, v);
+	ft_strdel(&v.path);
+	return (EXIT_SUCCESS);
 }

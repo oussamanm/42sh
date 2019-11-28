@@ -6,63 +6,69 @@
 /*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 12:12:01 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/16 12:48:05 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/11/25 19:51:55 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 /*
-** - store addr of cd cmd for easy free;
+** - cd helper function;
 */
 
-t_cdpkg		*store_addr_ofcdpkg(t_cdpkg *v)
+char		*dot_dot_path_2(char **arr, int cnt)
 {
-	static t_cdpkg *tmp;
+	char	*ret;
+	int		i;
 
-	if (v)
-		return ((tmp = v));
-	return (tmp);
+	ret = ft_strjoir("/", "", 0);
+	i = -1;
+	while (arr[++i] && i < cnt)
+	{
+		ret = ft_strjoir(ret, arr[i], 1);
+		if (!(i + 1 == cnt) || !arr[i + 1])
+			ret = ft_strjoir(ret, "/", 1);
+	}
+	return (ret);
 }
 
 /*
-** - cd helper functions
+** - cd helper function;
 */
 
 char		*dot_dot_path(char *s, char *pwd)
 {
 	int		cnt;
 	char	**arr;
+	char	*ret;
 	int		i;
-	int		k;
 
-	k = -1;
+	i = -1;
 	cnt = 0;
-	while (s[++k])
-		if (s[k] == '.' && s[k + 1] == '.')
+	ft_putendl_fd(pwd,1);
+	while (s[++i])
+		if (s[i] == '.' && s[i + 1] == '.')
 			cnt++;
 	arr = ft_strsplit(pwd, '/');
 	i = 0;
 	while (arr[i])
 		i++;
 	if (i <= cnt)
-		return (ft_strdup("/"));
-	cnt = (i > cnt) ? (i - cnt) : cnt;
-	arr[0] = ft_strjoir("/", arr[0], 0);
-	i = 0;
-	while (arr[++i] && i < cnt)
 	{
-		arr[i] = ft_strjoir("/", arr[i], 0);
-		arr[0] = ft_strjoir(arr[0], arr[i], 0);
+		ft_free2d(arr);
+		return (ft_strdup("/"));
 	}
-	return (arr[0]);
+	cnt = (i > cnt) ? (i - cnt) : cnt;
+	ret = dot_dot_path_2(arr, cnt);
+	ft_free2d(arr);
+	return (ret);
 }
 
 /*
 ** - correction path of cd cmd;
 */
 
-char		*correct_path(char *path, t_cdpkg *v)
+char		*correct_path(char *path, t_cdpkg v)
 {
 	char	*ret;
 	int		i;
@@ -81,7 +87,7 @@ char		*correct_path(char *path, t_cdpkg *v)
 	}
 	while (path[i] && path[i] == '.')
 		i++;
-	ret = ft_strjoin(getcwd(v->buff, 1024), path + i);
+	ret = ft_strjoir(getcwd(v.buff, 1024), path + i, 2);
 	return (ret);
 }
 
@@ -89,31 +95,29 @@ char		*correct_path(char *path, t_cdpkg *v)
 ** - this cmd work with symbolic path
 */
 
-int			cd_symlink_1(char **pwd, char **oldpwd, int *var)
+int			cd_symlink_1(char **pwd, char **oldpwd, int *var, t_cdpkg v)
 {
 	int		flag;
-	t_cdpkg *v;
+	char	*tmp;
 
-	v = store_addr_ofcdpkg(NULL);
 	flag = 0;
-	if (v->path[0] == '/' && (flag = 3))
-	{
-		chdir("/");
-		readlink(v->path, v->buff, 1024);
-		v->tmppath = ft_strdup(v->buff);
-	}
-	else if (v->path[0] == '.' && v->path[1] == '.' && v->path[2] == '/' &&\
+	tmp = NULL;
+	if (v.path[0] == '.' && v.path[1] == '.' && v.path[2] == '/' &&\
 	(flag = 1))
-		v->path = correct_path(v->path, v);
-	else if (((ft_strcmp(v->path, ".") == 0 ||\
-	ft_strcmp(v->path, "./") == 0) ||\
-	(ft_strcmp(v->path, *pwd) == 0 && ft_strcmp(v->path, *oldpwd) == 0)) &&\
+		v.path = correct_path(v.path, v);
+	else if (((ft_strcmp(v.path, ".") == 0 ||\
+	ft_strcmp(v.path, "./") == 0) ||\
+	(ft_strcmp(v.path, *pwd) == 0 && ft_strcmp(v.path, *oldpwd) == 0)) &&\
 	*var && (flag = 2))
-		v->path = ft_strdup(*pwd);
-	else if (!(ft_strcmp(*pwd, v->path) == 0 ||\
-	ft_strcmp(*oldpwd, v->path) == 0))
-		v->path = ft_strjoir(ft_strjoir(getcwd(v->buff, 1024), "/", 0)\
-		, v->path, 1);
+		v.path = ft_strdup(*pwd);
+	else if (!(ft_strcmp(*pwd, v.path) == 0 ||\
+	ft_strcmp(*oldpwd, v.path) == 0))
+	{
+		v.path = ft_strjoir(ft_strjoir(getcwd(v.buff, 1024), "/", 0)\
+		, v.path, 1);
+		ft_strdel(&tmp);
+	}
+	(flag == 1 || flag == 2) ? ft_strdel(&tmp) : 0;
 	return (flag);
 }
 
@@ -121,29 +125,30 @@ int			cd_symlink_1(char **pwd, char **oldpwd, int *var)
 ** - this cmd work with symbolic path
 */
 
-void		cd_symblink(char **pwd, char **oldpwd, int *var)
+void		cd_symblink(char **pwd, char **oldpwd, int *var, t_cdpkg v)
 {
-	t_cdpkg	*v;
 	int		flag;
 
-	v = store_addr_ofcdpkg(NULL);
-	flag = cd_symlink_1(pwd, oldpwd, var);
+	ft_putendl_fd("before symb\n", 1);
+	flag = cd_symlink_1(pwd, oldpwd, var, v);
+	ft_putendl_fd("after symb\n", 1);
 	if (flag == 1 || flag == 3)
-		ft_set_vrb(ft_strjoir("OLDPWD=", ft_get_vrb("PWD", g_environ), 0),\
-		&g_environ, 0);
-	ft_set_vrb(ft_strjoir("PWD=", v->path, 0), &g_environ, 1);
+		ft_set_vrb(ft_strjoir("OLDPWD=", ft_get_vrb("PWD", g_environ), 2),\
+		&g_environ, 1);
+	ft_set_vrb(ft_strjoir("PWD=", v.path, 0), &g_environ, 1);
 	if (!flag)
-		ft_set_vrb(ft_strjoir("OLDPWD=", getcwd(v->buff, 1024), 0),\
+		ft_set_vrb(ft_strjoir("OLDPWD=", getcwd(v.buff, 1024), 0),\
 		&g_environ, 1);
 	else if (flag == 2)
-		ft_set_vrb(ft_strjoir("OLDPWD=", ft_get_vrb("PWD", g_environ), 0),\
-		&g_environ, 0);
+		ft_set_vrb(ft_strjoir("OLDPWD=", ft_get_vrb("PWD", g_environ), 2),\
+		&g_environ, 1);
+	// here
+	chdir(v.path);
 	ft_strdel(pwd);
 	ft_strdel(oldpwd);
-	*pwd = ft_get_vrb("PWD", g_environ);
+	*pwd = ft_strdup(getcwd(v.buff, 1024));
+	// ft_putendl_fd(*pwd, 1);
 	*oldpwd = ft_get_vrb("OLDPWD", g_environ);
-	//ft_putendl(v->path);
-	//ft_putendl(v->tmppath);
-	chdir((flag == 3) ? v->tmppath : v->path);
 	*var = 1;
 }
+

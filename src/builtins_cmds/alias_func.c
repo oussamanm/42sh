@@ -102,7 +102,7 @@ void		createaliasfile(void)
 ** - import alias content file to list;
 */
 
-void		importaliasfilecontent(void)
+void		importaliasfilecontent(char *tmp)
 {
 	char	*line;
 	int		i;
@@ -121,8 +121,10 @@ void		importaliasfilecontent(void)
 			i = 0;
 			while (line[i] && line[i] != '=')
 				i++;
-			rm_alias_by_elem_flag(ft_strsub(line, 0, i), NULL, 0, 0);
+			tmp = ft_strsub(line, 0, i);
+			rm_alias_by_elem_flag(tmp, 0, 0);
 			pushtolist(line, 1);
+			ft_strdel(&tmp);
 			ft_strdel(&line);
 		}
 	}

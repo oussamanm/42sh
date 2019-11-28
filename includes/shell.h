@@ -448,8 +448,8 @@ void					procsub_close(int *fd);
 ** Alias
 */
 
-void            ft_buil_alias(t_tokens *st_tokens);
-int			ft_buil_unalias(t_tokens *st_token);
+int						ft_buil_alias(t_tokens *st_tokens);
+int						ft_buil_unalias(t_tokens *st_token);
 
 /*
 ** job

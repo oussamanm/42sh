@@ -6,7 +6,7 @@
 /*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 14:45:31 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/15 18:10:31 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/11/26 18:31:47 by test             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	**aliasmatched(char **args)
 ** Print a specific aliase for ex:cmd alias "x";
 */
 
-void	printelement(char *shortcut)
+void	printelement(char *shortcut, int *flag)
 {
 	t_aliaspkg	*data;
 	t_alias		*curr;
@@ -73,7 +73,9 @@ void	printelement(char *shortcut)
 		}
 		curr = curr->next;
 	}
+	(tmp) ? ft_strdel(&tmp) : 0;
 	print_error("not found", "alias: ", shortcut, 0);
+	*flag = 1;
 }
 
 /*
@@ -93,7 +95,7 @@ void	ft_built_alias_3(t_tokens *st_tokens, char *arg)
 	while (arg[j] && arg[j] != '=')
 		j++;
 	tmp = ft_strsub(arg, 0, j);
-	rm_alias_by_elem_flag(tmp, NULL, 0, 0);
+	rm_alias_by_elem_flag(tmp, 0, 0);
 	pushtolist(arg, 0);
 	ft_strdel(&tmp);
 	ft_strdel(&arg);
@@ -103,11 +105,13 @@ void	ft_built_alias_3(t_tokens *st_tokens, char *arg)
 ** this func call to functions to push alias in list or to print all aliases;
 */
 
-void	ft_buil_alias_2(t_tokens *st_tokens, char *arg)
+int		ft_buil_alias_2(t_tokens *st_tokens, char *arg)
 {
 	int i;
+	int flag;
 
 	i = 1;
+	flag = 0;
 	while (st_tokens)
 	{
 		if (st_tokens->indx == i)
@@ -115,30 +119,35 @@ void	ft_buil_alias_2(t_tokens *st_tokens, char *arg)
 			if (NEXT && NEXT->token == T_EQUAL && NEXT->indx == st_tokens->indx)
 				ft_built_alias_3(st_tokens, arg);
 			else
-				printelement(st_tokens->value);
+				printelement(st_tokens->value, &flag);
 			i++;
 		}
 		st_tokens = st_tokens->next;
 	}
+	if (flag)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 /*
 ** the main function of alias;
 */
 
-void	ft_buil_alias(t_tokens *st_tokens)
+int		ft_buil_alias(t_tokens *st_tokens)
 {
 	st_tokens = st_tokens->next;
 	if (!st_tokens)
 	{
 		printlist();
-		return ;
+		return (EXIT_SUCCESS);
 	}
 	if (st_tokens->value[0] == '-')
 	{
-		print_error(" invalid option", "alias: ", st_tokens->value, 0);
+		print_error("invalid option", "alias: ", st_tokens->value, 0);
 		print_error("alias [name[=value] ... ]", NULL, "alias: usage: ", 0);
-		return ;
+		return (EXIT_FAILURE);
 	}
-	ft_buil_alias_2(st_tokens, NULL);
+	if (!(ft_buil_alias_2(st_tokens, NULL)))
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
