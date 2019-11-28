@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 21:06:25 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 01:43:29 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/27 00:16:38 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,16 +125,20 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 ** Fill Intern and Temp variables
 */
 
-static void		fill_vrbs(t_pipes *st_pipes, char **args)
+static void		fill_vrbs(t_pipes *st_pipes)
 {
-	int			len;
+	char		**tmp_env;
 
-	if (!args)
+	if (!st_pipes)
 		return ;
-	if ((len = ft_check_tmp(args)) > 0)
-		st_pipes->tmp_env = ft_fill_env(args, len);
-	else
-		ft_fill_intern(args);
+	if (!ft_check_intern(st_pipes))	/// Fill intern variable
+		fill_intern(st_pipes);
+	else										/// temp environ
+	{
+		printf("aaaaaasdasdasdadasd\n");
+		tmp_env = ft_tokens_arg_env(st_pipes->st_tokens);
+		st_pipes->tmp_env = fill_env(tmp_env);
+	}
 }
 
 
@@ -175,11 +179,16 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 			ft_fill_pipe(st_logopr);
 			// Fill intern variable and tmp_env
 			if (st_logopr->st_pipes && !st_logopr->st_pipes->next && ft_check_token(st_logopr->st_pipes->st_tokens, T_EQUAL))
-				fill_vrbs(st_logopr->st_pipes, st_cmds->args);
+				fill_vrbs(st_logopr->st_pipes);
 			/// Fill args without T_EQUAL , T_SUBSHL,
 			fill_args(st_logopr->st_pipes);
+			puts("*** start");
+			ft_put_strr(st_logopr->st_pipes->args);
+			puts("*** end \n\n");
+			
 			st_logopr = st_logopr->next;
 		}
 		st_jobctr = st_jobctr->next;
 	}
 }
+

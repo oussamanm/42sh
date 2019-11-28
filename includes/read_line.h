@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/25 23:44:27 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/27 21:19:28 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void				ft_movecur_up_and_right(int up, int size);
 int					ft_get_num_of_lines(int num_col, char *s, int p);
 void				ft_set_last_position(t_cursor pos, int num_lines);
 void				ft_move_cursor_zero(t_cursor pos);
+void	ft_move_cursor_end(t_cursor pos);
 void				ft_copy_paste(char *buf, char **s, \
 t_cursor *pos, t_select *select);
 void				ft_init(int **d, int size);
@@ -164,7 +165,7 @@ char				*ft_inside_line(char *s, t_cursor *pos, char *buf);
 void				ft_enable(void);
 void				ft_disable(void);
 char				*ft_clear(t_cursor *pos, char *s, char *buf);
-
+void	print_tab(char spaces, int num_col, int *x);
 /*
 ** read for sub_shell
 */
@@ -188,7 +189,7 @@ int		history_handling(char **str_cmds);
 char    *history_content(t_history his);
 void	his_new_line(char *line, char **cmd, t_cursor *pos);
 char	*str_notnumber(char *keyword);
-void    history_search(t_history his, char **s);
+int    history_search(t_history his, char **s);
 /*history expansion */
 char    *history_expansion(t_history his, char *keyword);
 char    is_shell_delimiter(char c);

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:11:40 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/23 18:40:27 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/26 21:36:47 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	restore_history(t_history *history)
 	int		fd;
 
 	init_history(history);
-	fd = open(".42sh_history", O_RDONLY);
+	if ((fd = open(".42sh_history", O_RDONLY)) == -1)
+		return ;
 	line = NULL;
 	while (get_next_line(fd, &line) > 0)
 	{
@@ -68,7 +69,8 @@ void	save_history(t_history *history)
 		history->tail : history->head;
 	if (!(lst = history_index(lst, history->bg, history->len)))
 		return ;
-	fd = open(".42sh_history", O_WRONLY | O_APPEND | O_CREAT, 00600);
+	if ((fd = open(".42sh_history", O_WRONLY | O_APPEND | O_CREAT, 00600)) == -1)
+		return ;
 	while (lst)
 	{
 		write(fd, lst->cmd, ft_strlen(lst->cmd));

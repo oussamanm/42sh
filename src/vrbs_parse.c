@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 15:59:19 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/25 23:53:15 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/27 00:27:43 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,38 @@
 
 /// *** Check if token has T_EQUA in index
 
-int				is_tmp_intern(char *arg)
+int				ft_is_equal(int index, t_tokens *st_tokens)
 {
-	int i;
-
-	i = ft_strchrindex(arg, '=');
-	if (i > 0 && arg[i + 1])
-		return (1);
+	if (!st_tokens)
+		return (0);
+	while (st_tokens && st_tokens->indx == index)
+	{
+		if (st_tokens->token == T_EQUAL && PREV && st_tokens->indx == PREV->indx && PREV->token == T_TXT)
+			return (1);
+		st_tokens = st_tokens->next;
+	}
 	return (0);
 }
 
 /// Check if last token has cmd
-int				ft_check_tmp(char **args)
+int				ft_check_intern(t_pipes *st_pipe)
 {
-	int i;
+	t_tokens	*st_tokens;
+	int			i;
 
-	i = -1;
-	while (args && args[++i])
+	st_tokens = st_pipe->st_tokens;
+	i = st_tokens->indx - 1;
+
+	while (st_tokens)
 	{
-		if (!is_tmp_intern(args[i]))
-			return (i + 1);
+		if (st_tokens->indx == i)
+			st_tokens = st_tokens->next;
+		else
+		{
+			i++;
+			if (!ft_is_equal(i, st_tokens))
+				return (1);
+		}
 	}
 	return (0);
 }
@@ -43,21 +55,31 @@ int				ft_check_tmp(char **args)
 /*
 ** Fill inter
 */
-void			ft_fill_intern(char **args)
+void			fill_intern(t_pipes *st_pipe)
 {
-	int i;
-	char **split;
+	t_intern	var;	
+	t_tokens	*st_tokens;
+	int			i;
 
-	i = -1;
-	while (args && args[++i])
+	if (!st_pipe)
+		return ;
+	st_tokens = st_pipe->st_tokens;
+	i = st_tokens->indx - 1;
+	while (st_tokens)
 	{
-		if (is_tmp_intern(args[i]) && (split = get_key_value(args[i])))
-		{
-			add_intern_var(split[0], split[1]);
-			ft_strrdel(split);
-		}
+		if (st_tokens->indx == i)
+			st_tokens = st_tokens->next;
 		else
-			break ;
+		{
+			i++;
+			if (ft_is_equal(i, st_tokens))
+			{
+				var = get_key_value(st_tokens);
+				add_intern_var(var.key, var.value);
+			}
+			else
+				break;
+		}
 	}
 }
 
@@ -65,19 +87,47 @@ void			ft_fill_intern(char **args)
 ** Fill temp_environ with g_environ and append new variables
 */
 
-char            **ft_fill_env(char **args, int len)
+char            **fill_env(char **args)
 {
     int     i;
     char    **tmp_env;
 
-    tmp_env = ft_strr_dup(g_environ, ft_strrlen(g_environ) + len + 1);
-	i = -1;
-    while (args && args[++i])
-	{
-		if (is_tmp_intern(args[i]))
-        	ft_insert_vrb(args[i], &tmp_env, 0);
-		else
-			break ;
-	}
+    tmp_env = ft_strr_dup(g_environ, ft_strrlen(g_environ) + ft_strrlen(args));
+    i = -1;
+    if (!args || !*args)
+        return (tmp_env);
+    while (args[++i])
+        ft_insert_vrb(args[i], &tmp_env, 0);
     return (tmp_env);
+}
+
+/*
+** Fill temp_variable
+*/
+char			**ft_tokens_arg_env(t_tokens *st_tokens)
+{
+	char		**args;
+	t_tokens	*tmp_tokens;
+	t_intern	var;
+	int			i;
+	int			j;
+
+	i = st_tokens->indx - 1;
+	j = 0;
+	tmp_tokens = st_tokens;
+	while (tmp_tokens->next && (tmp_tokens = tmp_tokens->next));
+	args = ft_strr_new(tmp_tokens->indx);
+	while (st_tokens)
+	{
+		if (st_tokens->indx == i)
+			st_tokens = st_tokens->next;
+		else
+		{
+			if (!ft_is_equal(++i, st_tokens))
+				break ;
+			var = get_key_value(st_tokens);
+			args[j++] = ft_strjoir(ft_strjoir(var.key, "=", 0), var.value, 0);
+		}
+	}
+	return (args);
 }

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 06:25:57 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 15:29:34 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/28 23:35:36 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 		ft_buil_updatealias(&(st_pipes->args)[1]);
 	else if (!ft_strcmp(st_pipes->args[0], "fg"))
 		ft_foreground();
-	else if (!ft_strcmp(st_pipes->args[0], "bg"))
+	else if (!ft_strcmp(st_pipes->args[0], "zbi"))
 		ft_continue();
 	else if (!ft_strcmp(st_pipes->args[0], "jobs"))
 		ft_jobs_built();
