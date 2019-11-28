@@ -80,7 +80,7 @@ static void		ft_cmd_exec(char **args, char **env)
 	else
 	{
 		/// Check if exist in HASH_TABLE
-		//if (!(str_arg = lookup_hash(args[0])))
+		if (!(str_arg = lookup_hash(args[0])))
 			str_arg = ft_find_path(args[0], env);
 	}
 	if (str_arg != NULL)
@@ -104,14 +104,17 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	pid = 0;
 	rtn = 0;
 
-	/// Remove backslashs
-	remove_backslashs(st_pipes->args);
+	/// Remove backslashs  remove it from tokens
+	remove_backslashs(st_pipes->st_tokens);
+
+	/// Fill args without T_EQUAL , T_SUBSHL,
+		fill_args(st_pipes);
 
 	/// Check if tmp_env exist
 	environ = (st_pipes->tmp_env) ? st_pipes->tmp_env : g_environ;
 
 	/// Check if Builtens
-	if (st_pipes && ft_check_built(st_pipes->args[0]) && ft_strcmp(st_pipes->args[0], "echo"))
+	if (st_pipes && ft_check_built(st_pipes->args[0]))
 		return (ft_init_built(st_pipes, &(st_pipes->tmp_env))); ///  add return to ft_init_built
 
 	(fork_it) ? signal(SIGCHLD, SIG_DFL) : 0;
@@ -132,9 +135,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 			exit(EXIT_FAILURE);
 		/// execution
-		if (!ft_strcmp(st_pipes->args[0], "echo"))
-			built_echo(st_pipes->args);
-		else if (!ft_check_cmd(st_pipes->args[0], environ)) /// Check if cmd exist , permission
+		if (!ft_check_cmd(st_pipes->args[0], environ)) /// Check if cmd exist , permission
 			ft_cmd_exec(st_pipes->args, environ);
 		else
 			exit(EXIT_FAILURE);
@@ -145,8 +146,8 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		waitpid(pid, NULL, 0);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
 	/// insertion in hash_table in case of exit_proccess = SUCCESS
-	//if (rtn == EXIT_SUCCESS)
-	//	insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
+	if (rtn == EXIT_SUCCESS)
+		insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
 	return (rtn ? 0 : 1);
 }
 
@@ -165,7 +166,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
 	/// Check if cmd is alias and change it
-	//st_cmds->args = aliasmatched(st_cmds->args);
+	st_cmds->args = aliasmatched(st_cmds->args);
 
 	/// Apply Lexer && Check Error Syntax
 	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL || error_syntax_lexer(st_cmds->st_tokens))

@@ -27,7 +27,7 @@ t_job	*ft_inisial_job(void)
 {
 	t_job *job;
 
-	job = ft_memalloc(sizeof(t_job));
+	job = (t_job *)ft_memalloc(sizeof(t_job));
 	job->pgid = -1;
 	job->index = ft_job_index();
 	job->background = -1;

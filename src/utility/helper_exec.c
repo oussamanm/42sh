@@ -16,40 +16,30 @@
 ** Remove escaped_character from cmd befor execution
 */
 
-void			remove_backslashs(char **args)
+void			remove_backslashs(t_tokens *st_tokens)
 {
 	int		index;
 	char	*arg;
 	int		i;
-	int		quoted;
+	int		cmd_echo;
 
-	while (args && *args)
+	cmd_echo = (st_tokens && ft_strequ(st_tokens->value, "echo")) ? 1 : 0;
+	while (st_tokens)
 	{
-		arg = *args;
-		i = -1;
-		quoted = 0;
-		if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
+		if (st_tokens->token == T_TXT || (!cmd_echo && st_tokens->token == T_DQUO))
 		{
-			args++;
-			continue ;
+			arg = st_tokens->value;
+			i = -1;
+			while (arg[++i] && (index = ft_find_char(&arg[i], '\\')) != -1)
+			{
+				i += index;
+				if (st_tokens->token == T_DQUO && arg[i + 1] == '\\')
+					ft_strcpy(&arg[i],&arg[i + 1]);
+				else if (st_tokens->token == T_TXT)
+					ft_strcpy(&arg[i],&arg[i + 1]);
+			}
 		}
-		else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
-			quoted = 1;
-		while (arg[++i] && (index = ft_find_char(&arg[i], '\\')) != -1)
-		{
-			i += index;
-			if (quoted && M_SPEC_CHARC(arg[i + 1]))
-				ft_strcpy(&arg[i],&arg[i + 1]);
-			else if (!quoted)
-				ft_strcpy(&arg[i],&arg[i + 1]);
-		}
-		if (i > 1 && ft_all_quot(arg))
-		{
-			*args = ft_strnew(ft_strlen(arg) + 2);
-			(*args)[0] = '"';
-			ft_strcpy(&(*args)[1], arg);
-			(*args)[ft_strlen(*args)] = '"';
-		}
-		args++;
+		//ft_all_quot(arg))
+		st_tokens = NEXT;
 	}
 }

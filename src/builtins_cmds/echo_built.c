@@ -12,57 +12,20 @@
 
 #include "shell.h"
 
-/*
-** - check of metacharacters;
-*/
-
-int		echo_meta_char(char c)
-{
-	if (c == 'a')
-		return ('\a');
-	else if (c == 'b')
-		return ('\b');
-	else if (c == 'f')
-		return ('\f');
-	else if (c == 'n')
-		return ('\n');
-	else if (c == 'r')
-		return ('\r');
-	else if (c == 't')
-		return ('\t');
-	else if (c == 'v')
-		return ('\v');
-	else if (c == '\\')
-		return ('\\');
-	return (c);
-}
-
-/*
-** - comparison of chars;
-*/
-
-char	echo_charcmp(char c, char *str)
-{
-	while (*str)
-	{
-		if (*str++ == c)
-			return (echo_meta_char(c));
-	}
-	return (c);
-}
 
 /*
 ** this functinon serve option echo -n;
 */
 
-void	n_flag(char *arg, int flag)
+void	n_flag(char *arg)
 {
-	(flag) ? ft_putstr(arg) : 0;
+	if (!arg)
+		return ;
 	if (arg[ft_strlen(arg) - 1] != '\n')
 	{
-		ft_putstr_fd("\033[7m", 1);
-		ft_putchar_fd('%', 1);
-		ft_putstr_fd("\033[m\n", 1);
+		ft_putstr("\033[7m");
+		ft_putchar('%');
+		ft_putstr("\033[m\n");
 	}
 }
 
@@ -70,7 +33,7 @@ void	n_flag(char *arg, int flag)
 ** this functinon serve option echo -e;
 */
 
-void	e_interpretation(char *arg, int flag)
+void	e_interpretation(char *arg)
 {
 	char	tmp;
 	char	*temp;
@@ -79,51 +42,77 @@ void	e_interpretation(char *arg, int flag)
 	i = -1;
 	while (arg[++i])
 	{
-		if (arg[i] == '\\')
+		if (arg[i] != '\\')
+			continue ;
+		tmp = arg[i + 1];
+		arg[i + 1] = echo_charcmp(arg[i + 1], "abcfnrtv\\");
+		if (tmp != arg[i + 1] || tmp == '\\')
+			arg[i] = -1;
+		else if (arg[i + 1] == 'c')
 		{
-			tmp = arg[i + 1];
-			arg[i + 1] = echo_charcmp(arg[i + 1], "abcfnrtv\\");
-			if (tmp != arg[i + 1] || tmp == '\\')
-				arg[i] = -1;
-			else if (arg[i + 1] == 'c')
-			{
-				temp = arg;
-				arg = ft_strsub(arg, 0, i);
-				ft_strdel(&temp);
-				break ;
-			}
+			temp = arg;
+			arg = ft_strsub(arg, 0, i);
+			ft_strdel(&temp);
+			break ;
 		}
 	}
-	e_interpretation_1(arg, flag);
+	e_interpretation_1(arg);
 }
+
+/*
+** - verified options of echo;
+*/
+
+int		echo_options(t_tokens **st_tokens)
+{
+	int i;
+	int flag;
+	char *arg;
+
+	i = 0;
+	flag = 0;
+	while (*st_tokens)
+	{
+		arg = (*st_tokens)->value;
+		if (arg && arg[0] == '-' && (M_CHECK(arg[1], 'n', 'e') || arg[1] == 'E'))
+			echo_options_(&arg[1], &flag);
+		else
+			break ;
+		*st_tokens = (*st_tokens)->next;
+	}
+	return (flag);
+}
+
 
 /*
 **	Builten echo
 */
 
-void	built_echo(char **arg)
+void	built_echo(t_tokens *st_tokens)
 {
 	int		flag;
-	int		i;
+	int		index;
 
-	flag = 0;
-	arg += (arg) ? 1 : 0;
-	if (!((i = echo_options(arg, &flag)) == -1))
-		arg += i;
-	while (*(arg))
+	if (!st_tokens)
+		return ;
+	st_tokens = NEXT;
+	flag = echo_options(&st_tokens);
+	index = (st_tokens) ? st_tokens->indx : 1;
+	while (st_tokens)
 	{
-		if (flag == n_flg && !*(arg + 1))
-			n_flag(*arg, 1);
-		else if (flag == e_flg)
-			e_interpretation(*arg, 0);
-		else if (flag == (e_flg | n_flg))
-			e_interpretation(*arg, (!*(arg + 1)) ? 1 : 0);
+		if (M_CHECK(flag, (e_flg | n_flg), e_flg) && M_CHECK(st_tokens->token, T_QUO, T_DQUO))
+			e_interpretation(st_tokens->value);
 		else
-			ft_putstr_fd(*arg, 1);
-		(*(arg + 1) != NULL) ? ft_putchar_fd(' ', 1) : 0;
-		arg++;
+			ft_putstr(st_tokens->value);
+		if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !NEXT)
+			n_flag(st_tokens->value);
+		if (NEXT && NEXT->indx != index)
+		{
+			ft_putchar_fd(' ', 1);
+			index = NEXT->indx;
+		}
+		st_tokens = NEXT;
 	}
-	if (flag != n_flg && (flag != ((e_flg | n_flg))))
+	if (flag != n_flg && flag != ((e_flg | n_flg)))
 		ft_putchar_fd('\n', 1);
-	exit(EXIT_SUCCESS);
 }

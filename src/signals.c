@@ -61,9 +61,6 @@ void	call_signal(void)
 	signal(SIGCHLD, ft_catch_sigchild);
 }
 
-void sig_han(int sig){
-	dprintf(2, "%d SIG RECIEVED", sig);
-}
 
 void	ft_signal_default(void)
 {

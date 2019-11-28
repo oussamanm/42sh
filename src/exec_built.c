@@ -20,17 +20,18 @@ int			ft_init_built(t_pipes *st_pipes, char ***tmp_env)
 {
 	int i;
 	int tmp[3];
+	int status;
 
 	i = -1;
 	while (++i < 3)
 		tmp[i] = dup(i);
-	ft_call_built(st_pipes, tmp_env);
+	status = ft_call_built(st_pipes, tmp_env);
 	i = -1;
 	while (++i < 3)
 		if (dup2(tmp[i], i) == -1 || close(tmp[i]) == -1)
 			ft_putendl_fd("Error in dup or close \n", 2);
 	// should add return status of builtens
-	return (1);
+	return (status);
 }
 
 /*
@@ -52,12 +53,14 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 		built_exit();
 	if (ft_strcmp((st_pipes->args)[0], "env") == 0 && (rtn = 1))
 		built_env(&(st_pipes->args)[1], tmp_env);
+	else if (!ft_strcmp(st_pipes->args[0], "echo"))
+/**/	built_echo(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "alias") == 0 && (rtn = 1))
-		status = ft_buil_alias(st_pipes->st_tokens);
+/**/	status = ft_buil_alias(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "unalias") == 0 && (rtn = 1))
-		status = ft_buil_unalias(st_pipes->st_tokens);
+/**/	status = ft_buil_unalias(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "export") == 0 && (rtn = 1))
-		built_export(st_pipes->st_tokens);
+/**/	built_export(st_pipes->st_tokens);
 	else if (ft_strcmp((st_pipes->args)[0], "set") == 0 && (rtn = 1))
 		built_set();
 	else if (ft_strcmp((st_pipes->args)[0], "unset") == 0 && (rtn = 1))

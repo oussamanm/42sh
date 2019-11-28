@@ -73,15 +73,12 @@ void	ft_putstr_term(int num_col, char *s, t_cursor *pos)
 	int i;
 	int x;
 
-int fd = open("/dev/ttys006", O_WRONLY);
 	i = 0;
 	x = pos->x;
-	dprintf(fd, "begin\n");
 	while (s[i])
 	{
 		if (s[i] < 0)
 		{
-			dprintf(fd, "put : %d | num_col: %d\n", s[i], num_col);
 			print_tab(s[i] * -1, num_col, &x);
 		}
 		else

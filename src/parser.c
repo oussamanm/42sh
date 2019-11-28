@@ -142,7 +142,7 @@ static void		fill_vrbs(t_pipes *st_pipes, char **args)
 ** Fill args with token except T_EQUAL
 */
 
-static void		fill_args(t_pipes *st_pipes)
+void		fill_args(t_pipes *st_pipes)
 {
 	if (!st_pipes)
 		return ;
@@ -176,8 +176,8 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 			// Fill intern variable and tmp_env
 			if (st_logopr->st_pipes && !st_logopr->st_pipes->next && ft_check_token(st_logopr->st_pipes->st_tokens, T_EQUAL))
 				fill_vrbs(st_logopr->st_pipes, st_cmds->args);
-			/// Fill args without T_EQUAL , T_SUBSHL,
-			fill_args(st_logopr->st_pipes);
+			/// T_EQUAL from tokens
+			//remove tokens with token == T_EQUAL isarg
 			st_logopr = st_logopr->next;
 		}
 		st_jobctr = st_jobctr->next;

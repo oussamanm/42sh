@@ -148,6 +148,7 @@ typedef struct			s_job
 	char				p;
 	struct termios		term_child;
 }						t_job;
+
 t_list					*jobs;
 pid_t					g_shellpid;
 int						g_proc_sub;
@@ -248,6 +249,9 @@ t_garbage	*g_garbage;
 
 void		built_exit();
 void					built_export(t_tokens *st_tokens);
+void					built_echo(t_tokens *st_tokens);
+int						echo_options(t_tokens **st_tokens);
+
 
 /*
 ** Intern variable
@@ -390,7 +394,7 @@ int						ft_cmds_setup(char *str_arg, int bl_subsh);
 int						ft_cmd_fork(int fork_it, t_pipes *st_pipes);
 int				ft_check_cmd(char *cmd, char **environ);
 void		logical_ops(t_logopr *st_logopr);
-void			remove_backslashs(char **args);
+void			remove_backslashs(t_tokens *st_tokens);
 
 
 /*
@@ -430,6 +434,7 @@ void		free_list_pipe(t_pipes *st_pipes);
 */
 
 void					ft_parse_cmd(t_cmds *st_cmds);
+void		fill_args(t_pipes *st_pipes);
 
 
 /*

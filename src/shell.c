@@ -19,7 +19,7 @@
 
 void		initial_read_line(t_history *his, t_select **select)
 {
-	//restore_history(his);
+	restore_history(his);
 	*select = (t_select *)ft_memalloc(sizeof(t_select));
 	(*select)->start = -1;
 	(*select)->end = -1;
@@ -111,7 +111,7 @@ int			main(void)
 	init_fc_built();
 	//his->path = ft_get_vrb("PATH", g_environ);?????
 	// Initial Alias && HASH
-	//init_alias_hash();
+	init_alias_hash();
 	//start new session for shell
 	
 	setsid();
@@ -129,8 +129,8 @@ int			main(void)
         g_pos.cmd = completing_line(g_pos.cmd, select, &g_history);
 
         // add command to history	
-	  	// if (!history_handling(&g_pos.cmd))
-		// 	continue ;
+	  	if (!history_handling(&g_pos.cmd))
+			continue ;
 
 		// Execution
 		(!(g_pos.exit)) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
