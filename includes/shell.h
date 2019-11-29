@@ -435,6 +435,7 @@ void		free_list_pipe(t_pipes *st_pipes);
 
 void					ft_parse_cmd(t_cmds *st_cmds);
 void		fill_args(t_pipes *st_pipes);
+void	correct_tokens(t_pipes *st_pipes);
 
 
 /*

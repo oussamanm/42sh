@@ -13,6 +13,28 @@
 #include "shell.h"
 
 /*
+** Correct token by remove all arg of T_EQUAL : variable = value
+*/
+
+void	correct_tokens(t_pipes *st_pipes)
+{
+	t_tokens	*st_tokens;
+	t_tokens	*head;
+
+	if (!st_pipes || !st_pipes->st_tokens)
+		return ;
+	st_tokens = st_pipes->st_tokens;
+	head = st_tokens;
+	while (st_tokens && (st_tokens->is_arg == T_EQUAL || st_tokens->token == T_EQUAL))
+	{
+		st_tokens = NEXT;
+		free(head);
+		head = st_tokens;
+	}
+	st_pipes->st_tokens = head;
+}
+
+/*
 ** Remove escaped_character from cmd befor execution
 */
 

@@ -85,7 +85,6 @@ t_intern	get_key_value(t_tokens *st_tokens)
 	else
 		var.value = "";
 	NEXT->is_arg = T_EQUAL;
-    printf("value = %s and %s\n",st_tokens->value,NEXT->next->value);
 	return (var);
 }
 

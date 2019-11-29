@@ -120,7 +120,6 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 	}
 }
 
-
 /*
 ** Fill Intern and Temp variables
 */
@@ -180,10 +179,9 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 			if (st_logopr->st_pipes && !st_logopr->st_pipes->next && ft_check_token(st_logopr->st_pipes->st_tokens, T_EQUAL))
 				fill_vrbs(st_logopr->st_pipes);
 			/// T_EQUAL from tokens
-			//remove tokens with token == T_EQUAL isarg
+			correct_tokens(st_logopr->st_pipes);
 			st_logopr = st_logopr->next;
 		}
 		st_jobctr = st_jobctr->next;
 	}
 }
-
