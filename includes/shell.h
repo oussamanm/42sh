@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 15:53:08 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/27 00:02:26 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,11 +259,11 @@ int						echo_options(t_tokens **st_tokens);
 
 void					add_intern_var(char *key, char *value);
 int					delete_intern_var(char *key, t_intern **head);
-char					**ft_fill_env(char **args, int len);
 char					*get_intern_value(char *key);
-char				**get_key_value(char *arg);
-
-
+t_intern	get_key_value(t_tokens *st_tokens);
+char            **fill_env(char **args);
+int				ft_check_intern(t_pipes *st_pipe);
+char			**ft_tokens_arg_env(t_tokens *st_tokens);
 /*
 **Variable
 */
@@ -442,8 +442,8 @@ void		fill_args(t_pipes *st_pipes);
 */
 
 int						ft_check_tmp(char **args);
-void					ft_fill_intern(char **args);
-char					**ft_fill_env(char **args, int len);
+void			fill_intern(t_pipes *st_pipe);
+
 
 
 /*
@@ -468,7 +468,6 @@ int						ft_buil_unalias(t_tokens *st_token);
 /*
 ** job
 */
-
 void					ft_foreground(void);
 void					ft_continue(void);
 void					ft_catch_sigchild(int sig);

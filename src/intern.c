@@ -71,18 +71,22 @@ int		delete_intern_var(char *key, t_intern **head)
     return (1);
 }
 
-char	**get_key_value(char *arg)
+t_intern	get_key_value(t_tokens *st_tokens)
 {
-    int i;
-    char **split;
+	t_intern	var;
 
-    if (!(split = (char**)malloc(sizeof(char*) * 3)))
-        return (NULL);
-    i = ft_strchrindex(arg, '=');
-    split[0] = ft_strsub(arg, 0, i - 1);
-    split[1] = ft_strsub(arg, i, ft_strlen(arg) - i);
-    split[2] = NULL;
-	return (split);
+	var.key = st_tokens->value;
+	st_tokens->is_arg = T_EQUAL;
+	if (NEXT && NEXT->next && NEXT->next->indx == st_tokens->indx)
+	{
+		NEXT->next->is_arg = T_EQUAL;
+		var.value = NEXT->next->value;
+	}
+	else
+		var.value = "";
+	NEXT->is_arg = T_EQUAL;
+    printf("value = %s and %s\n",st_tokens->value,NEXT->next->value);
+	return (var);
 }
 
 char		*get_intern_value(char *key)

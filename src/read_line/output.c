@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/26 15:00:50 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/29 00:10:59 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,28 @@ void	ft_putstr_term(int num_col, char *s, t_cursor *pos)
 	int i;
 	int x;
 
+	//int fd = open("/dev/ttys004", O_WRONLY);
 	i = 0;
 	x = pos->x;
+	// /dprintf(fd,"--- start with x= %d \n",x);
 	while (s[i])
 	{
 		if (s[i] < 0)
 		{
+			//dprintf(fd, "put : %d | num_col: %d\n", s[i], num_col);
 			print_tab(s[i] * -1, num_col, &x);
 		}
 		else
 		{
 			ft_putchar(s[i]);
+			//dprintf(fd," x= %d , num_col - 1  = %d and \n",x,num_col - 1 );
 			if (x == num_col - 1 || s[i] == '\n')
 			{
 				if (x == num_col - 1 && s[i] != '\n')
+				{
+			//		dprintf(fd, "down\n");
 					tputs(tgetstr("do", NULL), 0, my_outc);
+				}
 				x = 0;
 			}
 			else
