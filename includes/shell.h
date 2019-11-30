@@ -394,7 +394,7 @@ void					remove_backslashs(t_tokens *st_tokens);
 ** Exec builtens
 */
 
-int						ft_init_built(t_pipes *st_pipes, char ***tmp_env);
+int						ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env);
 int						ft_call_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_check_built(char *arg);
 void					built_set();
