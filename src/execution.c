@@ -74,7 +74,7 @@ static void		ft_cmd_exec(char **args, char **env)
 
 	str_arg = NULL;
 	if (!args || !args[0])
-		exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	if (ft_check_char(args[0], '/'))
 		str_arg = args[0];
 	else
