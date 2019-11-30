@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/27 00:02:26 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/29 18:23:58 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ t_garbage	*g_garbage;
 */
 
 void					built_exit(t_pipes *st_pipes, char ***env);
-void					built_export(t_tokens *st_tokens);
+int						built_export(t_tokens *st_tokens);
 
 /*
 ** Intern variable
@@ -392,7 +392,7 @@ void			remove_backslashs(char **args);
 int						ft_init_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_call_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_check_built(char *arg);
-void					built_set();
+void					built_set(char **args);
 
 /*
 ** New

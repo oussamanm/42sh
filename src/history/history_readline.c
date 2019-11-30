@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:09:57 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/28 00:32:49 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 18:35:22 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,12 @@ void			history_readline(t_history *history, int key, char **cmd)
 		ft_strdel(&line);
 		last = history->tail;
 		pos = history->len + 1;
-		if (key == 0)
-			return ;
 	}
 	if (key == UP && pos > 1 && last)
 	{
-		if ((--pos) == history->len)
-		{
-			ft_strdel(&line);
-			line = ft_strdup(*cmd);
-		}
+		pos--;
+		(pos == history->len) ? ft_strdel(&line) : NULL;
+		(pos == history->len) ? line = ft_strdup(*cmd) : NULL;
 		last = his_cmd_pos(last, pos, cmd, history->len);
 	}
 	else if (key == DO && pos <= history->len)

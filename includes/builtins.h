@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:18:15 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/25 19:53:34 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/11/29 18:01:47 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int						built_type(char **args, char **tmpenv);
 int						hash_table(char **args);
 void					built_echo(char **arg);
 void					built_env(char **args, char ***tmp_env);
-void					built_unset(char **args);
+int					built_unset(char **args);
 
 /*
 ** - COMMAND (TYPE) FUNCTIONS

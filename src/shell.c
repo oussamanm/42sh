@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 15:44:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 19:12:52 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,9 @@ int			main(void)
 		}
         // Check incomplete syntax of Sub_shell or Quoting
         g_pos.cmd = compliting_line(g_pos.cmd, select, &g_history);
-
         // add command to history	
 	  	if (!history_handling(&g_pos.cmd))
 			continue ;
-
 		// Execution
 		(!(g_pos.exit)) ? ft_multi_cmd(ft_strdup(g_pos.cmd), 0) : NULL;
 		ft_job_processing();

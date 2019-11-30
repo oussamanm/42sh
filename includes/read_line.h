@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/27 21:19:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 19:12:45 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ void				ft_enable(void);
 void				ft_disable(void);
 char				*ft_clear(t_cursor *pos, char *s, char *buf);
 void	print_tab(char spaces, int num_col, int *x);
+void	num_lines_tab(char spaces, t_cursor *pos, int *x, int *num_lines);
 /*
 ** read for sub_shell
 */
@@ -189,7 +190,10 @@ int		history_handling(char **str_cmds);
 char    *history_content(t_history his);
 void	his_new_line(char *line, char **cmd, t_cursor *pos);
 char	*str_notnumber(char *keyword);
-int    history_search(t_history his, char **s);
+void	history_search(t_history his, char **s, char buf[6]);
+void	his_putstr_term(int num_col, char *s, char *search, t_cursor *pos);
+void	his_cursor_do(int nbr);
+void	his_cursor_up(t_cursor pos, int nbr);
 /*history expansion */
 char    *history_expansion(t_history his, char *keyword);
 char    is_shell_delimiter(char c);
@@ -199,14 +203,13 @@ char *get_delimiter(char *keyword);
 char    *read_fc();
 void    write_fc(char *content);
 void    fc_flag_l(t_history history, char *flags, char **args);
-void    fc_built(char **args, t_history *history);
+void    fc_built(char **args, t_history *history, char **tmp);
 void    fc_flag_l(t_history history, char *flags, char **args);
 void    fc_flag_s(t_history *his, char *arg);
 void    fc_flag_e(t_history his, char **args);
 t_info  *fc_value(t_history his, char *keyword);
 int    read_fc_flags(char **args, char **fl, char *err);
-int		fc_exec_flag(char *str_cmds);
-void    fc_usage(char c);
+void    fc_usage(char c, char *msg);
 int    fc_edit(t_history his, char *editor, char *flags, char **args);
 void    exec_fc();
 void init_fc_built();

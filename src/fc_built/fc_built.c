@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/26 01:36:54 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 15:22:13 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void			exec_fc(void)
 	ft_strrdel(cmds);
 }
 
-void			fc_built(char **args, t_history *history)
+void			fc_built(char **args, t_history *history, char **env)
 {
 	char	*flags;
 	char	c;
@@ -98,18 +98,15 @@ void			fc_built(char **args, t_history *history)
 		return ;
 	if ((pos = read_fc_flags(args, &flags, &c)) == -1)
 	{
-		fc_usage(c);
+		fc_usage(c, "invalid option");
 		return ;
 	}
-	if (!flags || (!ft_strchr(flags, 's') && !ft_strchr(flags, 'e')))
-		fc_edit(*history, ft_get_vrb("FCEDIT", g_environ), flags, args);
-	else
-	{
-		if (ft_strchr(flags, 's'))
-			fc_flag_s(history, *(args + pos));
-		else if (ft_strchr(flags, 'e'))
-			fc_flag_e(*history, args + pos);
-		else if (ft_strchr(flags, 'l'))
-			fc_flag_l(*history, flags, args + pos);
-	}
+	if (ft_strchr(flags, 's'))
+		fc_flag_s(history, *(args + pos));
+	else if (ft_strchr(flags, 'e'))
+		fc_flag_e(*history, args + pos);
+	else if (ft_strchr(flags, 'l'))
+		fc_flag_l(*history, flags, args + pos);
+	else if (!flags || ft_strchr(flags, 'r'))
+		fc_edit(*history, ft_get_vrb("FCEDIT", env), flags, args);
 }

@@ -6,42 +6,59 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:51:04 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/28 14:10:21 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 16:34:52 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "read_line.h"
 
-void	ft_move_cursor_zero(t_cursor pos)//??
+void	ft_move_cursor_zero(t_cursor pos)
 {	
 	ft_move_left(pos.x);
 	while (pos.y-- > 0)
 		tputs(tgetstr("up", NULL), 0, my_outc);
 	ft_move_right(pos.p);
-	tputs(tgoto(tgetstr("ch", NULL), 0, 8), 0, my_outc);//??
+	tputs(tgoto(tgetstr("ch", NULL), 0, 8), 0, my_outc);
 }
 
 
+void	num_lines_tab(char spaces, t_cursor *pos, int *x, int *num_lines)
+{
+	int i;
 
+	i = -1;
+	if (*x + spaces > pos->num_col - 1)
+	{
+		pos->end[*num_lines] = *x;
+		*x = 0;
+		*num_lines += 1;
+	}
+	else
+		*x += spaces;
+}
 int		ft_get_num_of_lines(int num_col, char *s, int p)
 {
 	int num_lines;
 	int i;
 	int j;
 
-	i = 0;
+	i = -1;
 	num_lines = 1;
 	j = p;
-	while (s[i])
+	while (s[++i])
 	{
-		if (j == num_col - 1 || s[i] == '\n')
-		{
-			num_lines++;
-			j = 0;
-		}
+		if (s[i] < 0)
+			num_lines_tab(s[i] * -1, &g_pos, &j, &num_lines);
 		else
-			j++;
-		i++;
+		{
+			if (j == num_col - 1 || s[i] == '\n')
+			{
+				num_lines++;
+				j = 0;
+			}
+			else
+				j++;
+		}
 	}
 	return (num_lines);
 }
@@ -58,14 +75,19 @@ void	ft_get_end_of_line_pos(t_cursor *pos, char *s, int num_col)
 	ft_init_size_end_line(pos);
 	while (s[++i])
 	{
-		if (x == num_col - 1 || s[i] == '\n')
-		{
-			pos->end[y] = x;
-			x = 0;
-			y++;
-		}
+		if (s[i] < 0)
+			num_lines_tab(s[i] * -1, pos, &x, &y);
 		else
-			x++;
+		{
+			if (x == num_col - 1 || s[i] == '\n')
+			{
+				pos->end[y] = x;
+				x = 0;
+				y++;
+			}
+			else
+				x++;
+		}
 	}
 	pos->end[y] = x;
 }

@@ -52,7 +52,7 @@ void			built_env(char **args, char ***tmp_env)
 	}
 }
 
-static int		export_valid_identifier(char *arg)
+static int		valid_identifier(char *arg, char *cmd)
 {
 	int i;
 
@@ -64,7 +64,7 @@ static int		export_valid_identifier(char *arg)
 		if (!ft_isalphanum(arg[i]) || arg[i] == '.' || arg[i] == '/' || arg[0] == '=')
 		{
 			ft_putstr_fd("42sh: export: `", 2);
-			ft_putstr_fd(arg, 2);
+			ft_putstr_fd(cmd, 2);
 			ft_putendl_fd("': not a valid identifier", 2);
 			return (0);
 		}
@@ -76,22 +76,22 @@ static int		export_valid_identifier(char *arg)
 ** export Variable
 */
 
-void			built_export(t_tokens *st_tokens)
+int			built_export(t_tokens *st_tokens)
 {
 	int i;
 	char *temp;
 
 	st_tokens = NEXT;
 	if (!st_tokens)
-		return ;
+		return (EXIT_SUCCESS);
 	temp = NULL;
 	i = 1;
 	while (st_tokens)
 	{
 		if (st_tokens->indx == i)
 		{
-			if (!export_valid_identifier(st_tokens->value))
-				return ;
+			if (!valid_identifier(st_tokens->value, "export"))
+				return (EXIT_FAILURE);
 			if (NEXT && NEXT->token == T_EQUAL && NEXT->indx == i)
 			{
 				temp = ft_strjoir(st_tokens->value, "=", 0);
@@ -108,30 +108,19 @@ void			built_export(t_tokens *st_tokens)
 		}
 		st_tokens = NEXT;
 	}
-	
-/*	int i;
-
-	i = -1;
-	while (args && args[++i])
-	{
-		if (export_valid_identifier(args[i]))
-		{
-			if (ft_strchr(args[i], '='))
-				ft_set_vrb(args[i], &g_environ, 0);
-			else
-				move_to_env(args[i]);
-		}
-	}*/
+	return (EXIT_SUCCESS);
 }
 
 /*
 ** display intern variables buitin
 */
 
-void			built_set()
+void			built_set(char **args)
 {
 	t_intern *lst;
 
+	if (args && *args)
+		return ;
 	lst = g_intern;
 	while (lst)
 	{
@@ -145,16 +134,19 @@ void			built_set()
 ** Unset Variable
 */
 
-void			built_unset(char **args)
+int			built_unset(char **args)
 {
 	int i;
 
 	if (!args || !*args)
-		return ;
+		return (EXIT_SUCCESS);
 	i = -1;
 	while (args[++i])
 	{
+		if (!valid_identifier(args[i], "unset"))
+			return (EXIT_FAILURE);
 		if (!delete_intern_var(args[i], &g_intern))
 			ft_unset_vrb(args[i], &g_environ);
 	}
+	return (EXIT_SUCCESS);
 }

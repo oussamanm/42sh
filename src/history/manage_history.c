@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:16:21 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/23 18:47:42 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 19:06:48 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_info	*history_value(t_history his, char *keyword)
 	int		index;
 	t_info	*ptr;
 
+	if (!keyword)
+		return (NULL);
 	if (ft_isdigit(keyword[0]))
 	{
 		index = ft_atoi(keyword);
@@ -41,6 +43,8 @@ t_info	*history_keyword(t_info *history, char *keyword, int dir)
 	t_info	*lst;
 	int		len;
 
+	if (!keyword)
+		return (NULL);
 	len = ft_strlen(keyword);
 	lst = history;
 	while (lst)

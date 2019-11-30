@@ -6,29 +6,11 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 10:51:28 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/23 18:34:01 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 17:51:21 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/read_line.h"
-
-int				history_handling(char **str_cmds)
-{
-
-	if (ft_strchr(*str_cmds, '!'))
-	{
-		if (!(*str_cmds = history_expansion(g_history, *str_cmds)))
-			return (0);
-		ft_putendl(*str_cmds);
-	}
-	if (!fc_exec_flag(*str_cmds))
-	{
-		insert_history(&g_history, *str_cmds);
-		history_readline(&g_history, 0, str_cmds);
-	}
-	return (1);
-}
-
 /*
 **	get history content from head to tail given
 **	and return it in a format of string

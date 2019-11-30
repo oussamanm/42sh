@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 21:06:25 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/27 00:16:38 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/29 17:21:22 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ static void		fill_vrbs(t_pipes *st_pipes)
 		fill_intern(st_pipes);
 	else										/// temp environ
 	{
-		printf("aaaaaasdasdasdadasd\n");
 		tmp_env = ft_tokens_arg_env(st_pipes->st_tokens);
 		st_pipes->tmp_env = fill_env(tmp_env);
 	}
@@ -182,10 +181,6 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 				fill_vrbs(st_logopr->st_pipes);
 			/// Fill args without T_EQUAL , T_SUBSHL,
 			fill_args(st_logopr->st_pipes);
-			puts("*** start");
-			ft_put_strr(st_logopr->st_pipes->args);
-			puts("*** end \n\n");
-			
 			st_logopr = st_logopr->next;
 		}
 		st_jobctr = st_jobctr->next;

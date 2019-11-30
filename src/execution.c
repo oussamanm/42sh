@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 16:01:37 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 01:41:01 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 
 	/// Check if Builtens
 	if (st_pipes && ft_check_built(st_pipes->args[0]) && ft_strcmp(st_pipes->args[0], "echo"))
-		return (ft_init_built(st_pipes, &(st_pipes->tmp_env))); ///  add return to ft_init_built
+		return (ft_init_built(st_pipes, &environ)); ///  add return to ft_init_built
 
 	(fork_it) ? signal(SIGCHLD, SIG_DFL) : 0;
 	

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   moving_cursor.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:51:04 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/07/07 14:51:06 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/11/30 16:41:28 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,8 @@ void	ft_right_touch(t_cursor *pos, int size)
 
 void	ft_see_touch(char *buf, char *s, t_cursor *pos)
 {
-	int		size;
+	int		sp;
 
-	size = ft_strlen(s);
 	if (LE == CAST(buf) && pos->x == 0)
 	{
 		pos->index--;
@@ -69,9 +68,37 @@ void	ft_see_touch(char *buf, char *s, t_cursor *pos)
 	else if (LE == CAST(buf) && pos->index != 0)
 	{
 		pos->index--;
-		pos->x--;
-		tputs(tgetstr("le", NULL), 0, my_outc);
+		sp = s[pos->index] * -1;
+		if (sp * -1 < 0)
+		{ 
+			ft_move_left(sp);
+			pos->x -= sp;
+		}
+		else
+		{
+			pos->x--;
+			tputs(tgetstr("le", NULL), 0, my_outc);
+		}
 	}
 	else if (RI == CAST(buf))
-		ft_right_touch(pos, size);
+	{
+		sp = s[pos->index] * -1;
+		if (sp * -1 < 0)
+		{
+			pos->index++;
+			if (pos->x + sp > pos->num_col - 1)
+			{
+				pos->x = 0;
+				pos->y++;
+				tputs(tgetstr("do", NULL), 0, my_outc);
+			}
+			else
+			{
+				pos->x += sp;
+				ft_move_right(sp);
+			}
+		}
+		else
+			ft_right_touch(pos, ft_strlen(s));
+	}
 }
