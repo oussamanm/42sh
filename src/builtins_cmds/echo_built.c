@@ -46,7 +46,8 @@ int		e_interpretation(char *arg, int token)
 			continue ;
 		tmp = arg[i + 1];
 		arg[i + 1] = echo_charcmp(arg[i + 1], "abcfnrtv\\");
-		if ((tmp != arg[i + 1] && M_CHECK(token, T_DQUO, T_QUO)) || tmp == '\\')
+		if ((tmp != arg[i + 1] && M_CHECK(token, T_DQUO, T_QUO)) ||
+			tmp == '\\')
 		{
 			arg[i] = -1;
 			i++;

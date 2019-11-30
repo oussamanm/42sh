@@ -92,6 +92,7 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 
 static void	initial_shell(t_select	**select)
 {
+	g_pos.cmd = NULL;
 	call_signal();
 	initial_read_line(&g_history, select);
 	init_fc_built();

@@ -28,6 +28,9 @@
 # include <sys/stat.h>
 # include <curses.h>
 
+# define ERR_SYN		"syntax error near unexpected token"
+
+
 # define BUFF_SIZE 10
 # define UNUSED(x) (void)(x)
 # define DEBUG(msg) puts(msg)
@@ -42,14 +45,9 @@
 # define M_ESCAPED(x) (x == '\\')
 # define M_BRACKET(x) (x == '(' || x == ')')
 # define STR(x)  (*str)[x]
-# define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
-# define OPER_TOKEN(t) (t == T_JOBCTR || t == T_PIPE || t == T_LOGOPR_OR || t == T_LOGOPR_AND)
 # define MATCH_CLOSED(x, y)(((x == 'q' || x == 'Q') && x == y) || (x == 'S' && y == 's'))
 # define PROMPT 3
 # define PATHSIZE 1024
-# define TOKEN st_tokens->token
-# define PREV st_tokens->prev
-# define NEXT st_tokens->next
 # define ERRO_IN_AND -12
 # define IDENTIFIER(x) (x=="?"||x=="-"||x=="@"||x=="%"||x=="~"||x==":"||x==".")
 
@@ -72,8 +70,6 @@
 /*
 **Tokens
 */
-#define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
-#define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
 
 # define T_TXT			0
 # define T_QUO			1
@@ -101,6 +97,14 @@
 # define T_RED_APP_M	-169
 # define T_RED_HER_D	-120
 # define T_RED_BOTH		-122
+
+# define TOKEN st_tokens->token
+# define PREV st_tokens->prev
+# define NEXT st_tokens->next
+# define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
+# define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
+# define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
+# define OPER_TOKEN(t) (t == T_JOBCTR || t == T_PIPE || t == T_LOGOPR_OR || t == T_LOGOPR_AND)
 
 
 /*
@@ -367,7 +371,7 @@ void					ft_redi_both(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_app(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_in(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_out(t_redir *st_redir, t_tokens *st_tokens);
-int						ft_error_redir(t_tokens *st_tokens);
+int						error_redir(t_tokens *st_tokens);
 void					ft_init_redi(t_redir *st_redir, int type_red);
 void					ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_apply_hered(t_redir *st_redi);
@@ -390,7 +394,7 @@ void					remove_backslashs(t_tokens *st_tokens);
 ** Exec builtens
 */
 
-int						ft_init_built(t_pipes *st_pipes, char ***tmp_env);
+int						ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env);
 int						ft_call_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_check_built(char *arg);
 void					built_set();

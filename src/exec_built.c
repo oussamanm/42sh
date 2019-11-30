@@ -16,23 +16,41 @@
 ** initail builtens : duplicate STD_* , Call builtens , Resete STD_*
 */
 
-int			ft_init_built(t_pipes *st_pipes, char ***tmp_env)
+int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 {
 	int i;
 	int tmp[3];
 	int status;
+	int	pid;
 
 	i = -1;
+	fork_it = (fork_it && st_pipes->bl_jobctr == 1) ? 1 : 0;
+	pid = 0;
 	/// Save a copy of default_FileDisc
-	while (++i < 3)
-		if ((tmp[i] = dup(i)) == -1)
-			ft_putendl_fd("Error in dup, in builtens \n", 2);
-	status = ft_call_built(st_pipes, tmp_env);
+	if (!fork_it)
+		while (++i < 3)
+			if ((tmp[i] = dup(i)) == -1)
+				ft_putendl_fd("Error in dup, in builtens \n", 2);
+	/// Fork in case of built and job_contr (no pipe)
+	if (fork_it && ((pid = fork()) == -1))
+		ft_err_exit("Error in Fork new process \n");
+	if (pid == 0)
+	{
+		status = ft_call_built(st_pipes, tmp_env);
+		if (fork_it)
+			exit((status) ? EXIT_SUCCESS : EXIT_FAILURE);
+	}
+	else /// apply job_controle
+	{
+		puts("------- apply job_controle in builtens ------\n");
+		waitpid(pid, &status, 0);
+	}
 	i = -1;
 	/// restore default_FileDisc
-	while (++i < 3)
-		if (dup2(tmp[i], i) == -1 || close(tmp[i]) == -1)
-			ft_putendl_fd("Error in dup or close in builtens \n", 2);
+	if (!fork_it)
+		while (++i < 3)
+			if (dup2(tmp[i], i) == -1 || close(tmp[i]) == -1)
+				ft_putendl_fd("Error in dup or close in builtens \n", 2);
 	return (status);
 }
 

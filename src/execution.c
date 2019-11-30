@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 16:01:37 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 18:05:52 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void		ft_cmd_exec(char **args, char **env)
 
 	str_arg = NULL;
 	if (!args || !args[0])
-		exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	if (ft_check_char(args[0], '/'))
 		str_arg = args[0];
 	else
@@ -117,13 +117,15 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 
 	/// Check if Builtens
 	if (st_pipes->args && ft_check_built(*(st_pipes->args)))
-		return (ft_init_built(st_pipes, &(st_pipes->tmp_env)) ? 0 : 1);
+		return (ft_init_built(st_pipes, fork_it, &(st_pipes->tmp_env)) ? 0 : 1);
 
 	(fork_it) ? signal(SIGCHLD, SIG_DFL) : 0;
 	
 	/// Fork - Child
 	if (fork_it && (pid = fork()) == -1)
 		ft_err_exit("Error in Fork new process \n");
+	if (pid > 0 && fork_it && !g_proc_sub)
+		ft_manage_jobs(pid, st_pipes, &rtn);
 	if (pid == 0)
 	{
 		ft_signal_default();
@@ -142,8 +144,6 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		else
 			exit(EXIT_FAILURE);
 	}
-	else if (fork_it && !g_proc_sub)
-		ft_manage_jobs(pid, st_pipes, &rtn);
 	else if (fork_it && g_proc_sub && !st_pipes->bl_jobctr)
 		waitpid(pid, &rtn, 0);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
