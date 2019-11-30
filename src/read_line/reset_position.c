@@ -21,8 +21,6 @@ void	ft_move_cursor_zero(t_cursor pos)//??
 	tputs(tgoto(tgetstr("ch", NULL), 0, pos.p), 0, my_outc);//??
 }
 
-
-
 int		ft_get_num_of_lines(int num_col, char *s, int p)
 {
 	int num_lines;
