@@ -52,7 +52,7 @@ void	ft_init_size_end_line(t_cursor *pos)
 		if (pos->end)
 			free(pos->end);
 		n = pos->num_lines + MAX_LINES;
-		if (!(pos->end = ft_memalloc(sizeof(int) * n)))
+		if (!(pos->end = (int *)ft_memalloc(sizeof(int) * n)))
 			return ;
 		ft_init(&pos->end, pos->num_lines + MAX_LINES);
 	}
@@ -74,7 +74,7 @@ void	ft_initial(int p)
 	g_pos.y = 0;
 	g_pos.exit = 0;
 	g_pos.num_col = ft_get_size_windz();
-	if (!(g_pos.end = ft_memalloc(sizeof(int) * MAX_LINES)))
+	if (!(g_pos.end = (int *)ft_memalloc(sizeof(int) * MAX_LINES)))
 		return ;
 	ft_init(&g_pos.end, MAX_LINES);
 }
