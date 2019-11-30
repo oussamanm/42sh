@@ -24,28 +24,21 @@ void		initial_read_line(t_history *his, t_select **select)
 	(*select)->start = -1;
 	(*select)->end = -1;
 	(*select)->save = NULL;
-	save_address(&his, select); //????
+	save_address(select); //????
 }
 
 /*
 ** Save adresse t_history to t_select , to easy access from other function
 */
 
-void		save_address(t_history **his, t_select **select)//??
+void		save_address(t_select **select)//??
 {
-	static t_history	*p_his;
 	static t_select		*p_select;
 
-	if (*his != NULL && *select != NULL)
-	{
-		p_his = *his;
+	if (*select != NULL)
 		p_select = *select;
-	}
 	else
-	{
-		*his = p_his;
 		*select = p_select;
-	}
 }
 
 /*

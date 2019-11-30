@@ -16,23 +16,12 @@
 ** - function get save of the selection line when we tap COPY or CUT key.
 */
 
-void	ft_get_save(char *s, t_select *select)
+void	ft_get_save(char *s, t_select *select, t_cursor *pos)
 {
-	int start;
-	int end;
-
-	if (select->end >= select->start)
-	{
-		start = select->start;
-		end = select->end;
-	}
-	else
-	{
-		start = select->end;
-		end = select->start;
-	}
+	select->start = pos->index;
+	select->end = ft_strlen(s) - 1;
 	ft_strdel(&select->save);
-	select->save = ft_strsub(s, start, end - start + 1);
+	select->save = ft_strsub(s, pos->index, ft_strlen(s));
 }
 
 /*
@@ -115,9 +104,9 @@ void	ft_copy_paste(char *buf, char **s, t_cursor *pos, t_select *select)
 	int len_sa;
 
 	len = ft_strlen(*s);
-	if (COPY == CAST(buf) && select->start != -1 && select->end != -1)
-		ft_get_save(*s, select);
-	if (CUT == CAST(buf) && select->start != -1 && select->end != -1)
+	if (COPY == CAST(buf))
+		ft_get_save(*s, select, pos);
+	if (CUT == CAST(buf))
 		ft_cut(pos, select, s);
 	if (PASTE == CAST(buf) && select->save)
 	{
@@ -131,6 +120,4 @@ void	ft_copy_paste(char *buf, char **s, t_cursor *pos, t_select *select)
 		pos->num_lines = ft_get_num_of_lines(pos->num_col, *s, pos->p);
 		ft_set_last_position(*pos, pos->num_lines);
 	}
-	select->start = -1;
-	select->end = -1;
 }

@@ -44,8 +44,6 @@ OBJS = error_handler.o\
 	read_line/moving_cursor.o\
 	read_line/output.o\
 	read_line/reset_position.o\
-	read_line/selection1.o\
-	read_line/selection2.o\
 	read_line/termcap.o\
 	read_line/clear_readline.o\
 	read_line/heredoc_line.o\

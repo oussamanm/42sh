@@ -18,7 +18,7 @@ void	ft_move_cursor_zero(t_cursor pos)//??
 	while (pos.y-- > 0)
 		tputs(tgetstr("up", NULL), 0, my_outc);
 	ft_move_right(pos.p);
-	tputs(tgoto(tgetstr("ch", NULL), 0, 8), 0, my_outc);//??
+	tputs(tgoto(tgetstr("ch", NULL), 0, pos.p), 0, my_outc);//??
 }
 
 
