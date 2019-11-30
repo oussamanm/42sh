@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+
+
 /*
 ** Check errors Syntax (Lexer) resirection, pipe, job_ctr, || , &&
 */
@@ -27,13 +29,13 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 		return (1);
 	while (st_tokens)
 	{
-		if (st_tokens->token == T_PIPE && (!PREV || !NEXT || NEXT->token == T_PIPE))
+		if (st_tokens->token == T_PIPE && (!PREV || !NEXT || OPER_TOKEN(NEXT->token)))
 			ft_strcpy(tmp, "|");
-		else if (st_tokens->token == T_JOBCTR && (!PREV || (NEXT && NEXT->token == T_JOBCTR)))
+		else if (st_tokens->token == T_JOBCTR && (!PREV || (NEXT && OPER_TOKEN(NEXT->token))))
 			ft_strcpy(tmp, "&");
-		else if (st_tokens->token == T_LOGOPR_AND && (!PREV || !NEXT || NEXT->token == T_LOGOPR_AND))
+		else if (st_tokens->token == T_LOGOPR_AND && (!PREV || !NEXT || OPER_TOKEN(NEXT->token)))
 			ft_strcpy(tmp, "&&");
-		else if (st_tokens->token == T_LOGOPR_OR && (!PREV || !NEXT || NEXT->token == T_LOGOPR_OR))
+		else if (st_tokens->token == T_LOGOPR_OR && (!PREV || !NEXT || OPER_TOKEN(NEXT->token)))
 			ft_strcpy(tmp, "||");
 		else if (M_BRACKET(st_tokens->token))
 			tmp[0] = st_tokens->token;
