@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 16:01:37 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 18:05:52 by mfetoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,8 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	/// Fork - Child
 	if (fork_it && (pid = fork()) == -1)
 		ft_err_exit("Error in Fork new process \n");
+	if (pid > 0 && fork_it && !g_proc_sub)
+		ft_manage_jobs(pid, st_pipes, &rtn);
 	if (pid == 0)
 	{
 		ft_signal_default();
@@ -142,8 +144,6 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		else
 			exit(EXIT_FAILURE);
 	}
-	else if (fork_it && !g_proc_sub)
-		ft_manage_jobs(pid, st_pipes, &rtn);
 	else if (fork_it && g_proc_sub && !st_pipes->bl_jobctr)
 		waitpid(pid, &rtn, 0);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;

@@ -19,7 +19,7 @@
 void	his_new_line(char *line, char **cmd, t_cursor *pos)
 {
 	ft_move_cursor_zero(*pos);
-	pos->x = 8;
+	pos->x = pos->p;
 	pos->y = 0;
 	tputs(tgetstr("cd", NULL), 0, my_outc);
 	ft_putstr_term(pos->num_col, line, pos);

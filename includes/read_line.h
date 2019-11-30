@@ -155,11 +155,11 @@ void				ft_move_right(int n);
 char				*ft_ctrl_d(t_cursor *pos, \
 t_history *his, t_select *select, char *s);
 char				*ft_auto_completion(t_cursor *pos, char *s);
-void				save_address(t_history **his, t_select **select);
+void				save_address(t_select **select);
 void				ft_clear_readline_struct(void);
 char				*ft_read_heredoc(char *eol);
 void				ft_cut(t_cursor *pos, t_select *select, char **s);
-void				ft_get_save(char *s, t_select *select);
+void				ft_get_save(char *s, t_select *select, t_cursor *pos);
 void				ft_init_size_end_line(t_cursor *pos);
 char				*ft_inside_line(char *s, t_cursor *pos, char *buf);
 void				ft_enable(void);

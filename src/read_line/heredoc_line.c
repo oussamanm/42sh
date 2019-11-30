@@ -15,20 +15,19 @@
 char	*ft_read_heredoc(char *eol)
 {
 	char		*line;
-	t_history	*his;
 	t_select	*select;
 
-	his = NULL;
 	select = NULL;
 	line = NULL;
-	save_address(&his, &select);
+	save_address(&select);
 	while (1337)
 	{
 		ft_putstr("heredoc> ");
-		ft_read_line(his, select, 9);
+		ft_read_line(&g_history, select, 9);
 		if (ft_strequ(g_pos.cmd, eol) || (g_pos.cmd != NULL && g_pos.cmd[0] == -1) || g_pos.exit)
 		{
 			ft_strdel(&g_pos.cmd);
+			history_readline(&g_history, 0, NULL);
 			break ;
 		}
 		(!line) ? (line = ft_strnew(0)) : 0;
