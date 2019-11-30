@@ -16,7 +16,7 @@
 ** Correct token by remove all arg of T_EQUAL : variable = value
 */
 
-void	correct_tokens(t_pipes *st_pipes)
+void		correct_tokens(t_pipes *st_pipes)
 {
 	t_tokens	*st_tokens;
 	t_tokens	*head;
@@ -38,24 +38,22 @@ void	correct_tokens(t_pipes *st_pipes)
 ** Remove escaped_character from cmd befor execution
 */
 
-void			remove_backslashs(t_tokens *st_tokens)
+void		remove_backslashs(t_tokens *st_tokens)
 {
 	int		index;
 	char	*arg;
 	int		i;
-	int		cmd_echo;
 
-	cmd_echo = (st_tokens && ft_strequ(st_tokens->value, "echo")) ? 1 : 0;
 	while (st_tokens)
 	{
-		if (st_tokens->token == T_TXT || (!cmd_echo && st_tokens->token == T_DQUO))
+		if (st_tokens->token == T_TXT || st_tokens->token == T_DQUO)
 		{
 			arg = st_tokens->value;
 			i = -1;
 			while (arg[++i] && (index = ft_find_char(&arg[i], '\\')) != -1)
 			{
 				i += index;
-				if (st_tokens->token == T_DQUO && arg[i + 1] == '\\')
+				if (st_tokens->token == T_DQUO && M_SPEC_CHARC(arg[i + 1]))
 					ft_strcpy(&arg[i],&arg[i + 1]);
 				else if (st_tokens->token == T_TXT)
 					ft_strcpy(&arg[i],&arg[i + 1]);
@@ -63,5 +61,34 @@ void			remove_backslashs(t_tokens *st_tokens)
 		}
 		//ft_all_quot(arg))
 		st_tokens = NEXT;
+	}
+}
+
+/*
+**	Function set is_arg variable in list tokens : (is argument of T_EQUAL)
+*/
+
+void		set_isarg(t_pipes *st_pipes)
+{
+	t_tokens *st_tokens;
+	int i;
+
+	st_tokens = st_pipes->st_tokens;
+	i = st_tokens->indx - 1;
+	while (st_tokens)
+	{
+		if (st_tokens->indx == i)
+			st_tokens = st_tokens->next;
+		else
+		{
+			i++;
+			if (!ft_is_equal(i, st_tokens))
+				break;
+			if (!valid_identifier(st_tokens->value))
+				return ;
+			st_tokens->is_arg = T_EQUAL;
+			if (NEXT && NEXT->next && NEXT->next->indx == st_tokens->indx)
+				NEXT->next->is_arg = T_EQUAL;
+		}
 	}
 }

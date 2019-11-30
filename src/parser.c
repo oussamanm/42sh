@@ -124,37 +124,30 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 ** Fill Intern and Temp variables
 */
 
-static void		fill_vrbs(t_pipes *st_pipes)
+static void		handle_variable(t_pipes *st_pipes)
 {
 	char		**tmp_env;
 
-	if (!st_pipes)
+	if (!st_pipes || !ft_check_token(st_pipes->st_tokens, T_EQUAL))
 		return ;
-	if (!ft_check_intern(st_pipes))	/// Fill intern variable
+	if (!st_pipes->next && ft_check_intern(st_pipes))	/// Fill intern variable
 		fill_intern(st_pipes);
-	else										/// temp environ
-	{
-		tmp_env = ft_tokens_arg_env(st_pipes->st_tokens);
-		st_pipes->tmp_env = fill_env(tmp_env);
-	}
-}
-
-
-/*
-** Fill args with token except T_EQUAL
-*/
-
-void		fill_args(t_pipes *st_pipes)
-{
-	if (!st_pipes)
-		return ;
 	while (st_pipes)
 	{
-		/// add condition in function below : ! T_EQUAL
-		ft_tokens_args(st_pipes);
+		if (!ft_check_intern(st_pipes))
+		{
+			tmp_env = ft_tokens_arg_env(st_pipes->st_tokens);
+			st_pipes->tmp_env = fill_env(tmp_env);
+		}
+		set_isarg(st_pipes);
+		correct_tokens(st_pipes);
 		st_pipes = st_pipes->next;
 	}
 }
+
+/*
+** Parse command and fill lists: job_ctr, logi_opr, pipes
+*/
 
 void            ft_parse_cmd(t_cmds *st_cmds)
 {
@@ -176,10 +169,7 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 			/// Fill Pipe
 			ft_fill_pipe(st_logopr);
 			// Fill intern variable and tmp_env
-			if (st_logopr->st_pipes && !st_logopr->st_pipes->next && ft_check_token(st_logopr->st_pipes->st_tokens, T_EQUAL))
-				fill_vrbs(st_logopr->st_pipes);
-			/// T_EQUAL from tokens
-			correct_tokens(st_logopr->st_pipes);
+				handle_variable(st_logopr->st_pipes);
 			st_logopr = st_logopr->next;
 		}
 		st_jobctr = st_jobctr->next;

@@ -128,25 +128,26 @@ int			ft_error_redir(t_tokens *st_tokens)
 	while (st_tokens != NULL)
 	{
 		/// check  case redirection followed by NULL(except <&- , >&-) or a token (not TXT and not sub_shell)
-		if (st_tokens->token < 0 &&
-			((!NEXT && !M_CHECK(st_tokens->token, T_RED_IN_B, T_RED_OUT_B)) || (!T_IS_TXT(NEXT->token) && !T_IS_SUBSHELL(NEXT->token))))
+		if (TOKEN < 0 &&
+			((!NEXT && !M_CHECK(TOKEN, T_RED_IN_B, T_RED_OUT_B)) || (!T_IS_TXT(NEXT->token) && !T_IS_SUBSHELL(NEXT->token))))
 			ft_strcpy(msg_err, "syntax error near unexpected token");
 		/// check token not exist
-		else if (st_tokens->token < T_RED_APP_A)
+		else if (TOKEN < T_RED_APP_A)
 			ft_strcpy(msg_err, "syntax error near unexpected token");
 		/// check unexpected & in redirection
-		else if (st_tokens->token < 0 && ft_check_char(st_tokens->value, ERRO_IN_AND))
+		else if (TOKEN < 0 && ft_check_char(st_tokens->value, ERRO_IN_AND))
 			ft_strcpy(msg_err, "syntax error near unexpected token `&'");
 		/// check  case "echo hello 3>&file" => "ambiguous redirect"
-		else if (st_tokens->token == T_RED_OUT_A && NEXT && PREV &&
-			!ft_isalldigit(NEXT->value) && PREV->indx == st_tokens->indx &&
+		else if (TOKEN == T_RED_OUT_A && *(st_tokens->value) == '>' &&
+			NEXT && !ft_isalldigit(NEXT->value) &&
+			PREV && PREV->indx == st_tokens->indx &&
 			ft_isalldigit(PREV->value) && ft_atoi(PREV->value) != 1)
 			ft_strcpy(msg_err, "ambiguous redirect");
 		/// check case [word] of redirection <&[word] not all_digits 
-		else if (st_tokens->token == T_RED_IN_A && NEXT && !ft_isalldigit((temp = get_value_next(NEXT))))
+		else if (TOKEN == T_RED_IN_A && NEXT && !ft_isalldigit((temp = get_value_next(NEXT))))
 			ft_strcpy(msg_err, "ambiguous redirect ");
 		/// check case token >< 
-		else if (st_tokens->token <= -122 && !ft_strncmp(st_tokens->value, "><", 2))
+		else if (TOKEN <= -122 && !ft_strncmp(st_tokens->value, "><", 2))
 			ft_strcpy(msg_err, "syntax error near unexpected token `<'");
 		st_tokens = NEXT;
 	}

@@ -25,7 +25,6 @@ void		initial_read_line(t_history *his, t_select **select)
 	(*select)->end = -1;
 	(*select)->save = NULL;
 	save_address(&his, select); //????
-	g_garbage = NULL;
 }
 
 /*
@@ -49,6 +48,9 @@ void		save_address(t_history **his, t_select **select)//??
 	}
 }
 
+/*
+** Initiale alias and hash_table
+*/
 
 void		init_alias_hash()
 {
@@ -64,7 +66,6 @@ void		init_alias_hash()
 	while (++i < SIZE)
 		hash_arr[i] =  NULL;
 	store_addr_of_hash(hash_arr, 1);
-	// printf("addr of hash_arr %p\n", hash_arr);
 }
 
 /*
@@ -96,6 +97,19 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	ft_strdel(&str_cmds);
 }
 
+static void	initial_shell(t_select	**select)
+{
+	call_signal();
+	initial_read_line(&g_history, select);
+	init_fc_built();
+	// Initial Alias && HASH
+	init_alias_hash();
+	//start new session for shell
+	setsid();
+	g_shellpid = getpid();
+	g_proc_sub = 0;
+}
+
 int			main(void)
 {
 	extern char	**environ;
@@ -104,19 +118,12 @@ int			main(void)
 	g_intern = NULL;
 	if (ft_set_termcap() == -1)
 		ft_err_exit("ERROR in setting Termcap parameters\n");
-	initial_read_line(&g_history, &select);
-	call_signal();
+
 	// Duplicate environ vrbs
 	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
-	init_fc_built();
-	//his->path = ft_get_vrb("PATH", g_environ);?????
-	// Initial Alias && HASH
-	init_alias_hash();
-	//start new session for shell
-	
-	setsid();
-	g_shellpid = getpid();
-	g_proc_sub = 0;
+
+	// Initail shell (signal, session, read_line, hash_table, alias, fc_built)
+	initial_shell(&select);
 	while (1337)
     {
         ft_putstr("\033[0;32m42sh $>\033[0m ");

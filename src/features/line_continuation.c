@@ -13,84 +13,8 @@
 #include "shell.h"
 #include "read_line.h"
 
-int			get_last_flag(int *maps)
-{
-	int i;
 
-	if (!maps)
-		return (0);
-	i = 0;
-	while (maps[i])
-		i++;
-	return (i - 1);
-}
-
-int			find_flag(int *maps, int flag)
-{
-	int index;
-
-	index = 0;
-	if (!maps || !*maps)
-		return (-1);
-	while (*maps)
-	{
-		if (*maps == flag)
-			return (index);
-		index++;
-		maps++;
-	}
-	return (-1);
-}
-
-void		clean_maps(int *maps)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	if (!maps || find_flag(maps, -1) == -1)
-		return ;
-	while (maps[i])
-	{
-		if (maps[i] != -1)
-			maps[j++] = maps[i];
-		i++;
-	}
-	ft_bzero(&maps[j], 1000 - j - 1);
-}
-
-int			count_key(int *maps, int key)
-{
-	int i;
-
-	i = 0;
-	if (!maps || !*maps)
-		return (0);
-	while (maps[i] == key)
-		i++;
-	return (i);
-}
-
-int			closed_dquot(int *maps)
-{
-	int i;
-
-	if (!maps)
-		return (-1);
-	i = 0;
-	while (maps[i])
-	{
-		if (maps[i] == 'S')
-			return (-1);
-		else if (maps[i] == 'Q')
-			return (i);
-		i++;
-	}
-	return (0);
-}
-
-int			correct_maps(int *maps)
+static int		correct_maps(int *maps)
 {
 	int i;
 	int quoted[2];
@@ -128,7 +52,7 @@ int			correct_maps(int *maps)
 	return (rtn);
 }
 
-void		fill_maps(char *str_cmd, int *maps, int j)
+static void		fill_maps(char *str_cmd, int *maps, int j)
 {
 	int i;
 	int quoted;
@@ -160,7 +84,7 @@ void		fill_maps(char *str_cmd, int *maps, int j)
 		clean_maps(maps);
 }
 
-static void	ft_read_subsh(char **line, t_select *select, t_history *his)
+static void		ft_read_subsh(char **line, t_select *select, t_history *his)
 {
 	if (!line || !(*line))
 		return ;
@@ -174,7 +98,7 @@ static void	ft_read_subsh(char **line, t_select *select, t_history *his)
 	}
 }
 
-static void	ft_read_quote(char **line, int quote,
+static void		ft_read_quote(char **line, int quote,
 	t_select *select, t_history *his)
 {
 	if (!line || !(*line))
@@ -197,7 +121,7 @@ static void	ft_read_quote(char **line, int quote,
 	}
 }
 
-char		*completing_line(char *str_cmds, t_select *select, t_history *his)
+char			*completing_line(char *str_cmds, t_select *select, t_history *his)
 {
 	int		*maps;
 	int		i;

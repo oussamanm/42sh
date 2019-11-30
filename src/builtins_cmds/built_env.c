@@ -52,7 +52,16 @@ void			built_env(char **args, char ***tmp_env)
 	}
 }
 
-static int		export_valid_identifier(char *arg)
+void	puterr_identifier(char *arg, char *cmd)
+{
+	ft_putstr_fd("42sh: ", 2);//export: `", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": `", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putendl_fd("': not a valid identifier", 2);
+}
+
+int		valid_identifier(char *arg)
 {
 	int i;
 
@@ -62,12 +71,7 @@ static int		export_valid_identifier(char *arg)
 	while (arg[++i])
 	{
 		if (!ft_isalphanum(arg[i]) || arg[i] == '.' || arg[i] == '/' || arg[0] == '=')
-		{
-			ft_putstr_fd("42sh: export: `", 2);
-			ft_putstr_fd(arg, 2);
-			ft_putendl_fd("': not a valid identifier", 2);
 			return (0);
-		}
 	}
 	return (1);
 }
@@ -90,8 +94,11 @@ void			built_export(t_tokens *st_tokens)
 	{
 		if (st_tokens->indx == i)
 		{
-			if (!export_valid_identifier(st_tokens->value))
+			if (!valid_identifier(st_tokens->value))
+			{
+				puterr_identifier(st_tokens->value, "export");
 				return ;
+			}
 			if (NEXT && NEXT->token == T_EQUAL && NEXT->indx == i)
 			{
 				temp = ft_strjoir(st_tokens->value, "=", 0);
@@ -108,20 +115,6 @@ void			built_export(t_tokens *st_tokens)
 		}
 		st_tokens = NEXT;
 	}
-	
-/*	int i;
-
-	i = -1;
-	while (args && args[++i])
-	{
-		if (export_valid_identifier(args[i]))
-		{
-			if (ft_strchr(args[i], '='))
-				ft_set_vrb(args[i], &g_environ, 0);
-			else
-				move_to_env(args[i]);
-		}
-	}*/
 }
 
 /*

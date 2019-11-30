@@ -76,15 +76,10 @@ t_intern	get_key_value(t_tokens *st_tokens)
 	t_intern	var;
 
 	var.key = st_tokens->value;
-	st_tokens->is_arg = T_EQUAL;
 	if (NEXT && NEXT->next && NEXT->next->indx == st_tokens->indx)
-	{
-		NEXT->next->is_arg = T_EQUAL;
 		var.value = NEXT->next->value;
-	}
 	else
 		var.value = "";
-	NEXT->is_arg = T_EQUAL;
 	return (var);
 }
 

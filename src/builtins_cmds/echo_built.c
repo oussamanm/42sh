@@ -33,7 +33,7 @@ void	n_flag(char *arg)
 ** this functinon serve option echo -e;
 */
 
-void	e_interpretation(char *arg)
+int		e_interpretation(char *arg, int token)
 {
 	char	tmp;
 	char	*temp;
@@ -46,8 +46,11 @@ void	e_interpretation(char *arg)
 			continue ;
 		tmp = arg[i + 1];
 		arg[i + 1] = echo_charcmp(arg[i + 1], "abcfnrtv\\");
-		if (tmp != arg[i + 1] || tmp == '\\')
+		if ((tmp != arg[i + 1] && M_CHECK(token, T_DQUO, T_QUO)) || tmp == '\\')
+		{
 			arg[i] = -1;
+			i++;
+		}
 		else if (arg[i + 1] == 'c')
 		{
 			temp = arg;
@@ -56,18 +59,18 @@ void	e_interpretation(char *arg)
 			break ;
 		}
 	}
-	e_interpretation_1(arg);
+	return ((e_interpretation_1(arg) == -1) ? 1 : 0);
 }
 
 /*
-** - verified options of echo;
+** verified options of echo;
 */
 
 int		echo_options(t_tokens **st_tokens)
 {
-	int i;
-	int flag;
-	char *arg;
+	int		i;
+	int		flag;
+	char	*arg;
 
 	i = 0;
 	flag = 0;
@@ -88,31 +91,30 @@ int		echo_options(t_tokens **st_tokens)
 **	Builten echo
 */
 
-void	built_echo(t_tokens *st_tokens)
+int		built_echo(t_tokens *st_tokens)
 {
 	int		flag;
 	int		index;
+	int		status;
 
-	if (!st_tokens)
-		return ;
-	st_tokens = NEXT;
+	if (!st_tokens || !(st_tokens = NEXT))
+		return (0);
+	status = 0;
 	flag = echo_options(&st_tokens);
 	index = (st_tokens) ? st_tokens->indx : 1;
-	while (st_tokens)
+	while (st_tokens && !status)
 	{
-		if (M_CHECK(flag, (e_flg | n_flg), e_flg) && M_CHECK(st_tokens->token, T_QUO, T_DQUO))
-			e_interpretation(st_tokens->value);
+		if (M_CHECK(flag, (e_flg | n_flg), e_flg))
+			status = e_interpretation(st_tokens->value, st_tokens->token);
 		else
-			ft_putstr(st_tokens->value);
+			status = (ft_putstr(st_tokens->value) == -1) ? 1 : 0;
 		if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !NEXT)
 			n_flag(st_tokens->value);
-		if (NEXT && NEXT->indx != index)
-		{
+		if (NEXT && NEXT->indx != index && (index = NEXT->indx))
 			ft_putchar_fd(' ', 1);
-			index = NEXT->indx;
-		}
 		st_tokens = NEXT;
 	}
 	if (flag != n_flg && flag != ((e_flg | n_flg)))
 		ft_putchar_fd('\n', 1);
+	return (status);
 }

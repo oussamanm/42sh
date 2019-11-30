@@ -39,16 +39,20 @@ int		echo_options_(char *arg, int *flag)
 	return (1);
 }
 
-void	e_interpretation_1(char *arg)
+int		e_interpretation_1(char *arg)
 {
 	if (!arg)
-		return ;
+		return (0);
 	while (*arg)
 	{
 		if (!(*(arg) == -1))
-			ft_putchar(*arg);
+		{
+			if (write(1, arg, 1) == -1)
+				return (-1);
+		}
 		arg++;
 	}
+	return (0);
 }
 
 /*

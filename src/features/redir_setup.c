@@ -45,9 +45,13 @@ void		ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens)
 {
 	char *temp;
 
-	if (PREV && PREV->indx == st_tokens->indx &&
-		ft_isalldigit(PREV->value) && (PREV->is_arg = 1))
+	temp = NULL;
+	if (PREV && PREV->indx == st_tokens->indx && *(st_tokens->value) != '&' &&
+		ft_isalldigit(PREV->value))
+	{
+		PREV->is_arg = 1;
 		st_redir->fd_red = ft_atoi(PREV->value);
+	}
 	temp = get_value_next(NEXT);
 	if ((st_tokens->value)[1] == '&' && ft_isalldigit(temp))
 		st_redir->fd_des = ft_atoi(temp);

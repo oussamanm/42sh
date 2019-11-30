@@ -96,45 +96,8 @@ int			ft_sum_asci(char str[])
 	return (sum);
 }
 
-/*
-** Function remove quote from string
-*/
 
-char		*ft_rm_quot(char *str)
-{
-	char	*rtn;
-
-	rtn = NULL;
-	if (!str)
-		return (NULL);
-	rtn = ft_strdup(&str[1]);
-	rtn[ft_strlen(rtn) - 1] = '\0';
-	return (rtn);
-}
-
-int		find_char_escap(char *str, char c)
-{
-	int		i;
-
-	i = 0;
-	if (str == NULL)
-		return (-1);
-	while (str[i] != '\0')
-	{
-		if (str[i] == '\\')
-		{
-			i += (str[i + 1]) ? 2 : 1;
-			continue ;
-		}
-		if (str[i] == c)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-
-int				ft_all_quot(char *str)
+int			ft_all_quot(char *str)
 {
 	if (!str)
 		return (0);

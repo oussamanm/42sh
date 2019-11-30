@@ -99,7 +99,7 @@ void					buil_putstr(char *arg, char *s1, char *s2, int fd);
 */
 
 int		echo_options_(char *arg, int *flag);
-void					e_interpretation_1(char *arg);
+int		e_interpretation_1(char *arg);
 int		echo_meta_char(char c);
 char	echo_charcmp(char c, char *str);
 

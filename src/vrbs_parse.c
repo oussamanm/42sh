@@ -45,10 +45,10 @@ int				ft_check_intern(t_pipes *st_pipe)
 		{
 			i++;
 			if (!ft_is_equal(i, st_tokens))
-				return (1);
+				return (0);
 		}
 	}
-	return (0);
+	return (1);
 }
 
 
@@ -74,6 +74,8 @@ void			fill_intern(t_pipes *st_pipe)
 			i++;
 			if (ft_is_equal(i, st_tokens))
 			{
+				if (!valid_identifier(st_tokens->value))
+					return ;
 				var = get_key_value(st_tokens);
 				add_intern_var(var.key, var.value);
 			}
@@ -123,7 +125,7 @@ char			**ft_tokens_arg_env(t_tokens *st_tokens)
 			st_tokens = st_tokens->next;
 		else
 		{
-			if (!ft_is_equal(++i, st_tokens))
+			if (!ft_is_equal(++i, st_tokens) || !valid_identifier(st_tokens->value))
 				break ;
 			var = get_key_value(st_tokens);
 			args[j++] = ft_strjoir(ft_strjoir(var.key, "=", 0), var.value, 0);

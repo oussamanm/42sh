@@ -59,6 +59,7 @@ t_logopr	*ft_new_logopr(void)
 	st_logopr->st_pipes = NULL;
 	st_logopr->st_tokens = NULL;
 	st_logopr->status = 0;
+	st_logopr->bl_jobctr = 0;
 	st_logopr->next = NULL;
 	return (st_logopr);
 }
@@ -98,6 +99,7 @@ t_pipes		*ft_new_pipe(void)
 	st_pipes->st_tokens = NULL;
 	st_pipes->tmp_env = NULL;
 	st_pipes->next = NULL;
+	st_pipes->bl_jobctr = 0;
 	return (st_pipes);
 }
 
