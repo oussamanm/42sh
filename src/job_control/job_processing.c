@@ -101,7 +101,7 @@ void	ft_job_processing(void)
 		if (job->status == EXITED)
 		{
 			ft_print_termsig_back(job->sig_term, job->cmd, job->index, job->p);
-			ft_remove_node(tmp, pr);
+			ft_remove_node(&tmp, &pr);
 		}
 		pr = tmp;
 		tmp = tmp ? tmp->next : tmp;

@@ -31,26 +31,34 @@ void	ft_jobs_built(void)
 		ft_putstr("\t\t\t");
 		ft_putstr(job->cmd);
 		ft_putchar(' ');
-		(job->background) ? ft_putchar('&') : 0;
+		(job->background == 1) ? ft_putchar('&') : 0;
 		ft_putchar('\n');
 		tmp = tmp->next;
 	}
 }
 
-void	ft_continue(void)
+void	ft_continue(char *arg)
 {
 	t_list	*tmp;
 	t_job	*job;
+	int		index;
 
 	if (!jobs)
 	{
 		ft_putendl_fd("42sh: bg: current: no such job", 2);
 		return ;
 	}
+	(arg) ? (index = ft_atoi(arg)) : 0;
 	tmp = jobs;
 	while (tmp)
 	{
 		job = tmp->content;
+		if (arg && index != job->index)
+		{
+			tmp = tmp->next;
+			(!tmp) ? ft_putendl_fd("42sh: bg: current: no such job", 2) : 0;
+			continue ;
+		}
 		if (job->status == STOPED)
 		{
 			ft_print_backcmd(job);
@@ -59,17 +67,25 @@ void	ft_continue(void)
 			killpg(job->pgid, SIGCONT);
 			break ;
 		}
+		else if (job->status == RUN)
+		{
+			ft_putstr_fd("bash: bg: job ", 2);
+			ft_putnbr(job->index);
+			ft_putendl_fd(" already in background", 2);
+			break ;		
+		}
 		tmp = tmp->next;
 	}
 }
 
-void	ft_foreg_wait(t_job *job, t_list *tmp, t_list *pr)
+void	ft_foreg_wait(t_job *job, t_list **tmp, t_list **pr)
 {
 	if (tcsetpgrp(0, job->pgid) == -1)
 		ft_putendl_fd("Controling terminal ERROR", 2);
 	signal(SIGCHLD, SIG_DFL);
 	killpg(job->pgid, SIGCONT);
 	job->status = RUN;
+	job->background = -1;
 	g_sign = 1;
 	ft_wait(job);
 	g_sign = 0;
@@ -80,25 +96,34 @@ void	ft_foreg_wait(t_job *job, t_list *tmp, t_list *pr)
 	signal(SIGCHLD, ft_catch_sigchild);
 }
 
-void	ft_foreground(void)
+void	ft_foreground(char *arg)
 {
 	t_job	*job;
 	t_list	*tmp;
 	t_list	*pr;
+	int		index;
 
 	if (!jobs)
 	{
 		ft_putendl_fd("42sh: fg: current: no such job", 2);
 		return ;
 	}
+	(arg) ? (index = ft_atoi(arg)) : 0;
 	tmp = jobs;
 	pr = NULL;
 	while (tmp)
 	{
 		job = tmp->content;
-		if (job->status == RUN)
+		if (arg && index != job->index)
 		{
-			ft_foreg_wait(job, tmp, pr);
+			tmp = tmp->next;
+			(!tmp) ? ft_putendl_fd("42sh: fg: current: no such job", 2) : 0;
+			continue ;
+		}
+		if (job->status == RUN || job->status == STOPED)
+		{
+			ft_putendl(job->cmd);
+			ft_foreg_wait(job, &tmp, &pr);
 			break ;
 		}
 		pr = tmp;

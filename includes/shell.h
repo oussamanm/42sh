@@ -43,7 +43,7 @@
 # define M_BRACKET(x) (x == '(' || x == ')')
 # define STR(x)  (*str)[x]
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
-# define OPER_TOKEN(t) (t == T_JOBCTR || t == T_PIPE || t == T_LOGOPR_OR || T_LOGOPR_AND)
+# define OPER_TOKEN(t) (t == T_JOBCTR || t == T_PIPE || t == T_LOGOPR_OR || t == T_LOGOPR_AND)
 # define MATCH_CLOSED(x, y)(((x == 'q' || x == 'Q') && x == y) || (x == 'S' && y == 's'))
 # define PROMPT 3
 # define PATHSIZE 1024
@@ -458,8 +458,8 @@ int						ft_buil_unalias(t_tokens *st_token);
 ** job
 */
 
-void					ft_foreground(void);
-void					ft_continue(void);
+void					ft_foreground(char *arg);
+void					ft_continue(char *arg);
 void					ft_catch_sigchild(int sig);
 void					ft_manage_jobs(int pid, t_pipes *st_pipes, int *rtn);
 void					ft_add_job(t_job *job);
@@ -479,7 +479,7 @@ void					ft_update_p(void);
 void					ft_update_index(void);
 void					ft_print_pid(int index, int pgid);
 void					ft_foreground_job(t_job *job);
-void					ft_remove_node(t_list *tmp, t_list *pr);
+void					ft_remove_node(t_list **tmp, t_list **pr);
 void					ft_free_job(t_job *job);
 void					ft_single_proc(t_job *job, t_pipes *st_pipes, int pid, int *add);
 void					ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add);

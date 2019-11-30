@@ -29,21 +29,21 @@ void	ft_free_job(t_job *job)
 	free(job);
 }
 
-void	ft_remove_node(t_list *tmp, t_list *pr)
+void	ft_remove_node(t_list **tmp, t_list **pr)
 {
-	if (pr == NULL)
+	if (*pr == NULL)
 	{
-		tmp = tmp->next;
+		(*tmp) = (*tmp)->next;
 		ft_free_job(jobs->content);
 		free(jobs);
-		jobs = tmp;
+		jobs = *tmp;
 	}
 	else
 	{
-		pr->next = tmp->next;
-		ft_free_job(tmp->content);
-		free(tmp);
-		tmp = pr;
+		(*pr)->next = (*tmp)->next;
+		ft_free_job((*tmp)->content);
+		free(*tmp);
+		*tmp = *pr;
 	}
 }
 

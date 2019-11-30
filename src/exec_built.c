@@ -45,7 +45,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	int     status;
 
 	status = 0;
-	if (st_pipes == NULL || st_pipes->args == NULL)
+	if (st_pipes == NULL || !st_pipes->args || !(*st_pipes->args))
 		return (-1);
 	/// Apply redirection 
 	if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
@@ -78,9 +78,9 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	else if (STR_CMP(*(st_pipes->args), "source"))
 		ft_buil_updatealias(st_pipes->args + 1);
 	else if (STR_CMP(*(st_pipes->args), "fg"))
-		ft_foreground();
+		ft_foreground((st_pipes->args)[1]);
 	else if (STR_CMP(*(st_pipes->args), "bg"))
-		ft_continue();
+		ft_continue((st_pipes->args)[1]);
 	else if (STR_CMP(*(st_pipes->args), "jobs"))
 		ft_jobs_built();
 	/// close file discriptor used by builtens
