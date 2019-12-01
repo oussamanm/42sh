@@ -95,7 +95,6 @@ void	ft_wait(t_job *current)
 	{
 		if ((pid = waitpid(-1, &status, WNOHANG | WUNTRACED)) < 0)
 			break ;
-		
 		if (pid == 0 && current)
 			continue;
 		else if (pid == 0)

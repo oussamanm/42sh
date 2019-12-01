@@ -12,23 +12,6 @@
 
 #include "read_line.h"
 
-void	ft_remove_selections(t_cursor *pos, char *s)
-{
-	int		num_col;
-	int		num_lines;
-	int		save;
-
-	num_col = ft_get_size_windz();
-	num_lines = ft_get_num_of_lines(num_col, s, pos->p);
-	ft_move_cursor_zero(*pos);
-	tputs(tgetstr("cd", NULL), 0, my_outc);
-	save = pos->x;
-	pos->x = pos->p;
-	ft_putstr_term(num_col, s, pos);
-	pos->x = save;
-	ft_set_last_position(*pos, num_lines);
-}
-
 void	ft_win_change(int sig)
 {
 	sig = 0;

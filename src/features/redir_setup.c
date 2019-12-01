@@ -103,11 +103,9 @@ void		ft_apply_her_doc(t_jobctr *st_jobctr)
 			{
 				while (st_temp)
 				{
-					if (st_temp->token == T_RED_HER_D)
-					{
-						st_pipe->st_redir = ft_new_redir();
+					if (st_temp->token == T_RED_HER_D &&
+						(st_pipe->st_redir = ft_new_redir()))
 						ft_redi_her(st_pipe->st_redir, st_temp);
-					}
 					st_temp = st_temp->next;
 				}
 				st_pipe = st_pipe->next;

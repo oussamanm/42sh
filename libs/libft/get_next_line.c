@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 10:50:39 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/01 21:22:37 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:00:02 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int			get_next_line(const int fd, char **line)
 	if (fd < 0)
 		return (0);
 	ft_bzero(buff, BUFFER_SIZE + 1);
-	while ((ret = read(fd, buff, BUFFER_SIZE)))
+	while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
 		if (!ptr)
@@ -48,7 +48,7 @@ int			get_next_line(const int fd, char **line)
 		if (ft_strchr(ptr, '\n'))
 			break ;
 	}
-	if (ptr[0] == '\0')
-		ptr = NULL;
+	if (ret == 0)
+		return (0);
 	return ((ptr[0] != '\0') ? copy_line(&ptr, line) : 0);
 }

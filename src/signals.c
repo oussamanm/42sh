@@ -30,6 +30,8 @@ void	ft_catch_signal(int signal)
 		ft_putchar('\n');
 	else
 	{
+		if (g_pos.cmd == NULL) /// check this 
+			exit(EXIT_SIGINT);
 		ft_putstr_term(g_pos.num_col, g_pos.cmd + g_pos.index, &g_pos);
 		g_pos.index = 0;
 		g_pos.x = 8;
@@ -39,12 +41,16 @@ void	ft_catch_signal(int signal)
 		g_pos.cmd = ft_strnew(0);
 		if (g_pos.p != 8 || g_pos.r)
 		{
+			g_exit_status = EXIT_FAILURE;
 			g_pos.exit = 1;
 			g_pos.r = 0;
 			ioctl(0, TIOCSTI, "\12");
 		}
 		else
+		{
 			ft_putstr_fd("\n\033[0;32m42sh $>\033[0m ", 2);
+			g_exit_status = EXIT_SIGINT;
+		}
 		g_pos.p = 8;
 		history_readline(&g_history, 0, NULL);
 	}

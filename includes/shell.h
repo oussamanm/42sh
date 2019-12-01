@@ -28,6 +28,10 @@
 # include <sys/stat.h>
 # include <curses.h>
 
+# define ERR_SYN		"syntax error near unexpected token"
+# define EXIT_CMD_NF 127
+# define EXIT_SIGINT 130
+
 # define BUFF_SIZE 10
 # define UNUSED(x) (void)(x)
 # define DEBUG(msg) puts(msg)
@@ -42,18 +46,13 @@
 # define M_ESCAPED(x) (x == '\\')
 # define M_BRACKET(x) (x == '(' || x == ')')
 # define STR(x)  (*str)[x]
-# define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
-# define OPER_TOKEN(t) (t == T_JOBCTR || t == T_PIPE || t == T_LOGOPR_OR || t == T_LOGOPR_AND)
 # define MATCH_CLOSED(x, y)(((x == 'q' || x == 'Q') && x == y) || (x == 'S' && y == 's'))
 # define PROMPT 3
 # define PATHSIZE 1024
-# define TOKEN st_tokens->token
-# define PREV st_tokens->prev
-# define NEXT st_tokens->next
 # define ERRO_IN_AND -12
 # define IDENTIFIER(x) (x=="?"||x=="-"||x=="@"||x=="%"||x=="~"||x==":"||x==".")
 
-#define MAX_MAPS 1000
+#define MAX_MAPS 100
 #define MAX_TAB_ADDR 10
 /*
 **Buttons
@@ -72,8 +71,6 @@
 /*
 **Tokens
 */
-#define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
-#define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
 
 # define T_TXT			0
 # define T_QUO			1
@@ -101,6 +98,14 @@
 # define T_RED_APP_M	-169
 # define T_RED_HER_D	-120
 # define T_RED_BOTH		-122
+
+# define TOKEN st_tokens->token
+# define PREV st_tokens->prev
+# define NEXT st_tokens->next
+# define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
+# define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
+# define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
+# define OPER_TOKEN(t) (t == T_JOBCTR || t == T_PIPE || t == T_LOGOPR_OR || t == T_LOGOPR_AND)
 
 
 /*
@@ -235,6 +240,7 @@ typedef	struct			s_cmds
 
 t_intern	*g_intern;
 char		**g_environ;
+int			g_exit_status;
 
 /*
 ** Builtins
@@ -368,7 +374,7 @@ void					ft_redi_both(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_app(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_in(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_out(t_redir *st_redir, t_tokens *st_tokens);
-int						ft_error_redir(t_tokens *st_tokens);
+int						error_redir(t_tokens *st_tokens);
 void					ft_init_redi(t_redir *st_redir, int type_red);
 void					ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_apply_hered(t_redir *st_redi);
@@ -391,7 +397,7 @@ void					remove_backslashs(t_tokens *st_tokens);
 ** Exec builtens
 */
 
-int						ft_init_built(t_pipes *st_pipes, char ***tmp_env);
+int						ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env);
 int						ft_call_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_check_built(char *arg);
 void					built_set(t_intern *lst, char **args);
@@ -433,11 +439,11 @@ void					set_isarg(t_pipes *st_pipes);
 ** Line complition
 */
 
-int						get_last_flag(int *maps);
-int						find_flag(int *maps, int flag);
-void					clean_maps(int *maps);
-int						count_key(int *maps, int key);
-int						closed_dquot(int *maps);
+int						get_last_flag(char *maps);
+int						find_flag(char *maps, int flag);
+void					clean_maps(char *maps);
+int						count_key(char *maps, int key);
+int						closed_dquot(char *maps);
 
 
 /*
@@ -459,8 +465,8 @@ int						ft_buil_unalias(t_tokens *st_token);
 ** job
 */
 
-void					ft_foreground(void);
-void					ft_continue(void);
+void					ft_foreground(char *arg);
+void					ft_continue(char *arg);
 void					ft_catch_sigchild(int sig);
 void					ft_manage_jobs(int pid, t_pipes *st_pipes, int *rtn);
 void					ft_add_job(t_job *job);
@@ -475,16 +481,19 @@ int						ft_job_index(void);
 t_job					*ft_inisial_job(void);
 char					*ft_cmd_value(t_tokens *st_tokens, char *cmd);
 int						ft_print_termsig_back(int sig, char *name, int index, char p);
-void					ft_jobs_built(void);
-void					ft_update_p(void);
+void					ft_jobs_built(char **args);
+void					ft_update_p(int any);
 void					ft_update_index(void);
 void					ft_print_pid(int index, int pgid);
 void					ft_foreground_job(t_job *job);
-void					ft_remove_node(t_list *tmp, t_list *pr);
+void					ft_remove_node(t_list **tmp, t_list **pr);
 void					ft_free_job(t_job *job);
 void					ft_single_proc(t_job *job, t_pipes *st_pipes, int pid, int *add);
 void					ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add);
 char					*ft_strsignal(int sig);
 void					ft_print_backcmd(t_job *job);
+char					ft_stoped(t_job *job);
+char					ft_terminated(t_job *job);
+void					ft_run_job(t_job *job);
 
 #endif

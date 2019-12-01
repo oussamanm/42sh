@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:11:40 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 21:23:18 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:10:27 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	init_history(t_history *history)
 	history->head = NULL;
 	history->tail = NULL;
 	history->len = 0;
-	history->bg = 0;
+	history->bg = 1;
 }
 
 /*

@@ -13,6 +13,8 @@
 #include "shell.h"
 #include "read_line.h"
 
+# define SAME_ARG(x, y) (x && x->indx == y->indx && ft_isalldigit(x->value)) ///// move to .h
+
 /*
 ** Redirection output >	 :
 */
@@ -22,8 +24,7 @@ void	ft_redi_out(t_redir *st_redir, t_tokens *st_tokens)
 	ft_init_redi(st_redir, 1);
 	if (st_tokens->token == T_RED_OUT_S)
 	{
-		if (PREV && PREV->indx == st_tokens->indx &&
-			ft_isalldigit(PREV->value) && PREV->token == T_TXT)
+		if (SAME_ARG(PREV, st_tokens) && PREV->token == T_TXT)
 		{
 			PREV->is_arg = 1;
 			st_redir->fd_red = ft_atoi(PREV->value);
@@ -35,7 +36,7 @@ void	ft_redi_out(t_redir *st_redir, t_tokens *st_tokens)
 		ft_redi_out_h(st_redir, st_tokens);
 	else if (st_tokens->token == T_RED_OUT_B)
 	{
-		if (PREV && PREV->indx == st_tokens->indx && ft_isalldigit(PREV->value))
+		if (SAME_ARG(PREV, st_tokens))
 		{
 			PREV->is_arg = 1;
 			st_redir->fd_close = ft_atoi(PREV->value);
@@ -56,14 +57,14 @@ void	ft_redi_in(t_redir *st_redir, t_tokens *st_tokens)
 	ft_init_redi(st_redir, 0);
 	if (st_tokens->token == T_RED_IN_S)
 	{
-		if (PREV && PREV->indx == st_tokens->indx && ft_isalldigit(PREV->value) && (PREV->is_arg = 1))
+		if (SAME_ARG(PREV, st_tokens) && (PREV->is_arg = 1))
 			st_redir->fd_red = ft_atoi(PREV->value);
 		st_redir->fd_des = -2;
 		st_redir->fd_file = get_value_next(NEXT);
 	}
 	else if (st_tokens->token == T_RED_IN_A)
 	{
-		if (PREV && PREV->indx == st_tokens->indx && ft_isalldigit(PREV->value) && (PREV->is_arg = 1))
+		if (SAME_ARG(PREV, st_tokens) && (PREV->is_arg = 1))
 			st_redir->fd_red = ft_atoi(PREV->value);
 		temp = get_value_next(NEXT);
 		st_redir->fd_des = ft_atoi(temp);
@@ -71,8 +72,7 @@ void	ft_redi_in(t_redir *st_redir, t_tokens *st_tokens)
 	}
 	else if (st_tokens->token == T_RED_IN_B)
 	{
-		if (PREV && PREV->indx == st_tokens->indx &&
-			ft_isalldigit(PREV->value) && (PREV->is_arg = 1))
+		if (SAME_ARG(PREV, st_tokens) && (PREV->is_arg = 1))
 			st_redir->fd_close = ft_atoi(PREV->value);
 	}
 }
@@ -89,7 +89,7 @@ void	ft_redi_app(t_redir *st_redir, t_tokens *st_tokens)
 	temp = get_value_next(NEXT);
 	if (st_tokens->token == T_RED_APP_S)
 	{
-		if (PREV && PREV->indx == st_tokens->indx && ft_isalldigit(PREV->value))
+		if (SAME_ARG(PREV, st_tokens))
 		{
 			PREV->is_arg = 1;
 			st_redir->fd_red = ft_atoi(PREV->value);
@@ -117,8 +117,7 @@ void	ft_redi_app(t_redir *st_redir, t_tokens *st_tokens)
 void	ft_redi_both(t_redir *st_redir, t_tokens *st_tokens)
 {
 	ft_init_redi(st_redir, 3);
-	if (st_tokens->prev->indx == st_tokens->indx &&
-		ft_isalldigit(st_tokens->prev->value))
+	if (SAME_ARG(PREV, st_tokens))
 	{
 		st_tokens->prev->is_arg = 1;
 		st_redir->fd_red = ft_atoi(PREV->value);
@@ -138,8 +137,7 @@ void	ft_redi_her(t_redir *st_redir, t_tokens *st_tokens)
 
 	temp = NULL;
 	ft_init_redi(st_redir, 4);
-	if (PREV && PREV->indx == st_tokens->indx &&
-		ft_isallprint(PREV->value))
+	if (PREV && PREV->indx == st_tokens->indx && ft_isallprint(PREV->value))
 	{
 		st_redir->fd_red = ft_atoi(PREV->value);
 		PREV->is_arg = 1;

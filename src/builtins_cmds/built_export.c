@@ -6,27 +6,28 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 07:28:51 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 21:09:09 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:05:12 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 /*
-**	export usage
+**	display export usage
 */
 
-static void		export_usage(char c)
+static	void	export_usage(char c)
 {
 	ft_putstr_fd("42sh: export: -", 2);
 	ft_putchar_fd(c, 2);
 	ft_putendl_fd(": invalid option", 2);
-	ft_putendl_fd("export: usage: export [-n] [name[=value] ...] or export -p", 2);
+	ft_putendl_fd("export: usage: export [-n] "\
+			"[name[=value] ...] or export -p", 2);
 }
 
-static void		setup_vrb(t_tokens *st_tokens, t_intern vrb, int index, int n)
+static	void	setup_vrb(t_tokens *st_tokens, t_intern vrb, int index, int n)
 {
-	char *temp;
+	char	*temp;
 
 	if (n)
 	{
@@ -36,7 +37,8 @@ static void		setup_vrb(t_tokens *st_tokens, t_intern vrb, int index, int n)
 	else if (NEXT && NEXT->token == T_EQUAL && NEXT->indx == index)
 	{
 		temp = ft_strjoin(st_tokens->value, "=");
-		if (NEXT->next && NEXT->next->indx == index && T_IS_TXT(NEXT->next->token))
+		if (NEXT->next && NEXT->next->indx == index &&
+			T_IS_TXT(NEXT->next->token))
 			temp = ft_strjoir(temp, NEXT->next->value, 0);
 		ft_set_vrb(temp, &g_environ, 1);
 		add_intern_var(&g_intern, vrb.key, vrb.value, 1);
@@ -46,10 +48,10 @@ static void		setup_vrb(t_tokens *st_tokens, t_intern vrb, int index, int n)
 		move_to_env(vrb.key);
 }
 
-static int			setup_export(t_tokens *st_tokens, int n)
+static	int		setup_export(t_tokens *st_tokens, int n)
 {
-	t_intern vrb;
-	int i;
+	t_intern	vrb;
+	int			i;
 
 	i = st_tokens->indx;
 	while (st_tokens)
@@ -71,10 +73,10 @@ static int			setup_export(t_tokens *st_tokens, int n)
 	return (1);
 }
 
-int			built_export(t_tokens *st_tokens)
+int				built_export(t_tokens *st_tokens)
 {
-    int n;
-	int c;
+	int	n;
+	int	c;
 
 	st_tokens = NEXT;
 	if ((c = export_flags(&st_tokens, &n)))
@@ -83,10 +85,10 @@ int			built_export(t_tokens *st_tokens)
 		return (EXIT_FAILURE);
 	}
 	if (!st_tokens)
-    {
+	{
 		exported_vars((t_intern){NULL, NULL, NULL}, STDOUT_FILENO, -1);
-        return (EXIT_SUCCESS);
-    }
+		return (EXIT_SUCCESS);
+	}
 	if (!setup_export(st_tokens, n))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);

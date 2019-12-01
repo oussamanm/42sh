@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 20:33:58 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:00:15 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 char	*ft_read_line(t_history *his, t_select *select, int p)
 {
 	char	buf[6];
-	int crash;
+	int 	crash;
 	
 	crash = 0;
 	//  To test only uncomment this line and run [./crash.py test_file && ./42sh]
@@ -105,7 +105,9 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 			ft_enter(&g_pos, g_pos.cmd);
 			break ;
 		}
-		else if (!(g_pos.cmd = ft_key_call_func(his, select, g_pos.cmd, buf))
+		g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, g_pos.cmd, g_pos.p);
+		ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
+		if (!(g_pos.cmd = ft_key_call_func(his, select, g_pos.cmd, buf))
 			|| g_pos.cmd[0] == -1)
 			break ;
 		ft_bzero(buf, 6);

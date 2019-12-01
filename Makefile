@@ -55,7 +55,8 @@ OBJS = error_handler.o\
 	history/history_search.o history/history_handling.o history/history_termcap.o\
 	fc_built/fc_built.o fc_built/fc_file.o fc_built/fc_flag_l.o\
 	fc_built/fc_flags.o\
-	job_control/add_remove.o job_control/built.o\
+	job_control/add_remove.o job_control/jobs_built.o\
+	job_control/fg_built.o job_control/bg_built.o\
 	job_control/index_up.o job_control/init.o\
 	job_control/job_execution.o job_control/job_processing.o\
 	job_control/msg_sig.o job_control/output.o\

@@ -6,21 +6,21 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 20:58:00 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 20:59:14 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:13:08 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int		export_flags(t_tokens **st_tokens, int *n)
+int				export_flags(t_tokens **st_tokens, int *n)
 {
-	int i;
-	int j;
-	char c;
+	int		i;
+	int		j;
+	char	c;
 
 	*n = 0;
-    if (!*st_tokens)
-        return (0);
+	if (!*st_tokens)
+		return (0);
 	i = (*st_tokens)->indx;
 	while (*st_tokens)
 	{
@@ -34,8 +34,9 @@ int		export_flags(t_tokens **st_tokens, int *n)
 				c = (*st_tokens)->value[j];
 				if (c != 'n' && c != 'p')
 					return (c);
-                (c == 'n') && (*n = 1);
-				if (!(*st_tokens)->value[j + 1] && (*st_tokens)->next && (*st_tokens)->next->indx == i)
+				(c == 'n') && (*n = 1);
+				if (!(*st_tokens)->value[j + 1] && (*st_tokens)->next
+						&& (*st_tokens)->next->indx == i)
 				{
 					*st_tokens = (*st_tokens)->next;
 					j = -1;
@@ -49,47 +50,47 @@ int		export_flags(t_tokens **st_tokens, int *n)
 }
 
 /*
-**  display list of exports if no args given or if -p flag is present
+**	display list of exports if no args given or if -p flag is present
 */
 
-static void    display_export(t_intern *export)
+static	void	display_export(t_intern *export)
 {
-    t_intern *lst;
+	t_intern	*lst;
 
-    lst = export;
+	lst = export;
 	while (lst)
 	{
-        ft_putstr("export ");
+		ft_putstr("export ");
 		ft_putstr(lst->key);
 		if (lst->value)
-        {
+		{
 			ft_putchar('=');
-            ft_putchar('"');
-		    ft_putstr(lst->value);
-            ft_putchar('"');
-        }
-        ft_putchar('\n');
+			ft_putchar('"');
+			ft_putstr(lst->value);
+			ft_putchar('"');
+		}
+		ft_putchar('\n');
 		lst = lst->next;
 	}
 }
 
 /*
-**remove, edit, add , display export variables
+**	remove, edit, add , display export variables
 */
 
-void	exported_vars(t_intern vrb, int rest, int edit)
+void			exported_vars(t_intern vrb, int rest, int edit)
 {
-	static t_intern *export;
-    char *line;
+	static	t_intern	*export;
+	char				*line;
 
 	if (rest == STDIN_FILENO)
-    {
+	{
 		if (add_intern_var(&export, vrb.key, vrb.value, edit))
-        {
-            line = ft_strjoir(ft_strjoin(vrb.key, "="), vrb.value, 1);
-            ft_set_vrb(line, &g_environ, 1);
-        }
-    }
+		{
+			line = ft_strjoir(ft_strjoin(vrb.key, "="), vrb.value, 1);
+			ft_set_vrb(line, &g_environ, 1);
+		}
+	}
 	else if (rest == STDOUT_FILENO)
 		display_export(export);
 	else if (rest == STDERR_FILENO)

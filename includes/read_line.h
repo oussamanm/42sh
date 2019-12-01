@@ -123,8 +123,6 @@ int					ft_get_size_windz(void);
 int					ft_set_termcap(void);
 void				ft_stock_history(char **history, char *line, int his_count);
 int					my_outc(int c);
-void				ft_selection(char *s, t_cursor *pos, \
-char *key, t_select *select);
 void				ft_movecur_up_and_right(int up, int size);
 int					ft_get_num_of_lines(int num_col, char *s, int p);
 void				ft_set_last_position(t_cursor pos, int num_lines);
@@ -145,8 +143,6 @@ char				**ft_alloc_tab(void);
 void				ft_win_change(int signal);
 void				ft_print_with_reverse_mode(char *s, \
 int start, int end, t_cursor *pos);
-void				ft_left_selection(char *s, t_cursor *pos, t_select *select);
-void				ft_remove_selections(t_cursor *pos, char *s);
 char				*ft_delcolomn(char *s, t_cursor *pos);
 void				ft_initial(int p);
 void				ft_print_history(t_history *his, \
