@@ -67,7 +67,7 @@
 
 # define CAST(x) *((int *)x)
 
-typedef struct s_history t_history;
+typedef struct s_history	t_history;
 
 typedef struct		s_cursor
 {
@@ -93,26 +93,24 @@ typedef	struct		s_select
 	char			*save;
 }					t_select;
 
-typedef	struct s_info
+typedef	struct		s_info
 {
-	int index;
-	char *cmd;
-	struct s_info *prev;
-	struct s_info *next;
-}			t_info;
+	int				index;
+	char			*cmd;
+	struct s_info	*prev;
+	struct s_info	*next;
+}					t_info;
 
-struct s_history
+struct				s_history
 {
-	struct s_info *head;
-	struct s_info *tail;
-	int len;
-	int bg;
+	struct s_info	*head;
+	struct s_info	*tail;
+	int				len;
+	int				bg;
 };
 
-
 t_cursor			g_pos;
-t_history 			g_history;
-
+t_history			g_history;
 int					g_sign;
 
 char				*ft_read_line(t_history *his, t_select *select, int p);
@@ -127,7 +125,7 @@ void				ft_movecur_up_and_right(int up, int size);
 int					ft_get_num_of_lines(int num_col, char *s, int p);
 void				ft_set_last_position(t_cursor pos, int num_lines);
 void				ft_move_cursor_zero(t_cursor pos);
-void	ft_move_cursor_end(t_cursor pos);
+void				ft_move_cursor_end(t_cursor pos);
 void				ft_copy_paste(char *buf, char **s, \
 t_cursor *pos, t_select *select);
 void				ft_init(int **d, int size);
@@ -162,61 +160,64 @@ char				*ft_inside_line(char *s, t_cursor *pos, char *buf);
 void				ft_enable(void);
 void				ft_disable(void);
 char				*ft_clear(t_cursor *pos, char *s, char *buf);
-void	print_tab(int num_col, int *x);
-void	num_lines_tab(char spaces, t_cursor *pos, int *x, int *num_lines);
-void    convert_neg_to_tab(char **s);
-void   convert_tab_to_neg(char **s);
-void    update_tab_str(char **s, t_cursor *pos);
+void				print_tab(int num_col, int *x);
+void				num_lines_tab(char spaces, t_cursor *pos,\
+int *x, int *num_lines);
+void				convert_neg_to_tab(char **s);
+void				convert_tab_to_neg(char **s);
+void				update_tab_str(char **s, t_cursor *pos);
 /*
 ** read for sub_shell
 */
-int					ft_check_subsh(int i, char **line, t_select *select, t_history *his);
+int					ft_check_subsh(int i, char **line,\
+t_select *select, t_history *his);
 /*
 **	history readline, '!' expansion and fc builtuin
 */
-
-void    insert_history(t_history *history, char *cmd);
-t_info  *history_index(t_info *history, int index, int len);
-t_info  *history_keyword(t_info *history, char *keyword, int dir);
-void    history_readline(t_history *history, int key, char **cmd);
-void init_history(t_history *history);
-void    restore_history(t_history *history);
-void    save_history(t_history *history);
-t_info  *history_value(t_history his, char *keyword);
-void    rev_his_list(t_history *lst);
-void    display_his_list(t_history his, int order);
-int		history_handling(char **str_cmds);
-char    *history_content(t_history his);
-char		*completing_line(char *str_cmds, t_select *select, t_history *his);
-void	his_new_line(char *line, char **cmd, t_cursor *pos);
-char	*str_notnumber(char *keyword);
-void	history_search(t_history his, char **s, char buf[6]);
-void	his_putstr_term(int num_col, char *s, char *search, t_cursor *pos);
-void	his_cursor_do(int nbr);
-void	his_cursor_up(t_cursor pos, int nbr);
-
-/*history expansion */
-char    *history_expansion(t_history his, char *keyword);
-char    is_shell_delimiter(char c);
-char *get_delimiter(char *keyword);
-/* fc buit */
-
-char    *read_fc();
-void    write_fc(char *content);
-void    fc_flag_l(t_history history, char *flags, char **args);
-void    fc_built(char **args, t_history *history, char **tmp);
-void    fc_flag_l(t_history history, char *flags, char **args);
-void    fc_flag_s(t_history *his, char *arg);
-void    fc_flag_e(t_history his, char **args);
-t_info  *fc_value(t_history his, char *keyword);
-int    read_fc_flags(char **args, char **fl, char *err);
-void    fc_usage(char c, char *msg);
-int    fc_edit(t_history his, char *editor, char *flags, char **args);
-void    exec_fc();
-void init_fc_built();
-
-
-void	tab_set_last_position(t_cursor pos, int num_lines);
-void	new_pos_tab(char *s, int len, t_cursor *pos);
+void				insert_history(t_history *history, char *cmd);
+t_info				*history_index(t_info *history, int index, int len);
+t_info				*history_keyword(t_info *history, char *keyword, int dir);
+void				history_readline(t_history *history, int key, char **cmd);
+void				init_history(t_history *history);
+void				restore_history(t_history *history);
+void				save_history(t_history *history);
+t_info				*history_value(t_history his, char *keyword);
+void				rev_his_list(t_history *lst);
+void				display_his_list(t_history his, int order);
+int					history_handling(char **str_cmds);
+char				*history_content(t_history his);
+char				*completing_line(char *str_cmds,\
+t_select *select, t_history *his);
+void				his_new_line(char *line, char **cmd, t_cursor *pos);
+char				*str_notnumber(char *keyword);
+void				history_search(t_history his, char **s, char buf[6]);
+void				his_putstr_term(int num_col, char *s,\
+char *search, t_cursor *pos);
+void				his_cursor_do(int nbr);
+void				his_cursor_up(t_cursor pos, int nbr);
+char				*history_expansion(t_history his, char *keyword);
+char				is_shell_delimiter(char c);
+char				*get_delimiter(char *keyword);
+char				*read_fc(void);
+void				write_fc(char *content);
+void				fc_flag_l(t_history history, char *flags, char **args);
+void				fc_built(char **args, t_history *history, char **tmp);
+void				fc_flag_l(t_history history, char *flags, char **args);
+void				fc_flag_s(t_history *his, char *arg);
+void				fc_flag_e(t_history his, char **args);
+t_info				*fc_value(t_history his, char *keyword);
+int					read_fc_flags(char **args, char **fl, char *err);
+void				fc_usage(char c, char *msg);
+int					fc_edit(t_history his,\
+char *editor, char *flags, char **args);
+void				exec_fc(void);
+void				init_fc_built();
+void				tab_set_last_position(t_cursor pos, int num_lines);
+void				new_pos_tab(char *s, int len, t_cursor *pos);
+char				*put_tab(char *s, t_cursor *pos);
+void				tab_mode(char **s);
+void				ft_go_to_left(t_cursor *pos, char *s);
+void				ft_go_to_right(t_cursor *pos, char *s);
+void				ft_right_touch(t_cursor *pos, int size);
 
 #endif

@@ -43,7 +43,7 @@ void	print_tab(int num_col, int *x)
 		{
 			tputs(tgetstr("do", NULL), 0, my_outc);
 			*x = 0;
-			break;
+			break ;
 		}
 		else
 		{
@@ -80,8 +80,6 @@ void	ft_putstr_term(int num_col, char *s, t_cursor *pos)
 	}
 }
 
-
-
 /*
 ** - function print and join the enter characters set the new cursor
 ** parameters.
@@ -114,38 +112,6 @@ char	*ft_putline(char c, char *s, t_cursor *pos)
 	return (new);
 }
 
-char	*put_tab(char *s, t_cursor *pos)
-{
-
-	char *new;
-	int spaces;
-	int i;
-
-	spaces = 8 - (pos->x % 8);
-	if (!(new = ft_memalloc(sizeof(char) * ft_strlen(s) + 2)))
-		return (NULL);
-	ft_strncpy(new, s, pos->index);
-	new[pos->index] = spaces * -1;
-	ft_strcpy(new + pos->index + 1, s + pos->index);
-	tputs(tgetstr("cd", NULL), 0, my_outc);
-	ft_putstr_term(pos->num_col, new + pos->index, pos);//??!!
-	pos->index++;
-	pos->num_lines = ft_get_num_of_lines(pos->num_col, new, pos->p);//??
-	i = -1;
-	if (pos->x + spaces > pos->num_col - 1)
-	{
-		pos->end[pos->y] = pos->x;
-		pos->x = 0;
-		pos->y++;
-	}
-	else
-		pos->x += spaces;
-	ft_get_end_of_line_pos(pos, new, pos->num_col);//??
-	ft_set_last_position(*pos, pos->num_lines);
-	free(s);
-	return (new);
-}
-
 /*
 ** - function filter the key pressed by the user and call the function
 ** ft_putline.
@@ -156,7 +122,6 @@ void	ft_print_touch_and_join(t_cursor *pos, char *buf, char **s)
 	int i;
 
 	i = 0;
-
 	if (ft_strcmp(buf, "\t") == 0)
 	{
 		*s = put_tab(*s, pos);

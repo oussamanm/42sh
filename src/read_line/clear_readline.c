@@ -26,8 +26,5 @@ void	ft_clear_readline_struct(void)
 	select = NULL;
 	save_address(&select);
 	ft_strdel(&select->save);
-	//ft_free_tab(his->history);
-	//ft_strdel(&his->path);
-	//(his != NULL) ? free(his) : 0;
 	(select != NULL) ? free(select) : 0;
 }
