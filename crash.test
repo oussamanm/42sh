@@ -21,3 +21,20 @@ echo hello
 *
 echo \$HOME ";" pwd
 qweqwe=qweqweqw rewerwer= ""
+
+
+
+
+/****** Redirection
+
+pwd >&-
+<>
+><
+pwd 1<>gggg asd ><asd 
+>'asd'dqwe$(echo kkkk)
+
+
+
+/******* Line continuation
+
+"$('
