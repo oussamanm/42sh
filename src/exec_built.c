@@ -34,17 +34,16 @@ int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 	/// Fork in case of built and job_contr (no pipe)
 	if (fork_it && ((pid = fork()) == -1))
 		ft_err_exit("Error in Fork new process \n");
+	if (pid > 0 && fork_it && !g_proc_sub)
+		ft_manage_jobs(pid, st_pipes, &status);
 	if (pid == 0)
 	{
 		status = ft_call_built(st_pipes, tmp_env);
 		if (fork_it)
 			exit((status) ? EXIT_SUCCESS : EXIT_FAILURE);
 	}
-	else /// apply job_controle
-	{
-		puts("------- apply job_controle in builtens ------\n");
+	else if (fork_it && g_proc_sub && !st_pipes->bl_jobctr)
 		waitpid(pid, &status, 0);
-	}
 	i = -1;
 	/// restore default_FileDisc
 	if (!fork_it)
