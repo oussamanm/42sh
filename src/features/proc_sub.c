@@ -43,22 +43,6 @@ int		procsub_count(t_tokens *st_tokens) {
 }
 
 /*
-** Join the arguments list into a string
-*/
-
-/*char	*token_join(t_tokens *st_tokens)
-{
-	char	*str;
-
-	str = ft_strnew(0);
-	while (st_tokens){
-		str = ft_strjoir(str, ft_strjoir(st_tokens->value, " ", 0), 3);
-		st_tokens = st_tokens->next;
-	}
-	return (str);
-}*/
-
-/*
 ** Execute process substitution, and return the pipe file descritor 
 */
 
@@ -90,15 +74,13 @@ int     procsub_fd(char *cmd, bool type) {
 
 void    proc_substitution(t_cmds *st_cmds) {
 	t_tokens *st_tokens;
-	t_tokens *head;
 	int     len;
 	int     i;
 
 	st_tokens = st_cmds->st_tokens;
-	head = st_tokens;
 	len = procsub_count(st_tokens);
 	st_cmds->fd = (int *)malloc(sizeof(int) * (len + 1));
-	ft_bzero(st_cmds->fd, len);
+	ft_bzero(st_cmds->fd, (len + 1)* sizeof(int));
 	i = 0;
 	while (st_tokens) {
 		if (M_CHECK(st_tokens->token, T_PROC_IN, T_PROC_OUT))
@@ -109,5 +91,4 @@ void    proc_substitution(t_cmds *st_cmds) {
 		}
 		st_tokens = st_tokens->next;
 	}
-	//st_cmds->args = ft_str_split_q(token_join(head), " \t\n");
 }

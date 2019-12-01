@@ -40,9 +40,12 @@ void		logical_ops(t_logopr *st_logopr)
 	state = -1;
 	while (st_logopr != NULL)
 	{
-		state = ft_pipe(st_logopr->st_pipes);
+		if (error_redir(st_logopr->st_tokens))
+			state = 1;
+		else
+			state = ft_pipe(st_logopr->st_pipes);
 		g_exit_status = get_state(state);
-		state = (state) ? 1 : 0;
+		state = (state) ? 0 : 1;
 		if ((st_logopr->status == T_LOGOPR_OR && state == 0) ||
 				(st_logopr->status == T_LOGOPR_AND && state == 1))
 			st_logopr = st_logopr->next;

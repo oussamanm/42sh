@@ -15,8 +15,7 @@
 
 void	ft_foreground_job(t_job *job)
 {
-	if (getpgid(job->pgid) != -1 && tcsetpgrp(0, job->pgid) == -1)
-		ft_putendl("Can't set controling terminal to the child process");
+	tcsetpgrp(0, job->pgid);
 	g_sign = 1;
 	ft_wait(job);
 	g_sign = 0;
@@ -60,8 +59,7 @@ void	ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add)
 	proc = job->proc;
 	if (!st_pipes->bl_jobctr)
 	{
-		if (getpgid(job->pgid) != -1 && tcsetpgrp(0, job->pgid) == -1)
-			ft_putendl("Can't set controling terminal to the child process");
+		tcsetpgrp(0, job->pgid);
 		g_sign = 1;
 		ft_wait(job);
 		g_sign = 0;

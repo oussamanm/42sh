@@ -25,8 +25,6 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 	ft_bzero(tmp, 3);
 	if (!st_tokens)
 		return (0);
-	if (error_redir(st_tokens))
-		return (1);
 	while (st_tokens && tmp[0] == 0)
 	{
 		if (st_tokens->token == T_PIPE && (!PREV || !NEXT || OPER_TOKEN(NEXT->token)))

@@ -7,8 +7,9 @@
 - Check Builtens
 - Check Args in all code
 - Check varaible bl_ apply job_controle
--------------------------------
 - Check ~
+-------------------------------
+
 - Check exit_status in signale
 - Check environ , g_environ , temp_env
 - Check Execution 
