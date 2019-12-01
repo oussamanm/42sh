@@ -37,7 +37,7 @@ int			get_next_line(const int fd, char **line)
 	if (fd < 0)
 		return (0);
 	ft_bzero(buff, BUFFER_SIZE + 1);
-	while ((ret = read(fd, buff, BUFFER_SIZE)))
+	while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
 		if (!ptr)
@@ -48,5 +48,7 @@ int			get_next_line(const int fd, char **line)
 		if (ft_strchr(ptr, '\n'))
 			break ;
 	}
+	if (ret == 0)
+		return (0);
 	return ((ptr[0] != '\0') ? copy_line(&ptr, line) : 0);
 }

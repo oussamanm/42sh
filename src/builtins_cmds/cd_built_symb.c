@@ -36,16 +36,13 @@ char		*dot_dot_path_2(char **arr, int cnt)
 ** - cd helper function;
 */
 
-char		*dot_dot_path(char *s, char *pwd)
+char		*dot_dot_path(char *s, char *pwd, int i, int cnt)
 {
-	int		cnt;
 	char	**arr;
 	char	*ret;
-	int		i;
+	char	*ptr;
 
-	i = -1;
-	cnt = 0;
-	ft_putendl_fd(pwd,1);
+	ptr = pwd;
 	while (s[++i])
 		if (s[i] == '.' && s[i + 1] == '.')
 			cnt++;
@@ -56,11 +53,13 @@ char		*dot_dot_path(char *s, char *pwd)
 	if (i <= cnt)
 	{
 		ft_free2d(arr);
+		ft_strdel(&ptr);
 		return (ft_strdup("/"));
 	}
 	cnt = (i > cnt) ? (i - cnt) : cnt;
 	ret = dot_dot_path_2(arr, cnt);
 	ft_free2d(arr);
+	ft_strdel(&ptr);
 	return (ret);
 }
 
@@ -68,87 +67,72 @@ char		*dot_dot_path(char *s, char *pwd)
 ** - correction path of cd cmd;
 */
 
-char		*correct_path(char *path, t_cdpkg v)
+char		*cd_backwardpoints(char *pathcopy, t_cdpkg *v, int *i)
 {
-	char	*ret;
-	int		i;
+	char	*tmp;
 
-	i = 0;
-	while (path[i] &&\
-			path[i] == '.' &&\
-			path[i + 1] == '.' &&\
-			path[i + 2] == '/')
+	*i = 0;
+	while (pathcopy[*(i)] &&\
+			pathcopy[*(i)] == '.' &&\
+			pathcopy[*(i) + 1] == '.' &&\
+			pathcopy[*(i) + 2] == '/')
 	{
 		chdir("..");
-		if (path[i + 3] == '.')
-			i += 3;
+		if (pathcopy[*i + 3] == '.')
+			*i += 3;
 		else
 			break ;
 	}
-	while (path[i] && path[i] == '.')
-		i++;
-	ret = ft_strjoir(getcwd(v.buff, 1024), path + i, 2);
-	return (ret);
+	while (pathcopy[*i] && pathcopy[*i] == '.')
+		(*i)++;
+	tmp = pathcopy;
+	ft_bzero(v->buff, 1024);
+	pathcopy = ft_strjoir(getcwd(v->buff, 1024), pathcopy + *(i), 0);
+	ft_strdel(&tmp);
+	return (pathcopy);
+}
+
+/*
+** - this cmd work with cd_symblink
+*/
+
+char		*cd_relativepath(char *pathcopy, t_cdpkg *v)
+{
+	ft_bzero(v->buff, 1024);
+	getcwd(v->buff, 1024);
+	pathcopy = ft_strjoir(v->buff, ft_strjoir("/", pathcopy, 2), 2);
+	return (pathcopy);
 }
 
 /*
 ** - this cmd work with symbolic path
 */
 
-int			cd_symlink_1(char **pwd, char **oldpwd, int *var, t_cdpkg v)
+void		cd_symblink(t_cdpkg *v)
 {
-	int		flag;
+	char	*pathcopy;
 	char	*tmp;
+	int		i;
 
-	flag = 0;
 	tmp = NULL;
-	if (v.path[0] == '.' && v.path[1] == '.' && v.path[2] == '/' &&\
-	(flag = 1))
-		v.path = correct_path(v.path, v);
-	else if (((ft_strcmp(v.path, ".") == 0 ||\
-	ft_strcmp(v.path, "./") == 0) ||\
-	(ft_strcmp(v.path, *pwd) == 0 && ft_strcmp(v.path, *oldpwd) == 0)) &&\
-	*var && (flag = 2))
-		v.path = ft_strdup(*pwd);
-	else if (!(ft_strcmp(*pwd, v.path) == 0 ||\
-	ft_strcmp(*oldpwd, v.path) == 0))
+	pathcopy = ft_strdup(v->path);
+	if (pathcopy[0] == '.' && pathcopy[1] == '.')
 	{
-		v.path = ft_strjoir(ft_strjoir(getcwd(v.buff, 1024), "/", 0)\
-		, v.path, 1);
+		pathcopy = cd_backwardpoints(pathcopy, v, &i);
+		tmp = v->path;
+		v->path = ft_strdup(v->path + (i - 1));
 		ft_strdel(&tmp);
 	}
-	(flag == 1 || flag == 2) ? ft_strdel(&tmp) : 0;
-	return (flag);
+	else if (pathcopy[0] == '.' && pathcopy[1] != '.')
+	{
+		tmp = pathcopy;
+		pathcopy = ft_get_vrb("PWD", g_environ);
+		ft_strdel(&tmp);
+	}
+	else if (pathcopy[0] != '/')
+		pathcopy = cd_relativepath(pathcopy, v);
+	ft_set_vrb(ft_strjoir("OLDPWD=", ft_get_vrb("PWD", g_environ), 2),\
+		&g_environ, 1);
+	ft_set_vrb(ft_strjoir("PWD=", pathcopy, 2), &g_environ, 1);
+	chdir(v->path);
 }
-
-/*
-** - this cmd work with symbolic path
-*/
-
-void		cd_symblink(char **pwd, char **oldpwd, int *var, t_cdpkg v)
-{
-	int		flag;
-
-	ft_putendl_fd("before symb\n", 1);
-	flag = cd_symlink_1(pwd, oldpwd, var, v);
-	ft_putendl_fd("after symb\n", 1);
-	if (flag == 1 || flag == 3)
-		ft_set_vrb(ft_strjoir("OLDPWD=", ft_get_vrb("PWD", g_environ), 2),\
-		&g_environ, 1);
-	ft_set_vrb(ft_strjoir("PWD=", v.path, 0), &g_environ, 1);
-	if (!flag)
-		ft_set_vrb(ft_strjoir("OLDPWD=", getcwd(v.buff, 1024), 0),\
-		&g_environ, 1);
-	else if (flag == 2)
-		ft_set_vrb(ft_strjoir("OLDPWD=", ft_get_vrb("PWD", g_environ), 2),\
-		&g_environ, 1);
-	// here
-	chdir(v.path);
-	ft_strdel(pwd);
-	ft_strdel(oldpwd);
-	*pwd = ft_strdup(getcwd(v.buff, 1024));
-	// ft_putendl_fd(*pwd, 1);
-	*oldpwd = ft_get_vrb("OLDPWD", g_environ);
-	*var = 1;
-}
-
