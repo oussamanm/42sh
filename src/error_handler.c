@@ -20,27 +20,40 @@
 
 int			error_syntax_lexer(t_tokens *st_tokens)
 {
-	char tmp[3];
+	char	*tmp;
+	int		bl;
 
-	ft_bzero(tmp, 3);
+	tmp = NULL;
+	bl = 0;
 	if (!st_tokens)
 		return (0);
-	while (st_tokens && tmp[0] == 0)
+	while (st_tokens && !bl)
 	{
+		// else if (M_BRACKET(st_tokens->token))
 		if (st_tokens->token == T_PIPE && (!PREV || !NEXT || OPER_TOKEN(NEXT->token)))
-			ft_strcpy(tmp, ((!NEXT) ? "|" : NEXT->value));
+			bl = 1;
 		else if (st_tokens->token == T_JOBCTR && (!PREV || (NEXT && OPER_TOKEN(NEXT->token))))
-			ft_strcpy(tmp, ((!NEXT) ? "&" : NEXT->value));
+			bl = 1;			
 		else if (st_tokens->token == T_LOGOPR_AND && (!PREV || !NEXT || OPER_TOKEN(NEXT->token)))
-			ft_strcpy(tmp, ((!NEXT) ? "&&" : NEXT->value));
+			bl = 1;
 		else if (st_tokens->token == T_LOGOPR_OR && (!PREV || !NEXT || OPER_TOKEN(NEXT->token)))
-			ft_strcpy(tmp, ((!NEXT) ? "||" : NEXT->value));
-		else if (M_BRACKET(st_tokens->token))
-			tmp[0] = st_tokens->token;
+			bl = 1;			
+		if (bl)
+		{
+			if (!PREV || !NEXT)
+				tmp = ft_strdup(st_tokens->value);
+			else if (NEXT)
+				tmp = ft_strdup(NEXT->value);
+		}
 		st_tokens = st_tokens->next;
 	}
-	(tmp[0] != 0) ? print_error(tmp, NULL, ERR_SYN, 0) : 0;
-	return ((tmp[0] != 0));
+	if (bl)
+	{
+		print_error(tmp, NULL, ERR_SYN, 0);
+		free(tmp);
+		return (1);
+	}
+	return (0);
 }
 
 /*

@@ -106,7 +106,7 @@ int				ft_apply_pipe(t_pipes *st_pipes)
 	ft_close_pipes(st_head);
 	(!g_proc_sub) ? ft_pipe_job_man(job, st_head, &status, add) : 0;
 	signal(SIGCHLD, ft_catch_sigchild);
-	return ((status) ? 0 : 1);
+	return (status);
 }
 
 /*

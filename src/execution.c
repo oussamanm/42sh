@@ -14,7 +14,7 @@
 #include "read_line.h"
 
 /*
-** Check if exist Cmd : check if Ok and permission
+** Check if exist Cmd : check if Ok and permission @
 */
 
 int				ft_check_cmd(char *cmd, char **environ)
@@ -46,10 +46,10 @@ int				ft_check_cmd(char *cmd, char **environ)
 }
 
 /*
- ** Execute all cmds 
+ ** Execute all cmds  @
  */
 
-static void		ft_cmds_exec(t_cmds *st_cmds)
+static void		ft_cmds_exec(t_cmds *st_cmds) 
 {
 	t_jobctr	*st_jobctr;
 
@@ -65,7 +65,7 @@ static void		ft_cmds_exec(t_cmds *st_cmds)
 
 
 /*
-** Execute of Cmd
+** Execute of Cmd @
 */
 
 static void		ft_cmd_exec(char **args, char **env)
