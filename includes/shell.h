@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 21:08:23 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 23:19:49 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,7 +355,9 @@ int						ft_apply_pipe(t_pipes *st_pipes);
 void					ft_err_lexer(t_pipes *st_pipes);
 void					ft_lexer_quot(t_tokens **st_tokens, char *arg, int *j, int indx);
 void					ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx);
+void					ft_lexer_logopr(t_tokens **st_tokens, char *arg, int *j, int indx);
 void					ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx);
+void					ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx);
 t_tokens				*ft_lexer(char **args);
 void					ft_fill_token(t_tokens **st_tokens, int token, char *value, int indx);
 void					ft_upd_token(t_tokens *st_tokens, int token, char *value);

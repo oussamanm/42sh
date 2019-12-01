@@ -1,13 +1,6 @@
 - check signal Ctr+c  and g_pos.cmd varaible 
-- 
 - check implementation of alias
-- review if should add flag for ctr-c in parsing
 
-
-- Check Builtens
-- Check Args in all code
-- Check varaible bl_ apply job_controle
-- Check ~
 -------------------------------
 
 - Check exit_status in signale
@@ -18,6 +11,94 @@
 - Check Allocation
 - Check Redirection
 - Check function aliasmatched (return args)
+
+/*      NORME   Lignes */
+
++ Lexer
+- Parser
+- Execution
+- pipe
+- sub-shell
+- expansions
+- exec_builtens
+- Signale
+
+/*      Verify Addresses , variable */
+
++ Lexer
+- Parser
+- Execution
+- pipe
+- sub-shell
+- expansions
+- exec_builtens
+- Signale
+
+
+/*      SIG_FAULT       */
+
+-------- Find path func
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/11 12:42:31 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/20 11:21:32 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:23:20 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define SYN_ER "Syntax error"
 # define IS_DIR "Is a directory"
 
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 1000
 
 typedef	struct		s_list
 {

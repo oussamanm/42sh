@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:11:40 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 22:10:27 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:28:21 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	save_history(t_history *history)
 	t_info	*lst;
 	int		fd;
 
+	if (!history || !history->head || !history->tail)
+		return ;
 	lst = (history->len - history->bg < history->bg - 1) ?
 		history->tail : history->head;
 	if (!(lst = history_index(lst, history->bg, history->len)))

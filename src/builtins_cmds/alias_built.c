@@ -147,7 +147,7 @@ int		ft_buil_alias(t_tokens *st_tokens)
 		print_error("alias [name[=value] ... ]", NULL, "alias: usage: ", 0);
 		return (EXIT_FAILURE);
 	}
-	if (!(ft_buil_alias_2(st_tokens, NULL)))
+	if (ft_buil_alias_2(st_tokens, NULL) == 1)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
