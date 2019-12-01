@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   alias_func.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 14:51:30 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/09 14:51:35 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/12/01 21:54:18 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,9 @@ void		importaliasfilecontent(char *tmp)
 
 	line = NULL;
 	count = 0;
+	
 	fd = open("42shrc", O_RDONLY);
-	while (get_next_line(fd, &line))
+	while (get_next_line(fd, &line) > 0)
 	{
 		if (ft_strcmp(line, "") == 0)
 			continue ;

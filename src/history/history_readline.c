@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:09:57 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/28 00:32:49 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 20:34:20 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 **	clear the line and rewrite it with the command given
 */
 
-void	his_new_line(char *line, char **cmd, t_cursor *pos)
+void			his_new_line(char *line, char **cmd, t_cursor *pos)
 {
+	convert_tab_to_neg(&line);
+	update_tab_str(&line, pos);
 	ft_move_cursor_zero(*pos);
 	pos->x = pos->p;
 	pos->y = 0;
@@ -26,8 +28,8 @@ void	his_new_line(char *line, char **cmd, t_cursor *pos)
 	ft_get_end_of_line_pos(pos, line, pos->num_col);
 	pos->num_lines = ft_get_num_of_lines(pos->num_col, line, pos->p);
 	pos->index = ft_strlen(line);
-	pos->x = pos->end[pos->num_lines - 1];
-	pos->y = pos->num_lines - 1;
+	new_pos_tab(line, pos->index, pos);
+	ft_strdel(cmd);
 	*cmd = ft_strdup(line);
 }
 
@@ -55,16 +57,12 @@ void			history_readline(t_history *history, int key, char **cmd)
 		ft_strdel(&line);
 		last = history->tail;
 		pos = history->len + 1;
-		if (key == 0)
-			return ;
 	}
 	if (key == UP && pos > 1 && last)
 	{
-		if ((--pos) == history->len)
-		{
-			ft_strdel(&line);
-			line = ft_strdup(*cmd);
-		}
+		pos--;
+		(pos == history->len) ? ft_strdel(&line) : NULL;
+		(pos == history->len) ? line = ft_strdup(*cmd) : NULL;
 		last = his_cmd_pos(last, pos, cmd, history->len);
 	}
 	else if (key == DO && pos <= history->len)

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 06:25:57 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/28 23:35:36 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 06:54:48 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	/// Apply redirection 
 	if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 		return (REDI_KO);
-
 	if (STR_CMP(*(st_pipes->args), "exit"))
 		built_exit();
 	else if (STR_CMP(*(st_pipes->args), "echo"))
@@ -77,11 +76,11 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	else if (STR_CMP(*(st_pipes->args), "unalias"))
 /**/	status = ft_buil_unalias(st_pipes->st_tokens);
 	else if (STR_CMP(*(st_pipes->args), "export"))
-/**/	built_export(st_pipes->st_tokens);
+/**/	status = built_export(st_pipes->st_tokens);
 	else if (STR_CMP(*(st_pipes->args), "set"))
-		built_set();
+		built_set(g_intern, st_pipes->args + 1);
 	else if (STR_CMP(*(st_pipes->args), "unset"))
-		built_unset(st_pipes->args + 1);
+		status = built_unset(st_pipes->args + 1);
 	else if (STR_CMP(*(st_pipes->args), "cd"))
 		status = built_cd(st_pipes->args + 1, *tmp_env);
 	else if (STR_CMP(*(st_pipes->args), "type"))
@@ -91,7 +90,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	else if (STR_CMP(*(st_pipes->args), "history"))
 		display_his_list(g_history, 1);
 	else if (STR_CMP(*(st_pipes->args), "fc"))
-		fc_built(st_pipes->args + 1, &g_history);
+		fc_built(st_pipes->args + 1, &g_history, *tmp_env);
 	else if (STR_CMP(*(st_pipes->args), "source"))
 		ft_buil_updatealias(st_pipes->args + 1);
 	else if (STR_CMP(*(st_pipes->args), "fg"))

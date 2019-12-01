@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 21:06:25 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/27 00:16:38 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/11/30 20:50:41 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ void            ft_parse_cmd(t_cmds *st_cmds)
 			/// Fill Pipe
 			ft_fill_pipe(st_logopr);
 			// Fill intern variable and tmp_env
-				handle_variable(st_logopr->st_pipes);
+			handle_variable(st_logopr->st_pipes);
 			st_logopr = st_logopr->next;
 		}
 		st_jobctr = st_jobctr->next;

@@ -31,6 +31,7 @@ OBJS = error_handler.o\
 	builtins_cmds/hash_built.o builtins_cmds/hash_func.o\
 	builtins_cmds/free_hash_and_alias.o builtins_cmds/unaliase_built.o\
 	builtins_cmds/cd_built_symb.o builtins_cmds/built_srcs.o\
+	builtins_cmds/built_export.o builtins_cmds/manage_export.o\
 	read_line/addition.o\
 	read_line/auto_completion.o\
 	read_line/copy_paste.o\
@@ -47,12 +48,12 @@ OBJS = error_handler.o\
 	read_line/reset_position.o\
 	read_line/termcap.o\
 	read_line/clear_readline.o\
-	read_line/heredoc_line.o\
+	read_line/heredoc_line.o read_line/tab_mode.o\
 	read_line/cut.o read_line/clear_line_or_window.o\
 	history/history_expansion.o\
 	history/history_file.o history/history_readline.o\
 	history/manage_history.o history/history_other.o history/history_content.o\
-	history/history_search.o\
+	history/history_search.o history/history_handling.o history/history_termcap.o\
 	fc_built/fc_built.o fc_built/fc_file.o fc_built/fc_flag_l.o\
 	fc_built/fc_flags.o\
 	job_control/add_remove.o job_control/jobs_built.o\

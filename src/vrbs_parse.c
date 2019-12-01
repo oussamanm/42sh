@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 15:59:19 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/27 00:27:43 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 16:40:57 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void			fill_intern(t_pipes *st_pipe)
 	t_intern	var;	
 	t_tokens	*st_tokens;
 	int			i;
+	char *line;
 
 	if (!st_pipe)
 		return ;
@@ -72,15 +73,17 @@ void			fill_intern(t_pipes *st_pipe)
 		else
 		{
 			i++;
-			if (ft_is_equal(i, st_tokens))
-			{
-				if (!valid_identifier(st_tokens->value))
-					return ;
-				var = get_key_value(st_tokens);
-				add_intern_var(var.key, var.value);
-			}
+			if (!ft_is_equal(i, st_tokens))
+				break ;
+			if (!valid_identifier(st_tokens->value))
+				return ;
+			var = get_key_value(st_tokens);
+			line = ft_strjoir(ft_strjoin(var.key, "="), var.value, 1);
+			if (ft_edit_vrb(line, &g_environ, 1))
+				add_intern_var(&g_intern, var.key, var.value, 1);
 			else
-				break;
+				add_intern_var(&g_intern, var.key, var.value, 0);
+			exported_vars(var, STDIN_FILENO, 1);
 		}
 	}
 }

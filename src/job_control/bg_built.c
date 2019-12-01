@@ -14,7 +14,8 @@
 
 int		ft_bg_content(t_job *job, char *arg)
 {
-	if (job->status == STOPED && job->p == '+')
+	if ((job->status == STOPED && job->p == '+')
+		|| (job->status == STOPED && arg))
 	{
 		ft_print_backcmd(job);
 		job->background = 1;

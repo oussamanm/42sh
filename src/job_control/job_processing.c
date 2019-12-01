@@ -35,6 +35,7 @@ void	ft_collect_job_status(void)
 		job = tmp->content;
 		ft_stoped(job);
 		ft_terminated(job);
+		(job->status == EXITED) ? ft_update_p(1) : 0;
 		tmp = tmp->next;
 	}
 }

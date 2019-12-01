@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/26 01:37:30 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:00:15 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 		s = ft_ctrl_d(&g_pos, his, select, s);
 	else if (CTRL_T == CAST(buf))
 		tab_mode(&s);
-	else if (CTRL_R == CAST(buf))
-		history_search(*his, &s);
 	else if (ALT_UP == CAST(buf) || ALT_DO == CAST(buf))
 		ft_move_by_lines(&g_pos, s, buf);
 	else if (HOME == CAST(buf) || END == CAST(buf))
@@ -97,6 +95,11 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	ft_enable();
 	while (read(crash, buf, 6) > 0)
 	{
+		if (CTRL_R == CAST(buf))
+		{
+			ft_bzero(buf, 6);
+			history_search(*his, &g_pos.cmd, buf);
+		}
 		if (ENTER == CAST(buf))
 		{
 			ft_enter(&g_pos, g_pos.cmd);

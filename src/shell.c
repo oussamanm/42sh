@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 15:44:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:01:38 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void		initial_read_line(t_history *his, t_select **select)
 	(*select)->start = -1;
 	(*select)->end = -1;
 	(*select)->save = NULL;
-	save_address(select); //????
+	save_address(select);
 }
 
 /*
@@ -57,6 +57,7 @@ void		init_alias_hash()
 	importaliasfilecontent(NULL);
 	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
 	int i = -1;
+	
 	while (++i < SIZE)
 		hash_arr[i] =  NULL;
 	store_addr_of_hash(hash_arr, 1);
@@ -97,13 +98,17 @@ static void	initial_shell(t_select	**select)
 	g_exit_status = 0;
 	call_signal();
 	initial_read_line(&g_history, select);
+	
 	init_fc_built();
+	
 	// Initial Alias && HASH
 	init_alias_hash();
+	
 	//start new session for shell
 	setsid();
 	g_shellpid = getpid();
 	g_proc_sub = 0;
+	
 }
 
 int			main(void)
@@ -128,12 +133,12 @@ int			main(void)
 			ft_job_processing();
 			continue ;
 		}
+		convert_neg_to_tab(&g_pos.cmd);
         // Check incomplete syntax of Sub_shell or Quoting
 		g_pos.cmd = completing_line(g_pos.cmd, select, &g_history);
         // add command to history	
 	  	if (!history_handling(&g_pos.cmd))
 			continue ;
-
 		// Execution
 		(!g_pos.exit) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
 		ft_job_processing();

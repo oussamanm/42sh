@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 21:35:32 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/25 03:01:50 by mfetoui          ###   ########.fr       */
+/*   Updated: 2019/12/01 18:51:07 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void	ft_catch_signal(int signal)
 		g_pos.num_col = ft_get_size_windz();
 		ft_strdel(&(g_pos.cmd));
 		g_pos.cmd = ft_strnew(0);
-		
-		if (g_pos.p != 8)
+		if (g_pos.p != 8 || g_pos.r)
 		{
 			g_exit_status = EXIT_FAILURE;
 			g_pos.exit = 1;
+			g_pos.r = 0;
 			ioctl(0, TIOCSTI, "\12");
 		}
 		else

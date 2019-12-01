@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initial.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/07/18 12:33:46 by abiri            ###   ########.fr       */
+/*   Updated: 2019/12/01 18:49:11 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	ft_initial(int p)
 	g_pos.p = p;
 	g_pos.x = p;
 	g_pos.y = 0;
+	g_pos.r = 0;
 	g_pos.exit = 0;
 	g_pos.num_col = ft_get_size_windz();
 	if (!(g_pos.end = (int *)ft_memalloc(sizeof(int) * MAX_LINES)))

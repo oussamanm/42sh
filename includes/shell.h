@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/27 00:02:26 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 21:08:23 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,16 +247,16 @@ int			g_exit_status;
 */
 
 void					built_exit();
-void					built_export(t_tokens *st_tokens);
+int						built_export(t_tokens *st_tokens);
 int						built_echo(t_tokens *st_tokens);
 int						echo_options(t_tokens **st_tokens);
-
-
+void					exported_vars(t_intern vrb, int rest, int edit);
+int						export_flags(t_tokens **st_tokens, int *n);
 /*
 ** Intern variable
 */
 
-void					add_intern_var(char *key, char *value);
+int					add_intern_var(t_intern **intern, char *key, char *value, int edit);
 int						delete_intern_var(char *key, t_intern **head);
 char					*get_intern_value(char *key);
 t_intern				get_key_value(t_tokens *st_tokens);
@@ -265,7 +265,7 @@ int						ft_check_intern(t_pipes *st_pipe);
 char					**ft_tokens_arg_env(t_tokens *st_tokens);
 int						valid_identifier(char *arg);
 int						ft_is_equal(int index, t_tokens *st_tokens);
-
+void					move_to_env(char *key);
 /*
 ** Variable
 */
@@ -292,6 +292,7 @@ int						error_syntax_lexer(t_tokens *st_tokens);
 int						error_syntax_semi(char *str_cmds, char **args);
 int						error_syntax_expans(char *str_cmds);
 int						ft_putchar_err(int c);
+void					puterr_identifier(char *arg, char *cmd);
 
 /*
 ** Updated Splite
@@ -401,7 +402,7 @@ void					remove_backslashs(t_tokens *st_tokens);
 int						ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env);
 int						ft_call_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_check_built(char *arg);
-void					built_set();
+void					built_set(t_intern *lst, char **args);
 
 /*
 ** New

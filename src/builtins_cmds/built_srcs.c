@@ -83,3 +83,17 @@ void	ft_buil_updatealias(char **args)
 		importaliasfilecontent(NULL);
 	}
 }
+
+void	cd_ordlink_1(t_cdpkg *v, int flag)
+{
+	if (v->path[0] == '/' && S_ISLNK(v->buf.st_mode))
+	{
+		ft_bzero(v->buff, 1024);
+		ft_set_vrb(ft_strjoir("PWD=", getcwd(v->buff, 1024), 0), &g_environ, 1);
+	}
+	else if (v->path[0] == '/')
+		ft_set_vrb(ft_strjoir("PWD=", v->path, 0), &g_environ, 1);
+	else if (flag == 0)
+		ft_set_vrb(ft_strjoir("PWD=", ft_strjoir(ft_get_vrb("PWD", g_environ)\
+		, ft_strjoir("/", v->path, 0), 3), 2), &g_environ, 1);
+}

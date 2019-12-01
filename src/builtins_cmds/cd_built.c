@@ -92,30 +92,29 @@ char	*get_path(char **arg, char **tmpenv, int flag)
 **	this func work with normal path
 */
 
-void	cd_ordlink(char **pwd, char **oldpwd, int *var, t_cdpkg v)
+void	cd_ordlink(t_cdpkg *v)
 {
-	char *tmp;
+	char	*tmp;
+	int		flag;
 
-	tmp = v.path;
-	ft_putendl_fd("ordinary\n", 1);
-	if (*var)
-		ft_set_vrb(ft_strjoir("OLDPWD=", *pwd, 0), &g_environ, 1);
-	else if (!*var)
-		ft_set_vrb(ft_strjoir("OLDPWD=", getcwd(v.buff, 1024), 0)\
-		, &g_environ, 1);
-	if ((ft_strncmp(v.path, "..", 2) == 0) && *var)
+	flag = 0;
+	ft_set_vrb(ft_strjoir("OLDPWD=", ft_get_vrb("PWD", g_environ), 2)\
+	, &g_environ, 1);
+	if (((ft_strcmp(v->path, ".")) == 0) || (ft_strcmp(v->path, "./") == 0))
+		return ;
+	else if ((ft_strncmp(v->path, "..", 2) == 0))
 	{
-		v.path = dot_dot_path(v.path, *pwd);
-		// ft_strdel(&tmp);
+		flag = 1;
+		tmp = v->path;
+		v->path = dot_dot_path(v->path, ft_get_vrb("PWD", g_environ), -1, 0);
+		ft_strdel(&tmp);
+		if (v->path[0] != '/' && v->path[1])
+			v->path = ft_correctpath(v->path, tmp);
+		ft_set_vrb(ft_strjoir("PWD=", v->path, 0), &g_environ, 1);
 	}
-	ft_putendl_fd(v.path, 1);
-	chdir(v.path);
-	if (*var && !(ft_strcmp(*oldpwd, *pwd) == 0))
-		ft_set_vrb(ft_strjoir("PWD=", v.path, 0), &g_environ, 1);
-	else
-		ft_set_vrb(ft_strjoir("PWD=", getcwd(v.buff, 1024), 0)\
-		, &g_environ, 1);
-	*var = 0;
+	chdir(v->path);
+	lstat(v->path, &v->buf);
+	cd_ordlink_1(v, flag);
 }
 
 /*
@@ -125,9 +124,6 @@ void	cd_ordlink(char **pwd, char **oldpwd, int *var, t_cdpkg v)
 int		built_cd(char **arg, char **env)
 {
 	t_cdpkg		v;
-	static char	*pwd;
-	static char	*oldpwd;
-	static int	var;
 
 	v.flag = 0;
 	ft_bzero(v.buff, sizeof(v.buff));
@@ -140,15 +136,14 @@ int		built_cd(char **arg, char **env)
 		ft_strdel(&v.path);
 		return (EXIT_FAILURE);
 	}
-// 	ft_putendl_fd(v.path,1);
 	lstat(v.path, &v.buf);
 	if ((S_ISLNK(v.buf.st_mode) && !(v.flag == P_flg)) ||\
-	(!(v.flag == P_flg) && var &&\
+	(!(v.flag == P_flg) &&\
 	(ft_strcmp(v.path, ".") == 0 ||\
 	ft_strcmp(v.path, "./") == 0)))
-		cd_symblink(&pwd, &oldpwd, &var, v);
+		cd_symblink(&v);
 	else
-		cd_ordlink(&pwd, &oldpwd, &var, v);
+		cd_ordlink(&v);
 	ft_strdel(&v.path);
 	return (EXIT_SUCCESS);
 }

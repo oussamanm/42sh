@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 11:05:50 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/23 18:31:00 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 20:21:04 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,52 +46,24 @@ int		read_fc_flags(char **args, char **fl, char *err)
 }
 
 /*
-**	check if fc builtin exists and in in cmd and has exec flags(e, s)
-*/
-
-int		fc_exec_flag(char *str_cmds)
-{
-	char	**pv_args;
-	char	**sp_args;
-	int		i;
-	char	*fl;
-
-	if (!str_cmds)
-		return (0);
-	pv_args = ft_str_split_q(str_cmds, ";");
-	sp_args = NULL;
-	i = -1;
-	while (pv_args && pv_args[++i])
-	{
-		sp_args = ft_str_split_q(pv_args[i], "\n \t");
-		if (sp_args && ft_strcmp(sp_args[0], "fc") == 0)
-		{
-			read_fc_flags(sp_args + 1, &fl, NULL);
-			if (ft_strchr(fl, 'e') || ft_strchr(fl, 's') || !ft_strchr(fl, 'l'))
-				return (1);
-		}
-		ft_strrdel(sp_args);
-	}
-	ft_strrdel(pv_args);
-	return (0);
-}
-
-/*
 **	in case of error display usage message
 */
 
-void	fc_usage(char c)
+void	fc_usage(char c, char *msg)
 {
 	ft_putstr_fd("42sh: fc: -", 2);
 	ft_putchar_fd(c, 2);
-	ft_putendl_fd(": invalid option\nfc: usage: fc [-e ename] [-nlr] [fisrt] [last]", 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(msg, 2);
+	ft_putendl_fd("fc: usage: fc [-e ename]"\
+			"[-nlr] [fisrt] [last]", 2);
 }
 
 void	fc_flag_e(t_history his, char **args)
 {
 	if (!args[0])
 	{
-		fc_usage('e');
+		fc_usage('e', "option requires an argument");
 		return ;
 	}
 	else if (fc_edit(his, args[0], NULL, args + 1))
