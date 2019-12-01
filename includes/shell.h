@@ -479,7 +479,7 @@ t_job					*ft_inisial_job(void);
 char					*ft_cmd_value(t_tokens *st_tokens, char *cmd);
 int						ft_print_termsig_back(int sig, char *name, int index, char p);
 void					ft_jobs_built(void);
-void					ft_update_p(void);
+void					ft_update_p(int any);
 void					ft_update_index(void);
 void					ft_print_pid(int index, int pgid);
 void					ft_foreground_job(t_job *job);

@@ -13,6 +13,28 @@
 #include "shell.h"
 #include "read_line.h"
 
+void	ft_update_p_fg(int index)
+{
+	t_list	*tmp;
+	t_job	*job;
+	int		add;
+
+	tmp = jobs;
+	add = 0;
+	while (tmp)
+	{
+		job = tmp->content;
+		if (add == 0)
+			job->p = '-';
+		if (job->index == index)
+			job->p = '+';
+		else if (add >= 1)
+			job->p = 0;
+		add++;
+		tmp = tmp->next;
+	}
+}
+
 void	ft_jobs_built(void)
 {
 	t_list	*tmp;
@@ -90,7 +112,11 @@ void	ft_foreg_wait(t_job *job, t_list **tmp, t_list **pr)
 	ft_wait(job);
 	g_sign = 0;
 	(job->sig_term) ? ft_termsig_fore(job->sig_term, job->cmd) : 0;
-	(job->status == EXITED) ? ft_remove_node(tmp, pr) : 0;
+	if (job->status == EXITED)
+	{
+		(job->p == '+') ? ft_update_p(1) : 0;
+		ft_remove_node(tmp, pr);
+	}
 	if (tcsetpgrp(0, getpgrp()) == -1)
 		ft_putendl_fd("Controling terminal ERROR", 2);
 	signal(SIGCHLD, ft_catch_sigchild);
@@ -123,6 +149,7 @@ void	ft_foreground(char *arg)
 		if (job->status == RUN || job->status == STOPED)
 		{
 			ft_putendl(job->cmd);
+			(arg) ? ft_update_p_fg(job->index) : 0;
 			ft_foreg_wait(job, &tmp, &pr);
 			break ;
 		}
