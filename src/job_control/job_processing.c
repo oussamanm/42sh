@@ -24,18 +24,6 @@ void	ft_printstatus(int status)
 		ft_putstr("Exited");
 }
 
-void	ft_putjoblst(int pgid, int pid, int status)
-{
-	ft_putstr("\n################\n");
-	ft_putstr("pgid == ");
-	ft_putnbr(pgid);
-	ft_putchar('\n');
-	ft_putstr("pid == ");
-	ft_putnbr(pid);
-	ft_putchar('\n');
-	ft_printstatus(status);
-}
-
 void	ft_collect_job_status(void)
 {
 	t_list	*tmp;
@@ -72,7 +60,7 @@ void	ft_job_processing(void)
 		if (job->status == EXITED)
 		{
 			ft_print_termsig_back(job->sig_term, job->cmd, job->index, job->p);
-			(job->p == '+') ? ft_update_p(1) : 0;
+			ft_update_p(1);
 			ft_remove_node(&tmp, &pr);
 		}
 		pr = tmp;

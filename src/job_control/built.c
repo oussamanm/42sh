@@ -79,6 +79,23 @@ int		ft_get_jobs_arg(char **args, int *index)
 	return (ret);
 }
 
+void	ft_print_jobinfo(t_job *job, int ar)
+{
+	ft_putchar('[');
+	ft_putnbr(job->index);
+	ft_putchar(']');
+	(job->p != 0) ? ft_putchar(job->p) : ft_putchar(' ');
+	ft_putstr("  ");
+	(ar == 0) ? ft_putnbr(job->pgid) : 0;
+	(ar == 0) ? ft_putchar(' ') : 0;
+	ft_printstatus(job->status);
+	ft_putstr("\t\t\t");
+	ft_putstr(job->cmd);
+	ft_putchar(' ');
+	(job->background == 1) ? ft_putchar('&') : 0;
+	ft_putchar('\n');
+}
+
 void	ft_jobs_built(char **args)
 {
 	t_list	*tmp;
@@ -98,21 +115,7 @@ void	ft_jobs_built(char **args)
 			continue ;
 		}
 		if (ar != 1)
-		{
-			ft_putchar('[');
-			ft_putnbr(job->index);
-			ft_putchar(']');
-			(job->p != 0) ? ft_putchar(job->p) : ft_putchar(' ');
-			ft_putstr("  ");
-			(ar == 0) ? ft_putnbr(job->pgid) : 0;
-			(ar == 0) ? ft_putchar(' ') : 0;
-			ft_printstatus(job->status);
-			ft_putstr("\t\t\t");
-			ft_putstr(job->cmd);
-			ft_putchar(' ');
-			(job->background == 1) ? ft_putchar('&') : 0;
-			ft_putchar('\n');
-		}
+			ft_print_jobinfo(job, ar);
 		else if (ar == 1)
 		{
 			ft_putnbr(job->pgid);
@@ -122,17 +125,33 @@ void	ft_jobs_built(char **args)
 	}
 }
 
+int		ft_bg_content(t_job *job, char *arg)
+{
+	if (job->status == STOPED && job->p == '+')
+	{
+		ft_print_backcmd(job);
+		job->background = 1;
+		ft_run_job(job);
+		killpg(job->pgid, SIGCONT);
+		return (1);
+	}
+	else if ((job->status == RUN && job->p == '+') || (job->status == RUN && arg))
+	{
+		ft_putstr_fd("bash: bg: job ", 2);
+		ft_putnbr(job->index);
+		ft_putendl_fd(" already in background", 2);
+		return (1);
+	}
+	return (0);
+}
+
 void	ft_continue(char *arg)
 {
 	t_list	*tmp;
 	t_job	*job;
 	int		index;
 
-	if (!jobs)
-	{
-		ft_putendl_fd("42sh: bg: current: no such job", 2);
-		return ;
-	}
+	(!jobs) ? ft_putendl_fd("42sh: bg: current: no such job", 2) : 0;
 	(arg) ? (index = ft_atoi(arg)) : 0;
 	tmp = jobs;
 	while (tmp)
@@ -144,21 +163,8 @@ void	ft_continue(char *arg)
 			(!tmp) ? ft_putendl_fd("42sh: bg: current: no such job", 2) : 0;
 			continue ;
 		}
-		if (job->status == STOPED && job->p == '+')
-		{
-			ft_print_backcmd(job);
-			job->background = 1;
-			ft_run_job(job);
-			killpg(job->pgid, SIGCONT);
+		if (ft_bg_content(job, arg))
 			break ;
-		}
-		else if (job->status == RUN && job->p == '+')
-		{
-			ft_putstr_fd("bash: bg: job ", 2);
-			ft_putnbr(job->index);
-			ft_putendl_fd(" already in background", 2);
-			break ;		
-		}
 		tmp = tmp->next;
 	}
 }
