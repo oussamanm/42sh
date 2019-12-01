@@ -480,8 +480,8 @@ int						ft_job_index(void);
 t_job					*ft_inisial_job(void);
 char					*ft_cmd_value(t_tokens *st_tokens, char *cmd);
 int						ft_print_termsig_back(int sig, char *name, int index, char p);
-void					ft_jobs_built(void);
-void					ft_update_p(void);
+void					ft_jobs_built(char **args);
+void					ft_update_p(int any);
 void					ft_update_index(void);
 void					ft_print_pid(int index, int pgid);
 void					ft_foreground_job(t_job *job);
@@ -491,5 +491,7 @@ void					ft_single_proc(t_job *job, t_pipes *st_pipes, int pid, int *add);
 void					ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add);
 char					*ft_strsignal(int sig);
 void					ft_print_backcmd(t_job *job);
+char					ft_stoped(t_job *job);
+char					ft_terminated(t_job *job);
 
 #endif

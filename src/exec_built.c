@@ -99,7 +99,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 	else if (STR_CMP(*(st_pipes->args), "bg"))
 		ft_continue((st_pipes->args)[1]);
 	else if (STR_CMP(*(st_pipes->args), "jobs"))
-		ft_jobs_built();
+		ft_jobs_built(st_pipes->args);
 	/// close file discriptor used by builtens
 	while (st_pipes->st_redir != NULL)
 	{

@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-void		ft_update_p(void)
+void		ft_update_p(int any)
 {
 	t_list	*tmp;
 	t_job	*job;
@@ -23,6 +23,8 @@ void		ft_update_p(void)
 	while (tmp)
 	{
 		job = tmp->content;
+		if (!any && job->p == '-')
+			break ;
 		if (add == 0)
 			job->p = '+';
 		if (add == 1)
