@@ -491,5 +491,6 @@ char					*ft_strsignal(int sig);
 void					ft_print_backcmd(t_job *job);
 char					ft_stoped(t_job *job);
 char					ft_terminated(t_job *job);
+void					ft_run_job(t_job *job);
 
 #endif
