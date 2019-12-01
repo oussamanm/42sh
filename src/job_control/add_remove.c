@@ -52,7 +52,7 @@ void	ft_add_job(t_job *job)
 	(!jobs) ? (jobs = ft_lstnew(NULL, sizeof(t_job))) :
 	(ft_lstadd(&jobs, ft_lstnew(NULL, sizeof(t_job))));
 	jobs->content = job;
-	ft_update_p();
+	ft_update_p(1);
 }
 
 void	ft_lstadd_last(t_list **alst, t_list *new, t_process *proc)
