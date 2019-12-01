@@ -14,7 +14,7 @@
 #include "read_line.h"
 
 /*
-** Fill args with token except T_EQUAL 
+** Fill args with token except T_EQUAL  @
 */
 
 void		tokens_to_args(t_pipes *st_pipe)
@@ -63,7 +63,7 @@ void		args_to_token_h(t_tokens **st_tokens, char *arg, int *j, int i)
 				else if (M_CHECK(arg[*j], '>', '<') && arg[*j + 1] != '(')
 					ft_lexer_red(st_tokens, &arg[*j], j, i);
 				else if ((*st_tokens)->prev && (*st_tokens)->prev->token == T_RED_OUT_A
-					&& arg[*j] == '-' && *j && arg[*j - 1] == '&')
+					&& arg[*j] == '-')
 					ft_upd_token((*st_tokens)->prev, T_RED_OUT_B, ">&-");
 	/*Pipe*/	else if (arg[*j] == '|' && arg[*j + 1] != '|')
 					ft_fill_token(st_tokens, T_PIPE, ft_strdup("|"), i);
@@ -93,9 +93,7 @@ void		args_to_token(t_tokens **st_tokens, char *arg, int i)
 		return ;
 	j = -1;
 	while (arg[++j])
-	{
 		args_to_token_h(st_tokens, arg, &j, i);
-	}
 }
 
 /*
@@ -118,9 +116,9 @@ t_tokens	*ft_lexer(char **args)
 		args_to_token(&st_tokens, args[i], i);
 		i++;
 	}
-	if (st_tokens != NULL && st_tokens->prev != NULL)
+	if (st_tokens != NULL && PREV != NULL)
 	{
-		st_tokens->prev->next = NULL;
+		PREV->next = NULL;
 		free(st_tokens);
 	}
 		// st_tokens = st_head;
@@ -131,6 +129,5 @@ t_tokens	*ft_lexer(char **args)
 		// }
 		// dprintf(2,"\n--------------\n");
 		//exit(0);
-
 	return ((i != 0) ? st_head : NULL);
 }

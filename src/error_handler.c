@@ -126,38 +126,32 @@ int			error_syntax_expans(char *str_cmds)
 ** Helper for handle error redirection
 */
 
-int			error_redir_h(t_tokens *st_tokens, char msg_err[50])
+char			*error_redir_h(t_tokens *st_tokens)
 {
 	char	*temp;
+	char	*msg;
 
-	if (!st_tokens)
-		return (1);
+	msg = NULL;
 	temp = NULL;
-	/// check  case redirection followed by NULL(except <&- , >&-) or a token (not TXT and not sub_shell)
 	if (TOKEN < 0 && ((!NEXT && !M_CHECK(TOKEN, T_RED_IN_B, T_RED_OUT_B)) ||
-		(!T_IS_TXT(NEXT->token) && !T_IS_SUBSHELL(NEXT->token))))
-		ft_strcpy(msg_err, "syntax error near unexpected token");
-	/// check token not exist
+		(NEXT && !T_IS_TXT(NEXT->token) && !T_IS_SUBSHELL(NEXT->token))))
+		msg = "syntax error near unexpected token";
 	else if (TOKEN < T_RED_APP_A)
-		ft_strcpy(msg_err, "syntax error near unexpected token");
-	/// check unexpected & in redirection
+		msg = "syntax error near unexpected token";
 	else if (TOKEN < 0 && ft_check_char(st_tokens->value, ERRO_IN_AND))
-		ft_strcpy(msg_err, "syntax error near unexpected token `&'");
-	/// check  case "echo hello 3>&file" => "ambiguous redirect"
+		msg = "syntax error near unexpected token `&'";
 	else if (TOKEN == T_RED_OUT_A && *(st_tokens->value) == '>' &&
 		NEXT && !ft_isalldigit(NEXT->value) &&
 		PREV && PREV->indx == st_tokens->indx &&
 		ft_isalldigit(PREV->value) && ft_atoi(PREV->value) != 1)
-		ft_strcpy(msg_err, "ambiguous redirect");
-	/// check case [word] of redirection <&[word] not all_digits 
+		msg = "ambiguous redirect";
 	else if (TOKEN == T_RED_IN_A && NEXT &&
 		!ft_isalldigit((temp = get_value_next(NEXT))))
-		ft_strcpy(msg_err, "ambiguous redirect ");
-	/// check case token >< 
+		msg = "ambiguous redirect ";
 	else if (TOKEN <= -122 && !ft_strncmp(st_tokens->value, "><", 2))
-		ft_strcpy(msg_err, "syntax error near unexpected token `<'");
+		msg = "syntax error near unexpected token `<'";
 	free(temp);
-	return (msg_err[0] != 0);
+	return (ft_strdup(msg));
 }
 
 /*
@@ -166,17 +160,19 @@ int			error_redir_h(t_tokens *st_tokens, char msg_err[50])
 
 int			error_redir(t_tokens *st_tokens)
 {
-	char	msg_err[50];
+	char	*msg_err;
 
-	ft_bzero(msg_err, 50);
+	msg_err = NULL;
 	while (st_tokens != NULL)
 	{
-		if (error_redir_h(st_tokens, msg_err))
+		if ((msg_err = error_redir_h(st_tokens)))
 		{
 			print_error(msg_err, NULL, NULL, 0);
+			ft_strdel(&msg_err);
 			return (1);
 		}
 		st_tokens = NEXT;
 	}
+	ft_strdel(&msg_err);
 	return (0);
 }

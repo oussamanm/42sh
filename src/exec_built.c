@@ -40,7 +40,7 @@ int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 	{
 		status = ft_call_built(st_pipes, tmp_env);
 		if (fork_it)
-			exit((status) ? EXIT_SUCCESS : EXIT_FAILURE);
+			exit((status) ? EXIT_FAILURE : EXIT_SUCCESS);
 	}
 	else if (fork_it && g_proc_sub && !st_pipes->bl_jobctr)
 		waitpid(pid, &status, 0);
