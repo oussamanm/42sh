@@ -13,6 +13,22 @@
 #include "shell.h"
 
 /*
+** Get state
+*/
+
+int			get_state(int status)
+{
+	if (status == 32512)
+		return (127);
+	else if (status == 2)
+		return (130);
+	else if (status)
+		return (1);
+	else
+		return (0);
+}
+
+/*
  ** Execute Logical Operateur
  */
 
@@ -25,6 +41,8 @@ void		logical_ops(t_logopr *st_logopr)
 	while (st_logopr != NULL)
 	{
 		state = ft_pipe(st_logopr->st_pipes);
+		g_exit_status = get_state(state);
+		state = (state) ? 1 : 0;
 		if ((st_logopr->status == T_LOGOPR_OR && state == 0) ||
 				(st_logopr->status == T_LOGOPR_AND && state == 1))
 			st_logopr = st_logopr->next;

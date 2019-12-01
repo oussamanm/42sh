@@ -20,6 +20,7 @@
 void		initial_read_line(t_history *his, t_select **select)
 {
 	restore_history(his);
+	g_sign = 0;
 	*select = (t_select *)ft_memalloc(sizeof(t_select));
 	(*select)->start = -1;
 	(*select)->end = -1;
@@ -93,6 +94,7 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 static void	initial_shell(t_select	**select)
 {
 	g_pos.cmd = NULL;
+	g_exit_status = 0;
 	call_signal();
 	initial_read_line(&g_history, select);
 	init_fc_built();
@@ -127,14 +129,13 @@ int			main(void)
 			continue ;
 		}
         // Check incomplete syntax of Sub_shell or Quoting
-        g_pos.cmd = completing_line(g_pos.cmd, select, &g_history);
-
+		g_pos.cmd = completing_line(g_pos.cmd, select, &g_history);
         // add command to history	
 	  	if (!history_handling(&g_pos.cmd))
 			continue ;
 
 		// Execution
-		(!(g_pos.exit)) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
+		(!g_pos.exit) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
 		ft_job_processing();
 		ft_strdel(&g_pos.cmd);
 	}
