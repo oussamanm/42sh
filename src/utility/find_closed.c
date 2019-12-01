@@ -14,9 +14,11 @@
 
 int			find_dquot(char *str)
 {
-	int i; 
+	int i;
+	int j;
 	
 	i = 0;
+	j = 0;
 	while (str[i])
 	{
 		if (M_ESCAPED(str[i]))
@@ -25,7 +27,10 @@ int			find_dquot(char *str)
 			continue ;
 		}
 		if (str[i] == '(')
-			i += find_subsh(&str[i]);
+		{
+			if ((j = find_subsh(&str[i])) != -1)
+				i += j;
+		}
 		else if (i && str[i] == '"')
 			return (i);
 		i++;
@@ -44,15 +49,16 @@ int			find_subsh(char *str)
 	temp = 0;
 	while (str[i] && temp != -1)
 	{
+		temp = 0;
 		if (M_ESCAPED(str[i]))
 		{
 			i += (str[i + 1]) ? 2 : 1;
 			continue ;
 		}
-		if (str[i] == '"')
-			i += find_dquot(&str[i]);
-		else if (str[i] == '\'')
-			i += find_quot(&str[i]);
+		if (str[i] == '"' && (temp = find_dquot(&str[i])) != -1)
+			i += temp;
+		else if (str[i] == '\'' && (temp = find_quot(&str[i])) != -1)
+			i += temp;
 		else if (i && str[i] == '(' && (temp = find_subsh(&str[i])) != -1)
 			i += temp;
 		else if (str[i] == ')')

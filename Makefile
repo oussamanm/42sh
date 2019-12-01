@@ -12,6 +12,7 @@ NAME = 42sh
 SRC = ./src/
 OBJS = error_handler.o\
 	variable.o shell.o signals.o lexer_h.o\
+	lexer_call.o\
 	lexer.o execution.o  exec_built.o quote.o\
 	parser.o intern.o vrbs_parse.o expansion.o \
 	utility/helper_func.o utility/new.o\

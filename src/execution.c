@@ -14,7 +14,7 @@
 #include "read_line.h"
 
 /*
-** Check if exist Cmd : check if Ok and permission
+** Check if exist Cmd : check if Ok and permission @
 */
 
 int				ft_check_cmd(char *cmd, char **environ)
@@ -46,10 +46,10 @@ int				ft_check_cmd(char *cmd, char **environ)
 }
 
 /*
- ** Execute all cmds 
+ ** Execute all cmds  @
  */
 
-static void		ft_cmds_exec(t_cmds *st_cmds)
+static void		ft_cmds_exec(t_cmds *st_cmds) 
 {
 	t_jobctr	*st_jobctr;
 
@@ -65,7 +65,7 @@ static void		ft_cmds_exec(t_cmds *st_cmds)
 
 
 /*
-** Execute of Cmd
+** Execute of Cmd @
 */
 
 static void		ft_cmd_exec(char **args, char **env)
@@ -117,7 +117,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 
 	/// Check if Builtens
 	if (st_pipes->args && ft_check_built(*(st_pipes->args)))
-		return (ft_init_built(st_pipes, fork_it, &environ) ? 0 : 1);
+		return (ft_init_built(st_pipes, fork_it, &environ));
 
 	(fork_it) ? signal(SIGCHLD, SIG_DFL) : 0;
 	
@@ -192,6 +192,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 
 	/// Apply here_doc (do not applied in case of comming from SUB_SHELL) ???? check if st_tokens exist
 	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;
+
 
 	/// Executions  *** (!g_pos.exit) ? 
 	(!g_pos.exit) ? ft_cmds_exec(st_cmds) : 0;

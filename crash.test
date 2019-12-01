@@ -1,11 +1,40 @@
-ls
-pwd
-env
-ifconfig
-fc -s p
-fc -l 0 1
-!l && !p || !i ; !e
-hello=world var2=pappa va3=papapapa var=llllll
-unset var3 var HOME
-cd
-set
+/**** parsing
+
+asdasd|asasdasd || asdasd;a"asdasd"s ()adsasd 'asdasd';
+;asdasdasd\|\|&pwdasdasd ; "" ; \| ; \||'asdasd'weqwe
+pwd ; | pwd "" ; "'"''"'" ; "" | ""
+""
+''
+\/\/\;\;
+echo hello \; echo world \; \"
+echo hello world \|
+echo hello world \||
+echo hello world \&
+echo hello world \&\&
+
+                   "'" ; ''|''
+aaa=bbb ccc=ddd | cat -e &
+pwd ;() ; echo hello world;
+echo $(aaa=fff cc=eee) | cat -e
+echo hello
+    $(echo world)\;pwd
+*
+echo \$HOME ";" pwd
+qweqwe=qweqweqw rewerwer= ""
+
+
+
+
+/****** Redirection
+
+pwd >&-
+<>
+><
+pwd 1<>gggg asd ><asd 
+>'asd'dqwe$(echo kkkk)
+
+
+
+/******* Line continuation
+
+"$('

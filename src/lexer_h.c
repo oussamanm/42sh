@@ -14,7 +14,7 @@
 
 
 /*
-** Fill t_tokens
+** Fill t_tokens @
 */
 
 void		ft_fill_token(t_tokens **st_tokens, int token,
@@ -34,7 +34,7 @@ void		ft_fill_token(t_tokens **st_tokens, int token,
 }
 
 /*
-**  append "-"" to redirection if separated
+**  append "-"" to redirection if separated @
 */
 
 void		ft_upd_token(t_tokens *st_tokens, int token, char *value)
@@ -49,7 +49,7 @@ void		ft_upd_token(t_tokens *st_tokens, int token, char *value)
 
 
 /*
-** Duplicate token and alloc next if exist
+** Duplicate token and alloc next if exist @
 */
 
 void		ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token)
@@ -77,41 +77,7 @@ void		ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token)
 }
 
 /*
-** Fill args with token except T_EQUAL
-*/
-
-void		tokens_to_args(t_pipes *st_pipe)
-{
-	t_tokens	*st_tokens;
-	int			len;
-	int			i;
-	int			index;
-
-	if (!st_pipe || !st_pipe->st_tokens)
-		return ;
-	i = 0;
-	st_tokens = st_pipe->st_tokens;
-	len = ft_count_tokens(st_pipe->st_tokens);
-	st_pipe->args = ft_strr_new(len);
-	index = st_tokens->indx;
-	while (st_tokens)
-	{
-		if (st_tokens->is_arg != T_EQUAL)
-		{
-			if (i != 0 && index == st_tokens->indx)
-				st_pipe->args[i - 1] = ft_strjoir_rtn(st_pipe->args[i - 1], st_tokens->value, 1);
-			else
-			{
-				st_pipe->args[i++] = ft_strdup(st_tokens->value);
-				index = st_tokens->indx;
-			}
-		}
-		st_tokens = st_tokens->next;
-	}
-}
-
-/*
-** Count tokens
+** Count tokens @
 */
 
 int			ft_count_tokens(t_tokens *st_tokens)
@@ -130,7 +96,7 @@ int			ft_count_tokens(t_tokens *st_tokens)
 }
 
 /*
-** Check if exist token in list tokens
+** Check if exist token in list tokens @
 */
 
 int			ft_check_token(t_tokens *st_tokens, int token)

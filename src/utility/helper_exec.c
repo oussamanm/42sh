@@ -46,9 +46,8 @@ void		remove_backslashs(t_tokens *st_tokens)
 
 	while (st_tokens)
 	{
-		if (st_tokens->token == T_TXT || st_tokens->token == T_DQUO)
+		if ((st_tokens->token == T_TXT || st_tokens->token == T_DQUO) && (arg = st_tokens->value))
 		{
-			arg = st_tokens->value;
 			i = -1;
 			while (arg[++i] && (index = ft_find_char(&arg[i], '\\')) != -1)
 			{
