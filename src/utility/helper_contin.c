@@ -13,19 +13,19 @@
 #include "shell.h"
 #include "read_line.h"
 
-int			get_last_flag(int *maps)
+int			get_last_flag(char *maps)
 {
 	int i;
 
 	if (!maps)
-		return (0);
+		return (-1);
 	i = 0;
 	while (maps[i])
 		i++;
 	return (i - 1);
 }
 
-int			find_flag(int *maps, int flag)
+int			find_flag(char *maps, int flag)
 {
 	int index;
 
@@ -42,25 +42,28 @@ int			find_flag(int *maps, int flag)
 	return (-1);
 }
 
-void		clean_maps(int *maps)
+void		clean_maps(char	*maps)
 {
 	int	i;
+	int len;
 	int	j;
 
 	i = 0;
 	j = 0;
+	len = ft_strlen(maps);
 	if (!maps || find_flag(maps, -1) == -1)
 		return ;
-	while (maps[i])
+	while (maps[i] && j < len)
 	{
 		if (maps[i] != -1)
 			maps[j++] = maps[i];
 		i++;
 	}
-	ft_bzero(&maps[j], 1000 - j - 1);
+	if (len != 0 && (len - j) > 0)
+		ft_bzero(&maps[j], len - j);
 }
 
-int			count_key(int *maps, int key)
+int			count_key(char *maps, int key)
 {
 	int i;
 
@@ -72,7 +75,7 @@ int			count_key(int *maps, int key)
 	return (i);
 }
 
-int			closed_dquot(int *maps)
+int			closed_dquot(char *maps)
 {
 	int i;
 

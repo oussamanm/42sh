@@ -29,7 +29,8 @@
 # include <curses.h>
 
 # define ERR_SYN		"syntax error near unexpected token"
-
+# define EXIT_CMD_NF 127
+# define EXIT_SIGINT 130
 
 # define BUFF_SIZE 10
 # define UNUSED(x) (void)(x)
@@ -51,7 +52,7 @@
 # define ERRO_IN_AND -12
 # define IDENTIFIER(x) (x=="?"||x=="-"||x=="@"||x=="%"||x=="~"||x==":"||x==".")
 
-#define MAX_MAPS 1000
+#define MAX_MAPS 100
 #define MAX_TAB_ADDR 10
 /*
 **Buttons
@@ -239,6 +240,7 @@ typedef	struct			s_cmds
 
 t_intern	*g_intern;
 char		**g_environ;
+int			g_exit_status;
 
 /*
 ** Builtins
@@ -436,11 +438,11 @@ void					set_isarg(t_pipes *st_pipes);
 ** Line complition
 */
 
-int						get_last_flag(int *maps);
-int						find_flag(int *maps, int flag);
-void					clean_maps(int *maps);
-int						count_key(int *maps, int key);
-int						closed_dquot(int *maps);
+int						get_last_flag(char *maps);
+int						find_flag(char *maps, int flag);
+void					clean_maps(char *maps);
+int						count_key(char *maps, int key);
+int						closed_dquot(char *maps);
 
 
 /*

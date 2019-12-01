@@ -104,7 +104,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	pid = 0;
 	rtn = 0;
 	if (!st_pipes || !st_pipes->st_tokens)
-		return (1);
+		return (0);
 	
 	/// Remove backslashs from tokens
 	remove_backslashs(st_pipes->st_tokens);
@@ -142,15 +142,16 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		if (!ft_check_cmd(st_pipes->args[0], environ)) /// Check if cmd exist , permission
 			ft_cmd_exec(st_pipes->args, environ);
 		else
-			exit(EXIT_FAILURE);
+			exit(EXIT_CMD_NF);
 	}
 	else if (fork_it && g_proc_sub && !st_pipes->bl_jobctr)
 		waitpid(pid, &rtn, 0);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
+
 	/// insertion in hash_table in case of exit_proccess = SUCCESS
 	if (rtn == EXIT_SUCCESS && st_pipes->args)
 		insert_hash(*st_pipes->args, ft_find_path(*st_pipes->args, environ));
-	return (rtn ? 0 : 1);
+	return (rtn);
 }
 
 /*
@@ -174,7 +175,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL || error_syntax_lexer(st_cmds->st_tokens))
 	{
 		free_list_cmds(st_cmds);
-		return (-1);
+		return ((g_exit_status = 258));
 	}
 	/// update token by remove quotes 
 	ft_update_tokens(st_cmds->st_tokens);
@@ -192,13 +193,13 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	/// Apply here_doc (do not applied in case of comming from SUB_SHELL) ???? check if st_tokens exist
 	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;
 
-	/// Executions * (apply execution if (Ctr + c) doesn't pressed)  *** (!g_pos.exit) ? 
-	ft_cmds_exec(st_cmds);
+	/// Executions  *** (!g_pos.exit) ? 
+	(!g_pos.exit) ? ft_cmds_exec(st_cmds) : 0;
 
 	procsub_close(st_cmds->fd);
 	
 	/// Clear allocated space
 	free_list_cmds(st_cmds);
 
-	return (1);
+	return (0);
 }

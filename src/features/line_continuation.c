@@ -13,8 +13,24 @@
 #include "shell.h"
 #include "read_line.h"
 
+int				increase_maps(char	**maps)
+{
+	char	*new_buff;
+	int		len;
 
-static int		correct_maps(int *maps)
+	if (!maps || !(*maps))
+		return (-1);
+	len = ft_strlen(*maps) + MAX_MAPS;
+	if ((new_buff = ft_strnew(len)) == NULL)
+		ft_putendl_fd("Error to allocate new area", 2);
+	ft_strcpy(new_buff, *maps);
+	ft_strdel(maps);
+	if ((*maps = new_buff) == NULL)
+		return (-1);
+	return (len);
+}
+
+static int		correct_maps(char *maps)
 {
 	int i;
 	int quoted[2];
@@ -24,11 +40,13 @@ static int		correct_maps(int *maps)
 	i = -1;
 	rtn = 0;
 	ft_bzero(quoted, sizeof(int) * 2);
+	if (!maps || !(*maps))
+		return (0);
 	while (maps[++i] > 0)
 	{
 		temp = 0;
 		if (MATCH_CLOSED(maps[i], maps[i + 1]) && ++rtn)
-			bchar(&maps[i], sizeof(int) * 2, -1);
+			bchar(&maps[i], 2, -1);
 		else if (maps[i] == 'Q')
 		{
 			if (!quoted[1])
@@ -52,36 +70,38 @@ static int		correct_maps(int *maps)
 	return (rtn);
 }
 
-static void		fill_maps(char *str_cmd, int *maps, int j)
+static void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 {
 	int i;
 	int quoted;
 
-	if (!str_cmd || !maps)
+	if (!str_cmd || !maps || !*maps)
 		return ;
 	i = 0;
 	quoted = 0;
 	while (str_cmd[i])
 	{
+		if (j >= (len_map - 1) && (len_map = increase_maps(maps)) == -1)
+			break ;
 		if (str_cmd[i] == '\\' && (str_cmd[i + 1] != '\'' || quoted == 0 || !j))/*|| (j && maps[j - 1] != 'q')))*/
 		{
 			i += (str_cmd[i + 1]) ? 1 : 0;
 		}
 		else if (str_cmd[i] == '"')
-			maps[j++] = 'Q';
+			(*maps)[j++] = 'Q';
 		else if (str_cmd[i] == '\'')
 		{
 			quoted = (quoted) ? 0 : 1;
-			maps[j++] = 'q';
+			(*maps)[j++] = 'q';
 		}
 		else if (M_SUBSH(str_cmd[i]) && str_cmd[i + 1] == '(' && ++i)
-			maps[j++] = 'S';
+			(*maps)[j++] = 'S';
 		else if (str_cmd[i] == ')')
-			maps[j++] = 's';
+			(*maps)[j++] = 's';
 		i += (str_cmd[i] != '\0');
 	}
-	while (correct_maps(maps))
-		clean_maps(maps);
+	while (correct_maps(*maps))
+		clean_maps(*maps);
 }
 
 static void		ft_read_subsh(char **line, t_select *select, t_history *his)
@@ -121,21 +141,26 @@ static void		ft_read_quote(char **line, int quote,
 	}
 }
 
+
 char			*completing_line(char *str_cmds, t_select *select, t_history *his)
 {
-	int		*maps;
+	char	*maps;
 	int		i;
 	int		index;
 	char	*cmd;
+	int		len;
 
-	if (!(maps = (int *)ft_memalloc(sizeof(int) * MAX_MAPS)))
+	if (!(maps = ft_strnew(MAX_MAPS)))
 		return (str_cmds);
 	cmd = ft_strdup(str_cmds);
 	ft_strdel(&g_pos.cmd);
-	fill_maps(cmd, maps, 0);
+	fill_maps(cmd, &maps, 0, MAX_MAPS);
 	i = get_last_flag(maps);
+	len = MAX_MAPS;
 	while (i >= 0 && !g_pos.exit)
 	{
+		if (i >= (len - 1) && (len = increase_maps(&maps)) == -1)
+			break ;
 		if (maps[i] == 'Q' || maps[i] == 'q' || maps[i] == 'S')
 		{
 			index = ft_strlen(cmd);
@@ -143,7 +168,7 @@ char			*completing_line(char *str_cmds, t_select *select, t_history *his)
 				ft_read_subsh(&cmd, select, his);
 			else
 				ft_read_quote(&cmd, (maps[i] == 'Q') ? '"' : '\'', select, his);
-			fill_maps(&cmd[index], maps, i + 1);
+			fill_maps(&cmd[index], &maps, i + 1, len);
 			i = get_last_flag(maps);
 			continue ;
 		}
