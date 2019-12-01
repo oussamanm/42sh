@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-char 			*ft_cmd_value(t_tokens *st_tokens, char *cmd)
+char	*ft_cmd_value(t_tokens *st_tokens, char *cmd)
 {
 	while (st_tokens)
 	{

@@ -22,6 +22,13 @@ void	ft_foreground_job(t_job *job)
 	(job->sig_term != 0) ? ft_termsig_fore(job->sig_term, job->cmd) : 0;
 }
 
+void	ft_back_job(t_job *job, int *add)
+{
+	job->background = 1;
+	ft_print_pid(job->index, job->pgid);
+	*add = 1;
+}
+
 void	ft_manage_jobs(int pid, t_pipes *st_pipes, int *rtn)
 {
 	t_job		*job;
@@ -38,16 +45,15 @@ void	ft_manage_jobs(int pid, t_pipes *st_pipes, int *rtn)
 	if (!st_pipes->bl_jobctr)
 		ft_foreground_job(job);
 	else
-	{
-		job->background = 1;
-		ft_print_pid(job->index, job->pgid);
-		add = 1;
-	}
+		ft_back_job(job, &add);
 	if (tcsetpgrp(0, g_shellpid) == -1)
 		ft_putendl("Can't set the controling terminal to the parent process");
 	process = job->proc->content;
 	*rtn = process->exit_status;
-	(job->status == STOPED || add) ? ft_add_job(job) : 0;
+	if (job->status == STOPED || add)
+		ft_add_job(job);
+	else
+		ft_free_job(job);
 }
 
 void	ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add)
@@ -58,13 +64,7 @@ void	ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add)
 	p = NULL;
 	proc = job->proc;
 	if (!st_pipes->bl_jobctr)
-	{
-		tcsetpgrp(0, job->pgid);
-		g_sign = 1;
-		ft_wait(job);
-		g_sign = 0;
-		(job->sig_term != 0) ? ft_termsig_fore(job->sig_term, job->cmd) : 0;
-	}
+		ft_foreground_job(job);
 	if (tcsetpgrp(0, g_shellpid) == -1)
 		ft_putendl("Can't set the controling terminal to the parent process");
 	while (proc)
@@ -73,7 +73,10 @@ void	ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add)
 		*status = p->exit_status;
 		proc = proc->next;
 	}
-	(job->status == STOPED || add) ? ft_add_job(job) : 0;
+	if (job->status == STOPED || add)
+		ft_add_job(job);
+	else
+		ft_free_job(job);
 }
 
 void	ft_single_proc(t_job *job, t_pipes *st_pipes, int pid, int *add)
