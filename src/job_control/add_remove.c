@@ -31,6 +31,7 @@ void	ft_free_job(t_job *job)
 
 void	ft_remove_node(t_list **tmp, t_list **pr)
 {
+
 	if (*pr == NULL)
 	{
 		(*tmp) = (*tmp)->next;

@@ -36,46 +36,17 @@ void	ft_putjoblst(int pgid, int pid, int status)
 	ft_printstatus(status);
 }
 
-int		ft_get_job_status(t_list *proc, int status)
-{
-	t_process	*process;
-	int			n_proc;
-	int			exited;
-	int			stoped;
-	int			terminated;
-
-	n_proc = 0;
-	exited = 0;
-	stoped = 0;
-	terminated = 0;
-	while (proc)
-	{
-		process = proc->content;
-		(process->status == STOPED) ? stoped++ : 0;
-		(process->status == TERMINATED) ? terminated++ : 0;
-		(process->status == EXITED) ? exited++ : 0;
-		n_proc++;
-		proc = proc->next;
-	}
-	if (stoped)
-		return (STOPED);
-	else if ((exited || terminated) && n_proc)
-		return (EXITED);
-	return (status);
-}
-
 void	ft_collect_job_status(void)
 {
 	t_list	*tmp;
-	t_list	*proc;
 	t_job	*job;
 
 	tmp = jobs;
 	while (tmp)
 	{
 		job = tmp->content;
-		proc = job->proc;
-		job->status = ft_get_job_status(proc, job->status);
+		ft_stoped(job);
+		ft_terminated(job);
 		tmp = tmp->next;
 	}
 }
