@@ -6,12 +6,12 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 00:09:35 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/23 18:27:21 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 20:15:20 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/read_line.h"
-#include "../../includes/shell.h"
+#include "read_line.h"
+#include "shell.h"
 
 t_info				*fc_value(t_history his, char *keyword)
 {

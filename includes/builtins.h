@@ -73,7 +73,6 @@ struct	s_hash
 int						built_cd(char **arg, char **env);
 int						built_type(char **args, char **tmpenv);
 int						hash_table(char **args);
-void					built_echo(char **arg);
 void					built_env(char **args, char ***tmp_env);
 int					built_unset(char **args);
 
@@ -99,9 +98,11 @@ void					buil_putstr(char *arg, char *s1, char *s2, int fd);
 ** - ECHO FUNCTIONS;
 */
 
-int						echo_options(char **arg, int *flag);
-void					e_interpretation_1(char *arg, int flag);
-void					n_flag(char *arg, int flag);
+int		echo_options_(char *arg, int *flag);
+int		e_interpretation_1(char *arg);
+int		echo_meta_char(char c);
+char	echo_charcmp(char c, char *str);
+
 
 /*
 ** ALIAS FUNCTIONS

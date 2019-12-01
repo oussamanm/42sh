@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 11:05:50 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/30 17:50:40 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 20:21:04 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void	fc_usage(char c, char *msg)
 	ft_putchar_fd(c, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(msg, 2);
-	ft_putendl_fd(": invalid option\nfc: usage: fc [-e ename] [-nlr] [fisrt] [last]", 2);
+	ft_putendl_fd("fc: usage: fc [-e ename]"\
+			"[-nlr] [fisrt] [last]", 2);
 }
 
 void	fc_flag_e(t_history his, char **args)

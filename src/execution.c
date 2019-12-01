@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/30 01:41:01 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 01:00:00 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int				ft_check_cmd(char *cmd, char **environ)
 }
 
 /*
- ** Execute all cmds
+ ** Execute all cmds 
  */
 
 static void		ft_cmds_exec(t_cmds *st_cmds)
@@ -92,7 +92,7 @@ static void		ft_cmd_exec(char **args, char **env)
 }
 
 /*
-** Create child proccess , check if builtens , call for apply redirection
+** Create child proccess , check if builtens , call for apply redirection , Execution
 */
 
 int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
@@ -103,25 +103,29 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 
 	pid = 0;
 	rtn = 0;
+	if (!st_pipes || !st_pipes->st_tokens)
+		return (1);
+	
+	/// Remove backslashs from tokens
+	remove_backslashs(st_pipes->st_tokens);
 
-	/// Remove backslashs
-	remove_backslashs(st_pipes->args);
-
-	/// Remove Quote
-	//ft_remove_quot(st_pipes->args);
+	/// Fill args without T_EQUAL , T_SUBSHL,
+	tokens_to_args(st_pipes);
 
 	/// Check if tmp_env exist
 	environ = (st_pipes->tmp_env) ? st_pipes->tmp_env : g_environ;
 
 	/// Check if Builtens
-	if (st_pipes && ft_check_built(st_pipes->args[0]) && ft_strcmp(st_pipes->args[0], "echo"))
-		return (ft_init_built(st_pipes, &environ)); ///  add return to ft_init_built
+	if (st_pipes->args && ft_check_built(*(st_pipes->args)))
+		return (ft_init_built(st_pipes, &environ) ? 0 : 1);
 
 	(fork_it) ? signal(SIGCHLD, SIG_DFL) : 0;
 	
 	/// Fork - Child
 	if (fork_it && (pid = fork()) == -1)
 		ft_err_exit("Error in Fork new process \n");
+	if (pid > 0 && fork_it && !g_proc_sub)
+		ft_manage_jobs(pid, st_pipes, &rtn);
 	if (pid == 0)
 	{
 		ft_signal_default();
@@ -135,26 +139,22 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 		if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 			exit(EXIT_FAILURE);
 		/// execution
-		if (!ft_strcmp(st_pipes->args[0], "echo"))
-			built_echo(st_pipes->args);
-		else if (!ft_check_cmd(st_pipes->args[0], environ)) /// Check if cmd exist , permission
+		if (!ft_check_cmd(st_pipes->args[0], environ)) /// Check if cmd exist , permission
 			ft_cmd_exec(st_pipes->args, environ);
 		else
 			exit(EXIT_FAILURE);
 	}
-	else if (fork_it && !g_proc_sub)
-		ft_manage_jobs(pid, st_pipes, &rtn);
 	else if (fork_it && g_proc_sub && !st_pipes->bl_jobctr)
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &rtn, 0);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
 	/// insertion in hash_table in case of exit_proccess = SUCCESS
-	if (rtn == EXIT_SUCCESS)
-		insert_hash(st_pipes->args[0], ft_find_path(st_pipes->args[0], environ));
+	if (rtn == EXIT_SUCCESS && st_pipes->args)
+		insert_hash(*st_pipes->args, ft_find_path(*st_pipes->args, environ));
 	return (rtn ? 0 : 1);
 }
 
 /*
- ** Config Cmds by : - Lexer - Check Syntax - Apply sub_shell - Apply her_doc - Execution - Clear lists
+ ** Config Cmds by : - Lexer - Check Syntax - Apply sub_shell - Apply her_doc - Clear lists
  */
 
 int				ft_cmds_setup(char *str_arg, int bl_subsh)
@@ -164,7 +164,6 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	if (str_arg == NULL)
 		return (-1);
 	st_cmds = ft_new_cmds();
-	//garbage_mem(st_cmds, &g_garbage, 3);//env, history, alias
 	/// Fill args
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 
@@ -177,29 +176,28 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 		free_list_cmds(st_cmds);
 		return (-1);
 	}
-	/// update token by remove quotes *
+	/// update token by remove quotes 
 	ft_update_tokens(st_cmds->st_tokens);
 
-	/// Apply sub_shell *
+	/// Apply sub_shell 
 	apply_subsh(st_cmds->st_tokens);
 	
-	/// Aplly proc_sub *
-	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT)) //// why only T_PROC_IN 
+	/// Aplly proc_sub 
+	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT))
 		proc_substitution(st_cmds);
 	
-	/// Fill Lists of lists *
+	/// Fill Lists of lists 
 	ft_parse_cmd(st_cmds);
 
-	/// Apply here_doc (do not applied in case of comming from SUB_SHELL)
+	/// Apply here_doc (do not applied in case of comming from SUB_SHELL) ???? check if st_tokens exist
 	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;
 
-	/// Executions *
-	//printf("%s|%d\n", st_cmds->args[0], getpid());
+	/// Executions * (apply execution if (Ctr + c) doesn't pressed)  *** (!g_pos.exit) ? 
 	ft_cmds_exec(st_cmds);
+
 	procsub_close(st_cmds->fd);
 	
 	/// Clear allocated space
-//	delete_garbarge(st_cmds);//??
 	free_list_cmds(st_cmds);
 
 	return (1);

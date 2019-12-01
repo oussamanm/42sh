@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/30 15:56:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 11:38:00 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	ft_win_change(int sig)
 		g_pos.num_col = ft_get_size_windz();
 		tputs(tgetstr("cl", NULL), 0, my_outc);
 		ft_putstr("\033[0;32m42sh $>\033[0m ");
-		ft_putstr(g_pos.cmd);
+		ft_putstr_term(g_pos.num_col, g_pos.cmd, &g_pos);
 		ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
 		g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, \
 		g_pos.cmd, g_pos.p);
@@ -47,11 +47,13 @@ void	ft_win_change(int sig)
 	}
 }
 
-void	print_tab(char spaces, int num_col, int *x)
+void	print_tab(int num_col, int *x)
 {
 	int i;
+	int spaces;
 
 	i = -1;
+	spaces = 8 - (*x % 8);
 	while (++i < spaces)
 	{
 		if (*x == num_col - 1)
@@ -78,7 +80,7 @@ void	ft_putstr_term(int num_col, char *s, t_cursor *pos)
 	while (s[i])
 	{
 		if (s[i] < 0)
-			print_tab(s[i] * -1, num_col, &x);
+			print_tab(num_col, &x);
 		else
 		{
 			ft_putchar(s[i]);

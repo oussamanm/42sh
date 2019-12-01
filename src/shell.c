@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/30 19:12:52 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 21:53:32 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,36 +19,33 @@
 
 void		initial_read_line(t_history *his, t_select **select)
 {
+	*his = (t_history){NULL, NULL, 0, 0};
 	restore_history(his);
-	*select = ft_memalloc(sizeof(t_select));
+	
+	*select = (t_select *)ft_memalloc(sizeof(t_select));
 	(*select)->start = -1;
 	(*select)->end = -1;
 	(*select)->save = NULL;
-	save_address(&his, select); //????
-	g_garbage = NULL;
+	save_address(select); //????
 }
 
 /*
 ** Save adresse t_history to t_select , to easy access from other function
 */
 
-void		save_address(t_history **his, t_select **select)//??
+void		save_address(t_select **select)//??
 {
-	static t_history	*p_his;
 	static t_select		*p_select;
 
-	if (*his != NULL && *select != NULL)
-	{
-		p_his = *his;
+	if (*select != NULL)
 		p_select = *select;
-	}
 	else
-	{
-		*his = p_his;
 		*select = p_select;
-	}
 }
 
+/*
+** Initiale alias and hash_table
+*/
 
 void		init_alias_hash()
 {
@@ -61,10 +58,10 @@ void		init_alias_hash()
 	importaliasfilecontent(NULL);
 	hash_arr = (t_hash **)malloc(sizeof(t_hash *) * SIZE);
 	int i = -1;
+	
 	while (++i < SIZE)
 		hash_arr[i] =  NULL;
 	store_addr_of_hash(hash_arr, 1);
-	// printf("addr of hash_arr %p\n", hash_arr);
 }
 
 /*
@@ -96,6 +93,23 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	ft_strdel(&str_cmds);
 }
 
+static void	initial_shell(t_select	**select)
+{
+	call_signal();
+	initial_read_line(&g_history, select);
+	
+	init_fc_built();
+	
+	// Initial Alias && HASH
+	init_alias_hash();
+	
+	//start new session for shell
+	setsid();
+	g_shellpid = getpid();
+	g_proc_sub = 0;
+	
+}
+
 int			main(void)
 {
 	extern char	**environ;
@@ -104,19 +118,12 @@ int			main(void)
 	g_intern = NULL;
 	if (ft_set_termcap() == -1)
 		ft_err_exit("ERROR in setting Termcap parameters\n");
-	initial_read_line(&g_history, &select);
-	call_signal();
+
 	// Duplicate environ vrbs
 	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
-	init_fc_built();
-	//his->path = ft_get_vrb("PATH", g_environ);?????
-	// Initial Alias && HASH
-	init_alias_hash();
-	//start new session for shell
-	
-	setsid();
-	g_shellpid = getpid();
-	g_proc_sub = 0;
+
+	// Initail shell (signal, session, read_line, hash_table, alias, fc_built)
+	initial_shell(&select);
 	while (1337)
     {
         ft_putstr("\033[0;32m42sh $>\033[0m ");
@@ -125,13 +132,15 @@ int			main(void)
 			ft_job_processing();
 			continue ;
 		}
+		convert_neg_to_tab(&g_pos.cmd);
         // Check incomplete syntax of Sub_shell or Quoting
-        g_pos.cmd = compliting_line(g_pos.cmd, select, &g_history);
-        // add command to history	
+        g_pos.cmd = completing_line(g_pos.cmd, select, &g_history);
+        // add command to history
+		
 	  	if (!history_handling(&g_pos.cmd))
 			continue ;
 		// Execution
-		(!(g_pos.exit)) ? ft_multi_cmd(ft_strdup(g_pos.cmd), 0) : NULL;
+		(!(g_pos.exit)) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
 		ft_job_processing();
 		ft_strdel(&g_pos.cmd);
 	}

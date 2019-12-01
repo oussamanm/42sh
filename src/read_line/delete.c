@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/30 15:57:00 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 21:55:08 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,9 @@ char	*ft_delcolomn(char *s, t_cursor *pos)
 {
 	char	*new;
 	int		len;
-	//int		fd;
 
-	//fd = open("/dev/ttys002", O_WRONLY);
 	len = ft_strlen(s);
 	pos->num_col = ft_get_size_windz();
-	//ft_putchar_fd(s[pos->index - 1], fd);
-	//if (s[pos->index - 1] < 0)
-	//	delete_tab(*s, pos);
 	if (pos->index <= len && pos->index > 0)
 	{
 		if (!(new = ft_memalloc(sizeof(char) * len)))

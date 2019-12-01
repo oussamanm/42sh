@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 21:02:13 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/26 01:32:10 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 16:37:48 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ char			*ft_corr_args(char *cmd)
 		return (NULL);
 	while (cmd[i])
 	{
-		// Conditions ( \ , ", ', $, !, ~ ) respectively
 		if (cmd[i] == '\\')
 			i += (cmd[i + 1]) ? 1 : 0;
 		else if (cmd[i] == '"')
@@ -137,7 +136,7 @@ char			*ft_corr_args(char *cmd)
 		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
 			(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))
 			cmd = ft_str_remp(cmd, ft_get_vrb("HOME", g_environ), i, -1);
-		i += cmd[i] != '\0';
+		i += (cmd[i] != '\0');
 	}
 	return (cmd);
 }

@@ -6,12 +6,12 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/30 15:22:13 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 20:14:59 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/read_line.h"
-#include "../../includes/shell.h"
+#include "read_line.h"
+#include "shell.h"
 
 static	char	*history_getcmds(t_history his, char **args, int r)
 {
@@ -32,7 +32,7 @@ static	char	*history_getcmds(t_history his, char **args, int r)
 			rev_his_list(&val);
 		content = history_content(val);
 	}
-    return (content);
+	return (content);
 }
 
 /*

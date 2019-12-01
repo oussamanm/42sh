@@ -23,7 +23,7 @@ void	ft_redi_out(t_redir *st_redir, t_tokens *st_tokens)
 	if (st_tokens->token == T_RED_OUT_S)
 	{
 		if (PREV && PREV->indx == st_tokens->indx &&
-			ft_isalldigit(PREV->value) && PREV->token == 0)
+			ft_isalldigit(PREV->value) && PREV->token == T_TXT)
 		{
 			PREV->is_arg = 1;
 			st_redir->fd_red = ft_atoi(PREV->value);

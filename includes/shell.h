@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/29 18:23:58 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 21:08:23 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define UNUSED(x) (void)(x)
 # define DEBUG(msg) puts(msg)
 # define DEBUGF(msg,...) printf(msg, __VA_ARGS__)
+# define STR_CMP(x, y) ((ft_strcmp(x, y)) ? 0 : 1)
 # define M_CHECK(x , y, z) ((x == y || x == z) ? 1 : 0)
 # define IS_QUOTE(x) (x == 34 || x == 39)
 # define M_CHECK_W(C)(C==32||C==9||C==11||C==10||C==13||C==12)
@@ -42,9 +43,11 @@
 # define M_BRACKET(x) (x == '(' || x == ')')
 # define STR(x)  (*str)[x]
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
+# define OPER_TOKEN(t) (t == T_JOBCTR || t == T_PIPE || t == T_LOGOPR_OR || t == T_LOGOPR_AND)
 # define MATCH_CLOSED(x, y)(((x == 'q' || x == 'Q') && x == y) || (x == 'S' && y == 's'))
 # define PROMPT 3
 # define PATHSIZE 1024
+# define TOKEN st_tokens->token
 # define PREV st_tokens->prev
 # define NEXT st_tokens->next
 # define ERRO_IN_AND -12
@@ -119,6 +122,19 @@
 # define TERMINATED 33
 # define EXITED 44
 
+/*
+** Flags garbage_collector
+*/
+
+#define GARB_POIN 1
+#define GARB_ARGS 2
+#define GARB_CMDS 3
+
+
+/*
+** job control
+*/
+
 typedef	struct			s_process
 {
 	pid_t				pid;
@@ -139,39 +155,20 @@ typedef struct			s_job
 	char				p;
 	struct termios		term_child;
 }						t_job;
+
 t_list					*jobs;
 pid_t					g_shellpid;
 int						g_proc_sub;
 
-/*
-** job control
-*/
 
 typedef struct termios	t_termios;
 
-typedef struct			s_tokens
+typedef struct			s_intern
 {
-	int					token;
-	char				*value;
-	int					indx;
-	int					is_arg;
-	struct s_tokens		*next;
-	struct s_tokens		*prev;
-}						t_tokens;
-
-typedef struct			s_filedes
-{
-	int					fd;
-	struct s_filedes	*next;
-}						t_filedes;
-
-typedef struct    s_intern
-{
-	char    *key;
-	char    *value;
-	struct s_intern *next;
-}                t_intern;
-
+	char			*key;
+	char			*value;
+	struct s_intern	*next;
+}						t_intern;
 
 typedef struct			s_redir
 {
@@ -184,6 +181,20 @@ typedef struct			s_redir
 	struct s_redir		*next;
 }						t_redir;
 
+/*
+** Parsing
+*/
+
+typedef struct			s_tokens
+{
+	int					token;
+	char				*value;
+	int					indx;
+	int					is_arg;
+	struct s_tokens		*next;
+	struct s_tokens		*prev;
+}						t_tokens;
+
 typedef struct			s_pipes
 {
 	int					fds[2];
@@ -193,7 +204,6 @@ typedef struct			s_pipes
 	char				**tmp_env;
 	t_tokens			*st_tokens;
 	t_redir				*st_redir;
-	//t_intern			*st_intern;
 	struct s_pipes		*next;
 }						t_pipes;
 
@@ -206,7 +216,7 @@ typedef struct 			s_logopr
 	int					bl_jobctr;
 }						t_logopr;
 
-typedef struct s_jobctr
+typedef struct			s_jobctr
 {
 	int					status;
 	t_tokens			*st_tokens;
@@ -214,8 +224,7 @@ typedef struct s_jobctr
 	struct s_jobctr		*next;
 }						t_jobctr;
 
-
-typedef	struct s_cmds
+typedef	struct			s_cmds
 {
 	char				**args;
 	int					*fd;
@@ -223,37 +232,36 @@ typedef	struct s_cmds
 	t_jobctr			*st_jobctr;
 }						t_cmds;
 
-typedef	struct	s_garbage
-{
-	void				*mem_ptr;
-	int					flag;
-	struct s_garbage	*next;
-	struct s_garbage	*tail;
-}				t_garbage;
 
 t_intern	*g_intern;
 char		**g_environ;
-t_garbage	*g_garbage;
+
 /*
 ** Builtins
 */
 
-void					built_exit(t_pipes *st_pipes, char ***env);
+void					built_exit();
 int						built_export(t_tokens *st_tokens);
-
+int						built_echo(t_tokens *st_tokens);
+int						echo_options(t_tokens **st_tokens);
+void					exported_vars(t_intern vrb, int rest, int edit);
+int						export_flags(t_tokens **st_tokens, int *n);
 /*
 ** Intern variable
 */
 
-void					add_intern_var(char *key, char *value);
-int					delete_intern_var(char *key, t_intern **head);
+int					add_intern_var(t_intern **intern, char *key, char *value, int edit);
+int						delete_intern_var(char *key, t_intern **head);
 char					*get_intern_value(char *key);
-t_intern	get_key_value(t_tokens *st_tokens);
-char            **fill_env(char **args);
-int				ft_check_intern(t_pipes *st_pipe);
-char			**ft_tokens_arg_env(t_tokens *st_tokens);
+t_intern				get_key_value(t_tokens *st_tokens);
+char					**fill_env(char **args);
+int						ft_check_intern(t_pipes *st_pipe);
+char					**ft_tokens_arg_env(t_tokens *st_tokens);
+int						valid_identifier(char *arg);
+int						ft_is_equal(int index, t_tokens *st_tokens);
+void					move_to_env(char *key);
 /*
-**Variable
+** Variable
 */
 
 char					*ft_get_vrb(char *vrb, char **env);
@@ -262,6 +270,8 @@ void					ft_add_vrb(char *arg, char ***env);
 void					ft_unset_vrb(char *vrb, char ***env);
 void					ft_insert_vrb(char *vrb, char ***env, int rm);
 int						ft_edit_vrb(char *vrb, char ***env, int rm);
+int						ft_check_tmp(char **args);
+void					fill_intern(t_pipes *st_pipe);
 
 
 /*
@@ -276,6 +286,7 @@ int						error_syntax_lexer(t_tokens *st_tokens);
 int						error_syntax_semi(char *str_cmds, char **args);
 int						error_syntax_expans(char *str_cmds);
 int						ft_putchar_err(int c);
+void					puterr_identifier(char *arg, char *cmd);
 
 /*
 ** Updated Splite
@@ -288,10 +299,10 @@ char					**ft_str_split_q(char *str, char *c);
 ** Helper Splite
 */
 
-int			find_dquot(char *str);
-int			find_subsh(char *str);
-int			find_quot(char *str);
-int			find_closed(char *str, char c);
+int						find_dquot(char *str);
+int						find_subsh(char *str);
+int						find_quot(char *str);
+int						find_closed(char *str, char c);
 
 
 /*
@@ -301,19 +312,17 @@ int			find_closed(char *str, char c);
 char					*ft_find_path(char *arg, char **env);
 int						ft_check_redi(t_pipes *st_pipes);
 int						ft_sum_asci(char str[]);
-int		find_char_escap(char *str, char c);
-int				ft_all_quot(char *str);
+int						ft_all_quot(char *str);
 
 
 /*
 ** Quote
 */
 
-char					*ft_rm_quot(char *str);
 char					*ft_corr_args(char *argv);
 void					ft_remove_quot(char **args);
 void					ft_update_tokens(t_tokens *st_tokens);
-char			*ft_str_remp(char *str, char *remp, int start, int len);
+char					*ft_str_remp(char *str, char *remp, int start, int len);
 
 /*
 ** Signals
@@ -342,11 +351,10 @@ void					ft_lexer_quot(t_tokens **st_tokens, char *arg, int *j, int indx);
 void					ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx);
 void					ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx);
 t_tokens				*ft_lexer(char **args);
-
 void					ft_fill_token(t_tokens **st_tokens, int token, char *value, int indx);
 void					ft_upd_token(t_tokens *st_tokens, int token, char *value);
 void					ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token);
-void					ft_tokens_args(t_pipes *st_pipe);
+void					tokens_to_args(t_pipes *st_pipe);
 int						ft_count_tokens(t_tokens *st_tokens);
 int						ft_check_token(t_tokens *st_tokens, int token);
 
@@ -354,6 +362,7 @@ int						ft_check_token(t_tokens *st_tokens, int token);
 ** Redirection
 */
 
+int						parse_redir(t_pipes *st_pipes);
 void					ft_redi_her(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_both(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_redi_app(t_redir *st_redir, t_tokens *st_tokens);
@@ -366,13 +375,6 @@ void					ft_apply_hered(t_redir *st_redi);
 void					ft_apply_her_doc(t_jobctr *st_jobctr);
 char					*get_value_next(t_tokens *st_token);
 
-
-/*
-** Parser Red
-*/
-
-int						parse_redir(t_pipes *st_pipes);
-
 /*
 ** Execution
 */
@@ -380,9 +382,9 @@ int						parse_redir(t_pipes *st_pipes);
 void					ft_multi_cmd(char *str_cmds, int bl_subsh);
 int						ft_cmds_setup(char *str_arg, int bl_subsh);
 int						ft_cmd_fork(int fork_it, t_pipes *st_pipes);
-int				ft_check_cmd(char *cmd, char **environ);
-void		logical_ops(t_logopr *st_logopr);
-void			remove_backslashs(char **args);
+int						ft_check_cmd(char *cmd, char **environ);
+void					logical_ops(t_logopr *st_logopr);
+void					remove_backslashs(t_tokens *st_tokens);
 
 
 /*
@@ -392,7 +394,7 @@ void			remove_backslashs(char **args);
 int						ft_init_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_call_built(t_pipes *st_pipes, char ***tmp_env);
 int						ft_check_built(char *arg);
-void					built_set(char **args);
+void					built_set(t_intern *lst, char **args);
 
 /*
 ** New
@@ -413,28 +415,29 @@ t_intern				*new_intern(char *key, char *value);
 
 void					free_list_cmds(t_cmds *st_cmds);
 void					free_tokens(t_tokens *st_tokens, int free_content);
-void		free_addresses(void *table[MAX_TAB_ADDR]);
-void		free_list_redir(t_redir *st_redir);
-void    delete_intern();
+void					free_addresses(void *table[MAX_TAB_ADDR]);
+void					free_list_redir(t_redir *st_redir);
+void					delete_intern();
+void					free_list_pipe(t_pipes *st_pipes);
+
 /*
 ** Parse Cmds
 */
 
 void					ft_parse_cmd(t_cmds *st_cmds);
-
-
-/*
-** Variable parsing
-*/
-
-int						ft_check_tmp(char **args);
-void			fill_intern(t_pipes *st_pipe);
-
-
+void					fill_args(t_pipes *st_pipes);
+void					correct_tokens(t_pipes *st_pipes);
+void					set_isarg(t_pipes *st_pipes);
 
 /*
 ** Line complition
 */
+
+int						get_last_flag(int *maps);
+int						find_flag(int *maps, int flag);
+void					clean_maps(int *maps);
+int						count_key(int *maps, int key);
+int						closed_dquot(int *maps);
 
 
 /*
@@ -444,6 +447,7 @@ void			fill_intern(t_pipes *st_pipe);
 void					apply_subsh(t_tokens *st_tokens);
 void					proc_substitution(t_cmds *st_cmds);
 void					procsub_close(int *fd);
+
 /*
 ** Alias
 */
@@ -454,6 +458,7 @@ int						ft_buil_unalias(t_tokens *st_token);
 /*
 ** job
 */
+
 void					ft_foreground(void);
 void					ft_continue(void);
 void					ft_catch_sigchild(int sig);
@@ -461,31 +466,25 @@ void					ft_manage_jobs(int pid, t_pipes *st_pipes, int *rtn);
 void					ft_add_job(t_job *job);
 void					ft_job_processing(void);
 void					ft_fill_process(int pid, t_job *job);
-void    ft_collect_job_status(void);
-void	ft_printstatus(int status);
-void	ft_putjoblst(int pgid, int pid, int status);
-int		ft_termsig_fore(int sig, char *name);
-void 	ft_wait(t_job *current);
-int			ft_job_index(void);
-t_job			*ft_inisial_job(void);
-char 			*ft_cmd_value(t_tokens *st_tokens, char *cmd);
-int		ft_print_termsig_back(int sig, char *name, int index, char p);
-void	ft_jobs_built(void);
-void		ft_update_p(void);
-void		ft_update_index(void);
-void	ft_print_pid(int index, int pgid);
-void 			ft_foreground_job(t_job *job);
-void	ft_remove_node(t_list *tmp, t_list *pr);
-void	ft_free_job(t_job *job);
-void			ft_single_proc(t_job *job, t_pipes *st_pipes, int pid, int *add);
-void			ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add);
-char	*ft_strsignal(int sig);
-void	ft_print_backcmd(t_job *job);
-
-
-/* gerbage collector */
-void			garbage_mem(void *mem, t_garbage **grb);
-void			free_garbage(t_garbage **head);
-void			exit_program(int fd, char *msg, t_garbage **grb);
+void					ft_collect_job_status(void);
+void					ft_printstatus(int status);
+void					ft_putjoblst(int pgid, int pid, int status);
+int						ft_termsig_fore(int sig, char *name);
+void					ft_wait(t_job *current);
+int						ft_job_index(void);
+t_job					*ft_inisial_job(void);
+char					*ft_cmd_value(t_tokens *st_tokens, char *cmd);
+int						ft_print_termsig_back(int sig, char *name, int index, char p);
+void					ft_jobs_built(void);
+void					ft_update_p(void);
+void					ft_update_index(void);
+void					ft_print_pid(int index, int pgid);
+void					ft_foreground_job(t_job *job);
+void					ft_remove_node(t_list *tmp, t_list *pr);
+void					ft_free_job(t_job *job);
+void					ft_single_proc(t_job *job, t_pipes *st_pipes, int pid, int *add);
+void					ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add);
+char					*ft_strsignal(int sig);
+void					ft_print_backcmd(t_job *job);
 
 #endif

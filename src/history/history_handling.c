@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 17:50:14 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/30 17:51:12 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 21:53:41 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int		is_fc_exist(char *cmd)
 {
 	char	**sp_args;
 	char	*fl;
-	int i;
+	int		i;
 
 	sp_args = ft_str_split_q(cmd, "\n \t");
 	i = 0;
@@ -59,6 +59,7 @@ static int		fc_exec_flag(char *str_cmds)
 	ft_strrdel(pv_args);
 	return (0);
 }
+
 int				history_handling(char **str_cmds)
 {
 	if (ft_strchr(*str_cmds, '!'))

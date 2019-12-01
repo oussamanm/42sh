@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:09:57 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/30 18:35:22 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 20:34:20 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,20 @@
 **	clear the line and rewrite it with the command given
 */
 
-void	his_new_line(char *line, char **cmd, t_cursor *pos)
+void			his_new_line(char *line, char **cmd, t_cursor *pos)
 {
+	convert_tab_to_neg(&line);
+	update_tab_str(&line, pos);
 	ft_move_cursor_zero(*pos);
-	pos->x = 8;
+	pos->x = pos->p;
 	pos->y = 0;
 	tputs(tgetstr("cd", NULL), 0, my_outc);
 	ft_putstr_term(pos->num_col, line, pos);
 	ft_get_end_of_line_pos(pos, line, pos->num_col);
 	pos->num_lines = ft_get_num_of_lines(pos->num_col, line, pos->p);
 	pos->index = ft_strlen(line);
-	pos->x = pos->end[pos->num_lines - 1];
-	pos->y = pos->num_lines - 1;
+	new_pos_tab(line, pos->index, pos);
+	ft_strdel(cmd);
 	*cmd = ft_strdup(line);
 }
 

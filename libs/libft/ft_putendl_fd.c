@@ -16,6 +16,8 @@ int		ft_putendl_fd(char const *s, int fd)
 {
 	int rtn;
 
+	if (!s)
+		return (0);
 	// ft_putstr_fd("୧༼ಠ益ಠ༽︻╦╤─ :: ", 2);
 	rtn = ft_putstr_fd(s, fd);
 	ft_putchar_fd('\n', fd);

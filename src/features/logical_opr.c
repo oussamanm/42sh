@@ -25,8 +25,8 @@ void		logical_ops(t_logopr *st_logopr)
 	while (st_logopr != NULL)
 	{
 		state = ft_pipe(st_logopr->st_pipes);
-		if ((st_logopr->status == 248 && state == 0) ||
-				(st_logopr->status == 76 && state == 1))
+		if ((st_logopr->status == T_LOGOPR_OR && state == 0) ||
+				(st_logopr->status == T_LOGOPR_AND && state == 1))
 			st_logopr = st_logopr->next;
 		else
 		{

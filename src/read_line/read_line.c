@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/30 18:29:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 20:33:58 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,16 @@
 ** - move the cursor in the last of the line.
 */
 
-void	ft_enter(t_cursor *pos, char *s, t_select *select)
+void	ft_enter(t_cursor *pos, char *s)
 {
-	if (select->start != -1 && select->end != -1)
-	{
-		ft_remove_selections(pos, s);
-		select->start = -1;
-		select->end = -1;
-	}
 	ft_putstr_term(pos->num_col, s + pos->index, pos);
 	ft_putchar('\n');
-}
-
-void	ft_clear_selection(t_select *select, t_cursor *pos, char *s, char *buf)
-{
-	ft_remove_selections(pos, s);
-	if (CAST(buf) != COPY && CAST(buf) != CUT && CAST(buf) != PASTE)
-	{
-		select->start = -1;
-		select->end = -1;
-	}
 }
 
 char	*ft_call_complete(t_select *select, char *s, char *buf)
 {
 	if (LE == CAST(buf) || RI == CAST(buf))
 		ft_see_touch(buf, s, &g_pos);
-	else if (SEL_RI == CAST(buf) || SEL_LE == CAST(buf))
-		ft_selection(s, &g_pos, buf, select);
 	else if (COPY == CAST(buf) || PASTE == CAST(buf) || CUT == CAST(buf))
 		ft_copy_paste(buf, &s, &g_pos, select);
 	else if (CTRL_U == CAST(buf) || CTRL_L == CAST(buf))
@@ -72,9 +54,6 @@ void	tab_mode(char **s)
 
 char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 {
-	if (CAST(buf) != SEL_RI && CAST(buf) != SEL_LE
-	&& select->start != -1 && select->end != -1)
-		ft_clear_selection(select, &g_pos, s, buf);
 	if (TAB == CAST(buf))
 		s = ft_auto_completion(&g_pos, s);
 	else if (CTRL_D == CAST(buf))
@@ -111,17 +90,19 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	crash = 0;
 	//  To test only uncomment this line and run [./crash.py test_file && ./42sh]
 	//crash = open("/tmp/crash.fifo", O_RDONLY);
-	select->end = 1;
 	ft_initial(p);
 	ft_bzero(buf, 6);
 	ft_enable();
 	while (read(crash, buf, 6) > 0)
 	{
 		if (CTRL_R == CAST(buf))
+		{
+			ft_bzero(buf, 6);
 			history_search(*his, &g_pos.cmd, buf);
+		}
 		if (ENTER == CAST(buf))
 		{
-			ft_enter(&g_pos, g_pos.cmd, select);
+			ft_enter(&g_pos, g_pos.cmd);
 			break ;
 		}
 		else if (!(g_pos.cmd = ft_key_call_func(his, select, g_pos.cmd, buf))

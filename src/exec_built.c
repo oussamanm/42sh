@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 06:25:57 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/30 14:40:22 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 06:54:48 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,20 @@ int			ft_init_built(t_pipes *st_pipes, char ***tmp_env)
 {
 	int i;
 	int tmp[3];
+	int status;
 
 	i = -1;
+	/// Save a copy of default_FileDisc
 	while (++i < 3)
-		tmp[i] = dup(i);
-	ft_call_built(st_pipes, tmp_env);
+		if ((tmp[i] = dup(i)) == -1)
+			ft_putendl_fd("Error in dup, in builtens \n", 2);
+	status = ft_call_built(st_pipes, tmp_env);
 	i = -1;
+	/// restore default_FileDisc
 	while (++i < 3)
 		if (dup2(tmp[i], i) == -1 || close(tmp[i]) == -1)
-			ft_putendl_fd("Error in dup or close \n", 2);
-	// should add return status of builtens
-	return (1);
+			ft_putendl_fd("Error in dup or close in builtens \n", 2);
+	return (status);
 }
 
 /*
@@ -39,54 +42,54 @@ int			ft_init_built(t_pipes *st_pipes, char ***tmp_env)
 
 int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 {
-	int		rtn;
 	int     status;
 
-	rtn = 0;
 	status = 0;
 	if (st_pipes == NULL || st_pipes->args == NULL)
 		return (-1);
+	/// Apply redirection 
 	if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 		return (REDI_KO);
-	if (ft_strcmp((st_pipes->args)[0], "exit") == 0)
-		built_exit(st_pipes, tmp_env);
-	if (ft_strcmp((st_pipes->args)[0], "env") == 0 && (rtn = 1))
-		built_env(&(st_pipes->args)[1], tmp_env);
-	else if (ft_strcmp((st_pipes->args)[0], "alias") == 0 && (rtn = 1))
-		status = ft_buil_alias(st_pipes->st_tokens);
-	else if (ft_strcmp((st_pipes->args)[0], "unalias") == 0 && (rtn = 1))
-		status = ft_buil_unalias(st_pipes->st_tokens);
-	else if (ft_strcmp((st_pipes->args)[0], "export") == 0 && (rtn = 1))
-		built_export(st_pipes->st_tokens);
-	else if (ft_strcmp((st_pipes->args)[0], "set") == 0 && (rtn = 1))
-		built_set(st_pipes->args + 1);
-	else if (ft_strcmp((st_pipes->args)[0], "unset") == 0 && (rtn = 1))
-		built_unset(&(st_pipes->args)[1]);
-	else if (ft_strcmp((st_pipes->args)[0], "cd") == 0 && (rtn = 1))
-		status = built_cd(&(st_pipes->args)[1], *tmp_env);
-	else if (ft_strcmp((st_pipes->args)[0], "type") == 0 && (rtn = 1))
-		status = built_type(&(st_pipes->args)[1], *tmp_env);
-	else if (ft_strcmp((st_pipes->args)[0], "hash") == 0 && (rtn = 1))
-		status = hash_table(&(st_pipes->args)[1]);
-	else if (ft_strcmp((st_pipes->args)[0], "history") == 0 && (rtn = 1))
+	if (STR_CMP(*(st_pipes->args), "exit"))
+		built_exit();
+	else if (STR_CMP(*(st_pipes->args), "echo"))
+/**/	status = built_echo(st_pipes->st_tokens);
+	else if (STR_CMP(*(st_pipes->args), "alias"))
+/**/	status = ft_buil_alias(st_pipes->st_tokens);
+	else if (STR_CMP(*(st_pipes->args), "unalias"))
+/**/	status = ft_buil_unalias(st_pipes->st_tokens);
+	else if (STR_CMP(*(st_pipes->args), "export"))
+/**/	status = built_export(st_pipes->st_tokens);
+	else if (STR_CMP(*(st_pipes->args), "set"))
+		built_set(g_intern, st_pipes->args + 1);
+	else if (STR_CMP(*(st_pipes->args), "unset"))
+		status = built_unset(st_pipes->args + 1);
+	else if (STR_CMP(*(st_pipes->args), "cd"))
+		status = built_cd(st_pipes->args + 1, *tmp_env);
+	else if (STR_CMP(*(st_pipes->args), "type"))
+		status = built_type(st_pipes->args + 1, *tmp_env);
+	else if (STR_CMP(*(st_pipes->args), "hash"))
+		status = hash_table(st_pipes->args + 1);
+	else if (STR_CMP(*(st_pipes->args), "history"))
 		display_his_list(g_history, 1);
-	else if (ft_strcmp((st_pipes->args)[0], "fc") == 0 && (rtn = 1))
+	else if (STR_CMP(*(st_pipes->args), "fc"))
 		fc_built(st_pipes->args + 1, &g_history, *tmp_env);
-	else if (ft_strcmp((st_pipes->args)[0], "source") == 0 && (rtn = 1))
-		ft_buil_updatealias(&(st_pipes->args)[1]);
-	else if (!ft_strcmp(st_pipes->args[0], "fg"))
+	else if (STR_CMP(*(st_pipes->args), "source"))
+		ft_buil_updatealias(st_pipes->args + 1);
+	else if (STR_CMP(*(st_pipes->args), "fg"))
 		ft_foreground();
-	else if (!ft_strcmp(st_pipes->args[0], "bg"))
+	else if (STR_CMP(*(st_pipes->args), "bg"))
 		ft_continue();
-	else if (!ft_strcmp(st_pipes->args[0], "jobs"))
+	else if (STR_CMP(*(st_pipes->args), "jobs"))
 		ft_jobs_built();
+	/// close file discriptor used by builtens
 	while (st_pipes->st_redir != NULL)
 	{
 		if (st_pipes->st_redir->fd_des != -1)
 			close(st_pipes->st_redir->fd_des);
 		st_pipes->st_redir = st_pipes->st_redir->next;
 	}
-	return (rtn);
+	return (status);
 }
 
 /*
@@ -95,26 +98,23 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 
 int			ft_check_built(char *arg)
 {
-	int		rtn;
-
-	rtn = 0;
 	if (arg == NULL)
 		return (-1);
-	if (!ft_strcmp(arg, "exit") || !ft_strcmp(arg, "env"))
-		rtn++;
-	else if (!ft_strcmp(arg, "echo"))
-		rtn++;
-	else if (!ft_strcmp(arg, "export") || !ft_strcmp(arg, "unset") || !ft_strcmp(arg, "set"))
-		rtn++;
+	if (!ft_strcmp(arg, "exit") || !ft_strcmp(arg, "echo"))
+		return (1);
+	else if (!ft_strcmp(arg, "export"))
+		return (1);
+	else if (!ft_strcmp(arg, "unset") || !ft_strcmp(arg, "set"))
+		return (1);
 	else if (!ft_strcmp(arg, "cd") || !ft_strcmp(arg, "type"))
-		rtn++;
+		return (1);
 	else if (!ft_strcmp(arg, "alias") || !ft_strcmp(arg, "unalias"))
-		rtn++;
+		return (1);
 	else if (!ft_strcmp(arg, "source") || !ft_strcmp(arg, "hash"))
-		rtn++;
+		return (1);
 	else if (!ft_strcmp(arg, "history") || !ft_strcmp(arg, "fc"))
-		rtn++;
+		return (1);
 	else if (!ft_strcmp(arg, "fg") || !ft_strcmp(arg, "bg") || !ft_strcmp(arg, "jobs"))
-		rtn++;
-	return (rtn);
+		return (1);
+	return (0);
 }

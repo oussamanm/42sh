@@ -6,11 +6,12 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 10:51:28 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/30 17:51:21 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 01:30:30 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/read_line.h"
+
 /*
 **	get history content from head to tail given
 **	and return it in a format of string

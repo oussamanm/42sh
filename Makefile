@@ -17,6 +17,7 @@ OBJS = error_handler.o\
 	utility/helper_func.o utility/new.o\
 	utility/free.o utility/ft_strsplit.o\
 	utility/find_closed.o utility/helper_exec.o\
+	utility/helper_contin.o\
 	features/pipe.o features/line_continuation.o\
 	features/proc_sub.o features/redir_parse.o\
 	features/redir_read.o features/redir_setup.o\
@@ -29,6 +30,7 @@ OBJS = error_handler.o\
 	builtins_cmds/hash_built.o builtins_cmds/hash_func.o\
 	builtins_cmds/free_hash_and_alias.o builtins_cmds/unaliase_built.o\
 	builtins_cmds/cd_built_symb.o builtins_cmds/built_srcs.o\
+	builtins_cmds/built_export.o builtins_cmds/manage_export.o\
 	read_line/addition.o\
 	read_line/auto_completion.o\
 	read_line/copy_paste.o\
@@ -43,11 +45,9 @@ OBJS = error_handler.o\
 	read_line/moving_cursor.o\
 	read_line/output.o\
 	read_line/reset_position.o\
-	read_line/selection1.o\
-	read_line/selection2.o\
 	read_line/termcap.o\
 	read_line/clear_readline.o\
-	read_line/heredoc_line.o\
+	read_line/heredoc_line.o read_line/tab_mode.o\
 	read_line/cut.o read_line/clear_line_or_window.o\
 	history/history_expansion.o\
 	history/history_file.o history/history_readline.o\

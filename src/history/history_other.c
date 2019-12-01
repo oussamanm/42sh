@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 06:21:47 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/29 17:01:16 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 20:35:02 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,19 @@ void	rev_his_list(t_history *lst)
 	tmp = lst->head;
 	lst->head = lst->tail;
 	lst->tail = tmp;
+}
+
+int		valid_identifier(char *arg)
+{
+	int i;
+
+	if (!arg)
+		return (0);
+	i = -1;
+	while (arg[++i])
+	{
+		if (!ft_isalphanum(arg[i]) || arg[i] == '.' || arg[i] == '/' || arg[0] == '=')
+			return (0);
+	}
+	return (1);
 }

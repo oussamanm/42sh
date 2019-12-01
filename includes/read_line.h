@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/30 19:12:45 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 18:38:12 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct		s_cursor
 	char			*cmd;
 	int				exit;
 	int				i;
+	int				r;
 	struct termios	enable;
 	struct termios	disable;
 }					t_cursor;
@@ -134,7 +135,7 @@ t_cursor *pos, t_select *select);
 void				ft_init(int **d, int size);
 void				ft_putstr_term(int num_col, char *s, t_cursor *pos);
 void				ft_get_end_of_line_pos(t_cursor *pos, char *s, int num_col);
-void				ft_get_new_pos(t_cursor *pos, int len_sa);
+void				ft_get_new_pos(t_cursor *pos, int len);
 void				ft_move_by_word(t_cursor *pos, char *s, char *buf);
 void				ft_home_end(t_cursor *pos, char *s, char *buf);
 void				ft_move_by_lines(t_cursor *pos, char *s, char *buf);
@@ -155,23 +156,25 @@ void				ft_move_right(int n);
 char				*ft_ctrl_d(t_cursor *pos, \
 t_history *his, t_select *select, char *s);
 char				*ft_auto_completion(t_cursor *pos, char *s);
-void				save_address(t_history **his, t_select **select);
+void				save_address(t_select **select);
 void				ft_clear_readline_struct(void);
 char				*ft_read_heredoc(char *eol);
 void				ft_cut(t_cursor *pos, t_select *select, char **s);
-void				ft_get_save(char *s, t_select *select);
+void				ft_get_save(char *s, t_select *select, t_cursor *pos);
 void				ft_init_size_end_line(t_cursor *pos);
 char				*ft_inside_line(char *s, t_cursor *pos, char *buf);
 void				ft_enable(void);
 void				ft_disable(void);
 char				*ft_clear(t_cursor *pos, char *s, char *buf);
-void	print_tab(char spaces, int num_col, int *x);
+void	print_tab(int num_col, int *x);
 void	num_lines_tab(char spaces, t_cursor *pos, int *x, int *num_lines);
+void    convert_neg_to_tab(char **s);
+void   convert_tab_to_neg(char **s);
+void    update_tab_str(char **s, t_cursor *pos);
 /*
 ** read for sub_shell
 */
 int					ft_check_subsh(int i, char **line, t_select *select, t_history *his);
-char		*compliting_line(char *str_cmds, t_select *select, t_history *his);
 /*
 **	history readline, '!' expansion and fc builtuin
 */
@@ -188,12 +191,14 @@ void    rev_his_list(t_history *lst);
 void    display_his_list(t_history his, int order);
 int		history_handling(char **str_cmds);
 char    *history_content(t_history his);
+char		*completing_line(char *str_cmds, t_select *select, t_history *his);
 void	his_new_line(char *line, char **cmd, t_cursor *pos);
 char	*str_notnumber(char *keyword);
 void	history_search(t_history his, char **s, char buf[6]);
 void	his_putstr_term(int num_col, char *s, char *search, t_cursor *pos);
 void	his_cursor_do(int nbr);
 void	his_cursor_up(t_cursor pos, int nbr);
+
 /*history expansion */
 char    *history_expansion(t_history his, char *keyword);
 char    is_shell_delimiter(char c);
@@ -213,4 +218,9 @@ void    fc_usage(char c, char *msg);
 int    fc_edit(t_history his, char *editor, char *flags, char **args);
 void    exec_fc();
 void init_fc_built();
+
+
+void	tab_set_last_position(t_cursor pos, int num_lines);
+void	new_pos_tab(char *s, int len, t_cursor *pos);
+
 #endif

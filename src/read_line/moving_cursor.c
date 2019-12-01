@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:51:04 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/30 16:41:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 21:54:51 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	ft_see_touch(char *buf, char *s, t_cursor *pos)
 	{
 		pos->index--;
 		sp = s[pos->index] * -1;
-		if (sp * -1 < 0)
-		{ 
+		if (sp > 0)
+		{
 			ft_move_left(sp);
 			pos->x -= sp;
 		}
@@ -83,7 +83,7 @@ void	ft_see_touch(char *buf, char *s, t_cursor *pos)
 	else if (RI == CAST(buf))
 	{
 		sp = s[pos->index] * -1;
-		if (sp * -1 < 0)
+		if (sp > 0)
 		{
 			pos->index++;
 			if (pos->x + sp > pos->num_col - 1)

@@ -77,17 +77,17 @@ void		ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token)
 }
 
 /*
-** Convert Tokens to args
+** Fill args with token except T_EQUAL
 */
 
-void		ft_tokens_args(t_pipes *st_pipe)
+void		tokens_to_args(t_pipes *st_pipe)
 {
 	t_tokens	*st_tokens;
 	int			len;
 	int			i;
 	int			index;
 
-	if (!st_pipe)
+	if (!st_pipe || !st_pipe->st_tokens)
 		return ;
 	i = 0;
 	st_tokens = st_pipe->st_tokens;

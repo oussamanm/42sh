@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:22:18 by onouaman          #+#    #+#             */
-/*   Updated: 2019/05/03 06:23:35 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/12/01 20:42:07 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ char			**ft_str_split_q(char *str, char *c)
 			continue ;
 		}
 		if ((temp[i] == '(' || IS_QUOTE(temp[i])) && (j = find_closed(&temp[i], temp[i])) != -1)
-		{
-			printf("j = %d \n",j);
 			i += j;
-		}
 		if (ft_check_char(c, temp[i]))
 			temp[i] = -1;
 	}

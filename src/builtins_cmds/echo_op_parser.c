@@ -13,20 +13,6 @@
 #include "shell.h"
 
 /*
-** - check for fake option;
-*/
-
-int		e_fake_option(char *str)
-{
-	while (*++str)
-		if (!(*str == 'n' ||\
-					*str == 'e' ||\
-					*str == 'E'))
-			return (1);
-	return (0);
-}
-
-/*
 ** echo option parser;
 */
 
@@ -53,37 +39,57 @@ int		echo_options_(char *arg, int *flag)
 	return (1);
 }
 
-/*
-** - verified options of echo;
-*/
-
-int		echo_options(char **arg, int *flag)
+int		e_interpretation_1(char *arg)
 {
-	int i;
-
-	i = 0;
-	while (arg[i])
-	{
-		if (arg[i][0] == '-')
-		{
-			if (e_fake_option(arg[i]))
-				return (i);
-			echo_options_(&arg[i][1], flag);
-		}
-		else
-			return (i);
-		i++;
-	}
-	return (i);
-}
-
-void	e_interpretation_1(char *arg, int flag)
-{
+	if (!arg)
+		return (0);
 	while (*arg)
 	{
 		if (!(*(arg) == -1))
-			ft_putchar_fd(*arg, 1);
+		{
+			if (write(1, arg, 1) == -1)
+				return (-1);
+		}
 		arg++;
 	}
-	(flag) ? n_flag(arg, 0) : 0;
+	return (0);
+}
+
+/*
+** - check of metacharacters;
+*/
+
+int		echo_meta_char(char c)
+{
+	if (c == 'a')
+		return ('\a');
+	else if (c == 'b')
+		return ('\b');
+	else if (c == 'f')
+		return ('\f');
+	else if (c == 'n')
+		return ('\n');
+	else if (c == 'r')
+		return ('\r');
+	else if (c == 't')
+		return ('\t');
+	else if (c == 'v')
+		return ('\v');
+	else if (c == '\\')
+		return ('\\');
+	return (c);
+}
+
+/*
+** - comparison of chars;
+*/
+
+char	echo_charcmp(char c, char *str)
+{
+	while (*str)
+	{
+		if (*str++ == c)
+			return (echo_meta_char(c));
+	}
+	return (c);
 }

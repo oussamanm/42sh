@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 10:50:39 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/23 15:08:53 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/12/01 21:22:37 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,7 @@ int			get_next_line(const int fd, char **line)
 		if (ft_strchr(ptr, '\n'))
 			break ;
 	}
+	if (ptr[0] == '\0')
+		ptr = NULL;
 	return ((ptr[0] != '\0') ? copy_line(&ptr, line) : 0);
 }

@@ -1,6 +1,17 @@
-- check signal and g_pos.cmd varaible 
-- check history implementation in shell.c
+- check signal Ctr+c  and g_pos.cmd varaible 
+- 
 - check implementation of alias
-- check free of all variables
-
 - review if should add flag for ctr-c in parsing
+
+
+- Check Builtens
+- Check Args in all code
+- Check varaible bl_ apply job_controle
+-------------------------------
+- Check environ , g_environ , temp_env
+- Check Execution 
+- Check Lexer
+- Check Parsing
+- Check Allocation
+- Check Redirection
+- Check function aliasmatched (return args)

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:51:04 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/30 16:34:52 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 02:47:57 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_move_cursor_zero(t_cursor pos)
 	while (pos.y-- > 0)
 		tputs(tgetstr("up", NULL), 0, my_outc);
 	ft_move_right(pos.p);
-	tputs(tgoto(tgetstr("ch", NULL), 0, 8), 0, my_outc);
+	tputs(tgoto(tgetstr("ch", NULL), 0, pos.p), 0, my_outc);
 }
 
 
@@ -27,6 +27,7 @@ void	num_lines_tab(char spaces, t_cursor *pos, int *x, int *num_lines)
 	int i;
 
 	i = -1;
+	spaces = 8 - (*x % 8);
 	if (*x + spaces > pos->num_col - 1)
 	{
 		pos->end[*num_lines] = *x;
@@ -36,6 +37,7 @@ void	num_lines_tab(char spaces, t_cursor *pos, int *x, int *num_lines)
 	else
 		*x += spaces;
 }
+
 int		ft_get_num_of_lines(int num_col, char *s, int p)
 {
 	int num_lines;
