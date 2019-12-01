@@ -6,17 +6,38 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 20:58:00 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 22:13:08 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 23:33:39 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
+static	int		export_flags_return(t_tokens **st_tokens, int index, int *n)
+{
+	int	j;
+	int	c;
+
+	j = 0;
+	while ((*st_tokens) && (*st_tokens)->value[++j])
+	{
+		c = (*st_tokens)->value[j];
+		if (c != 'n' && c != 'p')
+			return (c);
+		(c == 'n') && (*n = 1);
+		if (!(*st_tokens)->value[j + 1] && (*st_tokens)->next
+				&& (*st_tokens)->next->indx == index)
+		{
+			*st_tokens = (*st_tokens)->next;
+			j = -1;
+		}
+	}
+	return (0);
+}
+
 int				export_flags(t_tokens **st_tokens, int *n)
 {
 	int		i;
-	int		j;
-	char	c;
+	int		c;
 
 	*n = 0;
 	if (!*st_tokens)
@@ -28,20 +49,8 @@ int				export_flags(t_tokens **st_tokens, int *n)
 		{
 			if ((*st_tokens)->value[0] != '-')
 				return (0);
-			j = 0;
-			while ((*st_tokens) && (*st_tokens)->value[++j])
-			{
-				c = (*st_tokens)->value[j];
-				if (c != 'n' && c != 'p')
-					return (c);
-				(c == 'n') && (*n = 1);
-				if (!(*st_tokens)->value[j + 1] && (*st_tokens)->next
-						&& (*st_tokens)->next->indx == i)
-				{
-					*st_tokens = (*st_tokens)->next;
-					j = -1;
-				}
-			}
+			if ((c = export_flags_return(st_tokens, i, n)))
+				return (c);
 			i++;
 		}
 		*st_tokens = (*st_tokens)->next;
@@ -75,7 +84,7 @@ static	void	display_export(t_intern *export)
 }
 
 /*
-**	remove, edit, add , display export variables
+**	remove, edit, add, display export variables
 */
 
 void			exported_vars(t_intern vrb, int rest, int edit)
