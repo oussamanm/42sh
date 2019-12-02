@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 06:25:57 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 06:54:48 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 06:47:23 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../includes/read_line.h"
 
 /*
-** Save a copy of fds : STD_OUT, STD_IN, STD_ERR @
+** Save a copy of fds : STD_OUT, STD_IN, STD_ERR
 */
 
 void		save_fds(int tmp[3])
@@ -28,7 +28,7 @@ void		save_fds(int tmp[3])
 }
 
 /*
-** restor  fds : STD_OUT, STD_IN, STD_ERR to default @
+** restor  fds : STD_OUT, STD_IN, STD_ERR to default
 */
 
 void		restor_fds(int tmp[3])
@@ -42,7 +42,7 @@ void		restor_fds(int tmp[3])
 }
 
 /*
-** initail builtens : duplicate STD_* , Call builtens , Resete STD_* @
+** initail builtens : duplicate STD_* , Call builtens , Resete STD_*
 */
 
 int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
@@ -72,14 +72,13 @@ int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 	return (status);
 }
 
-
 /*
 **  Call Builtens (close fds of redirection)
 */
 
 int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 {
-	int     status;
+	int		status;
 	int		tmp;
 
 	status = 0;
@@ -102,7 +101,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 }
 
 /*
-**	Check if Command builtens @
+**	Check if Command builtens
 */
 
 int			ft_check_built(char *arg)
@@ -123,8 +122,8 @@ int			ft_check_built(char *arg)
 		return (1);
 	else if (!ft_strcmp(arg, "history") || !ft_strcmp(arg, "fc"))
 		return (1);
-	else if (!ft_strcmp(arg, "fg") || !ft_strcmp(arg, "bg") || !ft_strcmp(arg, "jobs"))
+	else if (!ft_strcmp(arg, "fg") || !ft_strcmp(arg, "bg")
+			|| !ft_strcmp(arg, "jobs"))
 		return (1);
 	return (0);
 }
-

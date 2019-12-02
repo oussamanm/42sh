@@ -25,7 +25,6 @@ t_cmds		*ft_new_cmds(void)
 	return (st_cmds);
 }
 
-
 t_jobctr	*ft_new_jobctr(void)
 {
 	t_jobctr	*st_jobctr;

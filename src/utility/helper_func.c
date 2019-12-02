@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-** find file in PATH :
+** find file in PATH
 */
 
 char		*ft_find_path(char *arg, char **env)
@@ -48,7 +48,7 @@ char		*ft_find_path(char *arg, char **env)
 }
 
 /*
-** Print error and exit @
+** Print error and exit
 */
 
 void		ft_err_exit(char *str)
@@ -58,7 +58,7 @@ void		ft_err_exit(char *str)
 }
 
 /*
-** Check if exist redirection @
+** Check if exist redirection
 */
 
 int			ft_check_redi(t_pipes *st_pipes)
@@ -78,7 +78,7 @@ int			ft_check_redi(t_pipes *st_pipes)
 }
 
 /*
-** Calculate sum of ASCI : @
+** Calculate sum of ASCI
 */
 
 int			ft_sum_asci(char str[])
@@ -97,7 +97,7 @@ int			ft_sum_asci(char str[])
 }
 
 /*
-** Converte Result_cmd to tokens , work for sub_shell @
+** Converte Result_cmd to tokens , work for sub_shell
 */
 
 void		value_to_token(char *value, t_tokens **st_tokens)

@@ -31,7 +31,7 @@ void		free_list_pipe(t_pipes *st_pipes)
 
 void		free_list_logopr(t_logopr *st_logopr)
 {
-	t_logopr *temp;
+	t_logopr	*temp;
 
 	temp = NULL;
 	while (st_logopr)
@@ -46,7 +46,7 @@ void		free_list_logopr(t_logopr *st_logopr)
 
 void		free_list_jobctr(t_jobctr *st_jobctr)
 {
-	t_jobctr *temp;
+	t_jobctr	*temp;
 
 	temp = NULL;
 	while (st_jobctr)
@@ -58,7 +58,6 @@ void		free_list_jobctr(t_jobctr *st_jobctr)
 		st_jobctr = temp;
 	}
 }
-
 
 void		free_list_cmds(t_cmds *st_cmds)
 {

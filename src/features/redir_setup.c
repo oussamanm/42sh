@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-** Initiale vrb of rediretion @
+** Initiale vrb of rediretion
 */
 
 void		ft_init_redi(t_redir *st_redir, int type_red)
@@ -38,7 +38,7 @@ void		ft_init_redi(t_redir *st_redir, int type_red)
 }
 
 /*
-** helper function for ft_redi_out (>& || &>) @
+** helper function for ft_redi_out (>& || &>)
 */
 
 void		ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens)
@@ -65,7 +65,7 @@ void		ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens)
 }
 
 /*
-** Apply redirection her_doc @
+** Apply redirection her_doc
 */
 
 void		ft_apply_hered(t_redir *st_redi)
@@ -83,7 +83,7 @@ void		ft_apply_hered(t_redir *st_redi)
 }
 
 /*
-** Apply here_doc if exist @
+** Apply here_doc if exist
 */
 
 void		ft_apply_her_doc(t_jobctr *st_jobctr)
@@ -116,13 +116,13 @@ void		ft_apply_her_doc(t_jobctr *st_jobctr)
 }
 
 /*
-**	get next value : helper function to get value next of redirection @
+**	get next value : helper function to get value next of redirection
 */
 
 char		*get_value_next(t_tokens *st_token)
 {
-	int	index;
-	char *str_rtn;
+	int		index;
+	char	*str_rtn;
 
 	if (!st_token)
 		return (NULL);

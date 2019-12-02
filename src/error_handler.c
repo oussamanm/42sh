@@ -6,21 +6,19 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 16:38:33 by onouaman          #+#    #+#             */
-/*   Updated: 2019/06/22 16:38:35 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/12/02 06:44:57 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-
 /*
-** helper function for error_syntax_lexer @
+** helper function for error_syntax_lexer
 */
 
 int			syntax_error_h(t_tokens *st_tokens)
 {
-	int bl;
-
+	int	bl;
 
 	bl = 0;
 	if (st_tokens->token == T_PIPE &&
@@ -39,7 +37,7 @@ int			syntax_error_h(t_tokens *st_tokens)
 }
 
 /*
-** Check errors Syntax (Lexer) resirection, pipe, job_ctr, || , &&   @
+** Check errors Syntax (Lexer) resirection, pipe, job_ctr, || , &&
 */
 
 int			error_syntax_lexer(t_tokens *st_tokens)
@@ -68,7 +66,7 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 }
 
 /*
-** Check error syntax of expansion ${}  @
+** Check error syntax of expansion ${}
 */
 
 int			error_syntax_expans(char *str_cmds)
@@ -100,7 +98,7 @@ int			error_syntax_expans(char *str_cmds)
 }
 
 /*
-** Helper for handle error redirection @
+** Helper for handle error redirection
 */
 
 char		*error_redir_h(t_tokens *st_tokens)
@@ -118,12 +116,12 @@ char		*error_redir_h(t_tokens *st_tokens)
 	else if (TOKEN < 0 && ft_check_char(st_tokens->value, ERRO_IN_AND))
 		msg = "syntax error near unexpected token `&'";
 	else if (TOKEN == T_RED_OUT_A && *(st_tokens->value) == '>' &&
-		NEXT && !ft_isalldigit(NEXT->value) &&
-		PREV && PREV->indx == st_tokens->indx &&
-		ft_isalldigit(PREV->value) && ft_atoi(PREV->value) != 1)
+			NEXT && !ft_isalldigit(NEXT->value) &&
+			PREV && PREV->indx == st_tokens->indx &&
+			ft_isalldigit(PREV->value) && ft_atoi(PREV->value) != 1)
 		msg = "ambiguous redirect";
 	else if (TOKEN == T_RED_IN_A && NEXT &&
-		!ft_isalldigit((temp = get_value_next(NEXT))))
+			!ft_isalldigit((temp = get_value_next(NEXT))))
 		msg = "ambiguous redirect ";
 	else if (TOKEN <= -122 && !ft_strncmp(st_tokens->value, "><", 2))
 		msg = "syntax error near unexpected token `<'";
@@ -132,7 +130,7 @@ char		*error_redir_h(t_tokens *st_tokens)
 }
 
 /*
-** Check Error syntax of redirection @
+** Check Error syntax of redirection
 */
 
 int			error_redir(t_tokens *st_tokens)

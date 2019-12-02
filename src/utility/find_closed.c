@@ -14,9 +14,9 @@
 
 int			find_dquot(char *str)
 {
-	int i;
-	int j;
-	
+	int	i;
+	int	j;
+
 	i = 0;
 	j = 0;
 	while (str[i])
@@ -40,14 +40,14 @@ int			find_dquot(char *str)
 
 int			find_subsh(char *str)
 {
-	int i;
-	int temp;
-	
+	int	i;
+	int	temp;
+
 	if (!str)
 		return (-1);
-	i = 0;
+	i = -1;
 	temp = 0;
-	while (str[i] && temp != -1)
+	while (str[++i] && temp != -1)
 	{
 		temp = 0;
 		if (M_ESCAPED(str[i]))
@@ -63,7 +63,6 @@ int			find_subsh(char *str)
 			i += temp;
 		else if (str[i] == ')')
 			return (i);
-		i++;
 	}
 	return (-1);
 }
@@ -99,4 +98,3 @@ int			find_closed(char *str, char c)
 		i = find_subsh(str);
 	return (i);
 }
-

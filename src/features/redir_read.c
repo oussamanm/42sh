@@ -13,8 +13,6 @@
 #include "shell.h"
 #include "read_line.h"
 
-# define SAME_ARG(x, y) (x && x->indx == y->indx && ft_isalldigit(x->value)) ///// move to .h
-
 /*
 ** Redirection output >	 @
 */

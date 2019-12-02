@@ -22,15 +22,14 @@ t_redir		*ft_new_redir(void)
 	return (st_redir);
 }
 
-
 t_intern	*new_intern(char *key, char *value)
 {
-    t_intern *new;
+	t_intern *new;
 
-    if (!(new = (t_intern*)malloc(sizeof(t_intern))))
-        return (NULL);
-    new->key = ft_strdup(key);
-    new->value = ft_strdup(value);
-    new->next = NULL;
-    return (new);
+	if (!(new = (t_intern*)malloc(sizeof(t_intern))))
+		return (NULL);
+	new->key = ft_strdup(key);
+	new->value = ft_strdup(value);
+	new->next = NULL;
+	return (new);
 }

@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-**	ft_remove_quot : Remove Quote from args @
+**	ft_remove_quot : Remove Quote from args
 */
 
 void			ft_remove_quot(char **args)
@@ -29,7 +29,8 @@ void			ft_remove_quot(char **args)
 	{
 		arg = args[i];
 		j = -1;
-		if ((arg[0] == '\'' || arg[0] == '"') && arg[ft_strlen(arg) - 1] == arg[0])
+		if ((arg[0] == '\'' || arg[0] == '"') &&
+			arg[ft_strlen(arg) - 1] == arg[0])
 		{
 			ft_strcpy(arg, &arg[1]);
 			arg[ft_strlen(arg) - 1] = 0;
@@ -37,9 +38,8 @@ void			ft_remove_quot(char **args)
 	}
 }
 
-
 /*
-**	ft_update_tokens : update token by remove quotes @
+**	ft_update_tokens : update token by remove quotes
 */
 
 void			ft_update_tokens(t_tokens *st_tokens)

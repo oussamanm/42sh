@@ -6,7 +6,7 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 18:37:39 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 18:37:40 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/12/02 06:38:33 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void		ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx)
 }
 
 /*
-** lexer for || &&      @
+** lexer for || &&
 */
 
 void		ft_lexer_logopr(t_tokens **st_tokens, char *arg, int *j, int indx)
@@ -82,7 +82,7 @@ void		ft_lexer_logopr(t_tokens **st_tokens, char *arg, int *j, int indx)
 	while (arg[i])
 	{
 		if ((arg[i] == '|' && arg[i + 1] == '|')
-			|| (arg[i] == '&' && arg[i + 1] == '&'))
+				|| (arg[i] == '&' && arg[i + 1] == '&'))
 		{
 			temp = (arg[i] == '|') ? ft_strdup("||") : ft_strdup("&&");
 			i++;
@@ -95,7 +95,7 @@ void		ft_lexer_logopr(t_tokens **st_tokens, char *arg, int *j, int indx)
 }
 
 /*
-** lexer for txt @
+** lexer for txt
 */
 
 void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
@@ -109,9 +109,9 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 	while (arg[++i] != '\0')
 	{
 		escaped = (arg[i] == '\\' && !escaped) ? 1 : 0;
-		if (!arg[i + 1] || M_CHECK(arg[i + 1], ' ', '\t') || /*M_BRACKET(arg[i + 1]) ||*/
-			M_CHECK(arg[i + 1], '&', '|') || M_REDIR(arg[i + 1]) || arg[i + 1] == '$'||
-			(arg[0] != '=' && arg[i + 1] == '=') || IS_QUOTE(arg[i + 1]))
+		if (!arg[i + 1] || M_CHECK(arg[i + 1], ' ', '\t') ||
+				M_CHECK(arg[i + 1], '&', '|') || M_SUBSH(arg[i + 1]) ||
+				(arg[0] != '=' && arg[i + 1] == '=') || IS_QUOTE(arg[i + 1]))
 		{
 			if (escaped && arg[i + 1])
 				continue ;
@@ -124,7 +124,7 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 }
 
 /*
-**	Lexer sub_shell @
+**	Lexer sub_shell
 */
 
 void		ft_lexer_subshl(t_tokens **st_tokens, char *arg, int *j, int indx)
