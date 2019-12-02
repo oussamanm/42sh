@@ -1,5 +1,4 @@
 /**** parsing
-
 asdasd|asasdasd || asdasd;a"asdasd"s ()adsasd 'asdasd';
 ;asdasdasd\|\|&pwdasdasd ; "" ; \| ; \||'asdasd'weqwe
 pwd ; | pwd "" ; "'"''"'" ; "" | ""
@@ -11,7 +10,6 @@ echo hello world \|
 echo hello world \||
 echo hello world \&
 echo hello world \&\&
-
                    "'" ; ''|''
 aaa=bbb ccc=ddd | cat -e &
 pwd ;() ; echo hello world;
@@ -21,20 +19,15 @@ echo hello
 *
 echo \$HOME ";" pwd
 qweqwe=qweqweqw rewerwer= ""
-
-
-
-
 /****** Redirection
-
 pwd >&-
 <>
 ><
 pwd 1<>gggg asd ><asd 
 >'asd'dqwe$(echo kkkk)
-
-
+ls <(cat -e)
+ls $(cat)
+cat |cat |cat
 
 /******* Line continuation
-
 "$('
