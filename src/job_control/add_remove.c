@@ -34,9 +34,9 @@ void	ft_remove_node(t_list **tmp, t_list **pr)
 	if (*pr == NULL)
 	{
 		(*tmp) = (*tmp)->next;
-		ft_free_job(jobs->content);
-		free(jobs);
-		jobs = *tmp;
+		ft_free_job(g_jobs->content);
+		free(g_jobs);
+		g_jobs = *tmp;
 	}
 	else
 	{
@@ -49,9 +49,9 @@ void	ft_remove_node(t_list **tmp, t_list **pr)
 
 void	ft_add_job(t_job *job)
 {
-	(!jobs) ? (jobs = ft_lstnew(NULL, sizeof(t_job))) :
-	(ft_lstadd(&jobs, ft_lstnew(NULL, sizeof(t_job))));
-	jobs->content = job;
+	(!g_jobs) ? (g_jobs = ft_lstnew(NULL, sizeof(t_job))) :
+	(ft_lstadd(&g_jobs, ft_lstnew(NULL, sizeof(t_job))));
+	g_jobs->content = job;
 	ft_update_p(1);
 }
 

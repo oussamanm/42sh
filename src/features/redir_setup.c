@@ -82,7 +82,6 @@ void		ft_apply_hered(t_redir *st_redi)
 	st_redi->fd_des = fds[0];
 }
 
-
 /*
 ** Apply here_doc if exist
 */
@@ -117,13 +116,13 @@ void		ft_apply_her_doc(t_jobctr *st_jobctr)
 }
 
 /*
-	get next value : helper function to get value next of redirection
+**	get next value : helper function to get value next of redirection
 */
 
-char	*get_value_next(t_tokens *st_token)
+char		*get_value_next(t_tokens *st_token)
 {
-	int	index;
-	char *str_rtn;
+	int		index;
+	char	*str_rtn;
 
 	if (!st_token)
 		return (NULL);

@@ -53,3 +53,26 @@ char		*ft_correctpath(char *path, char *str)
 		path = ft_strjoir("/", path, 2);
 	return (path);
 }
+
+/*
+** - import alias content file to list;
+*/
+
+void		importaliasfilecontent_1(char *line, char *tmp, int j)
+{
+	int	i;
+
+	while (line[j] && ft_isspace(line[j]))
+		j++;
+	i = j;
+	while (line[i] && line[i] != '=')
+		i++;
+	if (line[i] == '=')
+	{
+		tmp = ft_strsub(line, j, i);
+		rm_alias_by_elem_flag(tmp, 0, 0);
+		pushtolist(line + j, 1);
+		ft_strdel(&tmp);
+	}
+	(line) ? ft_strdel(&line) : 0;
+}

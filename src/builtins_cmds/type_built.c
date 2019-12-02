@@ -81,22 +81,26 @@ int		type_options(char **arg, int *flag)
 	return (i);
 }
 
-void	ft_buil_type_(char *args, int flag)
+int		ft_buil_type_(char *args, int flag)
 {
+	int	ret;
+
+	ret = 0;
 	if (flag == a_flg)
-		a_option(args);
+		ret = a_option(args);
 	else if (flag == p_flg)
-		p_option(args, 0);
+		ret = p_option(args, 0);
 	else if (flag == maj_p_flg)
-		p_option(args, 1);
+		ret = p_option(args, 1);
 	else if (flag == t_flg)
-		t_option(args, 1);
+		ret = t_option(args, 1);
 	else if (flag == (a_flg | p_flg))
-		p_option(args, 1);
+		ret = p_option(args, 1);
 	else if (flag == (a_flg | t_flg))
-		at_option(args);
+		ret = at_option(args);
 	else if (flag == (maj_p_flg | t_flg))
-		t_option(args, 0);
+		ret = t_option(args, 0);
+	return (ret ? 0 : 1);
 }
 
 /*
@@ -121,7 +125,12 @@ int		built_type(char **args, char **tmpenv)
 		if (!flag || flag == f_flg)
 			no_options(*args, &var);
 		else
-			ft_buil_type_(*args, flag);
+		{
+			if (var)
+				ft_buil_type_(*args, flag);
+			else
+				var = ft_buil_type_(*args, flag);
+		}
 		args++;
 	}
 	return ((var) ? EXIT_FAILURE : EXIT_SUCCESS);

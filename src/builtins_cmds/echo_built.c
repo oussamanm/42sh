@@ -12,7 +12,6 @@
 
 #include "shell.h"
 
-
 /*
 ** this functinon serve option echo -n;
 */
@@ -33,13 +32,11 @@ void	n_flag(char *arg)
 ** this functinon serve option echo -e;
 */
 
-int		e_interpretation(char *arg, int token)
+int		e_interpretation(char *arg, int token, int i)
 {
 	char	tmp;
 	char	*temp;
-	int		i;
 
-	i = -1;
 	while (arg[++i])
 	{
 		if (arg[i] != '\\')
@@ -105,7 +102,7 @@ int		built_echo(t_tokens *st_tokens)
 	while (st_tokens && !status)
 	{
 		if (M_CHECK(flag, (e_flg | n_flg), e_flg))
-			status = e_interpretation(st_tokens->value, st_tokens->token);
+			status = e_interpretation(st_tokens->value, st_tokens->token, -1);
 		else
 			status = (ft_putstr(st_tokens->value) == -1) ? 1 : 0;
 		if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !NEXT)

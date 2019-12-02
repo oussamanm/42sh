@@ -40,9 +40,9 @@ void	ft_continue(char *arg)
 	t_job	*job;
 	int		index;
 
-	(!jobs) ? ft_putendl_fd("42sh: bg: current: no such job", 2) : 0;
+	(!g_jobs) ? ft_putendl_fd("42sh: bg: current: no such job", 2) : 0;
 	(arg) ? (index = ft_atoi(arg)) : 0;
-	tmp = jobs;
+	tmp = g_jobs;
 	while (tmp)
 	{
 		job = tmp->content;

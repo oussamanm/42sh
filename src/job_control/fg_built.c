@@ -34,7 +34,7 @@ void	ft_update_p_fg(int index)
 	t_job	*job;
 	int		add;
 
-	tmp = jobs;
+	tmp = g_jobs;
 	add = 0;
 	while (tmp)
 	{
@@ -91,9 +91,9 @@ void	ft_foreground(char *arg)
 	t_list	*pr;
 	int		index;
 
-	(!jobs) ? ft_putendl_fd("42sh: fg: current: no such job", 2) : 0;
+	(!g_jobs) ? ft_putendl_fd("42sh: fg: current: no such job", 2) : 0;
 	(arg) ? (index = ft_atoi(arg)) : 0;
-	tmp = jobs;
+	tmp = g_jobs;
 	pr = NULL;
 	while (tmp)
 	{

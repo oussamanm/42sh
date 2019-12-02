@@ -66,7 +66,7 @@ void	ft_jobs_built(char **args)
 	int		index;
 	int		ar;
 
-	tmp = jobs;
+	tmp = g_jobs;
 	index = 0;
 	ar = ft_get_jobs_arg(args, &index);
 	while (tmp)

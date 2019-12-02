@@ -99,7 +99,7 @@ void	ft_wait(t_job *current)
 			continue;
 		else if (pid == 0)
 			break ;
-		tmp = jobs;
+		tmp = g_jobs;
 		if (ft_current_status(current, status, pid))
 			return ;
 		while (tmp)

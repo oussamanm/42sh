@@ -28,6 +28,8 @@ char	*ft_line_add(char *s, t_cursor *pos, char c)
 	new[pos->index] = c;
 	ft_strcpy(new + pos->index + 1, s + pos->index);
 	tputs(tgetstr("cd", NULL), 0, my_outc);
+	ft_get_end_of_line_pos(pos, new, pos->num_col);
+	update_tab_str(&new, pos);
 	ft_putstr_term(pos->num_col, new + pos->index, pos);
 	pos->index++;
 	pos->num_lines = ft_get_num_of_lines(pos->num_col, new, pos->p);

@@ -219,5 +219,6 @@ void				tab_mode(char **s);
 void				ft_go_to_left(t_cursor *pos, char *s);
 void				ft_go_to_right(t_cursor *pos, char *s);
 void				ft_right_touch(t_cursor *pos, int size);
-
+void				save_address(t_select **select);
+void				initial_read_line(t_history *his, t_select **select);
 #endif

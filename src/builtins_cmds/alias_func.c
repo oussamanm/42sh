@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 14:51:30 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/02 11:29:26 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 12:32:38 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void		createaliasfile(void)
 void		importaliasfilecontent(char *tmp)
 {
 	char	*line;
-	int		i;
 	int		count;
 	int		fd;
 
@@ -120,14 +119,10 @@ void		importaliasfilecontent(char *tmp)
 			continue ;
 		else
 		{
-			i = 0;
-			while (line[i] && line[i] != '=')
-				i++;
-			tmp = ft_strsub(line, 0, i);
-			rm_alias_by_elem_flag(tmp, 0, 0);
-			pushtolist(line, 1);
-			ft_strdel(&tmp);
-			ft_strdel(&line);
+			if ((ft_strncmp(line, "alias", 5)) == 0)
+				importaliasfilecontent_1(line, tmp, 5);
+			else
+				(line) ? ft_strdel(&line) : 0;
 		}
 	}
 	close(fd);
