@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/25 10:50:39 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/01 23:47:52 by aboukhri         ###   ########.fr       */
+/*   Created: 2019/12/02 01:11:52 by mfilahi           #+#    #+#             */
+/*   Updated: 2019/12/02 01:11:59 by mfilahi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,24 @@ int				get_next_line(const int fd, char **line)
 {
 	static char	*text[65536];
 	char		buff[BUFFER_SIZE + 1];
+	char		*tmp;
 	int			ret;
 
+	tmp = NULL;
 	if (fd < 0 || read(fd, buff, 0) < 0)
 		return (-1);
+	if (text[fd] == NULL)
+		text[fd] = ft_strnew(1);
 	while ((ret = read(fd, buff, BUFFER_SIZE)))
 	{
-		if (text[fd] == NULL)
-			text[fd] = ft_strnew(1);
 		buff[ret] = '\0';
-		text[fd] = ft_strjoir(text[fd], buff, 1);
+		tmp = text[fd];
+		text[fd] = ft_strjoin(text[fd], buff);
+		ft_strdel(&tmp);
 		if (ft_strchr(text[fd], '\n'))
 			break ;
 	}
 	if (*text[fd] != '\0')
 		return (copy_in_line(&text[fd], line));
-	return (-1);
+	return (0);
 }

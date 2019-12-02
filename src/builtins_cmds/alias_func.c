@@ -93,7 +93,7 @@ void		createaliasfile(void)
 	fd = 0;
 	if (!(access(".42shrc", F_OK) == 0))
 	{
-		fd = open(".42shrc", O_CREAT, 0777);
+		fd = open(".42shrc", O_CREAT, 00600);
 		close(fd);
 	}
 }
