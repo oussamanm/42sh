@@ -29,7 +29,7 @@ def crash():
             fifo.close()
             time.sleep(0.3)
         os.system('/usr/bin/pkill 42sh')
-        os.exit(0);
+        sys.exit(0)
 
 if __name__ == "__main__":
     crash()

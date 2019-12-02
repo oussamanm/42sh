@@ -111,7 +111,6 @@ void		importaliasfilecontent(char *tmp)
 
 	line = NULL;
 	count = 0;
-	
 	fd = open(".42shrc", O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
 	{
