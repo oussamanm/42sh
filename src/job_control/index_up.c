@@ -18,7 +18,7 @@ void		ft_update_p(int any)
 	t_job	*job;
 	int		add;
 
-	tmp = jobs;
+	tmp = g_jobs;
 	add = 0;
 	while (tmp)
 	{
@@ -55,7 +55,7 @@ void		ft_update_index(void)
 	t_job	*job;
 	int		len;
 
-	tmp = jobs;
+	tmp = g_jobs;
 	len = ft_lst_len(tmp);
 	while (tmp)
 	{
@@ -69,9 +69,9 @@ int			ft_job_index(void)
 {
 	t_job *job;
 
-	if (jobs)
+	if (g_jobs)
 	{
-		job = jobs->content;
+		job = g_jobs->content;
 		return (job->index + 1);
 	}
 	return (1);

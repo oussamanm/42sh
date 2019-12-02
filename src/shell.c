@@ -125,7 +125,6 @@ int			main(void)
 	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
 
 	// Initail shell (signal, session, read_line, hash_table, alias, fc_built)
-	g_fd= open("/dev/ttys001", O_WRONLY);
 	initial_shell(&select);
 	while (1337)
     {

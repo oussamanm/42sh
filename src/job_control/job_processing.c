@@ -29,7 +29,7 @@ void	ft_collect_job_status(void)
 	t_list	*tmp;
 	t_job	*job;
 
-	tmp = jobs;
+	tmp = g_jobs;
 	while (tmp)
 	{
 		job = tmp->content;
@@ -46,7 +46,7 @@ void	ft_job_processing(void)
 	t_job	*job;
 	t_list	*pr;
 
-	tmp = jobs;
+	tmp = g_jobs;
 	pr = NULL;
 	ft_update_p(0);
 	ft_update_index();
