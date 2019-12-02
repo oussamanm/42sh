@@ -58,21 +58,17 @@ char		*exec_subsh(char *cmd)
 		ft_putendl_fd("Error Create Pipe", 2);
 	signal(SIGCHLD, SIG_DFL);
 	g_sign = 1;
-	if ((pid = fork()) == 0)
-		child_subsh(fds, cmd);
+	((pid = fork()) == 0) ? child_subsh(fds, cmd) : NULL;
 	waitpid(pid, &status, 0);
 	g_sign = 0;
 	signal(SIGCHLD, ft_catch_sigchild);
-	if (WIFSIGNALED(status))
-		g_pos.exit = 1;
+	g_pos.exit = (WIFSIGNALED(status)) ? 1 : 0;
 	close(fds[1]);
 	result = ft_strnew(0);
 	ft_bzero(buff, 11);
-	while (read(fds[0], &buff, 10) > 0)
-	{
-		result = ft_strjoir(result, buff, 1);
+	while (read(fds[0], &buff, 10) > 0 &&
+		(result = ft_strjoir(result, buff, 1)))
 		ft_bzero(buff, 10);
-	}
 	close(fds[0]);
 	return (result);
 }

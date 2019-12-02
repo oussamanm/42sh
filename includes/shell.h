@@ -108,7 +108,7 @@
 # define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
 # define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
 # define OPER_TOKEN(t) (t == T_JOBCTR || t == T_PIPE || t == T_LOGOPR_OR || t == T_LOGOPR_AND)
-# define SAMGE_AR(x, y) (x && x->indx == y->indx && ft_isalldigit(x->value))
+# define SAME_ARG(x, y) (x && x->indx == y->indx && ft_isalldigit(x->value))
 
 /*
 **Parsing
@@ -453,6 +453,9 @@ int						find_flag(char *maps, int flag);
 void					clean_maps(char *maps);
 int						count_key(char *maps, int key);
 int						closed_dquot(char *maps);
+int						increase_maps(char	**maps);
+int						correct_maps_(char *maps, int i, int *quoted, int *rtn);
+int						fill_maps_h(char *str_cmd, char **maps, int quoted, int j);
 
 
 /*
@@ -504,5 +507,13 @@ void					ft_print_backcmd(t_job *job);
 char					ft_stoped(t_job *job);
 char					ft_terminated(t_job *job);
 void					ft_run_job(t_job *job);
+
+/*
+** initial
+*/
+
+void		init_alias_hash();
+void		save_address(t_select **select);
+void		initial_read_line(t_history *his, t_select **select);
 
 #endif

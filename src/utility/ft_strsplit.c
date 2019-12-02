@@ -35,10 +35,10 @@ char			**ft_str_split_q(char *str, char *c)
 			i += (temp[i + 1]) ? 1 : 0;
 			continue ;
 		}
-		if ((temp[i] == '(' || IS_QUOTE(temp[i])) && (j = find_closed(&temp[i], temp[i])) != -1)
+		if ((temp[i] == '(' || IS_QUOTE(temp[i])) &&
+			(j = find_closed(&temp[i], temp[i])) != -1)
 			i += j;
-		if (ft_check_char(c, temp[i]))
-			temp[i] = -1;
+		(ft_check_char(c, temp[i])) && (temp[i] = -1);
 	}
 	s_re = ft_strsplit(temp, -1);
 	ft_strdel(&temp);

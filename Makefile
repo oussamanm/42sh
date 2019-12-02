@@ -19,6 +19,7 @@ OBJS = error_handler.o\
 	utility/free.o utility/free_.o utility/ft_strsplit.o\
 	utility/find_closed.o utility/helper_exec.o\
 	utility/helper_contin.o utility/helper_built.o\
+	utility/line_contin.o\
 	features/pipe.o features/line_continuation.o\
 	features/proc_sub.o features/redir_parse.o\
 	features/redir_read.o features/redir_setup.o\

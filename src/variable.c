@@ -13,31 +13,6 @@
 #include "shell.h"
 
 /*
-**	ft_get_vrb : return variable (allocated) || NULL :
-*/
-
-char		*ft_get_vrb(char *vrb, char **env)
-{
-	int		len;
-	char	*value;
-
-	if (vrb == NULL || env == NULL)
-		return (NULL);
-	if ((len = ft_strlen(vrb)) == 0)
-		return (NULL);
-	while (*env != NULL)
-	{
-		if (ft_strnequ(*env, vrb, len) && (*env)[len] == '=')
-		{
-			value = ft_strsub(*env, len + 1, ft_strlen(*env) - len - 1);
-			return (value);
-		}
-		env++;
-	}
-	return (NULL);
-}
-
-/*
 **	ft_add_vrb : add variable to environ :
 */
 
@@ -122,53 +97,53 @@ void		ft_unset_vrb(char *vrb, char ***env)
 
 void		ft_insert_vrb(char *vrb, char ***env, int rm)
 {
-    int        i;
-    int        len_vrb;
-    char    **temp;
+	int			i;
+	int			len_vrb;
+	char		**temp;
 
-    if (vrb == NULL || *env == NULL)
-        return ;
-    i = -1;
-    temp = *env;
-    while (temp[++i] != NULL)
-    {
-        len_vrb = ft_find_char(vrb, '=');
-        if (len_vrb != -1 && !ft_strncmp(vrb, temp[i], len_vrb)
-            && temp[i][len_vrb] == '=')
-        {
-            ft_strdel(&temp[i]);
-            temp[i] = ft_strdup(vrb);
-            i = -2;
-            break ;
-        }
-    }
-    if (i != -2)
-        temp[i] = ft_strdup(vrb);
-    (rm == 1) ? ft_strdel(&vrb) : NULL;
+	if (vrb == NULL || *env == NULL)
+		return ;
+	i = -1;
+	temp = *env;
+	while (temp[++i] != NULL)
+	{
+		len_vrb = ft_find_char(vrb, '=');
+		if (len_vrb != -1 && !ft_strncmp(vrb, temp[i], len_vrb)
+			&& temp[i][len_vrb] == '=')
+		{
+			ft_strdel(&temp[i]);
+			temp[i] = ft_strdup(vrb);
+			i = -2;
+			break ;
+		}
+	}
+	if (i != -2)
+		temp[i] = ft_strdup(vrb);
+	(rm == 1) ? ft_strdel(&vrb) : NULL;
 }
 
 int			ft_edit_vrb(char *vrb, char ***env, int rm)
 {
-    int        i;
-    int        len_vrb;
-    char    **temp;
+	int		i;
+	int		len_vrb;
+	char	**temp;
 
-    if (vrb == NULL || *env == NULL)
-        return (0);
-    i = -1;
-    temp = *env;
-    while (temp[++i] != NULL)
-    {
-        len_vrb = ft_find_char(vrb, '=');
-        if (len_vrb != -1 && !ft_strncmp(vrb, temp[i], len_vrb)
-            && temp[i][len_vrb] == '=')
-        {
-            ft_strdel(&temp[i]);
-            temp[i] = ft_strdup(vrb);
+	if (vrb == NULL || *env == NULL)
+		return (0);
+	i = -1;
+	temp = *env;
+	while (temp[++i] != NULL)
+	{
+		len_vrb = ft_find_char(vrb, '=');
+		if (len_vrb != -1 && !ft_strncmp(vrb, temp[i], len_vrb)
+			&& temp[i][len_vrb] == '=')
+		{
+			ft_strdel(&temp[i]);
+			temp[i] = ft_strdup(vrb);
 			(rm == 1) ? ft_strdel(&vrb) : NULL;
-            return (1);
-        }
-    }
+			return (1);
+		}
+	}
 	(rm == 1) ? ft_strdel(&vrb) : NULL;
-    return (0);
+	return (0);
 }

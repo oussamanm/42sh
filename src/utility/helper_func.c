@@ -37,14 +37,11 @@ char		*ft_find_path(char *arg, char **env)
 		str_paths[i] = ft_strjoir(str_paths[i], "/", 1);
 		temp = ft_strjoir(str_paths[i], arg, 0);
 		if (access(temp, F_OK) == 0)
-		{
-			ft_strrdel(str_paths);
-			return (temp);
-		}
+			break ;
 		ft_strdel(&temp);
 	}
 	ft_strrdel(str_paths);
-	return (NULL);
+	return (temp);
 }
 
 /*
