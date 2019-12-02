@@ -68,13 +68,13 @@ void	ft_free2d(char **p)
 }
 
 /*
-** - import content from file 42shrc to list
-** we can do that with this cmd : source 42shrc.
+** - import content from file .42shrc to list
+** we can do that with this cmd : source .42shrc.
 */
 
 void	ft_buil_updatealias(char **args)
 {
-	if (!(ft_strcmp(*args, "42shrc") == 0))
+	if (!(ft_strcmp(*args, ".42shrc") == 0))
 		print_error("No such file or directory", NULL, *args, 0);
 	else
 	{

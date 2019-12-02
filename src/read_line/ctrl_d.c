@@ -43,8 +43,6 @@ int		ft_read_exit(t_cursor *pos, t_history *his, t_select *select, char **s)
 	if (select->save)
 		free(select->save);
 	save_history(his);
-	//if (his && his->head && his->tail)
-	//	delete_history(his);
 	delete_intern();
 	ft_disable();
 	exit(0);

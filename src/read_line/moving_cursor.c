@@ -56,8 +56,6 @@ void	ft_right_touch(t_cursor *pos, int size)
 
 void	ft_see_touch(char *buf, char *s, t_cursor *pos)
 {
-	int		sp;
-
 	if (LE == CAST(buf) && pos->x == 0)
 	{
 		pos->index--;
@@ -66,39 +64,7 @@ void	ft_see_touch(char *buf, char *s, t_cursor *pos)
 		ft_movecur_up_and_right(1, pos->x);
 	}
 	else if (LE == CAST(buf) && pos->index != 0)
-	{
-		pos->index--;
-		sp = s[pos->index] * -1;
-		if (sp > 0)
-		{
-			ft_move_left(sp);
-			pos->x -= sp;
-		}
-		else
-		{
-			pos->x--;
-			tputs(tgetstr("le", NULL), 0, my_outc);
-		}
-	}
+		ft_go_to_left(pos, s);
 	else if (RI == CAST(buf))
-	{
-		sp = s[pos->index] * -1;
-		if (sp > 0)
-		{
-			pos->index++;
-			if (pos->x + sp > pos->num_col - 1)
-			{
-				pos->x = 0;
-				pos->y++;
-				tputs(tgetstr("do", NULL), 0, my_outc);
-			}
-			else
-			{
-				pos->x += sp;
-				ft_move_right(sp);
-			}
-		}
-		else
-			ft_right_touch(pos, ft_strlen(s));
-	}
+		ft_go_to_right(pos, s);
 }

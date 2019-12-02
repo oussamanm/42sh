@@ -91,8 +91,8 @@ char	*ft_auto_completion(t_cursor *pos, char *s)
 	if (pos->index != (int)ft_strlen(s) || !(begin = ft_complete_thename(s)))
 		return (s);
 	complete = ft_search_in_dir(begin, ".");
-	//if (!complete)
-//		complete = ft_search_in_thepath(his->path, begin);
+	if (!complete)
+		complete = ft_search_in_thepath(ft_get_vrb("PATH", g_environ), begin);
 	if (!complete)
 		return (s);
 	len = ft_strlen(complete);

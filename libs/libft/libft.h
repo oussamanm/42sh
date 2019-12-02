@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/11 12:42:31 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/20 11:21:32 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:23:20 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,17 @@
 **	Error Message
 */
 
-# define FIL_NS "No such file or directory"
-# define FIL_PD "Permission denied"
-# define VRB_IA "Invalid argument"
-# define CMD_NF "¯\\_(ツ)_/¯ Command not found"
-# define CMD_NV "not a valid identifier"
-# define FIL_NU "no such user or named directory: "
-# define FIL_ND "not a directory"
-# define SYN_ER "Syntax error"
-# define IS_DIR "Is a directory"
+# define FIL_NS			"No such file or directory"
+# define FIL_PD			"Permission denied"
+# define VRB_IA			"Invalid argument"
+# define CMD_NF			"¯\\_(ツ)_/¯ Command not found"
+# define CMD_NV			"not a valid identifier"
+# define FIL_NU			"no such user or named directory: "
+# define FIL_ND			"not a directory"
+# define SYN_ER			"Syntax error"
+# define IS_DIR			"Is a directory"
 
-#define BUFFER_SIZE 10
+# define BUFFER_SIZE	1000
 
 typedef	struct		s_list
 {
@@ -44,9 +44,9 @@ typedef	struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-int	ft_strchrindex(const char *s, int c);
-int	ft_strrchrindex(const char *s, int c);
-int     ft_isalpha_exist(char *str);
+int					ft_strchrindex(const char *s, int c);
+int					ft_strrchrindex(const char *s, int c);
+int					ft_isalpha_exist(char *str);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 char				*ft_strstr(const char *haystack, const char *needle);
@@ -79,7 +79,7 @@ int					ft_isascii(int c);
 int					ft_isalpha(int c);
 int					ft_isalnum(int c);
 void				ft_bzero(void *s, size_t n);
-void	bchar(void *s, size_t n, char c);
+void				bchar(void *s, size_t n, char c);
 int					ft_atoi(const char *str);
 void				ft_memdel(void **ap);
 void				ft_striter(char *s, void (*f)(char *));
@@ -155,6 +155,5 @@ char				*ft_strtrim_and_free(char *s);
 void				ft_strr_trim(char **args);
 char				*ft_str_trim(char *str);
 int					ft_putnbrs(int *table);
-
-int				get_next_line(const int fd, char **line);
+int					get_next_line(const int fd, char **line);
 #endif

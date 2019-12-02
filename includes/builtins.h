@@ -71,11 +71,11 @@ struct			s_hash
 ** CALL OF BUILT
 */
 
-int						built_cd(char **arg, char **env);
-int						built_type(char **args, char **tmpenv);
-int						hash_table(char **args);
-void					built_env(char **args, char ***tmp_env);
-int					built_unset(char **args);
+int				built_cd(char **arg, char **env);
+int				built_type(char **args, char **tmpenv);
+int				hash_table(char **args);
+void			built_env(char **args, char ***tmp_env);
+int				built_unset(char **args);
 
 /*
 ** - COMMAND (TYPE) FUNCTIONS

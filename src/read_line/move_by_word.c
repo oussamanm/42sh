@@ -52,12 +52,8 @@ int		ft_len_last_word(t_cursor *pos, char *s)
 	int len;
 
 	i = pos->index;
-	len = 0;
-	if (s[i] == '\0')
-	{
-		i--;
-		len++;
-	}
+	len = (s[i] == '\0') ? 1 : 0;
+	(s[i] == '\0') && (i -= 1);
 	while (i >= 0 && s[i] != ' ' && s[i] != '\n' && s[i] > 0)
 	{
 		len++;
@@ -96,15 +92,7 @@ void	new_pos_tab_left(char *s, int i, int len, t_cursor *pos)
 				pos->x -= sp;
 		}
 		else
-		{
-			if (pos->x == 0)
-			{
-				pos->y--;
-				pos->x = pos->end[pos->y];
-			}
-			else
-				pos->x--;
-		}
+			ft_get_new_pos_r(pos, 1);
 	}
 }
 
@@ -118,10 +106,8 @@ void	ft_move_by_word(t_cursor *pos, char *s, char *buf)
 	int num_lines;
 	int len_move;
 
-
 	num_col = ft_get_size_windz();
 	num_lines = ft_get_num_of_lines(num_col, s, pos->p);
-	len_move = 0;
 	ft_get_end_of_line_pos(pos, s, num_col);
 	if (RI_WOR == CAST(buf))
 	{

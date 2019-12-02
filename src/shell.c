@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 22:01:38 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 22:58:41 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ static void	initial_shell(t_select	**select)
 	g_exit_status = 0;
 	call_signal();
 	initial_read_line(&g_history, select);
-	
 	init_fc_built();
 	
 	// Initial Alias && HASH

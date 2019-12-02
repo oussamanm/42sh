@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 21:02:13 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 16:37:48 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/01 23:27:43 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static char		*ft_swap_vrb(char *arg, int *index)
 	/// get variable
 	if (!len_vrb && arg[j] == '{')
 		variable = get_para_expan(&arg[j], &len_vrb);
-	else if (!len_vrb && arg[j] != '$' && ++(*index))
+	else if (!len_vrb && arg[j] != '$' && arg[j] != '?' && ++(*index))
 		return (arg);
 	else
 		variable = ft_strsub(arg, *index + 1, len_vrb);
@@ -100,6 +100,8 @@ static char		*ft_swap_vrb(char *arg, int *index)
 	/// get value
 	if (!len_vrb && arg[j] == '$' && ++len_vrb)
 		value = ft_itoa((int)getpid());
+	else if (!len_vrb && arg[j] == '?' && ++len_vrb)
+		value = ft_itoa(g_exit_status);
 	else if (!(value = ft_get_vrb(variable, g_environ)) && !(value = get_intern_value(variable))) /// may should add str_dup to rtn of get_intern_value
 		value = ft_strnew(0);
 	
