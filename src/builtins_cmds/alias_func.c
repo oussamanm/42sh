@@ -120,10 +120,7 @@ void		importaliasfilecontent(char *tmp)
 			if ((ft_strncmp(line, "alias", 5)) == 0)
 				importaliasfilecontent_1(line, tmp, 5);
 			else
-			{
-				print_error(" command not found ", line, NULL, 0);
 				(line) ? ft_strdel(&line) : 0;
-			}
 		}
 	}
 	close(fd);
