@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 14:51:30 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/01 22:44:47 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 12:32:38 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ void		createaliasfile(void)
 	fd = 0;
 	if (!(access(".42shrc", F_OK) == 0))
 	{
-		fd = open(".42shrc", O_CREAT, 00600);
+		if ((fd = open(".42shrc", O_CREAT, 00600)) == -1)
+			return ;
 		close(fd);
 	}
 }
@@ -110,7 +111,8 @@ void		importaliasfilecontent(char *tmp)
 
 	line = NULL;
 	count = 0;
-	fd = open(".42shrc", O_RDONLY);
+	if ((fd = open(".42shrc", O_RDONLY)) == -1)
+		return ;
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (ft_strcmp(line, "") == 0)
