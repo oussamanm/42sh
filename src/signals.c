@@ -23,6 +23,17 @@ void	ft_catch_sigchild(int sig)
 ** ft_catch_signal : CTR + c
 */
 
+void	ft_reset_line(void)
+{
+	ft_putstr_term(g_pos.num_col, g_pos.cmd + g_pos.index, &g_pos);
+	g_pos.index = 0;
+	g_pos.x = 8;
+	g_pos.y = 0;
+	g_pos.num_col = ft_get_size_windz();
+	ft_strdel(&(g_pos.cmd));
+	g_pos.cmd = ft_strnew(0);
+}
+
 void	ft_catch_signal(int signal)
 {
 	UNUSED(signal);
@@ -30,15 +41,7 @@ void	ft_catch_signal(int signal)
 		ft_putchar('\n');
 	else
 	{
-		if (g_pos.cmd == NULL) /// check this 
-			exit(EXIT_SIGINT);
-		ft_putstr_term(g_pos.num_col, g_pos.cmd + g_pos.index, &g_pos);
-		g_pos.index = 0;
-		g_pos.x = 8;
-		g_pos.y = 0;
-		g_pos.num_col = ft_get_size_windz();
-		ft_strdel(&(g_pos.cmd));
-		g_pos.cmd = ft_strnew(0);
+		ft_reset_line();
 		if (g_pos.p != 8 || g_pos.r)
 		{
 			g_pos.exit = 1;
