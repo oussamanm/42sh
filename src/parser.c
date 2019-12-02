@@ -6,31 +6,26 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 21:06:25 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/30 20:50:41 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 06:27:44 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-
 /*
 **	fill structs : Job_controle & Logical_opr & pipe
 */
 
-static void     ft_fill_jobctr(t_cmds *st_cmds)
+static void		ft_fill_jobctr(t_cmds *st_cmds)
 {
 	t_jobctr	*st_jobctr;
 	t_tokens	*st_token;
 	t_tokens	*st_temp;
 
-	// alloc st_jobctr
 	st_cmds->st_jobctr = ft_new_jobctr();
 	st_jobctr = st_cmds->st_jobctr;
-
-	// alloc t_tokens 
 	st_jobctr->st_tokens = ft_new_token();
 	st_token = st_jobctr->st_tokens;
-
 	st_temp = st_cmds->st_tokens;
 	while (st_temp)
 	{
@@ -39,9 +34,8 @@ static void     ft_fill_jobctr(t_cmds *st_cmds)
 		else
 		{
 			st_jobctr->status = 1;
-			if (st_temp->next) // if exist more tokens
+			if (st_temp->next && (st_jobctr->next = ft_new_jobctr()))
 			{
-				st_jobctr->next = ft_new_jobctr();
 				st_jobctr = st_jobctr->next;
 				st_jobctr->st_tokens = ft_new_token();
 				st_token = st_jobctr->st_tokens;
@@ -51,31 +45,25 @@ static void     ft_fill_jobctr(t_cmds *st_cmds)
 	}
 }
 
-static void     ft_fill_logopr(t_jobctr *st_jobctr)
+static void		ft_fill_logopr(t_jobctr *st_jobctr)
 {
 	t_logopr	*st_logopr;
 	t_tokens	*st_token;
 	t_tokens	*st_temp;
 
-	// alloc st_logopr
 	st_jobctr->st_logopr = ft_new_logopr();
 	st_logopr = st_jobctr->st_logopr;
-
-	// alloc t_tokens in st_token
 	st_logopr->st_tokens = ft_new_token();
 	st_token = st_logopr->st_tokens;
-
 	st_temp = st_jobctr->st_tokens;
 	while (st_temp)
 	{
 		if (st_temp->token != T_LOGOPR_AND && st_temp->token != T_LOGOPR_OR)
 			ft_dup_token(&st_token, st_temp, T_LOGOPR_AND);
-		else
+		else if ((st_logopr->status = st_temp->token))
 		{
-			st_logopr->status = st_temp->token;
-			if (st_temp->next) // if exist more tokens
+			if (st_temp->next && (st_logopr->next = ft_new_logopr()))
 			{
-				st_logopr->next = ft_new_logopr();
 				st_logopr = st_logopr->next;
 				st_logopr->st_tokens = ft_new_token();
 				st_token = st_logopr->st_tokens;
@@ -86,31 +74,26 @@ static void     ft_fill_logopr(t_jobctr *st_jobctr)
 	st_logopr->bl_jobctr = st_jobctr->status;
 }
 
-static void     ft_fill_pipe(t_logopr *st_logopr)
+static void		ft_fill_pipe(t_logopr *st_logopr)
 {
 	t_pipes		*st_pipes;
 	t_tokens	*st_token;
 	t_tokens	*st_temp;
 
-	// alloc list of logopr
 	st_logopr->st_pipes = ft_new_pipe();
 	st_pipes = st_logopr->st_pipes;
-
-	// alloc list of tokens
 	st_pipes->st_tokens = ft_new_token();
 	st_token = st_pipes->st_tokens;
-
 	st_temp = st_logopr->st_tokens;
 	while (st_temp)
 	{
-		st_pipes->bl_jobctr = st_logopr->bl_jobctr; 
+		st_pipes->bl_jobctr = st_logopr->bl_jobctr;
 		if (st_temp->token != T_PIPE)
 			ft_dup_token(&st_token, st_temp, T_PIPE);
 		else
 		{
-			if (st_temp->next) // if exist more tokens
+			if (st_temp->next && (st_pipes->next = ft_new_pipe()))
 			{
-				st_pipes->next = ft_new_pipe();
 				st_pipes = st_pipes->next;
 				st_pipes->st_tokens = ft_new_token();
 				st_token = st_pipes->st_tokens;
@@ -121,7 +104,7 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 }
 
 /*
-** Fill Intern and Temp variables
+** Fill Intern and Temp variables @
 */
 
 static void		handle_variable(t_pipes *st_pipes)
@@ -130,7 +113,7 @@ static void		handle_variable(t_pipes *st_pipes)
 
 	if (!st_pipes || !ft_check_token(st_pipes->st_tokens, T_EQUAL))
 		return ;
-	if (!st_pipes->next && ft_check_intern(st_pipes))	/// Fill intern variable
+	if (!st_pipes->next && ft_check_intern(st_pipes))
 		fill_intern(st_pipes);
 	while (st_pipes)
 	{
@@ -146,29 +129,25 @@ static void		handle_variable(t_pipes *st_pipes)
 }
 
 /*
-** Parse command and fill lists: job_ctr, logi_opr, pipes
+** Parse command and fill lists: job_ctr, logi_opr, pipes @
 */
 
-void            ft_parse_cmd(t_cmds *st_cmds)
+void			ft_parse_cmd(t_cmds *st_cmds)
 {
 	t_jobctr	*st_jobctr;
 	t_logopr	*st_logopr;
 
 	if (!st_cmds)
 		return ;
-	/// Fill Job_Controle
 	ft_fill_jobctr(st_cmds);
 	st_jobctr = st_cmds->st_jobctr;
 	while (st_jobctr)
 	{
-		/// Fill Log_Operator
 		ft_fill_logopr(st_jobctr);
 		st_logopr = st_jobctr->st_logopr;
 		while (st_logopr)
 		{
-			/// Fill Pipe
 			ft_fill_pipe(st_logopr);
-			// Fill intern variable and tmp_env
 			handle_variable(st_logopr->st_pipes);
 			st_logopr = st_logopr->next;
 		}

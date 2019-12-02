@@ -93,7 +93,7 @@ void		createaliasfile(void)
 	fd = 0;
 	if (!(access(".42shrc", F_OK) == 0))
 	{
-		fd = open(".42shrc", O_CREAT, 0777);
+		fd = open(".42shrc", O_CREAT, 00600);
 		close(fd);
 	}
 }
@@ -105,13 +105,11 @@ void		createaliasfile(void)
 void		importaliasfilecontent(char *tmp)
 {
 	char	*line;
-	int		i;
 	int		count;
 	int		fd;
 
 	line = NULL;
 	count = 0;
-	
 	fd = open(".42shrc", O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
 	{
@@ -119,14 +117,13 @@ void		importaliasfilecontent(char *tmp)
 			continue ;
 		else
 		{
-			i = 0;
-			while (line[i] && line[i] != '=')
-				i++;
-			tmp = ft_strsub(line, 0, i);
-			rm_alias_by_elem_flag(tmp, 0, 0);
-			pushtolist(line, 1);
-			ft_strdel(&tmp);
-			ft_strdel(&line);
+			if ((ft_strncmp(line, "alias", 5)) == 0)
+				importaliasfilecontent_1(line, tmp, 5);
+			else
+			{
+				print_error(" command not found ", line, NULL, 0);
+				(line) ? ft_strdel(&line) : 0;
+			}
 		}
 	}
 	close(fd);

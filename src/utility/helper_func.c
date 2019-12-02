@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-** find file in PATH :
+** find file in PATH
 */
 
 char		*ft_find_path(char *arg, char **env)
@@ -78,7 +78,7 @@ int			ft_check_redi(t_pipes *st_pipes)
 }
 
 /*
-** Calculate sum of ASCI :
+** Calculate sum of ASCI
 */
 
 int			ft_sum_asci(char str[])
@@ -96,16 +96,35 @@ int			ft_sum_asci(char str[])
 	return (sum);
 }
 
+/*
+** Converte Result_cmd to tokens , work for sub_shell
+*/
 
-int			ft_all_quot(char *str)
+void		value_to_token(char *value, t_tokens **st_tokens)
 {
-	if (!str)
-		return (0);
-	while (*str)
+	char		**args;
+	int			index;
+	int			i;
+	t_tokens	*save_next;
+
+	if (!st_tokens || !(*st_tokens))
+		return ;
+	i = 0;
+	index = (*st_tokens)->indx;
+	args = ft_str_split_q(value, " \n");
+	save_next = (*st_tokens)->next;
+	while (args[i])
 	{
-		if (!M_CHECK(*str, '\'', '"'))
-			return (0);
-		str++;
+		ft_fill_token(st_tokens, T_TXT, args[i], index);
+		index++;
+		i++;
 	}
-	return (1);
+	if (i != 0 && ((*st_tokens) = (*st_tokens)->prev))
+	{
+		free((*st_tokens)->next);
+		(*st_tokens)->next = save_next;
+		if (save_next)
+			save_next->prev = (*st_tokens);
+	}
+	free(args);
 }

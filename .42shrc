@@ -1,0 +1,11 @@
+<<<<<<< HEAD
+alias w="who"
+alias ll="ls -la"
+alias w
+alias g="grep"
+alias            			
+alias p="ping"
+=======
+w="who"
+ll="ls -la"
+>>>>>>> 225c1fcd1d70b068428a729f0eccd670eb714843

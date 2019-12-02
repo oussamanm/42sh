@@ -83,10 +83,8 @@ static void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 	{
 		if (j >= (len_map - 1) && (len_map = increase_maps(maps)) == -1)
 			break ;
-		if (str_cmd[i] == '\\' && (str_cmd[i + 1] != '\'' || quoted == 0 || !j))/*|| (j && maps[j - 1] != 'q')))*/
-		{
+		if (str_cmd[i] == '\\' && (str_cmd[i + 1] != '\'' || quoted == 0 || !j))
 			i += (str_cmd[i + 1]) ? 1 : 0;
-		}
 		else if (str_cmd[i] == '"')
 			(*maps)[j++] = 'Q';
 		else if (str_cmd[i] == '\'')

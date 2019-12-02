@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:39:18 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 21:55:37 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 06:33:15 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "read_line.h"
 
 /*
-** Fill args with token except T_EQUAL  @
+** Fill args with token except T_EQUAL
 */
 
 void		tokens_to_args(t_pipes *st_pipe)
@@ -35,7 +35,7 @@ void		tokens_to_args(t_pipes *st_pipe)
 		{
 			if (i != 0 && index == st_tokens->indx)
 				st_pipe->args[i - 1] = ft_strjoir_rtn(st_pipe->args[i - 1],\
-					st_tokens->value, 1);
+						st_tokens->value, 1);
 			else
 			{
 				st_pipe->args[i++] = ft_strdup(st_tokens->value);
@@ -46,48 +46,46 @@ void		tokens_to_args(t_pipes *st_pipe)
 	}
 }
 
-
 /*
-**  call functions for lexer @
+**  call functions for lexer
 */
-
 
 void		args_to_token_h(t_tokens **st_tokens, char *arg, int *j, int i)
 {
-	/*Esca_ch*/	if (arg[*j] == '\\')
-					ft_lexer_txt(st_tokens, &arg[*j], j, i);
-	/*Quot*/	else if (IS_QUOTE(arg[*j]))
-					ft_lexer_quot(st_tokens, &arg[*j], j, i);
-	/*Redi*/	else if (arg[*j] == '&' && M_CHECK(arg[*j + 1], '>', '<'))
-					ft_lexer_red(st_tokens, &arg[*j], j, i);
-				else if (M_CHECK(arg[*j], '>', '<') && arg[*j + 1] != '(')
-					ft_lexer_red(st_tokens, &arg[*j], j, i);
-				else if ((*st_tokens)->prev && (*st_tokens)->prev->token == T_RED_OUT_A
-					&& arg[*j] == '-')
-					ft_upd_token((*st_tokens)->prev, T_RED_OUT_B, ">&-");
-	/*Pipe*/	else if (arg[*j] == '|' && arg[*j + 1] != '|')
-					ft_fill_token(st_tokens, T_PIPE, ft_strdup("|"), i);
-	/*Logi*/	else if ((arg[*j] == '&' && arg[*j + 1] == '&') ||
-		(arg[*j] == '|' && arg[*j + 1] == '|'))
-					ft_lexer_logopr(st_tokens, &arg[*j], j, i);
-	/*Jobs*/	else if (arg[*j] == '&')
-					ft_fill_token(st_tokens, T_JOBCTR, ft_strdup("&"), i);
-	/*Equa*/	else if (arg[*j] == '=' && (*st_tokens)->prev &&
-		(*st_tokens)->prev->token != T_EQUAL)
-					ft_fill_token(st_tokens, T_EQUAL, ft_strdup("="), i);
-	/*SUB_SH*/	else if ((arg[*j] == '$' || M_CHECK(arg[*j], '>', '<')) && arg[*j + 1] == '(')
-					ft_lexer_subshl(st_tokens, &arg[*j], j, i);
-	/*Txt*/		else
-					ft_lexer_txt(st_tokens, &arg[*j], j, i);
+	if (arg[*j] == '\\')
+		ft_lexer_txt(st_tokens, &arg[*j], j, i);
+	else if (IS_QUOTE(arg[*j]))
+		ft_lexer_quot(st_tokens, &arg[*j], j, i);
+	else if (arg[*j] == '&' && M_CHECK(arg[*j + 1], '>', '<'))
+		ft_lexer_red(st_tokens, &arg[*j], j, i);
+	else if (M_CHECK(arg[*j], '>', '<') && arg[*j + 1] != '(')
+		ft_lexer_red(st_tokens, &arg[*j], j, i);
+	else if ((*st_tokens)->prev && (*st_tokens)->prev->token == T_RED_OUT_A
+			&& arg[*j] == '-')
+		ft_upd_token((*st_tokens)->prev, T_RED_OUT_B, ">&-");
+	else if (arg[*j] == '|' && arg[*j + 1] != '|')
+		ft_fill_token(st_tokens, T_PIPE, ft_strdup("|"), i);
+	else if ((arg[*j] == '&' && arg[*j + 1] == '&') ||
+			(arg[*j] == '|' && arg[*j + 1] == '|'))
+		ft_lexer_logopr(st_tokens, &arg[*j], j, i);
+	else if (arg[*j] == '&')
+		ft_fill_token(st_tokens, T_JOBCTR, ft_strdup("&"), i);
+	else if (arg[*j] == '=' && (*st_tokens)->prev &&
+			(*st_tokens)->prev->token != T_EQUAL)
+		ft_fill_token(st_tokens, T_EQUAL, ft_strdup("="), i);
+	else if (M_SUBSH(arg[*j]) && arg[*j + 1] == '(')
+		ft_lexer_subshl(st_tokens, &arg[*j], j, i);
+	else
+		ft_lexer_txt(st_tokens, &arg[*j], j, i);
 }
 
 /*
-**  creation of tokens @
+**  creation of tokens
 */
 
 void		args_to_token(t_tokens **st_tokens, char *arg, int i)
 {
-	int j;
+	int	j;
 
 	if (!arg)
 		return ;
@@ -97,7 +95,7 @@ void		args_to_token(t_tokens **st_tokens, char *arg, int i)
 }
 
 /*
-** Lexer @
+** Lexer
 */
 
 t_tokens	*ft_lexer(char **args)
@@ -121,13 +119,5 @@ t_tokens	*ft_lexer(char **args)
 		PREV->next = NULL;
 		free(st_tokens);
 	}
-		// st_tokens = st_head;
-		// while (st_tokens != NULL)
-		// {
-		// 	dprintf(2, "index = %d Token = <%d> : <%s>\n",st_tokens->indx, st_tokens->token,st_tokens->value);
-		// 	st_tokens = st_tokens->next;
-		// }
-		// dprintf(2,"\n--------------\n");
-		//exit(0);
 	return ((i != 0) ? st_head : NULL);
 }

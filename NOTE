@@ -14,14 +14,7 @@
 
 /*      NORME   Lignes */
 
-+ Lexer
-- Parser
-- Execution
-- pipe
-- sub-shell
-- expansions
-- exec_builtens
-- Signale
+ft_helper_func.c 
 
 /*      Verify Addresses , variable */
 
@@ -35,7 +28,7 @@
 - Signale
 
 
-/*      SIG_FAULT       */
+/*      LEAK       */
 
 -------- Find path func
 

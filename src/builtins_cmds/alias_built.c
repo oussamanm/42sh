@@ -116,7 +116,9 @@ int		ft_buil_alias_2(t_tokens *st_tokens, char *arg)
 	{
 		if (st_tokens->indx == i)
 		{
-			if (NEXT && NEXT->token == T_EQUAL && NEXT->indx == st_tokens->indx)
+			if (NEXT && NEXT->token == T_EQUAL &&\
+			NEXT->indx == st_tokens->indx &&\
+			ft_strlen(st_tokens->value) > 0)
 				ft_built_alias_3(st_tokens, arg);
 			else
 				printelement(st_tokens->value, &flag);
