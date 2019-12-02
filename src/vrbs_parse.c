@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 15:59:19 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/02 02:16:00 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 02:31:01 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,24 +62,24 @@ int				ft_check_intern(t_pipes *st_pipe)
 void			fill_intern(t_pipes *st_pipe)
 {
 	t_intern	var;
-	t_tokens	*st_tokens;
+	t_tokens	*token;
 	int			i;
 	char		*line;
 
 	if (!st_pipe)
 		return ;
-	st_tokens = st_pipe->st_tokens;
-	i = st_tokens->indx - 1;
-	while (st_tokens)
+	token = st_pipe->st_tokens;
+	i = token->indx - 1;
+	while (token)
 	{
-		if (st_tokens->indx == i)
-			st_tokens = st_tokens->next;
+		if (token->indx == i)
+			token = token->next;
 		else
 		{
 			i++;
-			if (!ft_is_equal(i, st_tokens) || !valid_identifier(st_tokens->value))
+			if (!ft_is_equal(i, token) || !valid_identifier(token->value))
 				return ;
-			var = get_key_value(st_tokens);
+			var = get_key_value(token);
 			line = ft_strjoir(ft_strjoin(var.key, "="), var.value, 1);
 			add_intern_var(&g_intern, var.key, var.value,
 			ft_edit_vrb(line, &g_environ, 1));
@@ -110,7 +110,7 @@ char			**fill_env(char **args)
 ** Fill temp_variable
 */
 
-char			**ft_tokens_arg_env(t_tokens *st_tokens)
+char			**ft_tokens_arg_env(t_tokens *token)
 {
 	char		**args;
 	t_tokens	*tmp_tokens;
@@ -118,23 +118,22 @@ char			**ft_tokens_arg_env(t_tokens *st_tokens)
 	int			i;
 	int			j;
 
-	i = st_tokens->indx - 1;
+	i = token->indx - 1;
 	j = 0;
-	tmp_tokens = st_tokens;
+	tmp_tokens = token;
 	while (tmp_tokens->next && (tmp_tokens = tmp_tokens->next))
 		;
 	args = ft_strr_new(tmp_tokens->indx);
-	while (st_tokens)
+	while (token)
 	{
-		if (st_tokens->indx == i)
-			st_tokens = st_tokens->next;
+		if (token->indx == i)
+			token = token->next;
 		else
 		{
-			if (!ft_is_equal(++i, st_tokens) ||
-				!valid_identifier(st_tokens->value))
+			if (!ft_is_equal(++i, token) || !valid_identifier(token->value))
 				break ;
-			var = get_key_value(st_tokens);
-			args[j++] = ft_strjoir(ft_strjoir(var.key, "=", 0), var.value, 0);
+			var = get_key_value(token);
+			args[j++] = ft_strjoir(ft_strjoin(var.key, "="), var.value, 1);
 		}
 	}
 	return (args);

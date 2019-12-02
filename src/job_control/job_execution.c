@@ -50,6 +50,8 @@ void	ft_manage_jobs(int pid, t_pipes *st_pipes, int *rtn)
 		ft_putendl("Can't set the controling terminal to the parent process");
 	process = job->proc->content;
 	*rtn = process->exit_status;
+	if (WTERMSIG(*rtn) == 2)
+		ft_putchar('\n');
 	if (job->status == STOPED || add)
 		ft_add_job(job);
 	else
@@ -73,6 +75,7 @@ void	ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add)
 		*status = p->exit_status;
 		proc = proc->next;
 	}
+	(WTERMSIG(*status) == 2) ? ft_putchar('\n') : 0;
 	if (job->status == STOPED || add)
 		ft_add_job(job);
 	else

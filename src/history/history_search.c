@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 12:19:07 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 20:34:12 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 11:25:15 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void			history_search(t_history his, char **s, char buf[6])
 	his_edit_line(NULL, NULL, s);
 	search = ft_strnew(1);
 	g_pos.r = 1;
-	while (read(0, buf, 6))
+	while (read(0, buf, 6) > 0)
 	{
 		len = ft_strlen(search);
 		if (DEL == CAST(buf))

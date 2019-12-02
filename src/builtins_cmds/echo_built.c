@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_built.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:17:27 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/11/15 18:28:34 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/12/02 02:38:07 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ int		echo_options(t_tokens **st_tokens)
 	while (*st_tokens)
 	{
 		arg = (*st_tokens)->value;
-		if (arg && arg[0] == '-' && (M_CHECK(arg[1], 'n', 'e') || arg[1] == 'E'))
+		if (arg && arg[0] == '-' &&\
+		(M_CHECK(arg[1], 'n', 'e') || arg[1] == 'E'))
 			echo_options_(&arg[1], &flag);
 		else
 			break ;
@@ -86,7 +87,6 @@ int		echo_options(t_tokens **st_tokens)
 	}
 	return (flag);
 }
-
 
 /*
 **	Builten echo
@@ -98,8 +98,7 @@ int		built_echo(t_tokens *st_tokens)
 	int		index;
 	int		status;
 
-	if (!st_tokens || !(st_tokens = NEXT))
-		return (0);
+	st_tokens = NEXT;
 	status = 0;
 	flag = echo_options(&st_tokens);
 	index = (st_tokens) ? st_tokens->indx : 1;

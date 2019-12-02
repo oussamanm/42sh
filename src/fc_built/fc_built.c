@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 20:14:59 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 11:16:10 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ int				fc_edit(t_history his, char *editor, char *fl, char **args)
 		return (0);
 	}
 	write_fc(content);
-	free(content);
+	ft_strdel(&content);
 	cmd = ft_strjoin(editor, " .42sh-fc");
 	ft_multi_cmd(cmd, 0);
-	free(cmd);
+	ft_strdel(&cmd);
 	return (1);
 }
 

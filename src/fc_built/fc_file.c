@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 00:18:39 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/23 18:25:45 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 11:35:20 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,16 @@ char	*read_fc(void)
 	int		rt;
 
 	cmd = NULL;
-	if ((fd = open(".42sh-fc", O_RDONLY, 00600)))
+	if ((fd = open(".42sh-fc", O_RDONLY, 00600)) == -1)
+		return (NULL);
+	ft_bzero(buff, 1000);
+	while ((rt = read(fd, buff, 1000)) > 0)
 	{
-		ft_bzero(buff, 1000);
-		while ((rt = read(fd, buff, 1000)) > 0)
-		{
-			cmd = (!cmd) ? ft_strdup(buff) : ft_strjoir(cmd, buff, 1);
-			if (rt == 1000)
-				ft_bzero(buff, 1000);
-		}
-		close(fd);
+		cmd = (!cmd) ? ft_strdup(buff) : ft_strjoir(cmd, buff, 1);
+		if (rt == 1000)
+			ft_bzero(buff, 1000);
 	}
+	close(fd);
 	return (cmd);
 }
 
@@ -43,9 +42,8 @@ void	write_fc(char *content)
 {
 	int	fd;
 
-	if ((fd = open(".42sh-fc", O_WRONLY | O_TRUNC | O_CREAT, 00600)))
-	{
-		ft_putendl_fd(content, fd);
-		close(fd);
-	}
+	if ((fd = open(".42sh-fc", O_WRONLY | O_TRUNC | O_CREAT, 00600)) == -1)
+		return ;
+	ft_putendl_fd(content, fd);
+	close(fd);
 }

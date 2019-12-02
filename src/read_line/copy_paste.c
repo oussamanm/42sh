@@ -91,38 +91,6 @@ void	ft_get_new_pos(t_cursor *pos, int len_sa)
 	}
 }
 
-void	new_pos_tab(char *s, int len, t_cursor *pos)
-{
-	int sp;
-	int i;
-
-	i = -1;
-	while (s[++i] && i < len)
-	{
-		if (s[i] < 0)
-		{
-			sp = s[i] * -1;
-			if (pos->x + sp > pos->end[pos->y])
-			{
-				pos->y++;
-				pos->x = 0;
-			}
-			else
-				pos->x += sp;
-		}
-		else
-		{
-			if (pos->x == pos->end[pos->y])
-			{
-				pos->y++;
-				pos->x = 0;
-			}
-			else
-				pos->x++;
-		}
-	}
-}
-
 /*
 ** - function get save from our line when select an element.
 ** - call funtion ft_cut when we need it.
@@ -130,30 +98,10 @@ void	new_pos_tab(char *s, int len, t_cursor *pos)
 ** position.
 */
 
-
-void	tab_set_last_position(t_cursor pos, int num_lines)
-{
-	int y;
-	//int real_pos;
-
-	y = num_lines - 1;
-	//real_pos = pos.p;
-	while (pos.y < y--)
-		tputs(tgetstr("up", NULL), 0, my_outc);
-	tputs(tgoto(tgetstr("ch", NULL), 0, pos.x), 0, my_outc);
-	/*if (real_pos > pos.x)
-		while (real_pos-- > pos.x)
-			tputs(tgetstr("le", NULL), 0, my_outc);
-	else if (real_pos < pos.x)
-		while (real_pos++ < pos.x)
-			tputs(tgetstr("nd", NULL), 0, my_outc);*/
-}
-
 void	ft_copy_paste(char *buf, char **s, t_cursor *pos, t_select *select)
 {
 	int len;
 	int len_sa;
-	//int index;
 
 	len = ft_strlen(*s);
 	if (COPY == CAST(buf))
@@ -172,6 +120,5 @@ void	ft_copy_paste(char *buf, char **s, t_cursor *pos, t_select *select)
 		new_pos_tab(*s + pos->index, len_sa, pos);
 		pos->index += len_sa;
 		tab_set_last_position(*pos, pos->num_lines);
-		
 	}
 }

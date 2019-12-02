@@ -38,7 +38,6 @@ OBJS = error_handler.o\
 	read_line/ctrl_d.o\
 	read_line/delete.o\
 	read_line/read_line.o\
-	read_line/history.o\
 	read_line/home_end.o\
 	read_line/initial.o\
 	read_line/move_by_lines.o\
@@ -50,6 +49,7 @@ OBJS = error_handler.o\
 	read_line/clear_readline.o\
 	read_line/heredoc_line.o read_line/tab_mode.o\
 	read_line/cut.o read_line/clear_line_or_window.o\
+	read_line/tab_pos.o\
 	history/history_expansion.o\
 	history/history_file.o history/history_readline.o\
 	history/manage_history.o history/history_other.o history/history_content.o\

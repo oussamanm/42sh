@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 11:05:50 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 20:21:04 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 11:21:50 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		read_fc_flags(char **args, char **fl, char *err)
 
 	i = -1;
 	*fl = NULL;
-	while (args[++i] && args[i][0] == '-' && !ft_isdigit(args[i][1]))
+	while (args && args[++i] && args[i][0] == '-' && !ft_isdigit(args[i][1]))
 	{
 		j = 0;
 		while (args[i][++j])
@@ -35,8 +35,7 @@ int		read_fc_flags(char **args, char **fl, char *err)
 				*fl = (!*fl) ? ft_strdup(&c) : ft_strjoir(*fl, &c, 1);
 			else
 			{
-				if (*fl)
-					free(*fl);
+				ft_strdel(fl);
 				(err) && (*err = c);
 				return (-1);
 			}
@@ -86,7 +85,7 @@ void	fc_flag_s(t_history *his, char *arg)
 		insert_history(his, cmd);
 		history_readline(his, 0, NULL);
 		ft_multi_cmd(cmd, 0);
-		free(cmd);
+		ft_strdel(&cmd);
 	}
 	else
 		ft_putendl_fd("42sh: fc: no command found", 2);

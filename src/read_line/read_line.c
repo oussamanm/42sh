@@ -38,16 +38,6 @@ char	*ft_call_complete(t_select *select, char *s, char *buf)
 	return (s);
 }
 
-void	tab_mode(char **s)
-{
-	char buf[6];
-	
-	ft_bzero(buf, 6);
-	read(0, buf, 6);
-	ft_print_touch_and_join(&g_pos, buf, s);
-	
-}
-
 /*
 ** - function call the functions needed to edit our line.
 */
@@ -80,20 +70,24 @@ char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 ** needed to edit the line returned to our shell.
 */
 
-
+int		ft_calling_center(t_history *his, t_select *select, char *buf)
+{
+	g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, g_pos.cmd, g_pos.p);
+	ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
+	if (!(g_pos.cmd = ft_key_call_func(his, select, g_pos.cmd, buf))
+		|| g_pos.cmd[0] == -1)
+		return (1);
+	return (0);
+}
 
 char	*ft_read_line(t_history *his, t_select *select, int p)
 {
 	char	buf[6];
-	int 	crash;
-	
-	crash = 0;
-	//  To test only uncomment this line and run [./crash.py test_file && ./42sh]
-	//crash = open("/tmp/crash.fifo", O_RDONLY);
+
 	ft_initial(p);
 	ft_bzero(buf, 6);
 	ft_enable();
-	while (read(crash, buf, 6) > 0)
+	while (read(0, buf, 6) > 0)
 	{
 		if (CTRL_R == CAST(buf))
 		{
@@ -105,17 +99,11 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 			ft_enter(&g_pos, g_pos.cmd);
 			break ;
 		}
-		g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, g_pos.cmd, g_pos.p);
-		ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
-		if (!(g_pos.cmd = ft_key_call_func(his, select, g_pos.cmd, buf))
-			|| g_pos.cmd[0] == -1)
+		if (ft_calling_center(his, select, buf))
 			break ;
 		ft_bzero(buf, 6);
 	}
 	ft_disable();
 	free(g_pos.end);
-	///(g_pos.cmd[0] != -1) ? g_pos.cmd = ft_strtrim_and_free(g_pos.cmd) : 0;
-	if (crash != 0)
-		close(crash);
 	return (g_pos.cmd);
 }

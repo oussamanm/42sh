@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 10:51:28 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 01:30:30 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 11:22:03 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void			display_his_list(t_history his, int order)
 	{
 		index = ft_itoa(g_history.tail->index);
 		max = ft_strlen(index);
-		free(index);
+		ft_strdel(&index);
 	}
 	while (lst)
 	{

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:11:40 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 22:28:21 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 11:34:18 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ void	save_history(t_history *history)
 
 	if (!history || !history->head || !history->tail)
 		return ;
+	if ((fd = open(".42sh_history", O_WRONLY | O_APPEND
+					| O_CREAT, 00600)) == -1)
+		return ;
 	lst = (history->len - history->bg < history->bg - 1) ?
 		history->tail : history->head;
 	if (!(lst = history_index(lst, history->bg, history->len)))
-		return ;
-	if ((fd = open(".42sh_history", O_WRONLY | O_APPEND
-					| O_CREAT, 00600)) == -1)
 		return ;
 	while (lst)
 	{

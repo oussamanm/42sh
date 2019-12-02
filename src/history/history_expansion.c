@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 16:21:54 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/11/30 18:08:40 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 11:22:12 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,7 @@ char			*history_expansion(t_history his, char *keyword)
 		ft_putstr_fd(exp, 2);
 		ft_putendl_fd(": event not found", 2);
 	}
-	if (exp)
-		free(exp);
-	free(keyword);
+	ft_strdel(&exp);
+	ft_strdel(&keyword);
 	return (cmd);
 }

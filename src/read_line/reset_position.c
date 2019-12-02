@@ -13,14 +13,13 @@
 #include "read_line.h"
 
 void	ft_move_cursor_zero(t_cursor pos)
-{	
+{
 	ft_move_left(pos.x);
 	while (pos.y-- > 0)
 		tputs(tgetstr("up", NULL), 0, my_outc);
 	ft_move_right(pos.p);
 	tputs(tgoto(tgetstr("ch", NULL), 0, pos.p), 0, my_outc);
 }
-
 
 void	num_lines_tab(char spaces, t_cursor *pos, int *x, int *num_lines)
 {
