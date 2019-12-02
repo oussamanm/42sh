@@ -19,6 +19,7 @@
 void			his_new_line(char *line, char **cmd, t_cursor *pos)
 {
 	convert_tab_to_neg(&line);
+	ft_get_end_of_line_pos(&g_pos, line, g_pos.num_col);
 	update_tab_str(&line, pos);
 	ft_move_cursor_zero(*pos);
 	pos->x = pos->p;
