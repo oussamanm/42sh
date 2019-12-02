@@ -41,8 +41,8 @@ void	ft_catch_signal(int signal)
 		g_pos.cmd = ft_strnew(0);
 		if (g_pos.p != 8 || g_pos.r)
 		{
-			g_exit_status = EXIT_FAILURE;
 			g_pos.exit = 1;
+			g_exit_status = EXIT_FAILURE;
 			g_pos.r = 0;
 			ioctl(0, TIOCSTI, "\12");
 		}
@@ -67,9 +67,9 @@ void	call_signal(void)
 	signal(SIGCHLD, ft_catch_sigchild);
 }
 
-
 void	ft_signal_default(void)
 {
+	signal(SIGINT, SIG_DFL);
 	signal(SIGHUP, SIG_DFL);
 	signal(SIGCONT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
