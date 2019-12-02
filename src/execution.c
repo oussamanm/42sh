@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/24 23:42:10 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 22:00:12 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 06:41:46 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include "read_line.h"
 
 /*
- ** Execute all cmds  @
- */
+** Execute all cmds
+*/
 
-static void		ft_cmds_exec(t_cmds *st_cmds) 
+static void		ft_cmds_exec(t_cmds *st_cmds)
 {
 	t_jobctr	*st_jobctr;
 
@@ -32,7 +32,7 @@ static void		ft_cmds_exec(t_cmds *st_cmds)
 }
 
 /*
-** Execute of Cmd @
+** Execute of Cmd
 */
 
 static void		ft_cmd_exec(char **args, char **env)
@@ -46,7 +46,6 @@ static void		ft_cmd_exec(char **args, char **env)
 		str_arg = args[0];
 	else
 	{
-		/// Check if exist in HASH_TABLE
 		if (!(str_arg = lookup_hash(args[0])))
 			str_arg = ft_find_path(args[0], env);
 	}
@@ -59,7 +58,7 @@ static void		ft_cmd_exec(char **args, char **env)
 }
 
 /*
-** Handle child process by , call redirection and call function execution @
+** Handle child process by , call redirection and call function execution
 */
 
 void			ft_handle_child(t_pipes *st_pipes, char **environ)
@@ -73,14 +72,14 @@ void			ft_handle_child(t_pipes *st_pipes, char **environ)
 	}
 	if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 		exit(EXIT_FAILURE);
-	if (!ft_check_cmd(st_pipes->args[0], environ)) /// Check if cmd exist , permission
+	if (!ft_check_cmd(st_pipes->args[0], environ))
 		ft_cmd_exec(st_pipes->args, environ);
 	else
 		exit(EXIT_CMD_NF);
 }
 
 /*
-** Create child proccess , check if builtens , call for apply redirection , Execution @
+** Create child proc, check built, call for apply redirect , Execution
 */
 
 int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
@@ -113,8 +112,8 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 }
 
 /*
- ** Config Cmds by : - Lexer - Check Syntax - Apply sub_shell - Apply her_doc - Clear lists @
- */
+** Config Cmds by : - Lexer - Check Syntax - sub_shell - her_doc - Clear lists
+*/
 
 int				ft_cmds_setup(char *str_arg, int bl_subsh)
 {
@@ -125,14 +124,16 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	st_cmds = ft_new_cmds();
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
 	st_cmds->args = aliasmatched(st_cmds->args);
-	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL || error_syntax_lexer(st_cmds->st_tokens))
+	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL ||
+		error_syntax_lexer(st_cmds->st_tokens))
 	{
 		free_list_cmds(st_cmds);
 		return ((g_exit_status = 258));
 	}
 	ft_update_tokens(st_cmds->st_tokens);
 	apply_subsh(st_cmds->st_tokens);
-	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) || ft_check_token(st_cmds->st_tokens, T_PROC_OUT))
+	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) ||
+		ft_check_token(st_cmds->st_tokens, T_PROC_OUT))
 		proc_substitution(st_cmds);
 	ft_parse_cmd(st_cmds);
 	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;

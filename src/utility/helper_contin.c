@@ -13,7 +13,6 @@
 #include "shell.h"
 #include "read_line.h"
 
-
 int			get_last_flag(char *maps)
 {
 	int i;
@@ -43,10 +42,10 @@ int			find_flag(char *maps, int flag)
 	return (-1);
 }
 
-void		clean_maps(char	*maps)
+void		clean_maps(char *maps)
 {
 	int	i;
-	int len;
+	int	len;
 	int	j;
 
 	i = 0;

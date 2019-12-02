@@ -13,10 +13,10 @@
 #include "shell.h"
 
 /*
-** calls function redirection @
+** calls function redirection
 */
 
-static void			call_redire(t_redir *st_redir, t_tokens *st_tokens)
+static void		call_redire(t_redir *st_redir, t_tokens *st_tokens)
 {
 	if (CHECK_TOKEN(st_tokens->token, T_RED_OUT_S, T_RED_OUT_A, T_RED_OUT_B))
 		ft_redi_out(st_redir, st_tokens);
@@ -30,7 +30,7 @@ static void			call_redire(t_redir *st_redir, t_tokens *st_tokens)
 }
 
 /*
-**	ft_read_tokens : Read token and fill struct t_redir with redirection @
+**	ft_read_tokens : Read token and fill struct t_redir with redirection
 */
 
 static void		read_tokens(t_pipes *st_pipes)
@@ -58,7 +58,7 @@ static void		read_tokens(t_pipes *st_pipes)
 }
 
 /*
-**	ft_apply_redi : apply redirection @
+**	ft_apply_redi : apply redirection
 */
 
 static int		ft_apply_redi(t_pipes *st_pipes)
@@ -91,7 +91,7 @@ static int		ft_apply_redi(t_pipes *st_pipes)
 }
 
 /*
-**	ft_update_args : update args by remove redirection @
+**	ft_update_args : update args by remove redirection
 */
 
 static void		ft_update_args(t_pipes *st_pipes)
@@ -123,7 +123,7 @@ static void		ft_update_args(t_pipes *st_pipes)
 }
 
 /*
-** read tokens and apply redirection @
+** read tokens and apply redirection
 */
 
 int				parse_redir(t_pipes *st_pipes)
@@ -133,7 +133,6 @@ int				parse_redir(t_pipes *st_pipes)
 	read_tokens(st_pipes);
 	if (ft_apply_redi(st_pipes) == REDI_KO)
 		return (PARSE_KO);
-	// update args by remove redirection
 	ft_update_args(st_pipes);
 	return (PARSE_OK);
 }

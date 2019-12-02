@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 21:02:13 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 23:27:43 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 06:55:46 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,10 @@ int				error_syntax_semi(char *str_cmds, char **args)
 			temp = 1;
 			continue ;
 		}
-		if (temp && !ft_isspace(str_cmds[i]))
-			temp = 0;
+		temp = (temp && !ft_isspace(str_cmds[i])) ? 0 : temp;
 	}
 	return (0);
 }
-
 
 /*
 **  Function to Change sub_string with string :
@@ -104,9 +102,7 @@ static char		*get_para_expan(char *arg, int *len_vrb)
 }
 
 /*
-**  ft_swap_vrb : Swap Variable with value :
-**		in case of - $$ replace with PID
-**				   - $(nor alphanum) do nothing
+**  ft_swap_vrb : Swap Variable with value : $$ replace with PID / $? history
 */
 
 static char		*ft_swap_vrb(char *arg, int *index)
@@ -121,26 +117,25 @@ static char		*ft_swap_vrb(char *arg, int *index)
 		return (NULL);
 	len_vrb = 0;
 	j = *index + 1;
-	/// get len of variable
 	while (arg[j] && (ft_isalnum(arg[j]) || arg[j] == '_') && ++len_vrb)
 		j++;
-	/// get variable
 	if (!len_vrb && arg[j] == '{')
 		variable = get_para_expan(&arg[j], &len_vrb);
 	else if (!len_vrb && arg[j] != '$' && arg[j] != '?' && ++(*index))
 		return (arg);
 	else
 		variable = ft_strsub(arg, *index + 1, len_vrb);
-
-	/// get value
 	if (!len_vrb && arg[j] == '$' && ++len_vrb)
 		value = ft_itoa((int)getpid());
 	else if (!len_vrb && arg[j] == '?' && ++len_vrb)
 		value = ft_itoa(g_exit_status);
-	else if (!(value = ft_get_vrb(variable, g_environ)) && !(value = get_intern_value(variable))) /// may should add str_dup to rtn of get_intern_value
-		value = ft_strnew(0);
-	
-	/// get result
+	else
+	{
+		if (!(value = ft_get_vrb(variable, g_environ)))
+			value = get_intern_value(variable);/// may should add str_dup to rtn of get_intern_value
+		else
+			value = ft_strnew(0);
+	}
 	result = ft_str_remp(arg, value, *index, len_vrb + 1);
 	*index += (ft_strlen(value) - 1);
 	free_addresses((void *[MAX_TAB_ADDR]){&variable, &value, &arg, NULL});
@@ -166,12 +161,12 @@ char			*ft_corr_args(char *cmd)
 			i += (cmd[i + 1]) ? 1 : 0;
 		else if (cmd[i] == '"')
 			bl_q = (bl_q == 0) ? 1 : 0;
- 		else if (cmd[i] == '\'' && !bl_q)
+		else if (cmd[i] == '\'' && !bl_q)
 			i += ft_find_char(cmd + i + 1, '\'') + 2;
 		else if (cmd[i] == '$' && cmd[i + 1])
 			cmd = ft_swap_vrb(cmd, &i);
 		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
-			(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))
+				(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))
 			cmd = ft_str_remp(cmd, ft_get_vrb("HOME", g_environ), i, -1);
 		i += (cmd[i] != '\0');
 	}

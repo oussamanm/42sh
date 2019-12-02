@@ -14,12 +14,12 @@
 #include "read_line.h"
 
 /*
-**	call builtens @
+**	call builtens
 */
 
 int			builtens_mini(t_pipes *st_pipes, char ***tmp_env)
 {
-	int     status;
+	int		status;
 
 	status = 0;
 	if (STR_CMP(*(st_pipes->args), "exit"))

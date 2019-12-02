@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-** Correct token by remove all arg of T_EQUAL : variable = value @
+** Correct token by remove all arg of T_EQUAL : variable = value
 */
 
 void		correct_tokens(t_pipes *st_pipes)
@@ -25,7 +25,8 @@ void		correct_tokens(t_pipes *st_pipes)
 		return ;
 	st_tokens = st_pipes->st_tokens;
 	head = st_tokens;
-	while (st_tokens && (st_tokens->is_arg == T_EQUAL || st_tokens->token == T_EQUAL))
+	while (st_tokens && (st_tokens->is_arg == T_EQUAL ||
+		st_tokens->token == T_EQUAL))
 	{
 		st_tokens = NEXT;
 		free(head);
@@ -35,7 +36,7 @@ void		correct_tokens(t_pipes *st_pipes)
 }
 
 /*
-** Remove escaped_character from cmd befor execution @
+** Remove escaped_character from cmd befor execution
 */
 
 void		remove_backslashs(t_tokens *st_tokens)
@@ -54,9 +55,9 @@ void		remove_backslashs(t_tokens *st_tokens)
 			{
 				i += index;
 				if (st_tokens->token == T_DQUO && M_SPEC_CHARC(arg[i + 1]))
-					ft_strcpy(&arg[i],&arg[i + 1]);
+					ft_strcpy(&arg[i], &arg[i + 1]);
 				else if (st_tokens->token == T_TXT)
-					ft_strcpy(&arg[i],&arg[i + 1]);
+					ft_strcpy(&arg[i], &arg[i + 1]);
 			}
 		}
 		st_tokens = NEXT;
@@ -64,13 +65,13 @@ void		remove_backslashs(t_tokens *st_tokens)
 }
 
 /*
-**	Function set is_arg variable in list tokens : (is argument of T_EQUAL) @
+**	Function set is_arg variable in list tokens : (is argument of T_EQUAL)
 */
 
 void		set_isarg(t_pipes *st_pipes)
 {
-	t_tokens *st_tokens;
-	int i;
+	t_tokens	*st_tokens;
+	int			i;
 
 	st_tokens = st_pipes->st_tokens;
 	i = st_tokens->indx - 1;
@@ -82,7 +83,7 @@ void		set_isarg(t_pipes *st_pipes)
 		{
 			i++;
 			if (!ft_is_equal(i, st_tokens))
-				break;
+				break ;
 			if (!valid_identifier(st_tokens->value))
 				return ;
 			st_tokens->is_arg = T_EQUAL;
@@ -93,10 +94,10 @@ void		set_isarg(t_pipes *st_pipes)
 }
 
 /*
-** Check if exist Cmd : check if Ok and permission @
+** Check if exist Cmd : check if Ok and permission
 */
 
-int				ft_check_cmd(char *cmd, char **environ)
+int			ft_check_cmd(char *cmd, char **environ)
 {
 	int			rtn;
 	char		*path_exec;
@@ -105,9 +106,9 @@ int				ft_check_cmd(char *cmd, char **environ)
 	if (!cmd)
 		return (0);
 	rtn = 0;
-	if (!ft_check_char(cmd, '/'))	/// case of cmd
+	if (!ft_check_char(cmd, '/'))
 		path_exec = ft_find_path(cmd, environ);
-	else							/// case of PATH exec
+	else
 	{
 		path_exec = ft_strdup(cmd);
 		if (access(cmd, F_OK) != 0 && ++rtn)

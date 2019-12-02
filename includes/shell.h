@@ -108,7 +108,7 @@
 # define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
 # define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
 # define OPER_TOKEN(t) (t == T_JOBCTR || t == T_PIPE || t == T_LOGOPR_OR || t == T_LOGOPR_AND)
-
+# define SAMGE_AR(x, y) (x && x->indx == y->indx && ft_isalldigit(x->value))
 
 /*
 **Parsing

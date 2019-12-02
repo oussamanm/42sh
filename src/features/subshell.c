@@ -14,19 +14,21 @@
 #include "read_line.h"
 
 /*
-** Exection of cmd sub_stitu @
+** Exection of cmd sub_stitu
 */
 
 void		child_subsh(int fds[2], char *cmd)
 {
+	char	**args;
+	int		i;
+
+	i = 0;
 	ft_signal_default();
 	close(fds[0]);
-	if (dup2(fds[1] , 1) == -1)
+	if (dup2(fds[1], 1) == -1)
 		ft_putendl_fd("Error in dub STD_OUT in SUB_SHELL", 2);
 	close(fds[1]);
-	char **args;
-	int i= 0;
-	args = ft_str_split_q(cmd,"\n");
+	args = ft_str_split_q(cmd, "\n");
 	while (args[i])
 	{
 		if (i != 0)
@@ -60,13 +62,13 @@ char		*exec_subsh(char *cmd)
 		child_subsh(fds, cmd);
 	waitpid(pid, &status, 0);
 	g_sign = 0;
-	signal(SIGCHLD, ft_catch_sigchild);	
+	signal(SIGCHLD, ft_catch_sigchild);
 	if (WIFSIGNALED(status))
 		g_pos.exit = 1;
 	close(fds[1]);
 	result = ft_strnew(0);
 	ft_bzero(buff, 11);
-	while (read(fds[0] , &buff, 10) > 0)
+	while (read(fds[0], &buff, 10) > 0)
 	{
 		result = ft_strjoir(result, buff, 1);
 		ft_bzero(buff, 10);
@@ -76,7 +78,7 @@ char		*exec_subsh(char *cmd)
 }
 
 /*
-** change new_line with space , or remove last \n in case of one cmd @
+** change new_line with space , or remove last \n in case of one cmd
 */
 
 char		*correct_result(char *result)
@@ -102,7 +104,7 @@ char		*correct_result(char *result)
 }
 
 /*
-** loop on all sub_stut 
+** loop on all sub_stut
 */
 
 char		*change_subsh_quot(char *arg)
@@ -136,7 +138,7 @@ char		*change_subsh_quot(char *arg)
 }
 
 /*
-** Apply sub_shell and change value in tokens @
+** Apply sub_shell and change value in tokens
 */
 
 void		apply_subsh(t_tokens *st_tokens)
@@ -157,7 +159,8 @@ void		apply_subsh(t_tokens *st_tokens)
 			value_to_token(value, &st_tokens);
 			ft_strdel(&value);
 		}
-		else if (st_tokens->token == T_DQUO && ft_strstr(st_tokens->value, "$("))
+		else if (st_tokens->token == T_DQUO &&
+			ft_strstr(st_tokens->value, "$("))
 		{
 			value = change_subsh_quot(st_tokens->value);
 			(value) ? ft_strdel(&st_tokens->value) : NULL;

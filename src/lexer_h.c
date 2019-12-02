@@ -6,19 +6,18 @@
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 02:18:45 by onouaman          #+#    #+#             */
-/*   Updated: 2019/08/06 02:18:46 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/12/02 06:36:42 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-
 /*
-** Fill t_tokens @
+** Fill t_tokens
 */
 
 void		ft_fill_token(t_tokens **st_tokens, int token,
-	char *value, int indx)
+		char *value, int indx)
 {
 	t_tokens	*prev;
 
@@ -34,7 +33,7 @@ void		ft_fill_token(t_tokens **st_tokens, int token,
 }
 
 /*
-**  append "-"" to redirection if separated @
+**  append "-"" to redirection if separated
 */
 
 void		ft_upd_token(t_tokens *st_tokens, int token, char *value)
@@ -47,9 +46,8 @@ void		ft_upd_token(t_tokens *st_tokens, int token, char *value)
 	st_tokens->value = ft_strdup(value);
 }
 
-
 /*
-** Duplicate token and alloc next if exist @
+** Duplicate token and alloc next if exist
 */
 
 void		ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token)
@@ -63,11 +61,10 @@ void		ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token)
 	(*st_token)->value = st_src->value;
 	(*st_token)->indx = st_src->indx;
 	(*st_token)->is_arg = st_src->is_arg;
-	/// ditermine if need to create next token or not
 	if (st_src->next && st_src->next->token != token)
 	{
 		if (token == T_LOGOPR_AND && st_src->next &&
-			M_CHECK(st_src->next->token, T_LOGOPR_AND, T_LOGOPR_OR))
+				M_CHECK(st_src->next->token, T_LOGOPR_AND, T_LOGOPR_OR))
 			return ;
 		(*st_token)->next = ft_new_token();
 		st_temp = *st_token;
@@ -77,7 +74,7 @@ void		ft_dup_token(t_tokens **st_token, t_tokens *st_src, int token)
 }
 
 /*
-** Count tokens @
+** Count tokens
 */
 
 int			ft_count_tokens(t_tokens *st_tokens)
@@ -96,7 +93,7 @@ int			ft_count_tokens(t_tokens *st_tokens)
 }
 
 /*
-** Check if exist token in list tokens @
+** Check if exist token in list tokens
 */
 
 int			ft_check_token(t_tokens *st_tokens, int token)
