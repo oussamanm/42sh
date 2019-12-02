@@ -453,8 +453,9 @@ void					clean_maps(char *maps);
 int						count_key(char *maps, int key);
 int						closed_dquot(char *maps);
 int						increase_maps(char	**maps);
-int						correct_maps_(char *maps, int i, int *quoted, int *rtn);
-int						fill_maps_h(char *str_cmd, char **maps, int quoted, int j);
+int						correct_maps_(int i, int *rtn, char *maps);
+void					fill_maps(char *str_cmd, char **maps, int j, int len_map);
+
 
 /*
 ** Sub_shell

@@ -221,4 +221,11 @@ void				ft_go_to_right(t_cursor *pos, char *s);
 void				ft_right_touch(t_cursor *pos, int size);
 void				save_address(t_select **select);
 void				initial_read_line(t_history *his, t_select **select);
+void				completing_line_(char **maps, char **cmd, t_select *select,\
+t_history *his);
+void				ft_read_quote(char **line, int quote,t_select *select,\
+t_history *his);
+void				ft_read_subsh(char **line, t_select *select,\
+t_history *his);
+
 #endif
