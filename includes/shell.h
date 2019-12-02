@@ -514,7 +514,5 @@ void					ft_run_job(t_job *job);
 */
 
 void		init_alias_hash();
-void		save_address(t_select **select);
-void		initial_read_line(t_history *his, t_select **select);
 
 #endif
