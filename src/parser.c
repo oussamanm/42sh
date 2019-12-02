@@ -12,7 +12,6 @@
 
 #include "shell.h"
 
-
 /*
 **	fill structs : Job_controle & Logical_opr & pipe
 */
@@ -121,7 +120,7 @@ static void     ft_fill_pipe(t_logopr *st_logopr)
 }
 
 /*
-** Fill Intern and Temp variables
+** Fill Intern and Temp variables @
 */
 
 static void		handle_variable(t_pipes *st_pipes)
@@ -146,7 +145,7 @@ static void		handle_variable(t_pipes *st_pipes)
 }
 
 /*
-** Parse command and fill lists: job_ctr, logi_opr, pipes
+** Parse command and fill lists: job_ctr, logi_opr, pipes @
 */
 
 void            ft_parse_cmd(t_cmds *st_cmds)

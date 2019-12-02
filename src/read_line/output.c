@@ -19,7 +19,7 @@ void	ft_win_change(int sig)
 	{
 		g_pos.num_col = ft_get_size_windz();
 		tputs(tgetstr("cl", NULL), 0, my_outc);
-		ft_putstr("\033[0;32m42sh $>\033[0m ");
+		ft_putstr_fd("\033[0;32m42sh $>\033[0m ", 2);
 		ft_putstr_term(g_pos.num_col, g_pos.cmd, &g_pos);
 		ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
 		g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, \

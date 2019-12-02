@@ -54,6 +54,7 @@ void	value_to_token(char *value, t_tokens **st_tokens)
 
 void		child_subsh(int fds[2], char *cmd)
 {
+	ft_signal_default();
 	close(fds[0]);
 	if (dup2(fds[1] , 1) == -1)
 		ft_putendl_fd("Error in dub STD_OUT in SUB_SHELL", 2);
@@ -82,14 +83,21 @@ char		*exec_subsh(char *cmd)
 	char	buff[11];
 	char	*result;
 	pid_t	pid;
+	int		status;
 
 	ft_bzero(fds, 2);
+	status = -1;
 	if (pipe(fds) == -1)
 		ft_putendl_fd("Error Create Pipe", 2);
+	signal(SIGCHLD, SIG_DFL);
+	g_sign = 1;
 	if ((pid = fork()) == 0)
 		child_subsh(fds, cmd);
-	waitpid(pid, NULL, 0);
-
+	waitpid(pid, &status, 0);
+	g_sign = 0;
+	signal(SIGCHLD, ft_catch_sigchild);	
+	if (WIFSIGNALED(status))
+		g_pos.exit = 1;
 	close(fds[1]);
 	result = ft_strnew(0);
 	ft_bzero(buff, 11);
