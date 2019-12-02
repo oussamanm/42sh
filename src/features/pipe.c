@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-**	ft_close_pipes : close all pipes created  :
+**	ft_close_pipes : close all pipes created  @
 */
 
 void			ft_close_pipes(t_pipes *st_pipes)
@@ -29,7 +29,7 @@ void			ft_close_pipes(t_pipes *st_pipes)
 }
 
 /*
-**	ft_create_pipes : create all pipes needed :
+**	ft_create_pipes : create all pipes needed @
 */
 
 void			ft_create_pipes(t_pipes *st_pipes)
@@ -54,7 +54,7 @@ void			ft_create_pipes(t_pipes *st_pipes)
 }
 
 /*
-**	ft_apply_pipe_h : helper function (norme) :
+**	ft_apply_pipe_h : helper function (norme) @
 */
 
 static void		ft_apply_pipe_h(t_pipes *st_pipes, t_pipes *st_head, int i)
@@ -110,7 +110,7 @@ int				ft_apply_pipe(t_pipes *st_pipes)
 }
 
 /*
-** exec pipe
+** exec pipe @
 */
 
 int				ft_pipe(t_pipes *st_pipe)

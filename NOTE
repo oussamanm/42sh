@@ -15,7 +15,7 @@
 /*      NORME   Lignes */
 
 + Lexer
-- Parser
++ Parser
 - Execution
 - pipe
 - sub-shell
@@ -35,7 +35,7 @@
 - Signale
 
 
-/*      SIG_FAULT       */
+/*      LEAK       */
 
 -------- Find path func
 

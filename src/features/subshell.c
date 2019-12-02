@@ -14,43 +14,8 @@
 #include "read_line.h"
 
 /*
-** Converte Result_cmd to tokens
+** Exection of cmd sub_stitu @
 */
-
-void	value_to_token(char *value, t_tokens **st_tokens)
-{
-	char		**args;
-	int			index;
-	int			i;
-	t_tokens	*save_next;
-
-	if (!st_tokens || !(*st_tokens))
-		return ;
-	i = 0;
-	index = (*st_tokens)->indx;
-	args = ft_str_split_q(value, " \n");
-	save_next = (*st_tokens)->next;
-	while (args[i])
-	{
-		ft_fill_token(st_tokens, T_TXT, args[i], index);
-		index++;
-		i++;
-	}
-	if (i != 0 && ((*st_tokens) = (*st_tokens)->prev))
-	{
-		free((*st_tokens)->next);
-		(*st_tokens)->next = save_next;
-		if (save_next)
-			save_next->prev = (*st_tokens);
-	}
-	free(args);
-}
-
-/*
-** Exection of cmd sub_stitu
-*/
-
-
 
 void		child_subsh(int fds[2], char *cmd)
 {
@@ -111,7 +76,7 @@ char		*exec_subsh(char *cmd)
 }
 
 /*
-** change new_line with space , or remove last \n in case of one cmd
+** change new_line with space , or remove last \n in case of one cmd @
 */
 
 char		*correct_result(char *result)
@@ -148,10 +113,10 @@ char		*change_subsh_quot(char *arg)
 	int		len;
 
 	cmd = NULL;
-	i = 0;
+	i = -1;
 	len = 0;
 	arg = ft_strdup(arg);
-	while (arg[i])
+	while (arg[++i])
 	{
 		if (arg[i] == '(' && i && M_SUBSH(arg[i - 1]))
 		{
@@ -166,18 +131,19 @@ char		*change_subsh_quot(char *arg)
 			}
 			ft_strdel(&cmd);
 		}
-		i++;
 	}
 	return (arg);
 }
+
+/*
+** Apply sub_shell and change value in tokens @
+*/
 
 void		apply_subsh(t_tokens *st_tokens)
 {
 	char	*value;
 	char	*temp;
-	int		i;
 
-	i = 0;
 	while (st_tokens)
 	{
 		value = NULL;
@@ -187,9 +153,7 @@ void		apply_subsh(t_tokens *st_tokens)
 				temp[ft_strlen(temp) - 1] = '\0';
 			value = exec_subsh(temp);
 			ft_strdel(&st_tokens->value);
-			/// correction value by remove \n in last
 			value = correct_result(value);
-			/// split value and fill tokens
 			value_to_token(value, &st_tokens);
 			ft_strdel(&value);
 		}
@@ -197,9 +161,7 @@ void		apply_subsh(t_tokens *st_tokens)
 		{
 			value = change_subsh_quot(st_tokens->value);
 			(value) ? ft_strdel(&st_tokens->value) : NULL;
-			/// split value and fill tokens
-			value_to_token(value, &st_tokens);
-			ft_strdel(&value);
+			st_tokens->value = value;
 		}
 		st_tokens = st_tokens->next;
 	}

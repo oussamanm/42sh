@@ -29,6 +29,8 @@
 # include <curses.h>
 
 # define ERR_SYN		"syntax error near unexpected token"
+# define ERR_FORK		"Error in Fork new process \n"
+# define ERR_SEMI		"syntax error near unexpected token `;'"
 # define EXIT_CMD_NF 127
 # define EXIT_SIGINT 130
 
@@ -252,6 +254,10 @@ int						built_echo(t_tokens *st_tokens);
 int						echo_options(t_tokens **st_tokens);
 void					exported_vars(t_intern vrb, int rest, int edit);
 int						export_flags(t_tokens **st_tokens, int *n);
+int			builtens_mini(t_pipes *st_pipes, char ***tmp_env);
+int			builtens_shell(t_pipes *st_pipes, char ***tmp_env);
+
+
 /*
 ** Intern variable
 */
@@ -318,7 +324,8 @@ int						find_closed(char *str, char c);
 char					*ft_find_path(char *arg, char **env);
 int						ft_check_redi(t_pipes *st_pipes);
 int						ft_sum_asci(char str[]);
-int						ft_all_quot(char *str);
+char			*ft_str_remp(char *str, char *remp, int start, int len);
+void		value_to_token(char *value, t_tokens **st_tokens);
 
 
 /*

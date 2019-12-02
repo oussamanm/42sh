@@ -12,48 +12,6 @@
 
 #include "shell.h"
 
-/*
-**	 free struct t_redir
-*/
-
-void		free_list_redir(t_redir *st_redir)
-{
-	t_redir	*temp;
-
-	while (st_redir)
-	{
-		temp = st_redir->next;
-		/// free file variable
-		ft_strdel(&st_redir->fd_file);
-		free(st_redir);
-		st_redir = temp;
-	}
-}
-
-/*
-**	 free struct t_tokens
-*/
-
-void		free_tokens(t_tokens *st_tokens, int free_content)
-{
-	t_tokens *st_temp;
-
-	if (!st_tokens)
-		return ;
-	while (st_tokens)
-	{
-		st_temp = st_tokens;
-		if (free_content)
-			ft_strdel(&(st_tokens->value));
-		st_tokens = st_tokens->next;
-		free(st_temp);
-	}
-}
-
-/*
-**	 free struct t_pipes, ->args, ->cmd
-*/
-
 void		free_list_pipe(t_pipes *st_pipes)
 {
 	t_pipes	*temp;
@@ -101,9 +59,6 @@ void		free_list_jobctr(t_jobctr *st_jobctr)
 	}
 }
 
-/*
-**	 Clear struct t_cmds
-*/
 
 void		free_list_cmds(t_cmds *st_cmds)
 {
@@ -113,22 +68,4 @@ void		free_list_cmds(t_cmds *st_cmds)
 	free_tokens(st_cmds->st_tokens, 1);
 	free_list_jobctr(st_cmds->st_jobctr);
 	free(st_cmds);
-}
-
-/*
-**	Free table of addresses
-*/
-
-void		free_addresses(void *table[MAX_TAB_ADDR])
-{
-	int i;
-
-	if (!table)
-		return ;
-	i = 0;
-	while (table[i])
-	{
-		ft_strdel(table[i]);
-		i++;
-	}
 }

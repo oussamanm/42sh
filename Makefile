@@ -15,10 +15,10 @@ OBJS = error_handler.o\
 	lexer_call.o\
 	lexer.o execution.o  exec_built.o quote.o\
 	parser.o intern.o vrbs_parse.o expansion.o \
-	utility/helper_func.o utility/new.o\
-	utility/free.o utility/ft_strsplit.o\
+	utility/helper_func.o utility/new.o utility/new_.o\
+	utility/free.o utility/free_.o utility/ft_strsplit.o\
 	utility/find_closed.o utility/helper_exec.o\
-	utility/helper_contin.o\
+	utility/helper_contin.o utility/helper_built.o\
 	features/pipe.o features/line_continuation.o\
 	features/proc_sub.o features/redir_parse.o\
 	features/redir_read.o features/redir_setup.o\
@@ -110,5 +110,3 @@ fclean : clean
 	@rm -f $(NAME)
 
 re : fclean all
-
-
