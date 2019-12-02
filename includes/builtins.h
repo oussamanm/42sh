@@ -135,6 +135,7 @@ void			display_hash_table();
 */
 
 void			free_hash_and_alias(void);
+void			importaliasfilecontent_1(char *line, char *tmp, int j);
 
 /*
 ** CD FUNCTIONS

@@ -1,0 +1,6 @@
+alias w="who"
+alias ll="ls -la"
+alias w
+alias g="grep"
+alias            			
+alias p="ping"
