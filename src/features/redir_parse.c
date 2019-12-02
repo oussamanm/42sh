@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-** calls function redirection
+** calls function redirection @
 */
 
 static void			call_redire(t_redir *st_redir, t_tokens *st_tokens)
@@ -30,7 +30,7 @@ static void			call_redire(t_redir *st_redir, t_tokens *st_tokens)
 }
 
 /*
-**	ft_read_tokens : Read token and fill struct t_redir with redirection
+**	ft_read_tokens : Read token and fill struct t_redir with redirection @
 */
 
 static void		read_tokens(t_pipes *st_pipes)
@@ -46,16 +46,10 @@ static void		read_tokens(t_pipes *st_pipes)
 	{
 		if (st_tokens->token < 0 && st_tokens->token != T_RED_HER_D)
 		{
-			if (head == NULL)
-			{
-				st_redir = ft_new_redir();
+			if (head == NULL && (st_redir = ft_new_redir()))
 				head = st_redir;
-			}
-			else
-			{
-				st_redir->next = ft_new_redir();
+			else if ((st_redir->next = ft_new_redir()))
 				st_redir = st_redir->next;
-			}
 			call_redire(st_redir, st_tokens);
 		}
 		st_tokens = st_tokens->next;
@@ -64,7 +58,7 @@ static void		read_tokens(t_pipes *st_pipes)
 }
 
 /*
-**	ft_apply_redi : apply redirection
+**	ft_apply_redi : apply redirection @
 */
 
 static int		ft_apply_redi(t_pipes *st_pipes)
@@ -97,7 +91,7 @@ static int		ft_apply_redi(t_pipes *st_pipes)
 }
 
 /*
-**	ft_update_args : update args by remove redirection
+**	ft_update_args : update args by remove redirection @
 */
 
 static void		ft_update_args(t_pipes *st_pipes)
@@ -111,7 +105,8 @@ static void		ft_update_args(t_pipes *st_pipes)
 	st_temp = st_pipes->st_tokens;
 	while (st_temp && st_temp->value)
 	{
-		if (!(st_temp->token < 0 || st_temp->is_arg == 1) && st_temp->is_arg != T_EQUAL && st_temp->token != T_EQUAL)
+		if (!(st_temp->token < 0 || st_temp->is_arg == 1) &&
+			st_temp->is_arg != T_EQUAL && st_temp->token != T_EQUAL)
 			count++;
 		st_temp = st_temp->next;
 	}
@@ -120,14 +115,15 @@ static void		ft_update_args(t_pipes *st_pipes)
 	st_pipes->args = ft_strr_new(count);
 	while (st_temp && st_temp->value)
 	{
-		if (!(st_temp->token < 0 || st_temp->is_arg) && st_temp->is_arg != T_EQUAL && st_temp->token != T_EQUAL)
+		if (!(st_temp->token < 0 || st_temp->is_arg) &&
+			st_temp->is_arg != T_EQUAL && st_temp->token != T_EQUAL)
 			(st_pipes->args)[i++] = ft_strdup(st_temp->value);
 		st_temp = st_temp->next;
 	}
 }
 
 /*
-** read tokens and apply redirection
+** read tokens and apply redirection @
 */
 
 int				parse_redir(t_pipes *st_pipes)

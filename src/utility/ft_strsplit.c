@@ -132,3 +132,4 @@ char			**ft_str_split(char const *s, char *c)
 	s_re[j] = NULL;
 	return (s_re);
 }
+

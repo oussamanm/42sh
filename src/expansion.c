@@ -14,6 +14,41 @@
 #include "read_line.h"
 
 /*
+** Check error syntax of command ; @
+*/
+
+int				error_syntax_semi(char *str_cmds, char **args)
+{
+	int		temp;
+	int		i;
+
+	temp = 0;
+	i = -1;
+	if (!args || (ft_strrlen(args) > 1 && (!(*args) || (*args)[0] == '\0')))
+	{
+		print_error(ERR_SEMI, NULL, NULL, 0);
+		return (1);
+	}
+	while (str_cmds[++i])
+	{
+		if (str_cmds[i] == ';')
+		{
+			if (temp || str_cmds[0] == ';')
+			{
+				print_error(ERR_SEMI, NULL, NULL, 0);
+				return (1);
+			}
+			temp = 1;
+			continue ;
+		}
+		if (temp && !ft_isspace(str_cmds[i]))
+			temp = 0;
+	}
+	return (0);
+}
+
+
+/*
 **  Function to Change sub_string with string :
 */
 

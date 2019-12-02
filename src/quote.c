@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-**	ft_remove_quot : Remove Quote from args :
+**	ft_remove_quot : Remove Quote from args @
 */
 
 void			ft_remove_quot(char **args)
@@ -39,7 +39,7 @@ void			ft_remove_quot(char **args)
 
 
 /*
-**	ft_update_tokens : update token by remove quotes
+**	ft_update_tokens : update token by remove quotes @
 */
 
 void			ft_update_tokens(t_tokens *st_tokens)

@@ -16,7 +16,7 @@
 # define SAME_ARG(x, y) (x && x->indx == y->indx && ft_isalldigit(x->value)) ///// move to .h
 
 /*
-** Redirection output >	 :
+** Redirection output >	 @
 */
 
 void	ft_redi_out(t_redir *st_redir, t_tokens *st_tokens)
@@ -47,7 +47,7 @@ void	ft_redi_out(t_redir *st_redir, t_tokens *st_tokens)
 }
 
 /*
-** Redirection input <	 :
+** Redirection input <	 @
 */
 
 void	ft_redi_in(t_redir *st_redir, t_tokens *st_tokens)
@@ -78,7 +78,7 @@ void	ft_redi_in(t_redir *st_redir, t_tokens *st_tokens)
 }
 
 /*
-** Redirection append >> :
+** Redirection append >> @
 */
 
 void	ft_redi_app(t_redir *st_redir, t_tokens *st_tokens)
@@ -111,7 +111,7 @@ void	ft_redi_app(t_redir *st_redir, t_tokens *st_tokens)
 }
 
 /*
-** Redirection input <>	 :
+** Redirection input <>	 @
 */
 
 void	ft_redi_both(t_redir *st_redir, t_tokens *st_tokens)
@@ -127,7 +127,7 @@ void	ft_redi_both(t_redir *st_redir, t_tokens *st_tokens)
 }
 
 /*
-** Redirection : Here-doc :
+** Redirection : Here-doc @
 */
 
 void	ft_redi_her(t_redir *st_redir, t_tokens *st_tokens)

@@ -12,10 +12,6 @@
 
 #include "shell.h"
 
-/*
-** New t_cmds
-*/
-
 t_cmds		*ft_new_cmds(void)
 {
 	t_cmds	*st_cmds;
@@ -29,9 +25,6 @@ t_cmds		*ft_new_cmds(void)
 	return (st_cmds);
 }
 
-/*
-**  New t_jobctr
-*/
 
 t_jobctr	*ft_new_jobctr(void)
 {
@@ -46,10 +39,6 @@ t_jobctr	*ft_new_jobctr(void)
 	return (st_jobctr);
 }
 
-/*
-**  New t_logopr
-*/
-
 t_logopr	*ft_new_logopr(void)
 {
 	t_logopr	*st_logopr;
@@ -63,10 +52,6 @@ t_logopr	*ft_new_logopr(void)
 	st_logopr->next = NULL;
 	return (st_logopr);
 }
-
-/*
-**	New t_tokens 
-*/
 
 t_tokens	*ft_new_token(void)
 {
@@ -83,10 +68,6 @@ t_tokens	*ft_new_token(void)
 	return (st_token);
 }
 
-/*
-**	New t_redir
-*/
-
 t_pipes		*ft_new_pipe(void)
 {
 	t_pipes *st_pipes;
@@ -101,34 +82,4 @@ t_pipes		*ft_new_pipe(void)
 	st_pipes->next = NULL;
 	st_pipes->bl_jobctr = 0;
 	return (st_pipes);
-}
-
-/*
-**	New t_redir
-*/
-
-t_redir		*ft_new_redir(void)
-{
-	t_redir	*st_redir;
-
-	if ((st_redir = (t_redir *)malloc(sizeof(t_redir))) == NULL)
-		return (NULL);
-	st_redir->next = NULL;
-	return (st_redir);
-}
-
-/*
-**	New t_intern
-*/
-
-t_intern	*new_intern(char *key, char *value)
-{
-    t_intern *new;
-
-    if (!(new = (t_intern*)malloc(sizeof(t_intern))))
-        return (NULL);
-    new->key = ft_strdup(key);
-    new->value = ft_strdup(value);
-    new->next = NULL;
-    return (new);
 }
