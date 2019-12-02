@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:11:52 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/02 01:11:59 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/12/02 11:26:30 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int				get_next_line(const int fd, char **line)
 		return (-1);
 	if (text[fd] == NULL)
 		text[fd] = ft_strnew(1);
-	while ((ret = read(fd, buff, BUFFER_SIZE)))
+	while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
 		tmp = text[fd];

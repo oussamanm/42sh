@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:09:57 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 22:48:45 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 11:25:02 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static	t_info	*his_cmd_pos(t_info *last, int pos, char **cmd, int len)
 {
 	last = history_index(last, pos, len);
 	his_new_line(last->cmd, cmd, &g_pos);
-	*cmd = ft_strdup(last->cmd);
 	return (last);
 }
 

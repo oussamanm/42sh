@@ -1,8 +1,0 @@
-alias w="who"
-alias ll="ls -la"
-alias w
-alias g="grep"
-alias m=           	
-alias p="ping"
-ww="who"
-lll="ls -la"

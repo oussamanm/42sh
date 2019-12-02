@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 06:21:47 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 20:35:02 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 00:09:38 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ int		valid_identifier(char *arg)
 	i = -1;
 	while (arg[++i])
 	{
-		if (!ft_isalphanum(arg[i]) || arg[i] == '.' || arg[i] == '/' || arg[0] == '=')
+		if (!ft_isalphanum(arg[i]) || arg[i] == '.' ||
+				arg[i] == '/' || arg[0] == '=')
 			return (0);
 	}
 	return (1);
