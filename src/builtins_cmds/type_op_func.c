@@ -39,62 +39,92 @@ void	no_options(char *arg, int *flag)
 ** - serve -a option for cmd type
 */
 
-void	a_option(char *arg)
+int		a_option(char *arg)
 {
-	char *path;
+	char	*path;
+	int		ret;
 
 	path = NULL;
-	if (ft_check_built(arg))
+	ret = 0;
+	if (ft_check_built(arg) && (ret = 1))
 		buil_putstr(arg, " is a shell builtin", NULL, 1);
 	if ((path = ft_find_path(arg, g_environ)))
+	{
 		buil_putstr(arg, " is ", path, 1);
+		ret = 1;
+	}
+	if (!ret)
+		buil_putstr("42sh: type ", arg, ": not found", 2);
+	return (ret);
 }
 
 /*
 ** - serve -p option for cmd type
 */
 
-void	p_option(char *arg, int maj_p)
+int		p_option(char *arg, int maj_p)
 {
-	char *path;
+	char	*path;
+	int		ret;
 
 	path = NULL;
-	if ((path = ft_find_path(arg, g_environ)) && !ft_check_built(arg))
+	ret = 0;
+	if ((path = ft_find_path(arg, g_environ)) &&\
+	!ft_check_built(arg) && (ret = 1))
 		buil_putstr(path, NULL, NULL, 1);
 	else if ((path = ft_find_path(arg, g_environ)) && \
-	ft_check_built(arg) && maj_p)
+	ft_check_built(arg) && maj_p && (ret = 1))
 		buil_putstr(path, NULL, NULL, 1);
 	ft_strdel(&path);
+	if (!ret)
+		buil_putstr("42sh: type ", arg, ": not found", 2);
+	return (ret);
 }
 
 /*
 ** - serve -t option for cmd type
 */
 
-void	t_option(char *arg, int flag)
+int		t_option(char *arg, int flag)
 {
-	char *path;
+	char	*path;
+	int		ret;
 
 	path = NULL;
-	if (ft_check_built(arg) && flag)
+	ret = 0;
+	if (ft_check_built(arg) && flag && (ret = 1))
 		buil_putstr("builtin", NULL, NULL, 1);
 	else if ((path = ft_find_path(arg, g_environ)))
+	{
+		ret = 1;
 		buil_putstr("file", NULL, NULL, 1);
+	}
+	if (!ret)
+		buil_putstr("42sh: type ", arg, ": not found", 2);
 	ft_strdel(&path);
+	return (ret);
 }
 
 /*
 ** - serve -at option for cmd type
 */
 
-void	at_option(char *arg)
+int		at_option(char *arg)
 {
-	char *path;
+	char	*path;
+	int		ret;
 
 	path = NULL;
-	if (ft_check_built(arg))
+	ret = 0;
+	if (ft_check_built(arg) && (ret = 1))
 		buil_putstr("builtin", NULL, NULL, 1);
 	if ((path = ft_find_path(arg, g_environ)))
+	{
+		ret = 1;
 		buil_putstr("file", NULL, NULL, 1);
+	}
+	if (!ret)
+		buil_putstr("42sh: type ", arg, ": not found", 2);
 	ft_strdel(&path);
+	return (ret);
 }

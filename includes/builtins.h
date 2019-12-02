@@ -81,10 +81,10 @@ int				built_unset(char **args);
 ** - COMMAND (TYPE) FUNCTIONS
 */
 
-void			at_option(char *arg);
-void			t_option(char *arg, int flag);
-void			p_option(char *arg, int maj_p);
-void			a_option(char *arg);
+int				at_option(char *arg);
+int				t_option(char *arg, int flag);
+int				p_option(char *arg, int maj_p);
+int				a_option(char *arg);
 void			no_options(char *arg, int *flag);
 int				a_op(char ch, int flag);
 int				p_op(char ch, int flag);
