@@ -83,7 +83,7 @@ int		ft_calling_center(t_history *his, t_select *select, char *buf)
 char	*ft_read_line(t_history *his, t_select *select, int p)
 {
 	char	buf[6];
-
+	
 	ft_initial(p);
 	ft_bzero(buf, 6);
 	ft_enable();

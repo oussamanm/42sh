@@ -12,7 +12,6 @@
 
 #include "shell.h"
 
-
 /*
 ** this functinon serve option echo -n;
 */
@@ -33,13 +32,11 @@ void	n_flag(char *arg)
 ** this functinon serve option echo -e;
 */
 
-int		e_interpretation(char *arg, int token)
+int		e_interpretation(char *arg, int token, int i)
 {
 	char	tmp;
 	char	*temp;
-	int		i;
 
-	i = -1;
 	while (arg[++i])
 	{
 		if (arg[i] != '\\')
@@ -78,7 +75,8 @@ int		echo_options(t_tokens **st_tokens)
 	while (*st_tokens)
 	{
 		arg = (*st_tokens)->value;
-		if (arg && arg[0] == '-' && (M_CHECK(arg[1], 'n', 'e') || arg[1] == 'E'))
+		if (arg && arg[0] == '-' &&\
+		(M_CHECK(arg[1], 'n', 'e') || arg[1] == 'E'))
 			echo_options_(&arg[1], &flag);
 		else
 			break ;
@@ -86,7 +84,6 @@ int		echo_options(t_tokens **st_tokens)
 	}
 	return (flag);
 }
-
 
 /*
 **	Builten echo
@@ -98,15 +95,14 @@ int		built_echo(t_tokens *st_tokens)
 	int		index;
 	int		status;
 
-	if (!st_tokens || !(st_tokens = NEXT))
-		return (0);
+	st_tokens = NEXT;
 	status = 0;
 	flag = echo_options(&st_tokens);
 	index = (st_tokens) ? st_tokens->indx : 1;
 	while (st_tokens && !status)
 	{
 		if (M_CHECK(flag, (e_flg | n_flg), e_flg))
-			status = e_interpretation(st_tokens->value, st_tokens->token);
+			status = e_interpretation(st_tokens->value, st_tokens->token, -1);
 		else
 			status = (ft_putstr(st_tokens->value) == -1) ? 1 : 0;
 		if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !NEXT)
