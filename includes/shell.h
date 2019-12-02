@@ -31,7 +31,7 @@
 # define ERR_SYN		"syntax error near unexpected token"
 # define EXIT_CMD_NF 127
 # define EXIT_SIGINT 130
-
+int g_fd;
 # define BUFF_SIZE 10
 # define UNUSED(x) (void)(x)
 # define DEBUG(msg) puts(msg)
