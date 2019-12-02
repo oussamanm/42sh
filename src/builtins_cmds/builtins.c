@@ -74,7 +74,5 @@ void		importaliasfilecontent_1(char *line, char *tmp, int j)
 		pushtolist(line + j, 1);
 		ft_strdel(&tmp);
 	}
-	else
-		print_error(" command not found ", line, NULL, 0);
-	ft_strdel(&line);
+	(line) ? ft_strdel(&line) : 0;
 }

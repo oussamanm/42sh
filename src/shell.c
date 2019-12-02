@@ -54,6 +54,8 @@ static void	initial_shell(t_select **select)
 	g_proc_sub = 0;
 }
 
+
+
 int			main(void)
 {
 	extern char	**environ;
