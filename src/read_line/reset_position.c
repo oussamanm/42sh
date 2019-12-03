@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:51:04 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 02:47:57 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/02 21:19:53 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	ft_get_end_of_line_pos(t_cursor *pos, char *s, int num_col)
 	int i;
 	int x;
 	int y;
+	int fd = open("/dev/ttys001", O_WRONLY);
 
 	i = -1;
 	x = pos->p;
@@ -82,6 +83,7 @@ void	ft_get_end_of_line_pos(t_cursor *pos, char *s, int num_col)
 		{
 			if (x == num_col - 1 || s[i] == '\n')
 			{
+				dprintf(fd, "x: %d|num_col: %d\n", x, num_col);
 				pos->end[y] = x;
 				x = 0;
 				y++;
