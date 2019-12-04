@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 17:50:14 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 21:53:41 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 21:12:42 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int				history_handling(char **str_cmds)
 			return (0);
 		ft_putendl(*str_cmds);
 	}
-	else if (!fc_exec_flag(*str_cmds))
+	if (!fc_exec_flag(*str_cmds))
 	{
 		insert_history(&g_history, *str_cmds);
 		history_readline(&g_history, 0, str_cmds);

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 16:21:54 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/02 11:22:12 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 22:18:28 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ static	char	*shift_expansion(char *keyword, int *i)
 static	int		get_next_expansion(char *keyword, char **exp, int *i)
 {
 	while (keyword[*i] && keyword[*i] != '!'
-			&& !is_shell_delimiter(keyword[*i]))
+			&& !is_shell_delimiter(keyword[*i]) && *i > 0)
 		*i += 1;
 	if (!keyword[*i])
 		return (0);
-	else if (is_shell_delimiter(keyword[*i]))
+	else if (is_shell_delimiter(keyword[*i]) || *i == 0)
 	{
-		*exp = get_delimiter(keyword + *i);
+		*exp = get_delimiter(keyword, *i);
 		*i += ft_strlen(*exp);
 	}
 	else if (keyword[*i + 1] == '!')
@@ -71,14 +71,14 @@ static	int		get_next_expansion(char *keyword, char **exp, int *i)
 	return (1);
 }
 
-static	char	*command_expansion(t_history his, char *exp)
+static	char	*command_expansion(t_history his, char *exp, int i)
 {
 	int		index;
 	t_info	*res;
 
 	if (!exp)
 		return (NULL);
-	if (is_shell_delimiter(exp[0]))
+	if (is_shell_delimiter(exp[0]) || i - ft_strlen(exp) == 0)
 		return (ft_strdup(exp));
 	if (exp[0] == '!' && his.tail)
 		return (ft_strdup(his.tail->cmd));
@@ -112,7 +112,7 @@ char			*history_expansion(t_history his, char *keyword)
 	i = 0;
 	while (get_next_expansion(keyword, &exp, &i))
 	{
-		if (!(cmd = ft_strjoir(cmd, command_expansion(his, exp), 3)))
+		if (!(cmd = ft_strjoir(cmd, command_expansion(his, exp, i), 3)))
 			break ;
 		ft_strdel(&exp);
 	}

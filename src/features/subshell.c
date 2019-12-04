@@ -116,19 +116,18 @@ char		*change_subsh_quot(char *arg)
 	arg = ft_strdup(arg);
 	while (arg[++i])
 	{
-		if (arg[i] == '(' && i && M_SUBSH(arg[i - 1]))
+		if (!(arg[i] == '(' && i && M_SUBSH(arg[i - 1])))
+			continue ;
+		if ((len = find_subsh(&arg[i])) != -1)
+			cmd = ft_strsub(arg, i - 1, len + 2);
+		if (cmd && (cmd = ft_strcpy(cmd, &cmd[2])))
 		{
-			if ((len = find_subsh(&arg[i])) != -1)
-				cmd = ft_strsub(arg, i - 1, len + 2);
-			if (cmd && (cmd = ft_strcpy(cmd, &cmd[2])))
-			{
-				cmd[ft_strlen(cmd) - 1] = '\0';
-				value = exec_subsh(cmd);
-				value = correct_result(value);
-				arg = ft_str_remp(arg, value, i - 1, (ft_strlen(cmd) + 3) * -1);
-			}
-			ft_strdel(&cmd);
+			cmd[ft_strlen(cmd) - 1] = '\0';
+			value = exec_subsh(cmd);
+			value = correct_result(value);
+			arg = ft_str_remp(arg, value, i - 1, (ft_strlen(cmd) + 3) * -1);
 		}
+		ft_strdel(&cmd);
 	}
 	return (arg);
 }

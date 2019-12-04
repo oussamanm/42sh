@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 18:38:12 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 21:56:34 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ void				his_cursor_do(int nbr);
 void				his_cursor_up(t_cursor pos, int nbr);
 char				*history_expansion(t_history his, char *keyword);
 char				is_shell_delimiter(char c);
-char				*get_delimiter(char *keyword);
+char				*get_delimiter(char *keyword, int i);
 char				*read_fc(void);
 void				write_fc(char *content);
 void				fc_flag_l(t_history history, char *flags, char **args);
@@ -221,4 +221,11 @@ void				ft_go_to_right(t_cursor *pos, char *s);
 void				ft_right_touch(t_cursor *pos, int size);
 void				save_address(t_select **select);
 void				initial_read_line(t_history *his, t_select **select);
+void				completing_line_(char **maps, char **cmd, t_select *select,\
+t_history *his);
+void				ft_read_quote(char **line, int quote,t_select *select,\
+t_history *his);
+void				ft_read_subsh(char **line, t_select *select,\
+t_history *his);
+
 #endif

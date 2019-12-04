@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 21:55:08 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 01:39:30 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,12 @@ char	*ft_delcolomn(char *s, t_cursor *pos)
 		ft_strncpy(new, s, pos->index - 1);
 		ft_strcpy(new + pos->index - 1, s + pos->index);
 		ft_move_cursor_fordel(s[pos->index - 1], pos);
-		ft_putstr_term(pos->num_col, new + pos->index - 1, pos);
 		pos->num_lines = ft_get_num_of_lines(pos->num_col, new, pos->p);
 		ft_get_end_of_line_pos(pos, new, pos->num_col);
+		update_tab_str(&new, pos);
+		ft_putstr_term(pos->num_col, new + pos->index - 1, pos);
+		
+		//ft_get_end_of_line_pos(pos, new, pos->num_col);
 		ft_set_last_position(*pos, pos->num_lines);
 		pos->index--;
 	}

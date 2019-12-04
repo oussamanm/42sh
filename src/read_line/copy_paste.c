@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 21:21:36 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 17:33:26 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 01:45:23 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,8 @@ void	ft_copy_paste(char *buf, char **s, t_cursor *pos, t_select *select)
 		*s = ft_paste_in_str(*s, select, pos->index);
 		tputs(tgetstr("cd", NULL), 0, my_outc);
 		ft_putstr_term(pos->num_col, *s + pos->index, pos);
-		ft_get_end_of_line_pos(pos, *s, pos->num_col);
 		pos->num_lines = ft_get_num_of_lines(pos->num_col, *s, pos->p);
+		ft_get_end_of_line_pos(pos, *s, pos->num_col);
 		update_tab_str(s, pos);
 		new_pos_tab(*s + pos->index, len_sa, pos);
 		pos->index += len_sa;
