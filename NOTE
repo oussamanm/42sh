@@ -40,7 +40,8 @@ ft_helper_func.c
 
 
 
-
+ls -la | cat -e
+| echo hello world | cat -e
 
 
 

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 16:21:54 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/04 22:18:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 22:22:42 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ char			*history_expansion(t_history his, char *keyword)
 	i = 0;
 	while (get_next_expansion(keyword, &exp, &i))
 	{
-		if (!(cmd = ft_strjoir(cmd, command_expansion(his, exp, i), 3)))
+		if (!(cmd = ft_strjoir_rtn(cmd, command_expansion(his, exp, i), 3)))
 			break ;
 		ft_strdel(&exp);
 	}

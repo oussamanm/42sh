@@ -86,7 +86,7 @@ int			error_syntax_expans(char *str_cmds)
 		{
 			if (str_cmds[i] == '}' && bl)
 				bl = 0;
-			else if (!ft_isalphanum(str_cmds[i]))
+			else if (helper_error_expans(str_cmds, i))
 			{
 				print_error(" bad substitution", NULL, NULL, 0);
 				return (1);
