@@ -1,4 +1,5 @@
 /**** parsing
+
 asdasd|asasdasd || asdasd;a"asdasd"s ()adsasd 'asdasd';
 ;asdasdasd\|\|&pwdasdasd ; "" ; \| ; \||'asdasd'weqwe
 pwd ; | pwd "" ; "'"''"'" ; "" | ""
@@ -19,6 +20,8 @@ echo hello
 *
 echo \$HOME ";" pwd
 qweqwe=qweqweqw rewerwer= ""
+
+
 /****** Redirection
 pwd >&-
 <>
@@ -29,5 +32,106 @@ ls <(cat -e)
 ls $(cat)
 cat |cat |cat
 
+
+/******* Expansions 
+echo $HOME
+echo $?
+echo $HOME
+echo $H
+echo ${qqq}
+echo ${r}
+echo ${?}
+echo $$$$
+echo $HOME
+echo $?
+echo $$
+echo ${HOME}
+echo $HOME
+echo ${?}
+echo ${$}
+echo ${h}
+echo $$$$
+echo ${?}
+pwd
+echo ${?}
+ls -Z
+echo ${?}
+echo ${?asdasd}
+echo ${$}
+echo ${$}$$
+echo ${$}op
+echo ${$}op
+echo ${$}op
+echo ${$}$$
+echo ${$}fff
+echo $$
+echo $$$?
+echo $$$?$?
+$HOMe
+$HOME
+$?
+${?}
+$?svfv
+echo $?svfv
+echo $?sv
+echo ${f?}
+echo ${dfvdfV?}
+echo ${?dfvdfv}
+echo ${dfvdfv?}
+echo ${?kyhk}
+echo ${jhjkhjk?}
+$?
+${?
+${?
+${?}
+$?
+echo $?
+$?
+${?
+${?
+echo ${dfvdfv?}
+echo ${ddfv?}dfv
+echo ${ddfv?dfv}
+echo ${?dfv}
+echo ${?dfgb}
+echo ${|}
+echo ${|}
+echo ${?}
+echo ${?dfv}
+echo ${dvdfv?}
+echo ${?}
+echo ${|}
+echo ${\}
+echo ${/}
+echo ${2}
+echo ${2342}
+echo ${234}
+echo ${234dfvdfv}
+echo ${?}
+echo ${?dfv}
+echo ${fvdf?}
+echo ${?}
+echo ${|}
+echo ${|123}
+echo ${*}
+echo ${HOMR%}
+echo ${HOME%}
+echo ${%}
+echo ${%}
+echo ${HOME%}
+echo ${HOME}
+echo ${HOM?}
+echo ${?}
+echo ${?sdc}
+echo ${sdcs?}
+echo ${|?}
+echo ${|}
+echo ${%}
+echo ${??}
+echo ${$}$$
+echo ~
+
 /******* Line continuation
 "$('
+
+

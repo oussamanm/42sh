@@ -112,7 +112,7 @@ char			*history_expansion(t_history his, char *keyword)
 	i = 0;
 	while (get_next_expansion(keyword, &exp, &i))
 	{
-		if (!(cmd = ft_strjoir(cmd, command_expansion(his, exp), 3)))
+		if (!(cmd = ft_strjoir_rtn(cmd, command_expansion(his, exp), 3)))
 			break ;
 		ft_strdel(&exp);
 	}
