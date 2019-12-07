@@ -70,25 +70,36 @@ void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 		clean_maps(*maps);
 }
 
+<<<<<<< HEAD
+int				ft_read_subsh(char **line, t_select *select, t_history *his)
+=======
 void		ft_read_subsh(char **line, t_select *select, t_history *his)
+>>>>>>> 887ae0c2d85c2ea848360b1603505f182d0e68e5
 {
 	if (!line || !(*line))
-		return ;
+		return (0);
 	*line = ft_strjoir(*line, "\n", 1);
 	ft_putstr("sub> ");
 	ft_read_line(his, select, 5);
+	if (g_pos.cmd[0] == EXIT_CLD)
+		return (-1);
 	if (g_pos.cmd)
 	{
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
 		g_pos.cmd = NULL;
 	}
+	return (0);
 }
 
+<<<<<<< HEAD
+int				ft_read_quote(char **line, int quote,
+=======
 void		ft_read_quote(char **line, int quote,
+>>>>>>> 887ae0c2d85c2ea848360b1603505f182d0e68e5
 	t_select *select, t_history *his)
 {
 	if (!line || !(*line))
-		return ;
+		return (0);
 	*line = ft_strjoir(*line, "\n", 1);
 	if (quote == '\'')
 	{
@@ -100,11 +111,14 @@ void		ft_read_quote(char **line, int quote,
 		ft_putstr("dquotes>> ");
 		ft_read_line(his, select, 10);
 	}
+	if (g_pos.cmd[0] == EXIT_CLD)
+		return (-1);
 	if (!g_pos.exit && g_pos.cmd)
 	{
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
 		g_pos.cmd = NULL;
 	}
+	return (0);
 }
 
 char		*completing_line(char *str_cmds, t_select *select,\

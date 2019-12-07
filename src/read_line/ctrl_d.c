@@ -31,9 +31,9 @@ void	ft_free_tab(char **tableau)
 
 int		ft_read_exit(t_cursor *pos, t_history *his, t_select *select, char **s)
 {
-	if (g_pos.p == 9 || g_pos.p == 10)
+	if (g_pos.p != PR_S)
 	{
-		(*s)[0] = -1;
+		(*s)[0] = EXIT_CLD;
 		return (-1);
 	}
 	if (pos->end)

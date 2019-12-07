@@ -24,8 +24,8 @@ char	*ft_read_heredoc(char *eol)
 	{
 		ft_putstr("heredoc> ");
 		ft_read_line(&g_history, select, 9);
-		if (ft_strequ(g_pos.cmd, eol) || (g_pos.cmd != NULL\
-			&& g_pos.cmd[0] == -1) || g_pos.exit)
+		if (ft_strequ(g_pos.cmd, eol) || (g_pos.cmd != NULL
+			&& g_pos.cmd[0] == EXIT_CLD) || g_pos.exit)
 		{
 			g_exit_status = (g_pos.exit) ? 1 : 0;
 			ft_strdel(&g_pos.cmd);

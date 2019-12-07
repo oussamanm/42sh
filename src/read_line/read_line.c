@@ -73,7 +73,7 @@ int		ft_calling_center(t_history *his, t_select *select, char *buf)
 	g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, g_pos.cmd, g_pos.p);
 	ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
 	if (!(g_pos.cmd = ft_key_call_func(his, select, g_pos.cmd, buf))
-		|| g_pos.cmd[0] == -1)
+		|| g_pos.cmd[0] == EXIT_CLD)
 		return (1);
 	return (0);
 }
