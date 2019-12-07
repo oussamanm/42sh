@@ -54,6 +54,7 @@
 # define IDENTIFIER(x) (x=="?"||x=="-"||x=="@"||x=="%"||x=="~"||x==":"||x==".")
 # define MAX_MAPS 100
 # define MAX_TAB_ADDR 10
+# define SAVED_FD 155
 
 /*
 **Buttons
@@ -106,6 +107,7 @@
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
 # define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
 # define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
+# define TOKEN_IS_ARG(x) (x->token >= 0 && x->is_arg == 0)
 # define OPER_TOKEN(t)(t==T_JOBCTR||t==T_PIPE||t==T_LOGOPR_OR||t==T_LOGOPR_AND)
 # define SAME_ARG(x, y) (x && x->indx == y->indx && ft_isalldigit(x->value))
 
@@ -238,6 +240,7 @@ typedef	struct			s_cmds
 t_intern				*g_intern;
 char					**g_environ;
 int						g_exit_status;
+char					*g_tty_name;
 
 /*
 ** Builtins

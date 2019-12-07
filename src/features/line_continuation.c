@@ -13,9 +13,12 @@
 #include "shell.h"
 #include "read_line.h"
 
+/*
+**	correction map by remove matched Quoting, sub-shell ,
+**		or (Dquote, sub-shell) inside quote.
+*/
 
-
-static int		correct_maps(char *maps)
+static int	correct_maps(char *maps)
 {
 	int i;
 	int rtn;
@@ -33,6 +36,10 @@ static int		correct_maps(char *maps)
 	}
 	return (rtn);
 }
+
+/*
+** Fill maps with symbole : q -> quote, Q -> Dquote, S -> sub-shell
+*/
 
 void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 {
@@ -99,7 +106,6 @@ void		ft_read_quote(char **line, int quote,
 		g_pos.cmd = NULL;
 	}
 }
-
 
 char		*completing_line(char *str_cmds, t_select *select, t_history *his)
 {

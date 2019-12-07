@@ -35,7 +35,6 @@ OBJS = error_handler.o\
 	builtins_cmds/cd_built_symb.o builtins_cmds/built_srcs.o\
 	builtins_cmds/built_export.o builtins_cmds/manage_export.o\
 	read_line/addition.o\
-	read_line/auto_completion.o\
 	read_line/copy_paste.o\
 	read_line/ctrl_d.o\
 	read_line/delete.o\

@@ -44,9 +44,7 @@ char	*ft_call_complete(t_select *select, char *s, char *buf)
 
 char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 {
-	if (TAB == CAST(buf))
-		s = ft_auto_completion(&g_pos, s);
-	else if (CTRL_D == CAST(buf))
+	if (CTRL_D == CAST(buf))
 		s = ft_ctrl_d(&g_pos, his, select, s);
 	else if (CTRL_T == CAST(buf))
 		tab_mode(&s);
