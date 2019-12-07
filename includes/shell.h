@@ -164,13 +164,11 @@ t_list					*g_jobs;
 pid_t					g_shellpid;
 int						g_proc_sub;
 
-typedef struct termios	t_termios;
-
 typedef struct			s_intern
 {
-	char			*key;
-	char			*value;
-	struct s_intern	*next;
+	char				*key;
+	char				*value;
+	struct s_intern		*next;
 }						t_intern;
 
 typedef struct			s_redir
@@ -293,7 +291,7 @@ int						ft_call_lexer(t_pipes *st_pipes);
 int						error_syntax_lexer(t_tokens *st_tokens);
 int						error_syntax_semi(char *str_cmds, char **args);
 int						error_syntax_expans(char *str_cmds);
-int			helper_error_expans(char *str_cmds, int i);
+int						helper_error_expans(char *str_cmds, int i);
 int						ft_putchar_err(int c);
 void					puterr_identifier(char *arg, char *cmd);
 
@@ -456,8 +454,8 @@ int						count_key(char *maps, int key);
 int						closed_dquot(char *maps);
 int						increase_maps(char	**maps);
 int						correct_maps_(int i, int *rtn, char *maps);
-void					fill_maps(char *str_cmd, char **maps, int j, int len_map);
-
+void					fill_maps(char *str_cmd, char **maps, int j,\
+int len_map);
 
 /*
 ** Sub_shell
@@ -517,6 +515,6 @@ int						ft_check_stopped_job(void);
 ** initial
 */
 
-void		init_alias_hash();
+void					init_alias_hash();
 
 #endif

@@ -19,6 +19,6 @@ int		ft_putstr_fd(char const *s, int fd)
 	if (!s)
 		return (0);
 	len = ft_strlen(s);
-	len = write (fd, s, len);
+	len = write(fd, s, len);
 	return (len);
 }

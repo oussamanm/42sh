@@ -29,7 +29,7 @@ int			ft_exit_status(char **args)
 **	Builten exit : free env , free readline, clear struct t_pipes
 */
 
-int		built_exit(char **args)
+int			built_exit(char **args)
 {
 	int status;
 

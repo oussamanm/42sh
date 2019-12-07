@@ -88,8 +88,6 @@ char	*ft_delcolomn(char *s, t_cursor *pos)
 		ft_get_end_of_line_pos(pos, new, pos->num_col);
 		update_tab_str(&new, pos);
 		ft_putstr_term(pos->num_col, new + pos->index - 1, pos);
-		
-		//ft_get_end_of_line_pos(pos, new, pos->num_col);
 		ft_set_last_position(*pos, pos->num_lines);
 		pos->index--;
 	}

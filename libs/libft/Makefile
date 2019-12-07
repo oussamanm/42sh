@@ -29,7 +29,7 @@ bchar.c ft_strrchrindex.c ft_strchrindex.c ft_isalpha_exist.c get_next_line.c\
 
 SRC_H = ft_func_h_file.c ft_func_h_str2.c\
 ft_func_h_strr.c ft_func_h_upd.c ft_func_h_str.c ft_func_h_str3.c\
-ft_func_h_strr2.c ft_func_h_str4.c
+ft_func_h_strr2.c ft_func_h_str4.c ft_func_help.c
 
 OBJS = $(addprefix , $(SRC:.c=.o))
 OBJ_H = $(addprefix ./helper_func/, $(SRC_H:.c=.o))

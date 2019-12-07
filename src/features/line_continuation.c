@@ -13,8 +13,6 @@
 #include "shell.h"
 #include "read_line.h"
 
-
-
 static int		correct_maps(char *maps)
 {
 	int i;
@@ -34,7 +32,7 @@ static int		correct_maps(char *maps)
 	return (rtn);
 }
 
-void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
+void			fill_maps(char *str_cmd, char **maps, int j, int len_map)
 {
 	int i;
 	int quoted;
@@ -63,7 +61,7 @@ void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 		clean_maps(*maps);
 }
 
-void		ft_read_subsh(char **line, t_select *select, t_history *his)
+void			ft_read_subsh(char **line, t_select *select, t_history *his)
 {
 	if (!line || !(*line))
 		return ;
@@ -77,7 +75,7 @@ void		ft_read_subsh(char **line, t_select *select, t_history *his)
 	}
 }
 
-void		ft_read_quote(char **line, int quote,
+void			ft_read_quote(char **line, int quote,
 	t_select *select, t_history *his)
 {
 	if (!line || !(*line))
@@ -100,8 +98,8 @@ void		ft_read_quote(char **line, int quote,
 	}
 }
 
-
-char		*completing_line(char *str_cmds, t_select *select, t_history *his)
+char			*completing_line(char *str_cmds, t_select *select,\
+t_history *his)
 {
 	char	*maps;
 	char	*cmd;
