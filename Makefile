@@ -19,7 +19,7 @@ OBJS = error_handler.o\
 	utility/free.o utility/free_.o utility/ft_strsplit.o\
 	utility/find_closed.o utility/helper_exec.o\
 	utility/helper_contin.o utility/helper_built.o\
-	utility/line_contin.o utility/initial.o \
+	utility/line_contin.o utility/initial.o utility/helper_subshell.o\
 	utility/helper_variab.o utility/helper_syntaxerr.o\
 	features/pipe.o features/line_continuation.o\
 	features/proc_sub.o features/redir_parse.o\
@@ -62,7 +62,7 @@ OBJS = error_handler.o\
 	job_control/index_up.o job_control/init.o\
 	job_control/job_execution.o job_control/job_processing.o\
 	job_control/msg_sig.o job_control/output.o\
-	job_control/update_status.o
+	job_control/update_status.o\
 
 FLAG = -Wall -Wextra -Werror 
 INCL = ./includes
