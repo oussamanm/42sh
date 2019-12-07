@@ -950,7 +950,6 @@ echo world:
 "
 )
 
-kinit
 pwd
 ls $( 50)
 cat <(ls 50)

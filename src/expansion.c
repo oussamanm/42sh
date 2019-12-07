@@ -87,7 +87,11 @@ static char		*helper_swap_vrb(char *arg, int *len_v, int *j, int index)
 
 	variable = NULL;
 	if (arg[*j] == '{')
+	{
 		variable = get_para_expan(&arg[*j], len_v);
+		if (ft_strlen(variable) == 0)
+			return (NULL);
+	}
 	else if ((arg[*j] == '$' || arg[*j] == '?') && ++(*len_v))
 		variable = ft_strdup((char[2]){arg[*j], '\0'});
 	else
@@ -122,7 +126,9 @@ static char		*ft_swap_vrb(char *arg, int *index)
 	len_vrb = 0;
 	j = *index + 1;
 	variable = helper_swap_vrb(arg, &len_vrb, &j, *index);
-	if (M_CHECK(variable[0], '$', '?'))
+	if (variable == NULL)
+		return (arg);
+	else if (M_CHECK(variable[0], '$', '?'))
 		value = (variable[0] == '$') ?\
 		ft_itoa((int)getpid()) : ft_itoa(g_exit_status);
 	else if (!(value = ft_get_vrb(variable, g_environ))

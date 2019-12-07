@@ -1,31 +1,38 @@
-/*      should correct  */
-echo kkkk >$(echo fileee)
+TEST
 
-Error in dup or close in builtens in test : aa=ee echo hello worldd 3>&- >file =asd
+'$HOME'$PWD"$HOME"
+echo $PWD'$HOMEE'$HOME
 
-echo hello worldd 2>&- >file
+--------- Expansion --------------
 
-/*      LEAK       */
+echo $$$$$$
+echo \$\$\$\$
+$$$?
+$"""$HOME"$$
+'$HOME'$PWD"$HOME"
+echo ~/toutou
+~
+"~"
+"\~\~\/~"
+echo ./~ .~
+'"$HOME"'
+echo $PWD'$HOMEE'$HOME
+echo $\???\\
+echo "'\\'$HOME"
+echo ${}
+echo ${\}
+echo ${{}
+echo \$\{\}
+echo $${PWD}
+echo $PWD\      $       HOME
+${{PWD}}
+echo ${?}
+echo ${!}
 
--------- Find path func
-
-ls -la | cat -e
-| echo hello world | cat -e
 
 
 
-
-- redirection 
-
-
-
-
-
-
-
-
-
-
+--------- Redirection --------------
 
 1>&1 cat 2>&- <<EOL > /tmp/oops.oops; 1<&- >/tmp/lol cat 2>&1 <<EOF > /tmp/oops1.oops
 oops
@@ -41,6 +48,61 @@ cat Makefile 5>&1 >&5 5>&- >&- <&-
 cat 5>&1 >&5 5>&- >&- <&- Makefile
 5>&1 >&5 5>&- >&- <&- cat Makefile
 5>&1 cat >&5 5>&- Makefile >&- <&-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/bin/ls | grep -o "42sh"
+/bin/ls -laF | grep -o "CMakeLists.txt*"
+/bin/ls -l -a -F | grep -o "CMakeLists.txt*"
+ls | grep "42sh"
+ls -laF | grep -o "CMakeLists.txt*"
+ls -l -a -F | grep -o "CMakeLists.txt*"
+GREP=$(which grep)
+unset PATH
+/bin/ls | ${GREP} -o "42sh"
+/bin/ls -laF | ${GREP} -o "CMakeLists.txt*"
+/bin/ls -l -a -F | ${GREP} -o "CMakeLists.txt*"
+ls 2>&1 | ${GREP} -o "ls"
+ls -laF 2>&1 | ${GREP} -o "ls"
+ls -l -a -F 2>&1 |${GREP} -o "ls"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

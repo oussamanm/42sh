@@ -469,6 +469,7 @@ int len_map);
 void					apply_subsh(t_tokens *st_tokens);
 void					proc_substitution(t_cmds *st_cmds);
 void					procsub_close(int *fd);
+void					spec_case_subshell(char **arg);
 
 /*
 ** Alias
