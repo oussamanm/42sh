@@ -300,6 +300,7 @@ int						error_syntax_expans(char *str_cmds);
 int			helper_error_expans(char *str_cmds, int i);
 int						ft_putchar_err(int c);
 void					puterr_identifier(char *arg, char *cmd);
+int			error_token_redi(t_tokens *st_tokens);
 
 /*
 ** Updated Splite
@@ -375,6 +376,7 @@ int token, char *value);
 void					ft_dup_token(t_tokens **st_token,\
 t_tokens *st_src, int token);
 void					tokens_to_args(t_pipes *st_pipe);
+void					args_to_token(t_tokens **st_tokens, char *arg, int i);
 int						ft_count_tokens(t_tokens *st_tokens);
 int						ft_check_token(t_tokens *st_tokens, int token);
 
@@ -520,6 +522,6 @@ void					ft_run_job(t_job *job);
 ** initial
 */
 
-void		init_alias_hash();
+void					init_alias_hash();
 
 #endif

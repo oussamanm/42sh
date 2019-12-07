@@ -20,7 +20,7 @@ OBJS = error_handler.o\
 	utility/find_closed.o utility/helper_exec.o\
 	utility/helper_contin.o utility/helper_built.o\
 	utility/line_contin.o utility/initial.o \
-	utility/helper_variab.o\
+	utility/helper_variab.o utility/helper_syntaxerr.o\
 	features/pipe.o features/line_continuation.o\
 	features/proc_sub.o features/redir_parse.o\
 	features/redir_read.o features/redir_setup.o\

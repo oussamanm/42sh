@@ -69,7 +69,8 @@ int			helper_error_expans(char *str_cmds, int i)
 {
 	if (!ft_isalphanum(str_cmds[i]))
 	{
-		if (!(M_CHECK(str_cmds[i], '?', '$') && (str_cmds[i - 1] == '{' && str_cmds[i + 1] == '}')))
+		if (!(M_CHECK(str_cmds[i], '?', '$') && (str_cmds[i - 1] == '{' &&
+			str_cmds[i + 1] == '}')))
 			return (1);
 	}
 	return (0);

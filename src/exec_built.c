@@ -19,7 +19,7 @@
 
 static void		save_fds(void)
 {
-	if (dup2(0 , SAVED_FD) == -1)
+	if (dup2(0, SAVED_FD) == -1)
 		ft_putendl_fd("Error in dup, in builtens \n", 2);
 }
 
@@ -31,10 +31,11 @@ static void		restor_fds(void)
 {
 	int	i;
 	int	fd;
-	
+
 	i = -1;
 	fd = SAVED_FD;
-	if (read(SAVED_FD, NULL, 0) == -1 && write(SAVED_FD, NULL, 0) == -1 && g_tty_name)
+	if (read(SAVED_FD, NULL, 0) == -1 &&
+		write(SAVED_FD, NULL, 0) == -1 && g_tty_name)
 		if ((fd = open(g_tty_name, O_RDWR)) == -1)
 			fd = SAVED_FD;
 	while (++i < 3)
@@ -47,7 +48,7 @@ static void		restor_fds(void)
 ** initail builtens : duplicate STD_* , Call builtens , Resete STD_*
 */
 
-int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
+int				ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 {
 	int		status;
 	int		pid;
@@ -77,7 +78,7 @@ int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 **  Call Builtens (close fds of redirection)
 */
 
-int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
+int				ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 {
 	int		status;
 	int		tmp;
@@ -105,7 +106,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 **	Check if Command builtens
 */
 
-int			ft_check_built(char *arg)
+int				ft_check_built(char *arg)
 {
 	if (arg == NULL)
 		return (-1);
