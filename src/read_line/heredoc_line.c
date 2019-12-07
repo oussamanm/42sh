@@ -23,7 +23,7 @@ char	*ft_read_heredoc(char *eol)
 	while (1337)
 	{
 		ft_putstr("heredoc> ");
-		ft_read_line(&g_history, select, 9);
+		ft_read_line(&g_history, select, HEREDOC);
 		if (ft_strequ(g_pos.cmd, eol) || (g_pos.cmd != NULL
 			&& g_pos.cmd[0] == EXIT_CLD) || g_pos.exit)
 		{

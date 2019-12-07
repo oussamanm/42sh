@@ -68,7 +68,7 @@ int			main(void)
 	while (1337)
 	{
 		ft_putstr("\033[0;32m42sh $>\033[0m ");
-		if ((ft_read_line(&g_history, select, 8)) == NULL || !g_pos.cmd[0])
+		if ((ft_read_line(&g_history, select, PR_S)) == NULL || !g_pos.cmd[0])
 		{
 			ft_job_processing();
 			continue ;

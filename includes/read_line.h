@@ -65,6 +65,8 @@
 # define CTRL_L 12
 # define CTRL_R 18
 
+# define SUB_S 5
+# define QUOTE 7
 # define PR_S 8
 # define HEREDOC 9
 # define DQUOTE 10
