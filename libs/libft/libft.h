@@ -156,4 +156,6 @@ void				ft_strr_trim(char **args);
 char				*ft_str_trim(char *str);
 int					ft_putnbrs(int *table);
 int					get_next_line(const int fd, char **line);
+void				ft_free_join(char **str1, char **str2, int rm);
+
 #endif

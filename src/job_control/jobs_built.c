@@ -13,17 +13,24 @@
 #include "shell.h"
 #include "read_line.h"
 
+int		ft_jobs_usage(char *str)
+{
+	ft_putstr_fd("42sh: jobs: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putendl_fd(": invalid option", 2);
+	ft_putendl_fd("usage: jobs [-lp] [jobspec ...]", 2);
+	return (-1);
+}
+
 int		ft_get_jobs_arg(char **args, int *index)
 {
 	int i;
 	int j;
 	int ret;
 
-	if (!args)
-		return (-1);
-	j = 0;
-	ret = -1;
-	while (args[j])
+	j = -1;
+	ret = -2;
+	while (args[++j])
 	{
 		i = 0;
 		if (args[j][0] == '-')
@@ -34,10 +41,11 @@ int		ft_get_jobs_arg(char **args, int *index)
 				ret = 1;
 			else if (args[j][i - 1] == 'l')
 				ret = 0;
+			else
+				return (ft_jobs_usage(args[j]));
 		}
 		else
 			*index = ft_atoi(args[j]);
-		j++;
 	}
 	return (ret);
 }
@@ -69,7 +77,7 @@ void	ft_jobs_built(char **args)
 	tmp = g_jobs;
 	index = 0;
 	ar = ft_get_jobs_arg(args, &index);
-	while (tmp)
+	while (ar != -1 && tmp)
 	{
 		job = tmp->content;
 		if (index != 0 && job->index != index)

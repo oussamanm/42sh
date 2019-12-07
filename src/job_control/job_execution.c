@@ -15,10 +15,12 @@
 
 void	ft_foreground_job(t_job *job)
 {
+	tcgetattr(0, &job->term_child);
 	tcsetpgrp(0, job->pgid);
 	g_sign = 1;
 	ft_wait(job);
 	g_sign = 0;
+	ft_enable();
 	(job->sig_term != 0) ? ft_termsig_fore(job->sig_term, job->cmd) : 0;
 }
 

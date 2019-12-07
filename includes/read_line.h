@@ -223,7 +223,7 @@ char				*completing_line(char *str_cmds,\
 t_select *select, t_history *his);
 void				completing_line_(char **maps, char **cmd, t_select *select,\
 t_history *his);
-void				ft_read_quote(char **line, int quote,t_select *select,\
+void				ft_read_quote(char **line, int quote, t_select *select,\
 t_history *his);
 void				ft_read_subsh(char **line, t_select *select,\
 t_history *his);

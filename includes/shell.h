@@ -166,13 +166,11 @@ t_list					*g_jobs;
 pid_t					g_shellpid;
 int						g_proc_sub;
 
-typedef struct termios	t_termios;
-
 typedef struct			s_intern
 {
-	char			*key;
-	char			*value;
-	struct s_intern	*next;
+	char				*key;
+	char				*value;
+	struct s_intern		*next;
 }						t_intern;
 
 typedef struct			s_redir
@@ -246,7 +244,7 @@ char					*g_tty_name;
 ** Builtins
 */
 
-void					built_exit();
+int						built_exit(char **args);
 int						built_export(t_tokens *st_tokens);
 int						built_echo(t_tokens *st_tokens);
 int						echo_options(t_tokens **st_tokens);
@@ -292,12 +290,11 @@ int						is_variab_expans(char *cmd);
 void					print_error(char *msg,\
 char *para1, char *para2, int rm);
 void					ft_err_exit(char *str);
-int						ft_error_cd(char *path, char **arg);
 int						ft_call_lexer(t_pipes *st_pipes);
 int						error_syntax_lexer(t_tokens *st_tokens);
 int						error_syntax_semi(char *str_cmds, char **args);
 int						error_syntax_expans(char *str_cmds);
-int			helper_error_expans(char *str_cmds, int i);
+int						helper_error_expans(char *str_cmds, int i);
 int						ft_putchar_err(int c);
 void					puterr_identifier(char *arg, char *cmd);
 int			error_token_redi(t_tokens *st_tokens);
@@ -462,8 +459,8 @@ int						count_key(char *maps, int key);
 int						closed_dquot(char *maps);
 int						increase_maps(char	**maps);
 int						correct_maps_(int i, int *rtn, char *maps);
-void					fill_maps(char *str_cmd, char **maps, int j, int len_map);
-
+void					fill_maps(char *str_cmd, char **maps, int j,\
+int len_map);
 
 /*
 ** Sub_shell
@@ -517,6 +514,7 @@ void					ft_print_backcmd(t_job *job);
 char					ft_stoped(t_job *job);
 char					ft_terminated(t_job *job);
 void					ft_run_job(t_job *job);
+int						ft_check_stopped_job(void);
 
 /*
 ** initial

@@ -12,7 +12,7 @@
 
 #include "read_line.h"
 
-void		num_lines_(int *x, int *y, int end, int c)
+void	num_lines_(int *x, int *y, int end, int c)
 {
 	if (*x == end || c == '\n')
 	{

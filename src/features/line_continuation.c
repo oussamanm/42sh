@@ -107,7 +107,8 @@ void		ft_read_quote(char **line, int quote,
 	}
 }
 
-char		*completing_line(char *str_cmds, t_select *select, t_history *his)
+char		*completing_line(char *str_cmds, t_select *select,\
+t_history *his)
 {
 	char	*maps;
 	char	*cmd;

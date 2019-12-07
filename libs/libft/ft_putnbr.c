@@ -14,7 +14,7 @@
 
 void	ft_putnbr(int n)
 {
-	int b_ismin;
+	int	b_ismin;
 
 	b_ismin = 0;
 	if (n < 0)
@@ -36,8 +36,7 @@ void	ft_putnbr(int n)
 		ft_putchar(n + '0');
 }
 
-
-int			ft_putnbrs(int *table)
+int		ft_putnbrs(int *table)
 {
 	int i;
 

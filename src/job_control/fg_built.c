@@ -57,6 +57,7 @@ void	ft_foreg_wait(t_job *job, t_list **tmp, t_list **pr)
 	signal(SIGCHLD, SIG_DFL);
 	killpg(job->pgid, SIGCONT);
 	ft_run_job(job);
+	tcsetattr(0, TCSANOW, &job->term_child);
 	job->background = -1;
 	g_sign = 1;
 	ft_wait(job);

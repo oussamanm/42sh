@@ -12,6 +12,25 @@
 
 #include "shell.h"
 
+int		ft_check_stopped_job(void)
+{
+	t_list	*tmp;
+	t_job	*job;
+
+	tmp = g_jobs;
+	while (tmp)
+	{
+		job = tmp->content;
+		if (job->status == STOPED)
+		{
+			ft_putendl_fd("There are stopped jobs.", 2);
+			return (1);
+		}
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 char	*ft_cmd_value(t_tokens *st_tokens, char *cmd)
 {
 	while (st_tokens)

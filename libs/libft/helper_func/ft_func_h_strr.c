@@ -37,10 +37,7 @@ char		**ft_strr_join(char **str1, char **str2, int rm)
 		while (str2[l2] != NULL)
 			new_chaine[i++] = ft_strdup(str2[l2++]);
 	new_chaine[i] = NULL;
-	if (rm == 1 || rm == 3)
-		ft_strrdel(str1);
-	if (rm == 2 || rm == 3)
-		ft_strrdel(str2);
+	ft_free_join(str1, str2, rm);
 	return (new_chaine);
 }
 
