@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 22:00:15 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 01:26:40 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,6 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	free(g_pos.end);
 	// if (crash != 0)
 	// 	close(crash);
+	convert_neg_to_tab(&g_pos.cmd);
 	return (g_pos.cmd);
 }

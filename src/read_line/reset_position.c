@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:51:04 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 02:47:57 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 03:01:08 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		ft_get_num_of_lines(int num_col, char *s, int p)
 	int j;
 
 	i = -1;
-	num_lines = 1;
+	num_lines = 0;
 	j = p;
 	while (s[++i])
 	{
@@ -61,7 +61,7 @@ int		ft_get_num_of_lines(int num_col, char *s, int p)
 				j++;
 		}
 	}
-	return (num_lines);
+	return (num_lines + 1);
 }
 
 void	ft_get_end_of_line_pos(t_cursor *pos, char *s, int num_col)

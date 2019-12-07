@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fg_built.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 08:03:48 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 08:03:50 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/12/02 16:50:58 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void	ft_foreg_wait(t_job *job, t_list **tmp, t_list **pr)
 	(job->sig_term) ? ft_termsig_fore(job->sig_term, job->cmd) : 0;
 	if (job->status == EXITED)
 	{
-		(job->p == '+') ? ft_update_p(1) : 0;
 		ft_remove_node(tmp, pr);
+		ft_update_p(1);
 	}
 	if (tcsetpgrp(0, getpgrp()) == -1)
 		ft_putendl_fd("Controling terminal ERROR", 2);

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 06:21:47 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/02 00:09:38 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 22:20:10 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	is_shell_delimiter(char c)
 	return (0);
 }
 
-char	*get_delimiter(char *keyword)
+char	*get_delimiter(char *keyword, int index)
 {
 	int	bg;
 	int	len;
@@ -28,10 +28,10 @@ char	*get_delimiter(char *keyword)
 
 	bg = -1;
 	len = 0;
-	i = -1;
+	i = index - 1;
 	while (keyword[++i])
 	{
-		if (is_shell_delimiter(keyword[i]) && bg == -1)
+		if ((is_shell_delimiter(keyword[i]) || i == 0) && bg == -1)
 			bg = i;
 		else if (keyword[i] == '!')
 			break ;

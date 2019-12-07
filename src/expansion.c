@@ -77,28 +77,29 @@ char			*ft_str_remp(char *str, char *remp, int start, int len)
 	return (rtn);
 }
 
+
 /*
-**  get varaible inside ${}
+** helper function for ft_swap_vrb to get variable 
 */
 
-static char		*get_para_expan(char *arg, int *len_vrb)
+static char		*helper_swap_vrb(char *arg, int *len_vrb, int *j, int index)
 {
-	int		i;
-	char	*str_rtn;
+	char	*variable;
 
-	if (!arg)
-		return (NULL);
-	i = 0;
-	str_rtn = NULL;
-	while (arg[i])
+	variable = NULL;
+	if (arg[*j] == '{')
+		variable = get_para_expan(&arg[*j], len_vrb);
+	else if ((arg[*j] == '$' || arg[*j] == '?') && ++(*len_vrb))
+		variable = ft_strdup((char[2]){arg[*j], '\0'});
+	else
 	{
-		if (arg[i] == '}')
-			break ;
-		i++;
+		while (arg[*j] && (ft_isalnum(arg[*j]) || arg[*j] == '_') && ++(*len_vrb))
+			(*j)++;
+		if (!(*len_vrb))
+			return (ft_strnew(0));
+		variable = ft_strsub(arg, index + 1, *len_vrb);
 	}
-	str_rtn = ft_strsub(arg, 1, i - 1);
-	*len_vrb += (i + 1);
-	return (str_rtn);
+	return (variable);
 }
 
 /*
@@ -115,32 +116,22 @@ static char		*ft_swap_vrb(char *arg, int *index)
 
 	if (arg == NULL || !(*arg))
 		return (NULL);
+	value = NULL;
 	len_vrb = 0;
 	j = *index + 1;
-	while (arg[j] && (ft_isalnum(arg[j]) || arg[j] == '_') && ++len_vrb)
-		j++;
-	if (!len_vrb && arg[j] == '{')
-		variable = get_para_expan(&arg[j], &len_vrb);
-	else if (!len_vrb && arg[j] != '$' && arg[j] != '?' && ++(*index))
-		return (arg);
-	else
-		variable = ft_strsub(arg, *index + 1, len_vrb);
-	if (!len_vrb && arg[j] == '$' && ++len_vrb)
-		value = ft_itoa((int)getpid());
-	else if (!len_vrb && arg[j] == '?' && ++len_vrb)
-		value = ft_itoa(g_exit_status);
-	else
-	{
-		if (!(value = ft_get_vrb(variable, g_environ)))
-			value = get_intern_value(variable);/// may should add str_dup to rtn of get_intern_value
-		else
-			value = ft_strnew(0);
-	}
+	variable = helper_swap_vrb(arg, &len_vrb, &j, *index);
+	if (M_CHECK(variable[0], '$', '?'))
+		value = (variable[0] == '$') ? ft_itoa((int)getpid()) : ft_itoa(g_exit_status);
+	else if (!(value = ft_get_vrb(variable, g_environ)) && !(value = get_intern_value(variable)))
+		value = ft_strnew(0);
 	result = ft_str_remp(arg, value, *index, len_vrb + 1);
 	*index += (ft_strlen(value) - 1);
-	free_addresses((void *[MAX_TAB_ADDR]){&variable, &value, &arg, NULL});
+	ft_strdel(&variable);
+	ft_strdel(&value);
+	ft_strdel(&arg);
 	return (result);
 }
+
 
 /*
 **  ft_corr_args : Correction cmd_line by change expansions and histr :
@@ -163,7 +154,7 @@ char			*ft_corr_args(char *cmd)
 			bl_q = (bl_q == 0) ? 1 : 0;
 		else if (cmd[i] == '\'' && !bl_q)
 			i += ft_find_char(cmd + i + 1, '\'') + 2;
-		else if (cmd[i] == '$' && cmd[i + 1])
+		else if (cmd[i] == '$' && is_variab_expans(&cmd[i + 1]))
 			cmd = ft_swap_vrb(cmd, &i);
 		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
 				(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))
@@ -172,4 +163,3 @@ char			*ft_corr_args(char *cmd)
 	}
 	return (cmd);
 }
-//?? corr args

@@ -279,6 +279,8 @@ void					ft_insert_vrb(char *vrb, char ***env, int rm);
 int						ft_edit_vrb(char *vrb, char ***env, int rm);
 int						ft_check_tmp(char **args);
 void					fill_intern(t_pipes *st_pipe);
+char					*get_para_expan(char *arg, int *len_vrb);
+int						is_variab_expans(char *cmd);
 
 /*
 ** Error handler
@@ -291,6 +293,7 @@ int						ft_call_lexer(t_pipes *st_pipes);
 int						error_syntax_lexer(t_tokens *st_tokens);
 int						error_syntax_semi(char *str_cmds, char **args);
 int						error_syntax_expans(char *str_cmds);
+int			helper_error_expans(char *str_cmds, int i);
 int						ft_putchar_err(int c);
 void					puterr_identifier(char *arg, char *cmd);
 

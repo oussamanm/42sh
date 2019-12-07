@@ -3,123 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   move_by_lines.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 19:41:24 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/06/11 19:41:31 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/12/04 18:45:26 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "read_line.h"
 
-int		ft_next_tab(t_cursor *pos, char *s, int save_x, int *bye)
+void		num_lines_(int *x, int *y, int end, int c)
 {
-	int sp;
-
-	sp = s[pos->index] * -1;
-	if ((pos->x >= save_x || pos->x > pos->end[pos->y]) && *bye)
-		return (1);
-	else if (pos->x + sp > pos->end[pos->y] && !*bye)
+	if (*x == end || c == '\n')
 	{
-		*bye = 1;
-		pos->x = 0;
-		pos->y++;
+		*y += 1;
+		*x = 0;
 	}
 	else
-		pos->x += sp;
-	return (0);
+		*x += 1;
 }
 
-void	ft_next_line(t_cursor *pos, char *s)
+void	move_to_pos(char *s, t_cursor *pos, int col, int line)
 {
-	int save_x;
-	int bye;
+	int x;
+	int y;
+	int i;
 
-	save_x = (pos->x > pos->end[pos->y + 1]) ? pos->end[pos->y + 1] : pos->x;
-	bye = 0;
-	while (s[pos->index])
+	i = -1;
+	x = pos->p;
+	y = 0;
+	while (s[++i])
 	{
-		if (s[pos->index] < 0 && ft_next_tab(pos, s, save_x, &bye))
-			break ;
-		if (s[pos->index] > 0)
+		if (line == y && ((s[i] < 0 && ((s[i] * -1) + x > col ||
+		(s[i] * -1) + x > pos->end[y])) || x >= col || x >= pos->end[y]))
 		{
-			if (pos->x == pos->end[pos->y] && !bye)
-			{
-				bye = 1;
-				pos->x = 0;
-				pos->y++;
-			}
-			else if (pos->x == save_x && bye)
-				break ;
-			else
-				pos->x++;
+			pos->x = x;
+			pos->index = i;
+			return ;
 		}
-		pos->index++;
+		(s[i] < 0) ? num_lines_tab(s[i] * -1, pos, &x, &y)
+		: num_lines_(&x, &y, pos->end[y], s[i]);
+	}
+	if (x >= col || x >= pos->end[line])
+	{
+		pos->x = x;
+		pos->index = i - 1;
 	}
 }
 
-int		ft_prev_tab(t_cursor *pos, char *s, int save_x, int *bye)
+void	move_line(int x, int dir)
 {
-	int sp;
-
-	sp = s[pos->index] * -1;
-	if (pos->x - sp <= save_x && *bye)
-	{
-		if (pos->x - sp == save_x || pos->x - sp == pos->p)
-			pos->x -= sp;
-		else
-			pos->x -= sp - 1;
-		if (pos->y == 0 && pos->x < pos->p)
-			pos->x = pos->p;
-		return (1);
-	}
-	else if ((pos->x == 0 || pos->x - sp < 0) && !*bye)
-	{
-		*bye = 1;
-		pos->y--;
-		pos->x = pos->end[pos->y];
-	}
+	if (dir)
+		tputs(tgetstr("do", NULL), 0, my_outc);
 	else
-	{
-		pos->x -= sp;
-		(pos->y == 0 && pos->x < pos->p) ? pos->x = pos->p : 0;
-	}
-	return (0);
+		tputs(tgetstr("up", NULL), 0, my_outc);
+	tputs(tgoto(tgetstr("ch", NULL), 0, x), 0, my_outc);
 }
-
-void	ft_prev_line(t_cursor *pos, char *s)
-{
-	int save_x;
-	int bye;
-	int bl;
-
-	save_x = (pos->x > pos->end[pos->y - 1]) ? pos->end[pos->y - 1] : pos->x;
-	bye = 0;
-	bl = (s[pos->index++] == '\0') ? 1 : 0;
-	while (--pos->index >= 0)
-	{
-		if (s[pos->index] < 0 && ft_prev_tab(pos, s, save_x, &bye))
-			break ;
-		if (s[pos->index] <= 0)
-			continue ;
-		if (pos->x == save_x && bye)
-			break ;
-		if (pos->x == 0 && !bye)
-		{
-			bye = 1;
-			pos->y--;
-			pos->x = pos->end[pos->y];
-		}
-		else
-			pos->x--;
-	}
-	(pos->index == -1 || bl) ? pos->index++ : 0;
-}
-
-/*
-** -function move the cursor to the next line when we press
-** ALT down or the last when we press ALT Up.
-*/
 
 void	ft_move_by_lines(t_cursor *pos, char *s, char *buf)
 {
@@ -127,20 +66,24 @@ void	ft_move_by_lines(t_cursor *pos, char *s, char *buf)
 	int num_lines;
 
 	num_col = ft_get_size_windz();
-	num_lines = ft_get_num_of_lines(num_col, s, pos->p);
 	ft_get_end_of_line_pos(pos, s, num_col);
-	if (ALT_DO == CAST(buf))
+	num_lines = ft_get_num_of_lines(num_col, s, pos->p);
+	pos->num_col = num_col;
+	if (ALT_DO == CAST(buf) && pos->y < num_lines - 1)
 	{
-		tputs(tgetstr("cd", NULL), 0, my_outc);
-		ft_putstr_term(num_col, s + pos->index, pos);
-		ft_next_line(pos, s);
-		tab_set_last_position(*pos, num_lines);
+		pos->y++;
+		(pos->x > pos->end[pos->y]) && (pos->x = pos->end[pos->y]);
+		move_to_pos(s, pos, pos->x, pos->y);
+		move_line(pos->x, 1);
 	}
-	if (ALT_UP == CAST(buf) && pos->y != 0)
+	if (ALT_UP == CAST(buf) && pos->y > 0)
 	{
-		tputs(tgetstr("cd", NULL), 0, my_outc);
-		ft_putstr_term(num_col, s + pos->index, pos);
-		ft_prev_line(pos, s);
-		tab_set_last_position(*pos, num_lines);
+		pos->y--;
+		if (pos->x > pos->end[pos->y])
+			pos->x = pos->end[pos->y];
+		else if (pos->y == 0 && pos->x < pos->p)
+			pos->x = pos->p;
+		move_to_pos(s, pos, pos->x, pos->y);
+		move_line(pos->x, 0);
 	}
 }

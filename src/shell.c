@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 22:58:41 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 01:33:42 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int			main(void)
 			ft_job_processing();
 			continue ;
 		}
-		convert_neg_to_tab(&g_pos.cmd);
 		g_pos.cmd = completing_line(g_pos.cmd, select, &g_history);
 		if (!history_handling(&g_pos.cmd))
 			continue ;

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:09:57 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/02 11:25:02 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/04 01:37:35 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,13 @@
 void			his_new_line(char *line, char **cmd, t_cursor *pos)
 {
 	convert_tab_to_neg(&line);
+	pos->num_lines = ft_get_num_of_lines(pos->num_col, line, pos->p);
 	ft_get_end_of_line_pos(&g_pos, line, g_pos.num_col);
 	update_tab_str(&line, pos);
 	ft_move_cursor_zero(*pos);
 	pos->x = pos->p;
 	pos->y = 0;
 	tputs(tgetstr("cd", NULL), 0, my_outc);
-	pos->num_lines = ft_get_num_of_lines(pos->num_col, line, pos->p);
-	ft_get_end_of_line_pos(&g_pos, line, g_pos.num_col);
 	ft_putstr_term(pos->num_col, line, pos);
 	pos->index = ft_strlen(line);
 	new_pos_tab(line, pos->index, pos);
