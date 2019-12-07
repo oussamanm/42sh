@@ -243,7 +243,7 @@ int						g_exit_status;
 ** Builtins
 */
 
-void					built_exit();
+int						built_exit(char **args);
 int						built_export(t_tokens *st_tokens);
 int						built_echo(t_tokens *st_tokens);
 int						echo_options(t_tokens **st_tokens);
@@ -511,6 +511,7 @@ void					ft_print_backcmd(t_job *job);
 char					ft_stoped(t_job *job);
 char					ft_terminated(t_job *job);
 void					ft_run_job(t_job *job);
+int						ft_check_stopped_job(void);
 
 /*
 ** initial

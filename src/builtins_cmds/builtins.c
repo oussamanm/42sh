@@ -13,14 +13,33 @@
 #include "shell.h"
 #include "read_line.h"
 
+int			ft_exit_status(char **args)
+{
+	if (!args || !*args)
+		return (0);
+	if (*args && *(args + 1))
+	{
+		ft_putendl_fd("42sh: exit: too many arguments", 2);
+		return (-1);
+	}
+	return (ft_atoi(*args));
+}
+
 /*
 **	Builten exit : free env , free readline, clear struct t_pipes
 */
 
-void		built_exit(void)
+int		built_exit(char **args)
 {
+	int status;
+
+	ft_putendl("exit");
+	if ((status = ft_exit_status(args + 1)) == -1)
+		return (EXIT_FAILURE);
+	if (ft_check_stopped_job())
+		return (EXIT_FAILURE);
 	save_history(&g_history);
-	exit(0);
+	exit(status);
 }
 
 /*
