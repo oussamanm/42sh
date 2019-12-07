@@ -108,8 +108,7 @@ char		*error_redir_h(t_tokens *st_tokens)
 
 	msg = NULL;
 	temp = NULL;
-	if (TOKEN < 0 && ((!NEXT && !M_CHECK(TOKEN, T_RED_IN_B, T_RED_OUT_B)) ||
-		(NEXT && !T_IS_TXT(NEXT->token) && !T_IS_SUBSHELL(NEXT->token))))
+	if (TOKEN < 0 && error_token_redi(st_tokens))
 		msg = "syntax error near unexpected token";
 	else if (TOKEN < T_RED_APP_A)
 		msg = "syntax error near unexpected token";

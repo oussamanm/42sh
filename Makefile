@@ -20,7 +20,7 @@ OBJS = error_handler.o\
 	utility/find_closed.o utility/helper_exec.o\
 	utility/helper_contin.o utility/helper_built.o\
 	utility/line_contin.o utility/initial.o \
-	utility/helper_variab.o\
+	utility/helper_variab.o utility/helper_syntaxerr.o\
 	features/pipe.o features/line_continuation.o\
 	features/proc_sub.o features/redir_parse.o\
 	features/redir_read.o features/redir_setup.o\
@@ -35,7 +35,6 @@ OBJS = error_handler.o\
 	builtins_cmds/cd_built_1.o builtins_cmds/built_srcs.o\
 	builtins_cmds/built_export.o builtins_cmds/manage_export.o\
 	read_line/addition.o\
-	read_line/auto_completion.o\
 	read_line/copy_paste.o\
 	read_line/ctrl_d.o\
 	read_line/delete.o\

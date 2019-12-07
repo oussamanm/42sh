@@ -92,8 +92,11 @@ static char		*helper_swap_vrb(char *arg, int *len_v, int *j, int index)
 		variable = ft_strdup((char[2]){arg[*j], '\0'});
 	else
 	{
-		while (arg[*j] && (ft_isalnum(arg[*j]) || arg[*j] == '_') && ++(*len_v))
+		while (arg[*j] && (ft_isalnum(arg[*j]) || arg[*j] == '_'))
+		{
+			(*len_v)++;
 			(*j)++;
+		}
 		if (!(*len_v))
 			return (ft_strnew(0));
 		variable = ft_strsub(arg, index + 1, *len_v);
@@ -127,9 +130,7 @@ static char		*ft_swap_vrb(char *arg, int *index)
 		value = ft_strnew(0);
 	result = ft_str_remp(arg, value, *index, len_vrb + 1);
 	*index += (ft_strlen(value) - 1);
-	ft_strdel(&variable);
-	ft_strdel(&value);
-	ft_strdel(&arg);
+	free_addresses((void *[MAX_TAB_ADDR]){&variable, &value, &arg});
 	return (result);
 }
 

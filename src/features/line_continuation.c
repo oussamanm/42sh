@@ -13,7 +13,12 @@
 #include "shell.h"
 #include "read_line.h"
 
-static int		correct_maps(char *maps)
+/*
+**	correction map by remove matched Quoting, sub-shell ,
+**		or (Dquote, sub-shell) inside quote.
+*/
+
+static int	correct_maps(char *maps)
 {
 	int i;
 	int rtn;
@@ -32,7 +37,11 @@ static int		correct_maps(char *maps)
 	return (rtn);
 }
 
-void			fill_maps(char *str_cmd, char **maps, int j, int len_map)
+/*
+** Fill maps with symbole : q -> quote, Q -> Dquote, S -> sub-shell
+*/
+
+void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 {
 	int i;
 	int quoted;
@@ -61,7 +70,11 @@ void			fill_maps(char *str_cmd, char **maps, int j, int len_map)
 		clean_maps(*maps);
 }
 
+<<<<<<< HEAD
 int				ft_read_subsh(char **line, t_select *select, t_history *his)
+=======
+void		ft_read_subsh(char **line, t_select *select, t_history *his)
+>>>>>>> 887ae0c2d85c2ea848360b1603505f182d0e68e5
 {
 	if (!line || !(*line))
 		return (0);
@@ -78,7 +91,11 @@ int				ft_read_subsh(char **line, t_select *select, t_history *his)
 	return (0);
 }
 
+<<<<<<< HEAD
 int				ft_read_quote(char **line, int quote,
+=======
+void		ft_read_quote(char **line, int quote,
+>>>>>>> 887ae0c2d85c2ea848360b1603505f182d0e68e5
 	t_select *select, t_history *his)
 {
 	if (!line || !(*line))
@@ -104,7 +121,7 @@ int				ft_read_quote(char **line, int quote,
 	return (0);
 }
 
-char			*completing_line(char *str_cmds, t_select *select,\
+char		*completing_line(char *str_cmds, t_select *select,\
 t_history *his)
 {
 	char	*maps;

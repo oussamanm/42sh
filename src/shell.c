@@ -45,6 +45,7 @@ static void	initial_shell(t_select **select)
 {
 	g_pos.cmd = NULL;
 	g_exit_status = 0;
+	g_tty_name = ttyname(0);
 	call_signal();
 	initial_read_line(&g_history, select);
 	init_fc_built();
