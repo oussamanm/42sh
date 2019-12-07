@@ -65,6 +65,11 @@
 # define CTRL_L 12
 # define CTRL_R 18
 
+# define PR_S 8
+# define HEREDOC 9
+# define DQUOTE 10
+# define EXIT_CLD -10
+
 # define CAST(x) *((int *)x)
 
 typedef struct s_history	t_history;
@@ -223,9 +228,9 @@ void				save_address(t_select **select);
 void				initial_read_line(t_history *his, t_select **select);
 void				completing_line_(char **maps, char **cmd, t_select *select,\
 t_history *his);
-void				ft_read_quote(char **line, int quote, t_select *select,\
+int					ft_read_quote(char **line, int quote, t_select *select,\
 t_history *his);
-void				ft_read_subsh(char **line, t_select *select,\
+int					ft_read_subsh(char **line, t_select *select,\
 t_history *his);
 
 #endif

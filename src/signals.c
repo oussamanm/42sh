@@ -42,7 +42,7 @@ void	ft_catch_signal(int signal)
 	else
 	{
 		ft_reset_line();
-		if (g_pos.p != 8 || g_pos.r)
+		if (g_pos.p != PR_S || g_pos.r)
 		{
 			g_pos.exit = 1;
 			g_exit_status = EXIT_FAILURE;
@@ -54,7 +54,7 @@ void	ft_catch_signal(int signal)
 			ft_putstr_fd("\n\033[0;32m42sh $>\033[0m ", 2);
 			g_exit_status = EXIT_SIGINT;
 		}
-		g_pos.p = 8;
+		g_pos.p = PR_S;
 		history_readline(&g_history, 0, NULL);
 	}
 }

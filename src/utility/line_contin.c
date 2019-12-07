@@ -65,7 +65,9 @@ void			completing_line_(char **maps, char **cmd, t_select *select,
 	int		i;
 	int		index;
 	int		len;
-
+	int		rtn;
+	 
+	rtn = 0;
 	len = MAX_MAPS;
 	i = get_last_flag(*maps);
 	while (i >= 0 && !g_pos.exit)
@@ -76,10 +78,11 @@ void			completing_line_(char **maps, char **cmd, t_select *select,
 		{
 			index = ft_strlen(*cmd);
 			if ((*maps)[i] == 'S')
-				ft_read_subsh(cmd, select, his);
+				rtn = ft_read_subsh(cmd, select, his);
 			else
-				ft_read_quote(cmd, ((*maps)[i] == 'Q') ? '"' : '\'',\
-					select, his);
+				rtn = ft_read_quote(cmd, ((*maps)[i] == 'Q') ? '"' : '\'', select, his);
+			if (rtn == -1)
+				break ;
 			fill_maps(&(*cmd)[index], maps, i + 1, len);
 			i = get_last_flag(*maps);
 			continue ;
