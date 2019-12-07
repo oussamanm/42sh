@@ -84,7 +84,7 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	int 	crash;
 	
 	crash = 0;
-	// crash = open("/tmp/crash.fifo", O_RDONLY);
+	//crash = open("/tmp/crash.fifo", O_RDONLY);
 	ft_initial(p);
 	ft_bzero(buf, 6);
 	ft_enable();

@@ -89,6 +89,7 @@ void	insert_hash(char *key, char *value)
 	if ((node = lookup_hash_2(key)))
 	{
 		node->counter++;
+		ft_strdel(&value);
 		return ;
 	}
 	if (!(node = (t_hash *)malloc(sizeof(t_hash))))

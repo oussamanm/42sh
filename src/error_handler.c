@@ -81,12 +81,13 @@ int			error_syntax_expans(char *str_cmds)
 	while (str_cmds[i])
 	{
 		if (!bl && str_cmds[i] == '$' && str_cmds[i + 1] == '{' && ++i)
-			bl = 1;
+			bl = (i && str_cmds[i - 1] == '$') ? 0 : 1;
 		else if (bl)
 		{
-			if (str_cmds[i] == '}' && bl)
+			if (str_cmds[i] == '}' && bl && (i && str_cmds[i - 1] != '{'))
 				bl = 0;
-			else if (helper_error_expans(str_cmds, i))
+			else if (helper_error_expans(str_cmds, i) ||
+				(i && str_cmds[i - 1] == '{'))
 			{
 				print_error(" bad substitution", NULL, NULL, 0);
 				return (1);
