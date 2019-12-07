@@ -32,7 +32,7 @@ OBJS = error_handler.o\
 	builtins_cmds/alias_built.o builtins_cmds/alias_func.o \
 	builtins_cmds/hash_built.o builtins_cmds/hash_func.o\
 	builtins_cmds/free_hash_and_alias.o builtins_cmds/unaliase_built.o\
-	builtins_cmds/cd_built_symb.o builtins_cmds/built_srcs.o\
+	builtins_cmds/cd_built_1.o builtins_cmds/built_srcs.o\
 	builtins_cmds/built_export.o builtins_cmds/manage_export.o\
 	read_line/addition.o\
 	read_line/auto_completion.o\

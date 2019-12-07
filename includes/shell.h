@@ -287,7 +287,6 @@ void					fill_intern(t_pipes *st_pipe);
 void					print_error(char *msg,\
 char *para1, char *para2, int rm);
 void					ft_err_exit(char *str);
-int						ft_error_cd(char *path, char **arg);
 int						ft_call_lexer(t_pipes *st_pipes);
 int						error_syntax_lexer(t_tokens *st_tokens);
 int						error_syntax_semi(char *str_cmds, char **args);
