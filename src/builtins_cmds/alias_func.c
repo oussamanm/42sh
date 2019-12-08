@@ -31,20 +31,17 @@ t_aliaspkg	*storeaddrstruct(t_aliaspkg *addr)
 ** - push alias into list;
 */
 
-void		pushtolist(char *string, int flag)
+void		pushtolist(char *key, char *value, int flag)
 {
 	t_alias		*node;
 	t_aliaspkg	*data;
-	int			i;
 
 	data = storeaddrstruct(NULL);
 	if (!(node = (t_alias *)malloc(sizeof(t_alias))))
 		return ;
-	i = -1;
-	while (string[++i] && string[i] != '=')
-		;
-	node->shortcut = ft_strsub(string, 0, ++i);
-	node->cmd = handleqoutes(ft_strdup(string + i));
+	node->shortcut = ft_strdup(key);
+	node->equal = ft_strdup("=");
+	node->cmd = handleqoutes(ft_strdup(value));
 	node->flag = flag;
 	node->next = NULL;
 	if (!data->head_ref && !data->tail_ref)
@@ -74,6 +71,7 @@ void		printlist(void)
 	{
 		ft_putstr_fd("alias ", 1);
 		ft_putstr_fd(curr->shortcut, 1);
+		ft_putstr_fd("=", 1);
 		(curr->cmd[0] != '\'') ? ft_putchar_fd('\'', 1) : 0;
 		ft_putstr_fd(curr->cmd, 1);
 		(curr->cmd[ft_strlen(curr->cmd) - 1] != '\'') ? ft_putendl_fd("\'", 1)\
@@ -93,7 +91,7 @@ void		createaliasfile(void)
 	fd = 0;
 	if (!(access(".42shrc", F_OK) == 0))
 	{
-		if ((fd = open(".42shrc", O_CREAT, 00600)) == -1)
+		if ((fd = open(".42shrc", O_CREAT, 00644)) == -1)
 			return ;
 		close(fd);
 	}
@@ -111,18 +109,21 @@ void		importaliasfilecontent(char *tmp)
 
 	line = NULL;
 	count = 0;
+	(void)tmp;
 	if ((fd = open(".42shrc", O_RDONLY)) == -1)
 		return ;
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (ft_strcmp(line, "") == 0)
+		{
+			ft_strdel(&line);
 			continue ;
+		}
 		else
 		{
 			if ((ft_strncmp(line, "alias", 5)) == 0)
-				importaliasfilecontent_1(line, tmp, 5);
-			else
-				(line) ? ft_strdel(&line) : 0;
+				importaliasfilecontent_1(line + 5);
+			ft_strdel(&line);
 		}
 	}
 	close(fd);

@@ -24,22 +24,21 @@ char	**aliasmatched(char **args)
 	char		**rtn;
 
 	data = storeaddrstruct(NULL);
-	temp = ft_strjoin(args[0], "=");
 	curr = data->head_ref;
 	rtn = NULL;
 	while (curr)
 	{
-		if (ft_strcmp(curr->shortcut, temp) == 0)
+		if (ft_strcmp(curr->shortcut, args[0]) == 0)
 		{
-			ft_strdel(&temp);
-			temp = handleqoutes(ft_strdup(curr->cmd));
+			// temp = handleqoutes(ft_strdup(curr->cmd));
+			temp = aliasfinder(curr, NULL, NULL);
 			rtn = ft_str_split_q(temp, " \t\n");
+			ft_strdel(&temp);
 			rtn = ft_strr_join(rtn, &args[1], 1);
-			ft_strrdel(args);
+			break ;
 		}
 		curr = curr->next;
 	}
-	ft_strdel(&temp);
 	if (rtn)
 		return (rtn);
 	return (args);
@@ -53,27 +52,24 @@ void	printelement(char *shortcut, int *flag)
 {
 	t_aliaspkg	*data;
 	t_alias		*curr;
-	char		*tmp;
 
 	data = storeaddrstruct(NULL);
 	curr = data->head_ref;
-	tmp = ft_strjoin(shortcut, "=");
 	while (curr)
 	{
-		if (ft_strcmp(curr->shortcut, tmp) == 0)
+		if (ft_strcmp(curr->shortcut, shortcut) == 0)
 		{
 			ft_putstr_fd("alias ", 1);
 			ft_putstr_fd(curr->shortcut, 1);
+			ft_putstr_fd("=", 1);
 			(curr->cmd[0] != '\'') ? ft_putchar_fd('\'', 1) : 0;
 			ft_putstr_fd(curr->cmd, 1);
 			(curr->cmd[ft_strlen(curr->cmd) - 1] != '\'') ?\
 			ft_putendl_fd("\'", 1) : ft_putchar_fd('\n', 1);
-			ft_strdel(&tmp);
 			return ;
 		}
 		curr = curr->next;
 	}
-	(tmp) ? ft_strdel(&tmp) : 0;
 	print_error("not found", "alias: ", shortcut, 0);
 	*flag = 1;
 }
@@ -84,20 +80,18 @@ void	printelement(char *shortcut, int *flag)
 
 void	ft_built_alias_3(t_tokens *st_tokens, char *arg)
 {
-	char	*tmp;
-	int		j;
+	char	**arr;
 
 	arg = ft_strjoir("", st_tokens->value, 0);
 	arg = ft_strjoir(arg, NEXT->value, 1);
 	if (NEXT && NEXT->next && NEXT->next->indx == st_tokens->indx)
 		arg = ft_strjoir(arg, NEXT->next->value, 1);
-	j = 0;
-	while (arg[j] && arg[j] != '=')
-		j++;
-	tmp = ft_strsub(arg, 0, j);
-	rm_alias_by_elem_flag(tmp, 0, 0);
-	pushtolist(arg, 0);
-	ft_strdel(&tmp);
+	arr = ft_strsplit(arg, '=');
+	rm_alias_by_elem_flag(arr[0]);
+	if (!arr[1])
+		arr[1] = ft_strdup("");
+	pushtolist(arr[0], arr[1], 0);
+	ft_strdel(arr);
 	ft_strdel(&arg);
 }
 

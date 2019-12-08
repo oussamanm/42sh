@@ -16,34 +16,31 @@
 ** - followed to down function;
 */
 
-int		removeal_2(t_aliaspkg *data, t_alias *curr, t_alias *prev, int flag)
+int		removeal_2(t_aliaspkg *data, t_alias *curr, t_alias *prev)
 {
-	if (curr == data->head_ref && flag)
+	if (curr == data->head_ref)
 		data->head_ref = curr->next;
-	else if (curr == data->tail_ref && flag)
+	else if (curr == data->tail_ref)
 	{
 		prev->next = NULL;
 		data->tail_ref = prev;
 	}
-	else if (flag)
+	else
 		prev->next = curr->next;
-	if (flag)
-	{
-		ft_strdel(&curr->shortcut);
-		ft_strdel(&curr->cmd);
-		free(curr);
-		if (!data->head_ref)
-			data->tail_ref = NULL;
-		return (1);
-	}
-	return (0);
+	ft_strdel(&curr->shortcut);
+	ft_strdel(&curr->equal);
+	ft_strdel(&curr->cmd);
+	free(curr);
+	if (!data->head_ref)
+		data->tail_ref = NULL;
+	return (1);
 }
 
 /*
 ** - remove a specific alias or all aliases;
 */
 
-int		rm_alias_by_elem_flag(char *shortcut, int check, int flag)
+int		rm_alias_by_elem_flag(char *shortcut)
 {
 	t_aliaspkg	*data;
 	t_alias		*curr;
@@ -54,19 +51,16 @@ int		rm_alias_by_elem_flag(char *shortcut, int check, int flag)
 		return (0);
 	curr = data->head_ref;
 	prev = curr;
-	(!check) ? (shortcut = ft_strjoin(shortcut, "=")) : 0;
 	while (curr)
 	{
-		if (((ft_strcmp(curr->shortcut, shortcut) == 0) ||\
-		(curr->flag && check)) && (flag = 1))
+		if ((ft_strcmp(curr->shortcut, shortcut) == 0))
 			break ;
 		prev = curr;
 		curr = curr->next;
 	}
-	(!check) ? ft_strdel(&shortcut) : 0;
-	if (removeal_2(data, curr, prev, flag))
-		return (1);
-	return (0);
+	if (!curr)
+		return (0);
+	return (removeal_2(data, curr, prev));
 }
 
 /*
@@ -84,6 +78,7 @@ int		freealiaslist(void)
 	{
 		data->head_ref = data->head_ref->next;
 		ft_strdel(&prev->shortcut);
+		ft_strdel(&prev->equal);
 		ft_strdel(&prev->cmd);
 		free(prev);
 		prev = data->head_ref;
@@ -106,7 +101,7 @@ int		ft_buil_unalias_1(t_tokens *st_token)
 			print_error("not found", "unalias: ", arg, 0);
 		else
 		{
-			if (!(rm_alias_by_elem_flag(arg, 0, 0)) && (flag = 1))
+			if (!(rm_alias_by_elem_flag(arg)))
 				print_error("not found", "unalias: ", arg, 0);
 		}
 		st_token = st_token->next;

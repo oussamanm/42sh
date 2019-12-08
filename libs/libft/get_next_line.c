@@ -30,7 +30,7 @@ static int		copy_in_line(char **text, char **line)
 	*line = ft_strdup(tmp);
 	free(tmp);
 	tmp = *text;
-	*text = ft_strdup(*text + i + 1);
+	*text = ft_strdup(((*text) + i + 1));
 	ft_strdel(&tmp);
 	return (1);
 }
@@ -46,7 +46,7 @@ int				get_next_line(const int fd, char **line)
 	if (fd < 0 || read(fd, buff, 0) < 0)
 		return (-1);
 	if (text[fd] == NULL)
-		text[fd] = ft_strnew(1);
+		text[fd] = ft_strnew(0);
 	while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
