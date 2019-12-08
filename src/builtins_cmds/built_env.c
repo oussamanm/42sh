@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 11:56:36 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/02 11:20:11 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:08:27 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	move_to_env(char *key)
 	{
 		if (ft_strcmp(key, lst->key) == 0)
 		{
-			vrb = ft_strjoin(ft_strjoin(lst->key, "="), lst->value);
+			vrb = ft_strjoir_rtn(ft_strjoin(lst->key, "="), lst->value, 1);
 			ft_set_vrb(vrb, &g_environ, 1);
 			exported_vars((t_intern){key, lst->value, NULL}, STDIN_FILENO, 0);
 			return ;
@@ -30,29 +30,6 @@ void	move_to_env(char *key)
 		lst = lst->next;
 	}
 	exported_vars((t_intern){key, NULL, NULL}, STDIN_FILENO, 0);
-}
-
-/*
-**	Builten env
-*/
-
-void	built_env(char **args, char ***tmp_env)
-{
-	int		i;
-
-	i = 0;
-	if (tmp_env && *tmp_env)
-		ft_put_strr(*tmp_env);
-	else
-		ft_put_strr(g_environ);
-	while (args != NULL && args[i] != NULL)
-	{
-		if (ft_find_char(args[i], '=') > 0)
-			ft_putendl(args[i]);
-		else
-			break ;
-		i++;
-	}
 }
 
 void	puterr_identifier(char *arg, char *cmd)

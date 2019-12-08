@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 07:28:51 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 13:25:45 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 18:52:21 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static	void	setup_vrb(t_tokens *st_tokens, t_intern vrb, int index, int n)
 		ft_set_vrb(temp, &g_environ, 1);
 		add_intern_var(&g_intern, vrb.key, vrb.value, 1);
 		exported_vars(vrb, STDIN_FILENO, 0);
+		ft_strdel(&temp);
 	}
 	else
 		move_to_env(vrb.key);

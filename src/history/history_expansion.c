@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 16:21:54 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 13:16:51 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:54:19 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,29 +88,31 @@ static	char	*command_expansion(t_history his, char *exp)
 **	get history cmds by ! expansion keyword
 */
 
-static	char	*parse_expansion(t_history his, char *split, char **cmd)
+static	char	*parse_expansion(t_history his, char *s, char **cmd)
 {
 	char	*exp;
 	int		i;
+	char	*str;
 
-	if (split[0] == '!' && is_shell_delimiter(split[1]))
+	if (s[0] == '!' && is_shell_delimiter(s[1]))
 	{
 		ft_strdel(cmd);
 		return (ft_strdup("!"));
 	}
-	else if (split[0] != '!' || ft_isspace(split[1]) || !split[1])
-		*cmd = ft_strjoir(*cmd, split, 1);
-	else if (split[0] == '!')
+	else if (s[0] != '!' || ft_isspace(s[1]) || !s[1])
+		*cmd = ft_strjoir(*cmd, s, 1);
+	else if (s[0] == '!')
 	{
 		i = 0;
-		if ((exp = shift_expansion(split, &i)))
+		exp = shift_expansion(s, &i);
+		if (!(str = command_expansion(his, exp + 1)))
 		{
-			if (!(*cmd = ft_strjoir(*cmd, command_expansion(his, exp + 1), 3)))
-				return (exp);
-			if (i < (int)ft_strlen(split))
-				*cmd = ft_strjoir_rtn(*cmd, split + i, 1);
-			ft_strdel(&exp);
+			ft_strdel(cmd);
+			return (exp);
 		}
+		*cmd = ft_strjoir(*cmd, str, 3);
+		(i < (int)ft_strlen(s)) && (*cmd = ft_strjoir_rtn(*cmd, s + i, 1));
+		ft_strdel(&exp);
 	}
 	return (NULL);
 }

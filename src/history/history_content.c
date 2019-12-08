@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 10:51:28 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/02 11:22:03 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 16:34:48 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static	void	put_nbr_len(int index, int max)
 
 	id = ft_itoa(index);
 	len = ft_strlen(id);
+	ft_strdel(&id);
 	i = -1;
 	while (++i < max - len)
 		ft_putchar(' ');

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:34:51 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 23:03:08 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:07:42 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int			built_exit(char **args)
 {
 	int status;
 
-	ft_putendl("exit");
 	if ((status = ft_exit_status(args + 1)) == -1)
 		return (EXIT_FAILURE);
 	if (ft_check_stopped_job())

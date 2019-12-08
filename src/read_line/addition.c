@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:51:04 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/30 15:04:38 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:15:37 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*ft_inside_line(char *s, t_cursor *pos, char *buf)
 	int i;
 
 	i = 0;
-	while ((ft_isprint(buf[i]) || buf[i] == '\n') && i < 6)
+	while ((ft_isprint(buf[i]) || buf[i] == '\n' || buf[i] == '\t') && i < 6)
 		if (!(s = ft_line_add(s, pos, buf[i++])))
 			return (NULL);
 	return (s);
