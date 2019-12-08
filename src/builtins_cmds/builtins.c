@@ -48,17 +48,22 @@ int			built_exit(char **args)
 void		importaliasfilecontent_1(char *line)
 {
 	int		j;
-	char	**arr;
+	int		i;
+	char	*str1;
+	char	*str2;
 
-	arr = NULL;
 	j = 0;
 	while (line[j] && ft_isspace(line[j]))
 		j++;
-	//
-	arr = ft_strsplit((line + j), '=');
-	rm_alias_by_elem_flag(arr[0]);
-	if (!arr[1])
-		arr[1] = ft_strdup("");
-	pushtolist(arr[0], arr[1], 1);
-	ft_free2d(arr);
+	i = j;
+	while (line[j] && line[j] != '=')
+		j++;
+	str1 = ft_strsub(line, i, j - 1);
+	str2 = ft_strsub(line, ++j, ft_strlen(line));
+	rm_alias_by_elem_flag(str1);
+	if (!str2)
+		str2 = ft_strdup("");
+	pushtolist(str1, str2, 1);
+	ft_strdel(&str1);
+	ft_strdel(&str2);
 }

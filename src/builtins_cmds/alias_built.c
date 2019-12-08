@@ -80,18 +80,25 @@ void	printelement(char *shortcut, int *flag)
 
 void	ft_built_alias_3(t_tokens *st_tokens, char *arg)
 {
-	char	**arr;
+	int		j;
+	char	*str1;
+	char	*str2;
 
 	arg = ft_strjoir("", st_tokens->value, 0);
 	arg = ft_strjoir(arg, NEXT->value, 1);
 	if (NEXT && NEXT->next && NEXT->next->indx == st_tokens->indx)
 		arg = ft_strjoir(arg, get_value_next(NEXT->next), 3);
-	arr = ft_strsplit(arg, '=');
-	rm_alias_by_elem_flag(arr[0]);
-	if (!arr[1])
-		arr[1] = ft_strdup("");
-	pushtolist(arr[0], arr[1], 0);
-	ft_strdel(arr);
+	j = 0;
+	while (arg[j] && arg[j] != '=')
+		j++;
+	str1 = ft_strsub(arg, 0, j);
+	str2 = ft_strsub(arg, ++j, ft_strlen(arg));
+	rm_alias_by_elem_flag(str1);
+	if (!str2)
+		str2 = ft_strdup("");
+	pushtolist(str1, str2, 1);
+	ft_strdel(&str1);
+	ft_strdel(&str2);
 	ft_strdel(&arg);
 }
 
