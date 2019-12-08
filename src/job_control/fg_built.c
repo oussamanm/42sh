@@ -23,7 +23,7 @@ void	ft_run_job(t_job *job)
 	while (proc)
 	{
 		process = proc->content;
-		process->status = RUN;
+		(process->status != EXITED) ? process->status = RUN : 0;
 		proc = proc->next;
 	}
 }
@@ -52,17 +52,21 @@ void	ft_update_p_fg(int index)
 
 void	ft_foreg_wait(t_job *job, t_list **tmp, t_list **pr)
 {
+	t_process *process;
+
+	process = job->proc->content;
 	if (tcsetpgrp(0, job->pgid) == -1)
 		ft_putendl_fd("Controling terminal ERROR", 2);
 	signal(SIGCHLD, SIG_DFL);
 	killpg(job->pgid, SIGCONT);
 	ft_run_job(job);
-	tcsetattr(0, TCSANOW, &job->term_child);
 	job->background = -1;
 	g_sign = 1;
 	ft_wait(job);
 	g_sign = 0;
 	(job->sig_term) ? ft_termsig_fore(job->sig_term, job->cmd) : 0;
+	if (ft_inter_back(job->proc) || job->status == STOPED)
+		ft_putchar('\n');
 	if (job->status == EXITED)
 	{
 		ft_remove_node(tmp, pr);

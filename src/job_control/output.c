@@ -13,6 +13,20 @@
 #include "shell.h"
 #include "read_line.h"
 
+int		ft_inter_back(t_list *proc)
+{
+	t_process *process;
+
+	while (proc)
+	{
+		process = proc->content;
+		if (WTERMSIG(process->exit_status) == 2)
+			return (1);
+		proc = proc->next;
+	}
+	return (0);
+}
+
 int		ft_termsig_fore(int sig, char *name)
 {
 	char	*msg;
