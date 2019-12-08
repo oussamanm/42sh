@@ -159,7 +159,6 @@ typedef struct			s_job
 	int					sig_term;
 	char				*cmd;
 	char				p;
-	struct termios		term_child;
 }						t_job;
 
 t_list					*g_jobs;
@@ -516,6 +515,7 @@ char					ft_stoped(t_job *job);
 char					ft_terminated(t_job *job);
 void					ft_run_job(t_job *job);
 int						ft_check_stopped_job(void);
+int						ft_inter_back(t_list *proc);
 
 /*
 ** initial
