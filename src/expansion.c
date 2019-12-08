@@ -90,7 +90,10 @@ static char		*helper_swap_vrb(char *arg, int *len_v, int *j, int index)
 	{
 		variable = get_para_expan(&arg[*j], len_v);
 		if (ft_strlen(variable) == 0)
+		{
+			ft_strdel(&variable);
 			return (NULL);
+		}
 	}
 	else if ((arg[*j] == '$' || arg[*j] == '?') && ++(*len_v))
 		variable = ft_strdup((char[2]){arg[*j], '\0'});
