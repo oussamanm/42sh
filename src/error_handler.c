@@ -71,28 +71,29 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 
 int			error_syntax_expans(char *str_cmds)
 {
-	int bl;
 	int i;
 
-	if (!str_cmds)
-		return (0);
-	bl = 0;
 	i = 0;
 	while (str_cmds[i])
 	{
-		if (!bl && str_cmds[i] == '$' && str_cmds[i + 1] == '{' && ++i)
-			bl = 1;
-		else if (bl)
+		if (str_cmds[i] == '$' && str_cmds[i + 1] == '{')
 		{
-			if (str_cmds[i] == '}' && bl)
-				bl = 0;
-			else if (helper_error_expans(str_cmds, i))
+			if (i && str_cmds[i - 1] == '$')
+				continue ;
+			i += 2;
+			while (str_cmds[i])
 			{
-				print_error(" bad substitution", NULL, NULL, 0);
-				return (1);
+				if ((str_cmds[i] == '}' && i && str_cmds[i - 1] == '{') ||
+					helper_error_expans(str_cmds, i))
+				{
+					print_error(" bad substitution", NULL, NULL, 0);
+					return (1);
+				}
+				if (str_cmds[++i] == '}')
+					break ;
 			}
 		}
-		i += (str_cmds[i] != '\0');
+		i += ((str_cmds[i]) ? 1 : 0);
 	}
 	return (0);
 }
@@ -108,8 +109,7 @@ char		*error_redir_h(t_tokens *st_tokens)
 
 	msg = NULL;
 	temp = NULL;
-	if (TOKEN < 0 && ((!NEXT && !M_CHECK(TOKEN, T_RED_IN_B, T_RED_OUT_B)) ||
-		(NEXT && !T_IS_TXT(NEXT->token) && !T_IS_SUBSHELL(NEXT->token))))
+	if (TOKEN < 0 && error_token_redi(st_tokens))
 		msg = "syntax error near unexpected token";
 	else if (TOKEN < T_RED_APP_A)
 		msg = "syntax error near unexpected token";

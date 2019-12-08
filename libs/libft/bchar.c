@@ -14,5 +14,5 @@
 
 void	bchar(void *s, size_t n, char c)
 {
-    ft_memset( s, c, n);
+	ft_memset(s, c, n);
 }

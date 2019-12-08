@@ -16,7 +16,7 @@ void	convert_neg_to_tab(char **s)
 {
 	int i;
 
-	if (!s || !*s)
+	if (!s || !*s || (*s)[0] == EXIT_CLD)
 		return ;
 	i = -1;
 	while (s[0][++i])

@@ -13,7 +13,6 @@
 #include "../libft.h"
 #include <stdio.h>
 
-
 char		**alloc_chain(char **env, int nbr)
 {
 	char	**new_env;
@@ -37,25 +36,6 @@ char		**alloc_chain(char **env, int nbr)
 	}
 	new_env[i] = NULL;
 	return (new_env);
-}
-
-char		**ft_strr_new(int len)
-{
-	char	**args;
-	int		i;
-
-	i = 0;
-	if ((args = (char **)malloc(sizeof(char *) * (len + 1))) == NULL)
-	{
-		ft_putendl_fd("Error in allocation\n", 2);
-		return (NULL);
-	}
-	while (i < len)
-	{
-		args[i++] = NULL;
-	}
-	args[i] = NULL;
-	return (args);
 }
 
 char		*ft_strfreejoin(char *s1, char *s2)
@@ -107,6 +87,7 @@ char		*ft_str_trim(char *str)
 	}
 	return (str);
 }
+
 void		ft_strr_trim(char **args)
 {
 	if (!args)
@@ -122,7 +103,7 @@ void		ft_strr_trim(char **args)
 ** Trim all args
 */
 
-void			ft_strrtrim(char **args)
+void		ft_strrtrim(char **args)
 {
 	int i;
 

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 20:58:00 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/02 00:04:19 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/07 18:18:56 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,18 @@ void			exported_vars(t_intern vrb, int rest, int edit)
 		display_export(export);
 	else if (rest == STDERR_FILENO)
 		delete_intern_var(vrb.key, &export);
+}
+
+t_intern		get_vrb_value(char *vrb)
+{
+	t_intern	val;
+	int			i;
+
+	val = (t_intern){NULL, NULL, NULL};
+	if ((i = ft_strchrindex(vrb, '=')) != -1)
+	{
+		val.key = ft_strsub(vrb, 0, i - 1);
+		val.value = ft_strsub(vrb, i, ft_strlen(vrb) - i);
+	}
+	return (val);
 }

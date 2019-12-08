@@ -19,6 +19,7 @@ void	ft_foreground_job(t_job *job)
 	g_sign = 1;
 	ft_wait(job);
 	g_sign = 0;
+	ft_enable();
 	(job->sig_term != 0) ? ft_termsig_fore(job->sig_term, job->cmd) : 0;
 }
 
@@ -75,7 +76,8 @@ void	ft_pipe_job_man(t_job *job, t_pipes *st_pipes, int *status, int add)
 		*status = p->exit_status;
 		proc = proc->next;
 	}
-	(WTERMSIG(*status) == 2 || job->status == STOPED) ? ft_putchar('\n') : 0;
+	if (ft_inter_back(job->proc) || job->status == STOPED)
+		ft_putchar('\n');
 	if (job->status == STOPED || add)
 		ft_add_job(job);
 	else

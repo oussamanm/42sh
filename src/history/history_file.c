@@ -6,11 +6,12 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:11:40 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/02 11:34:18 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/07 17:10:35 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/read_line.h"
+#include "read_line.h"
+#include "shell.h"
 
 /*
 **	initialize pointers to NULL
@@ -20,6 +21,7 @@ void	init_history(t_history *history)
 {
 	history->head = NULL;
 	history->tail = NULL;
+	history->home = NULL;
 	history->len = 0;
 	history->bg = 1;
 }
@@ -31,7 +33,7 @@ void	init_history(t_history *history)
 
 void	init_fc_built(void)
 {
-	ft_set_vrb("FCEDIT=vim", &g_environ, 0);
+	add_intern_var(&g_intern, "FCEDIT", "vim", 0);
 }
 
 /*
@@ -42,9 +44,14 @@ void	restore_history(t_history *history)
 {
 	char	*line;
 	int		fd;
+	char	*home;
 
 	init_history(history);
-	if ((fd = open(".42sh_history", O_RDONLY, 00600)) == -1)
+	if (!(home = ft_get_vrb("HOME", g_environ)))
+		return ;
+	home = ft_strjoir(ft_strjoir(home, "/", 1), ".42sh_history", 1);
+	history->home = home;
+	if ((fd = open(history->home, O_RDONLY | O_CREAT, 00600)) == -1)
 		return ;
 	line = NULL;
 	while (get_next_line(fd, &line) > 0)
@@ -65,9 +72,9 @@ void	save_history(t_history *history)
 	t_info	*lst;
 	int		fd;
 
-	if (!history || !history->head || !history->tail)
+	if (!history || !history->head || !history->tail || !history->home)
 		return ;
-	if ((fd = open(".42sh_history", O_WRONLY | O_APPEND
+	if ((fd = open(history->home, O_WRONLY | O_APPEND
 					| O_CREAT, 00600)) == -1)
 		return ;
 	lst = (history->len - history->bg < history->bg - 1) ?

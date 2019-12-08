@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/04 21:56:34 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 06:18:52 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,13 @@
 # define CTRL_L 12
 # define CTRL_R 18
 
+# define SUB_S 5
+# define QUOTE 7
+# define PR_S 8
+# define HEREDOC 9
+# define DQUOTE 10
+# define EXIT_CLD -10
+
 # define CAST(x) *((int *)x)
 
 typedef struct s_history	t_history;
@@ -105,6 +112,7 @@ struct				s_history
 {
 	struct s_info	*head;
 	struct s_info	*tail;
+	char			*home;
 	int				len;
 	int				bg;
 };
@@ -149,7 +157,6 @@ void				ft_print_touch_and_join(t_cursor *pos, char *buf, char **s);
 void				ft_move_right(int n);
 char				*ft_ctrl_d(t_cursor *pos, \
 t_history *his, t_select *select, char *s);
-char				*ft_auto_completion(t_cursor *pos, char *s);
 void				save_address(t_select **select);
 void				ft_clear_readline_struct(void);
 char				*ft_read_heredoc(char *eol);
@@ -186,8 +193,7 @@ void				rev_his_list(t_history *lst);
 void				display_his_list(t_history his, int order);
 int					history_handling(char **str_cmds);
 char				*history_content(t_history his);
-char				*completing_line(char *str_cmds,\
-t_select *select, t_history *his);
+
 void				his_new_line(char *line, char **cmd, t_cursor *pos);
 char				*str_notnumber(char *keyword);
 void				history_search(t_history his, char **s, char buf[6]);
@@ -200,11 +206,10 @@ char				is_shell_delimiter(char c);
 char				*get_delimiter(char *keyword, int i);
 char				*read_fc(void);
 void				write_fc(char *content);
-void				fc_flag_l(t_history history, char *flags, char **args);
-void				fc_built(char **args, t_history *history, char **tmp);
-void				fc_flag_l(t_history history, char *flags, char **args);
-void				fc_flag_s(t_history *his, char *arg);
-void				fc_flag_e(t_history his, char **args);
+int					fc_flag_l(t_history history, char *flags, char **args);
+int					fc_built(char **args, t_history *history, char **tmp);
+int					fc_flag_s(t_history *his, char *arg);
+int					fc_flag_e(t_history his, char **args);
 t_info				*fc_value(t_history his, char *keyword);
 int					read_fc_flags(char **args, char **fl, char *err);
 void				fc_usage(char c, char *msg);
@@ -221,11 +226,15 @@ void				ft_go_to_right(t_cursor *pos, char *s);
 void				ft_right_touch(t_cursor *pos, int size);
 void				save_address(t_select **select);
 void				initial_read_line(t_history *his, t_select **select);
+char				*completing_line(char *str_cmds,\
+t_select *select, t_history *his);
 void				completing_line_(char **maps, char **cmd, t_select *select,\
 t_history *his);
-void				ft_read_quote(char **line, int quote,t_select *select,\
+int					read_quote(char **line, int quote, t_select *select,\
 t_history *his);
-void				ft_read_subsh(char **line, t_select *select,\
+int					read_subsh(char **line, t_select *select,\
 t_history *his);
+char				*shift_expansion(char *keyword, int *i);
+int					is_expansion_syntax(char *cmd);
 
 #endif

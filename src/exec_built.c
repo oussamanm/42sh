@@ -17,44 +17,50 @@
 ** Save a copy of fds : STD_OUT, STD_IN, STD_ERR
 */
 
-void		save_fds(int tmp[3])
+static void		save_fds(void)
 {
-	int i;
-
-	i = -1;
-	while (++i < 3)
-		if ((tmp[i] = dup(i)) == -1)
-			ft_putendl_fd("Error in dup, in builtens \n", 2);
+	if (dup2(0, SAVED_FD) == -1)
+		ft_putendl_fd("Error in dup, in builtens \n", 2);
 }
 
 /*
 ** restor  fds : STD_OUT, STD_IN, STD_ERR to default
 */
 
-void		restor_fds(int tmp[3])
+static void		restor_fds(void)
 {
 	int	i;
+	int	fd;
 
 	i = -1;
+	fd = SAVED_FD;
+	if (read(SAVED_FD, NULL, 0) == -1 &&
+		write(SAVED_FD, NULL, 0) == -1 && g_tty_name)
+		if ((fd = open(g_tty_name, O_RDWR)) == -1)
+			fd = SAVED_FD;
 	while (++i < 3)
-		if (dup2(tmp[i], i) == -1 || close(tmp[i]) == -1)
+	{
+		if (g_proc_sub == 2)
+			continue ;
+		if (dup2(fd, i) == -1)
 			ft_putendl_fd("Error in dup or close in builtens \n", 2);
+	}
+	close(fd);
 }
 
 /*
 ** initail builtens : duplicate STD_* , Call builtens , Resete STD_*
 */
 
-int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
+int				ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 {
-	int		tmp[3];
 	int		status;
 	int		pid;
 
 	fork_it = (fork_it && st_pipes->bl_jobctr == 1) ? 1 : 0;
 	pid = 0;
 	if (!fork_it)
-		save_fds(tmp);
+		save_fds();
 	if (fork_it && ((pid = fork()) == -1))
 		ft_err_exit("Error in Fork new process \n");
 	if (pid > 0 && fork_it && !g_proc_sub)
@@ -68,7 +74,7 @@ int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 	else if (fork_it && g_proc_sub && !st_pipes->bl_jobctr)
 		waitpid(pid, &status, 0);
 	if (!fork_it)
-		restor_fds(tmp);
+		restor_fds();
 	return (status);
 }
 
@@ -76,7 +82,7 @@ int			ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 **  Call Builtens (close fds of redirection)
 */
 
-int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
+int				ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 {
 	int		status;
 	int		tmp;
@@ -104,7 +110,7 @@ int			ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 **	Check if Command builtens
 */
 
-int			ft_check_built(char *arg)
+int				ft_check_built(char *arg)
 {
 	if (arg == NULL)
 		return (-1);

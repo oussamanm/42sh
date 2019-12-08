@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/04 01:33:42 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 13:18:14 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,20 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 
 static void	initial_shell(t_select **select)
 {
+	g_shellpid = getpid();
+	while (1)
+	{
+		if (g_shellpid == tcgetpgrp(0))
+			break ;
+		kill(g_shellpid, SIGTTIN);
+	}
 	g_pos.cmd = NULL;
 	g_exit_status = 0;
+	g_tty_name = ttyname(0);
 	call_signal();
 	initial_read_line(&g_history, select);
 	init_fc_built();
 	init_alias_hash();
-	setsid();
-	g_shellpid = getpid();
-	g_proc_sub = 0;
 }
 
 int			main(void)
@@ -60,14 +65,14 @@ int			main(void)
 	t_select	*select;
 
 	g_intern = NULL;
+	set_export_env(environ);
+	initial_shell(&select);
 	if (ft_set_termcap() == -1)
 		ft_err_exit("ERROR in setting Termcap parameters\n");
-	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
-	initial_shell(&select);
 	while (1337)
 	{
 		ft_putstr("\033[0;32m42sh $>\033[0m ");
-		if ((ft_read_line(&g_history, select, 8)) == NULL || !g_pos.cmd[0])
+		if ((ft_read_line(&g_history, select, PR_S)) == NULL || !g_pos.cmd[0])
 		{
 			ft_job_processing();
 			continue ;
@@ -78,6 +83,7 @@ int			main(void)
 		(!g_pos.exit) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
 		ft_job_processing();
 		ft_strdel(&g_pos.cmd);
+		g_proc_sub = 0;
 	}
 	return (0);
 }

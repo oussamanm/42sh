@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper_built.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:35:59 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/02 03:36:05 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/12/07 17:33:36 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int			builtens_mini(t_pipes *st_pipes, char ***tmp_env)
 
 	status = 0;
 	if (STR_CMP(*(st_pipes->args), "exit"))
-		built_exit();
+		status = built_exit(st_pipes->args);
 	else if (STR_CMP(*(st_pipes->args), "echo"))
 		status = built_echo(st_pipes->st_tokens);
 	else if (STR_CMP(*(st_pipes->args), "alias"))
@@ -55,7 +55,7 @@ int			builtens_shell(t_pipes *st_pipes, char ***tmp_env)
 	else if (STR_CMP(*(st_pipes->args), "history"))
 		display_his_list(g_history, 1);
 	else if (STR_CMP(*(st_pipes->args), "fc"))
-		fc_built(st_pipes->args + 1, &g_history, *tmp_env);
+		status = fc_built(st_pipes->args + 1, &g_history, *tmp_env);
 	else if (STR_CMP(*(st_pipes->args), "source"))
 		ft_buil_updatealias(st_pipes->args + 1);
 	else if (STR_CMP(*(st_pipes->args), "fg"))

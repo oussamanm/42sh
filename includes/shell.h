@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 23:19:49 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/07 15:54:47 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@
 # define IDENTIFIER(x) (x=="?"||x=="-"||x=="@"||x=="%"||x=="~"||x==":"||x==".")
 # define MAX_MAPS 100
 # define MAX_TAB_ADDR 10
+# define SAVED_FD 155
 
 /*
 **Buttons
@@ -106,6 +107,7 @@
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
 # define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
 # define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
+# define TOKEN_IS_ARG(x) (x->token >= 0 && x->is_arg == 0)
 # define OPER_TOKEN(t)(t==T_JOBCTR||t==T_PIPE||t==T_LOGOPR_OR||t==T_LOGOPR_AND)
 # define SAME_ARG(x, y) (x && x->indx == y->indx && ft_isalldigit(x->value))
 
@@ -157,20 +159,17 @@ typedef struct			s_job
 	int					sig_term;
 	char				*cmd;
 	char				p;
-	struct termios		term_child;
 }						t_job;
 
 t_list					*g_jobs;
 pid_t					g_shellpid;
 int						g_proc_sub;
 
-typedef struct termios	t_termios;
-
 typedef struct			s_intern
 {
-	char			*key;
-	char			*value;
-	struct s_intern	*next;
+	char				*key;
+	char				*value;
+	struct s_intern		*next;
 }						t_intern;
 
 typedef struct			s_redir
@@ -238,12 +237,13 @@ typedef	struct			s_cmds
 t_intern				*g_intern;
 char					**g_environ;
 int						g_exit_status;
+char					*g_tty_name;
 
 /*
 ** Builtins
 */
 
-void					built_exit();
+int						built_exit(char **args);
 int						built_export(t_tokens *st_tokens);
 int						built_echo(t_tokens *st_tokens);
 int						echo_options(t_tokens **st_tokens);
@@ -267,6 +267,8 @@ char					**ft_tokens_arg_env(t_tokens *st_tokens);
 int						valid_identifier(char *arg);
 int						ft_is_equal(int index, t_tokens *st_tokens);
 void					move_to_env(char *key);
+t_intern				get_vrb_value(char *vrb);
+void					set_export_env(char **env);
 /*
 ** Variable
 */
@@ -293,9 +295,10 @@ int						ft_call_lexer(t_pipes *st_pipes);
 int						error_syntax_lexer(t_tokens *st_tokens);
 int						error_syntax_semi(char *str_cmds, char **args);
 int						error_syntax_expans(char *str_cmds);
-int			helper_error_expans(char *str_cmds, int i);
+int						helper_error_expans(char *str_cmds, int i);
 int						ft_putchar_err(int c);
 void					puterr_identifier(char *arg, char *cmd);
+int						error_token_redi(t_tokens *st_tokens);
 
 /*
 ** Updated Splite
@@ -371,6 +374,7 @@ int token, char *value);
 void					ft_dup_token(t_tokens **st_token,\
 t_tokens *st_src, int token);
 void					tokens_to_args(t_pipes *st_pipe);
+void					args_to_token(t_tokens **st_tokens, char *arg, int i);
 int						ft_count_tokens(t_tokens *st_tokens);
 int						ft_check_token(t_tokens *st_tokens, int token);
 
@@ -456,8 +460,8 @@ int						count_key(char *maps, int key);
 int						closed_dquot(char *maps);
 int						increase_maps(char	**maps);
 int						correct_maps_(int i, int *rtn, char *maps);
-void					fill_maps(char *str_cmd, char **maps, int j, int len_map);
-
+void					fill_maps(char *str_cmd, char **maps, int j,\
+int len_map);
 
 /*
 ** Sub_shell
@@ -466,6 +470,7 @@ void					fill_maps(char *str_cmd, char **maps, int j, int len_map);
 void					apply_subsh(t_tokens *st_tokens);
 void					proc_substitution(t_cmds *st_cmds);
 void					procsub_close(int *fd);
+void					spec_case_subshell(char **arg);
 
 /*
 ** Alias
@@ -511,11 +516,13 @@ void					ft_print_backcmd(t_job *job);
 char					ft_stoped(t_job *job);
 char					ft_terminated(t_job *job);
 void					ft_run_job(t_job *job);
+int						ft_check_stopped_job(void);
+int						ft_inter_back(t_list *proc);
 
 /*
 ** initial
 */
 
-void		init_alias_hash();
+void					init_alias_hash();
 
 #endif

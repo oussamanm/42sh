@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "shell.h"
+#include "read_line.h"
 
 /*
 ** this functinon serve option echo -n;
@@ -85,6 +86,21 @@ int		echo_options(t_tokens **st_tokens)
 	return (flag);
 }
 
+int		hendl_echo(int flag, t_tokens *st_tokens, int *index)
+{
+	int status;
+
+	if (M_CHECK(flag, (e_flg | n_flg), e_flg))
+		status = e_interpretation(st_tokens->value, st_tokens->token, -1);
+	else
+		status = (ft_putstr(st_tokens->value) == -1) ? 1 : 0;
+	if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !NEXT)
+		n_flag(st_tokens->value);
+	if (NEXT && NEXT->indx != *index && (*index = NEXT->indx))
+		ft_putchar_fd(' ', 1);
+	return (status);
+}
+
 /*
 **	Builten echo
 */
@@ -101,17 +117,12 @@ int		built_echo(t_tokens *st_tokens)
 	index = (st_tokens) ? st_tokens->indx : 1;
 	while (st_tokens && !status)
 	{
-		if (M_CHECK(flag, (e_flg | n_flg), e_flg))
-			status = e_interpretation(st_tokens->value, st_tokens->token, -1);
+		if (TOKEN_IS_ARG(st_tokens))
+			status = hendl_echo(flag, st_tokens, &index);
 		else
-			status = (ft_putstr(st_tokens->value) == -1) ? 1 : 0;
-		if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !NEXT)
-			n_flag(st_tokens->value);
-		if (NEXT && NEXT->indx != index && (index = NEXT->indx))
-			ft_putchar_fd(' ', 1);
+			index = (NEXT) ? NEXT->indx : index;
 		st_tokens = NEXT;
 	}
-	if (flag != n_flg && flag != ((e_flg | n_flg)))
-		ft_putchar_fd('\n', 1);
+	(flag != n_flg && flag != ((e_flg | n_flg))) && (my_outc('\n'));
 	return (status);
 }

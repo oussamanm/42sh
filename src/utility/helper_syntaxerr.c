@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   helper_syntaxerr.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/15 12:24:55 by onouaman          #+#    #+#             */
-/*   Updated: 2018/10/15 13:08:43 by onouaman         ###   ########.fr       */
+/*   Created: 2019/12/07 19:11:21 by onouaman          #+#    #+#             */
+/*   Updated: 2019/12/07 19:11:24 by onouaman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "shell.h"
 
-int		ft_putendl_fd(char const *s, int fd)
+/*
+** check syntax error token redirection
+*/
+
+int			error_token_redi(t_tokens *st_tokens)
 {
-	int rtn;
-
-	if (!s)
+	if (NEXT && T_IS_TXT(NEXT->token))
 		return (0);
-	rtn = ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
-	return (rtn + 1);
+	else if (!NEXT && !M_CHECK(TOKEN, T_RED_IN_B, T_RED_OUT_B))
+		return (1);
+	else if (NEXT && !T_IS_SUBSHELL(NEXT->token) &&
+		!M_CHECK(TOKEN, T_RED_IN_B, T_RED_OUT_B))
+		return (1);
+	return (0);
 }
