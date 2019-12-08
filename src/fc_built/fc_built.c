@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 17:31:01 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 22:14:29 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ int				fc_3adiya(t_history his, unsigned char flags,
 		editor = get_intern_value("FCEDIT");
 	(!editor) && (editor = ft_strdup("vi"));
 	if (fc_edit(his, editor, flags, args))
+	{
+		ft_strdel(&editor);
 		return (EXIT_FAILURE);
+	}
 	ft_strdel(&editor);
 	if (access(".42sh-fc", F_OK) == 0)
 		ft_multi_cmd("rm .42sh-fc", 0);
