@@ -6,25 +6,40 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 11:05:50 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 13:46:41 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:30:32 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/read_line.h"
+#include "read_line.h"
 
 /*
 **	read fc flags and save them in string and return the position
 **	of args after flags or return -1 in case flag not exist
 */
 
-int		read_fc_flags(char **args, char **fl, char *err)
+static	int		fc_bit_mask(char c)
+{
+	if (c == 'e')
+		return (FC_E);
+	else if (c == 'l')
+		return (FC_L);
+	else if (c == 'n')
+		return (FC_N);
+	else if (c == 'r')
+		return (FC_R);
+	else if (c == 's')
+		return (FC_S);
+	return (0);
+}
+
+int				read_fc_flags(char **args, unsigned char *fl, char *err)
 {
 	int		i;
 	int		j;
 	char	c;
 
 	i = -1;
-	*fl = NULL;
+	*fl = 0;
 	while (args && args[++i] && args[i][0] == '-' && !ft_isdigit(args[i][1]))
 	{
 		j = 0;
@@ -32,10 +47,10 @@ int		read_fc_flags(char **args, char **fl, char *err)
 		{
 			c = args[i][j];
 			if (c == 'l' || c == 'n' || c == 'r' || c == 's' || c == 'e')
-				*fl = (!*fl) ? ft_strdup(&c) : ft_strjoir(*fl, &c, 1);
+				*fl |= fc_bit_mask(c);
 			else
 			{
-				ft_strdel(fl);
+				*fl = 0;
 				(err) && (*err = c);
 				return (-1);
 			}
@@ -48,7 +63,7 @@ int		read_fc_flags(char **args, char **fl, char *err)
 **	in case of error display usage message
 */
 
-void	fc_usage(char c, char *msg)
+void			fc_usage(char c, char *msg)
 {
 	ft_putstr_fd("42sh: fc: -", 2);
 	ft_putchar_fd(c, 2);
@@ -58,8 +73,12 @@ void	fc_usage(char c, char *msg)
 			"[-nlr] [fisrt] [last]", 2);
 }
 
-int		fc_flag_e(t_history his, char **args)
+int				fc_flag_e(t_history his, char **args)
 {
+	int		len;
+	char	**par;
+	char	*editor;
+
 	if (!args[0])
 	{
 		fc_usage('e', "option requires an argument");
@@ -67,7 +86,10 @@ int		fc_flag_e(t_history his, char **args)
 	}
 	else
 	{
-		if (fc_edit(his, args[0], NULL, args + 1))
+		len = ft_strrlen(args);
+		editor = (len > 0) ? args[0] : NULL;
+		par = (len > 1) ? args + 1 : NULL;
+		if (fc_edit(his, editor, 0, par))
 			return (EXIT_FAILURE);
 		exec_fc();
 		if (access(".42sh-fc", F_OK) == 0)
@@ -76,7 +98,7 @@ int		fc_flag_e(t_history his, char **args)
 	return (EXIT_SUCCESS);
 }
 
-int		fc_flag_s(t_history *his, char *arg)
+int				fc_flag_s(t_history *his, char *arg)
 {
 	char	*cmd;
 	t_info	*val;

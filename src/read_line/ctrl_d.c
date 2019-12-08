@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 17:14:32 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/08 13:37:59 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:05:46 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int		ft_read_exit(t_cursor *pos, t_history *his, t_select *select, char **s)
 	if (select->save)
 		free(select->save);
 	save_history(his);
-	ft_putendl("world");
 	delete_intern();
 	ft_disable();
 	exit(0);

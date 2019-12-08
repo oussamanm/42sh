@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/08 06:18:52 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 16:26:05 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,12 @@
 # define EXIT_CLD -10
 
 # define CAST(x) *((int *)x)
+
+# define FC_E 0x1
+# define FC_L 0x2
+# define FC_N 0x4
+# define FC_R 0x8
+# define FC_S 0x10
 
 typedef struct s_history	t_history;
 
@@ -206,15 +212,15 @@ char				is_shell_delimiter(char c);
 char				*get_delimiter(char *keyword, int i);
 char				*read_fc(void);
 void				write_fc(char *content);
-int					fc_flag_l(t_history history, char *flags, char **args);
+int					fc_flag_l(t_history history, unsigned char flags, char **args);
 int					fc_built(char **args, t_history *history, char **tmp);
 int					fc_flag_s(t_history *his, char *arg);
 int					fc_flag_e(t_history his, char **args);
 t_info				*fc_value(t_history his, char *keyword);
-int					read_fc_flags(char **args, char **fl, char *err);
+int					read_fc_flags(char **args, unsigned char *fl, char *err);
 void				fc_usage(char c, char *msg);
 int					fc_edit(t_history his,\
-char *editor, char *flags, char **args);
+char *editor, unsigned char flags, char **args);
 void				exec_fc(void);
 void				init_fc_built();
 void				tab_set_last_position(t_cursor pos, int num_lines);

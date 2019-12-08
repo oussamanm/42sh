@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:36:54 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/04 01:26:40 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:24:06 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 			ft_enter(&g_pos, g_pos.cmd);
 			break ;
 		}
-		if (ft_calling_center(his, select, buf))
+		if (ft_strcmp(buf, "\t") != 0 && ft_calling_center(his, select, buf))
 			break ;
 		ft_bzero(buf, 6);
 	}

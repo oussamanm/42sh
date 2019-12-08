@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:18:15 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/01 22:00:03 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:08:22 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ struct			s_hash
 int				built_cd(char **arg, char **env);
 int				built_type(char **args, char **tmpenv);
 int				hash_table(char **args);
-void			built_env(char **args, char ***tmp_env);
 int				built_unset(char **args);
 
 /*
