@@ -20,6 +20,7 @@ int		ft_bg_content(t_job *job, char *arg)
 		ft_print_backcmd(job);
 		job->background = 1;
 		ft_run_job(job);
+		ft_update_p(1);
 		killpg(job->pgid, SIGCONT);
 		return (1);
 	}
