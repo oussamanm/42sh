@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/04 01:33:42 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 13:18:14 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int			main(void)
 	g_intern = NULL;
 	if (ft_set_termcap() == -1)
 		ft_err_exit("ERROR in setting Termcap parameters\n");
-	g_environ = ft_strr_dup(environ, ft_strrlen(environ));
+	set_export_env(environ);
 	initial_shell(&select);
 	while (1337)
 	{
