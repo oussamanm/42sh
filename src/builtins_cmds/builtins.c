@@ -55,6 +55,7 @@ void		importaliasfilecontent_1(char *line)
 	j = 0;
 	while (line[j] && ft_isspace(line[j]))
 		j++;
+	//
 	arr = ft_strsplit((line + j), '=');
 	rm_alias_by_elem_flag(arr[0]);
 	if (!arr[1])
