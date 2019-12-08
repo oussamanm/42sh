@@ -71,29 +71,29 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 
 int			error_syntax_expans(char *str_cmds)
 {
-	int bl;
 	int i;
 
-	if (!str_cmds)
-		return (0);
-	bl = 0;
-	i = 0;
-	while (str_cmds[i])
+	i = -1;
+	while (str_cmds[++i])
 	{
-		if (!bl && str_cmds[i] == '$' && str_cmds[i + 1] == '{' && ++i)
-			bl = (i && str_cmds[i - 1] == '$') ? 0 : 1;
-		else if (bl)
+		if (str_cmds[i] == '$' && str_cmds[i + 1] == '{')
 		{
-			if (str_cmds[i] == '}' && bl && (i && str_cmds[i - 1] != '{'))
-				bl = 0;
-			else if (helper_error_expans(str_cmds, i) ||
-				(i && str_cmds[i - 1] == '{'))
+			if (i && str_cmds[i - 1] == '$')
+				continue ;
+			i += 2;
+			while (str_cmds[i])
 			{
-				print_error(" bad substitution", NULL, NULL, 0);
-				return (1);
+				if ((str_cmds[i] == '}' && i && str_cmds[i - 1] == '{') ||
+					helper_error_expans(str_cmds, i))
+				{
+					print_error(" bad substitution", NULL, NULL, 0);
+					return (1);
+				}
+				i++;
+				if (str_cmds[i] == '}')
+					break ;
 			}
 		}
-		i += (str_cmds[i] != '\0');
 	}
 	return (0);
 }

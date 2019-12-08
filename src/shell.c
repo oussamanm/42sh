@@ -52,7 +52,6 @@ static void	initial_shell(t_select **select)
 	init_alias_hash();
 	setsid();
 	g_shellpid = getpid();
-	g_proc_sub = 0;
 }
 
 int			main(void)
@@ -79,6 +78,7 @@ int			main(void)
 		(!g_pos.exit) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
 		ft_job_processing();
 		ft_strdel(&g_pos.cmd);
+		g_proc_sub = 0;
 	}
 	return (0);
 }

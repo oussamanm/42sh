@@ -1,4 +1,6 @@
-TEST
+--------- ERROR  -----------------
+
+alaisa asd="asd"asda"asdasd"kjhkjh
 
 '$HOME'$PWD"$HOME"
 echo $PWD'$HOMEE'$HOME
@@ -28,9 +30,73 @@ echo $PWD\      $       HOME
 ${{PWD}}
 echo ${?}
 echo ${!}
+echo ${\%\%}
+echo ${555555555 55555}
+echo ${aaaa{sss}
+echo ${aaaa{
+echo hasdklajsdklasd${asdasdasd}asdasdasd
+echo "${PWD}asdasdasd" ; echo "sdfsdf${PW}asdasdasd"
+echo ${""}
+echo ${?}${\$}
+echo $}{}
+echo ${}
+echo ${$$}
+echo ${  "p"  }
+echo ${  "\n"  }
+echo ${"asdasdasd
+echo ${''}
+echo ${%}
+echo ${$$}
+echo ${$}
+echo ${?}
+echo $${HOME}
+echo ${$HOME}
+echo ${hello}
+echo ${?}${$}
+${}
+${
+echo \~
+echo ./
+echo ./~
+echo /~
+echo ~/
+echo ~/
+echo ~//
+echo "~"
+echo ~~
+~
+~~
+\~\~
+\~
+
+--------- command sub_stitution --------------
+
+echo "$(echo hello) world ; $(pwd) '$(not sub_shell)' $(echo fin)"
+echo aaaaaaaaaaaa $(echo hellooooo)
+pwd $()
+$()
+echo $(<fi"l"e     pwd)
+echo $(<file)
+echo $(<"f"i"l"e)
+echo $(<file "")
+echo $(<file)
+echo $(<fi"l"e)
+echo $(<"fil )
+----
+echo $(<file
 
 
 
+)
+----
+$(<file)
+echo hello "$(echo world) rtfm"'rr'$(echo aaaa)"$(echo bbbb)cccc"ddddd
+----
+echo hello "$(echo world) rtfm"'rr'$(echo aaaaa
+echo bbbb
+echo ccccc
+)"fin".
+---
 
 --------- Redirection --------------
 
@@ -63,7 +129,8 @@ cat 5>&1 >&5 5>&- >&- <&- Makefile
 
 
 
-
+${}
+${%}
 
 
 
