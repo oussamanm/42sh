@@ -72,7 +72,7 @@ void	ft_foreg_wait(t_job *job, t_list **tmp, t_list **pr)
 		ft_remove_node(tmp, pr);
 		ft_update_p(1);
 	}
-	if (tcsetpgrp(0, getpgrp()) == -1)
+	if (tcsetpgrp(0, g_shellpid) == -1)
 		ft_putendl_fd("Controling terminal ERROR", 2);
 	signal(SIGCHLD, ft_catch_sigchild);
 }
