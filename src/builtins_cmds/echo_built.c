@@ -91,7 +91,7 @@ int		hendl_echo(int flag, t_tokens *st_tokens, int *index)
 	int status;
 
 	if (M_CHECK(flag, (e_flg | n_flg), e_flg))
-		status =  e_interpretation(st_tokens->value, st_tokens->token, -1);
+		status = e_interpretation(st_tokens->value, st_tokens->token, -1);
 	else
 		status = (ft_putstr(st_tokens->value) == -1) ? 1 : 0;
 	if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !NEXT)

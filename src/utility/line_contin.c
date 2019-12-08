@@ -59,18 +59,18 @@ int				correct_maps_(int i, int *rtn, char *maps)
 	return (temp);
 }
 
-void			completing_line_(char **maps, char **cmd, t_select *select,
+void			completing_line_(char **maps, char **cmd, t_select *slc,
 	t_history *his)
 {
 	int		i;
 	int		index;
 	int		len;
 	int		rtn;
-	 
+
 	rtn = 0;
 	len = MAX_MAPS;
 	i = get_last_flag(*maps);
-	while (i >= 0 && !g_pos.exit)
+	while (i >= 0 && !g_pos.exit && rtn != -1)
 	{
 		if (i >= (len - 1) && (len = increase_maps(maps)) == -1)
 			break ;
@@ -78,11 +78,9 @@ void			completing_line_(char **maps, char **cmd, t_select *select,
 		{
 			index = ft_strlen(*cmd);
 			if ((*maps)[i] == 'S')
-				rtn = ft_read_subsh(cmd, select, his);
+				rtn = read_subsh(cmd, slc, his);
 			else
-				rtn = ft_read_quote(cmd, ((*maps)[i] == 'Q') ? '"' : '\'', select, his);
-			if (rtn == -1)
-				break ;
+				rtn = read_quote(cmd, ((*maps)[i] == 'Q') ? 34 : 39, slc, his);
 			fill_maps(&(*cmd)[index], maps, i + 1, len);
 			i = get_last_flag(*maps);
 			continue ;

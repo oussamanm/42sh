@@ -32,7 +32,8 @@ void		spec_case_subshell(char **arg)
 		(T_IS_TXT(NEXT->token) || NEXT->token == T_SUBSHL))
 	{
 		st_temp = NEXT->next;
-		while (st_temp && st_temp->indx == NEXT->indx && T_IS_TXT(st_temp->token))
+		while (st_temp && st_temp->indx == NEXT->indx &&
+			T_IS_TXT(st_temp->token))
 			st_temp = st_temp->next;
 		if (!st_temp)
 			*arg = ft_strjoir("cat ", *arg, 2);

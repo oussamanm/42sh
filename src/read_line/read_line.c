@@ -81,8 +81,8 @@ int		ft_calling_center(t_history *his, t_select *select, char *buf)
 char	*ft_read_line(t_history *his, t_select *select, int p)
 {
 	char	buf[6];
-	int 	crash;
-	
+	int		crash;
+
 	crash = 0;
 	//crash = open("/tmp/crash.fifo", O_RDONLY);
 	ft_initial(p);

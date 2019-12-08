@@ -70,7 +70,7 @@ void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 		clean_maps(*maps);
 }
 
-int				ft_read_subsh(char **line, t_select *select, t_history *his)
+int			read_subsh(char **line, t_select *select, t_history *his)
 {
 	if (!line || !(*line))
 		return (0);
@@ -87,7 +87,7 @@ int				ft_read_subsh(char **line, t_select *select, t_history *his)
 	return (0);
 }
 
-int				ft_read_quote(char **line, int quote,
+int			read_quote(char **line, int quote,
 	t_select *select, t_history *his)
 {
 	if (!line || !(*line))
