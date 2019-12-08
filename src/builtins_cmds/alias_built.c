@@ -90,7 +90,7 @@ void	ft_built_alias_3(t_tokens *st_tokens, char *arg)
 	arg = ft_strjoir("", st_tokens->value, 0);
 	arg = ft_strjoir(arg, NEXT->value, 1);
 	if (NEXT && NEXT->next && NEXT->next->indx == st_tokens->indx)
-		arg = ft_strjoir(arg, NEXT->next->value, 1);
+		arg = ft_strjoir(arg, get_value_next(NEXT->next), 3);
 	j = 0;
 	while (arg[j] && arg[j] != '=')
 		j++;
