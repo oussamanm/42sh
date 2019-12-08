@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 15:59:19 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/02 02:31:01 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 13:27:23 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ void			fill_intern(t_pipes *st_pipe)
 			if (!ft_is_equal(i, token) || !valid_identifier(token->value))
 				return ;
 			var = get_key_value(token);
+			if (ft_strcmp("PATH", var.key) == 0)
+				erase_hash_table();
 			line = ft_strjoir(ft_strjoin(var.key, "="), var.value, 1);
 			add_intern_var(&g_intern, var.key, var.value,
 			ft_edit_vrb(line, &g_environ, 1));

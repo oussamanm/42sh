@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/02 11:16:10 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 13:50:27 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static	char	*history_getcmds(t_history his, char **args, int r)
 		content = ft_strdup(val.head->cmd);
 	else if (len > 1)
 	{
-		val = (t_history){fc_value(his, args[0]), fc_value(his, args[1]), 0, 0};
+		val = (t_history){fc_value(his, args[0]),\
+		fc_value(his, args[1]), NULL, 0, 0};
 		if (r)
 			rev_his_list(&val);
 		content = history_content(val);
@@ -48,20 +49,22 @@ int				fc_edit(t_history his, char *editor, char *fl, char **args)
 	if (editor == NULL)
 	{
 		ft_putendl_fd("42sh: must specify editor in FCEDIT", 2);
-		return (0);
+		return (EXIT_FAILURE);
 	}
 	(fl) && (args++);
 	if (!(content = history_getcmds(his, args, (ft_strchr(fl, 'r')) ? 1 : 0)))
 	{
 		ft_putendl_fd("42sh: fc: history specification out of range", 2);
-		return (0);
+		return (EXIT_FAILURE);
 	}
 	write_fc(content);
 	ft_strdel(&content);
 	cmd = ft_strjoin(editor, " .42sh-fc");
 	ft_multi_cmd(cmd, 0);
 	ft_strdel(&cmd);
-	return (1);
+	if (g_exit_status != 0)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 /*
@@ -77,6 +80,7 @@ void			exec_fc(void)
 	if (!(content = read_fc()))
 		return ;
 	cmds = ft_strsplit(content, '\n');
+	ft_strdel(&content);
 	i = -1;
 	while (cmds && cmds[++i])
 	{
@@ -88,25 +92,43 @@ void			exec_fc(void)
 	ft_strrdel(cmds);
 }
 
-void			fc_built(char **args, t_history *history, char **env)
+int				fc_3adiya(t_history his, char *flags, char **args, char **env)
+{
+	char	*editor;
+
+	if (!(editor = ft_get_vrb("FCEDIT", env)))
+		editor = get_intern_value("FCEDIT");
+	(!editor) && (editor = ft_strdup("vi"));
+	if (fc_edit(his, editor, flags, args))
+		return (EXIT_FAILURE);
+	if (access(".42sh-fc", F_OK) == 0)
+		ft_multi_cmd("rm .42sh-fc", 0);
+	return (EXIT_SUCCESS);
+}
+
+int				fc_built(char **args, t_history *history, char **env)
 {
 	char	*flags;
 	char	c;
 	int		pos;
 
 	if (!history->head || !history->tail)
-		return ;
+	{
+		ft_putendl_fd("42sh: fc: history specification out of range", 2);
+		return (EXIT_FAILURE);
+	}
 	if ((pos = read_fc_flags(args, &flags, &c)) == -1)
 	{
 		fc_usage(c, "invalid option");
-		return ;
+		return (EXIT_FAILURE);
 	}
 	if (ft_strchr(flags, 's'))
-		fc_flag_s(history, *(args + pos));
+		return (fc_flag_s(history, *(args + pos)));
 	else if (ft_strchr(flags, 'e'))
-		fc_flag_e(*history, args + pos);
+		return (fc_flag_e(*history, args + pos));
 	else if (ft_strchr(flags, 'l'))
-		fc_flag_l(*history, flags, args + pos);
+		return (fc_flag_l(*history, flags, args + pos));
 	else if (!flags || ft_strchr(flags, 'r'))
-		fc_edit(*history, ft_get_vrb("FCEDIT", env), flags, args);
+		return (fc_3adiya(*history, flags, args, env));
+	return (EXIT_SUCCESS);
 }
