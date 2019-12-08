@@ -43,7 +43,7 @@ void	ft_remove_node(t_list **tmp, t_list **pr)
 		(*pr)->next = (*tmp)->next;
 		ft_free_job((*tmp)->content);
 		free(*tmp);
-		*tmp = *pr;
+		*tmp = (*pr)->next;
 	}
 }
 

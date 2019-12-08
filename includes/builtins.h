@@ -141,12 +141,11 @@ void			importaliasfilecontent_1(char *line, char *tmp, int j);
 ** CD FUNCTIONS
 */
 
-void			cd_symblink(t_cdpkg *v);
-char			*dot_dot_path(char *s, char *pwd, int i, int cnt);
-char			*dot_dot_path_2(char **arr, int cnt);
-char			*cd_backwardpoints(char *pathcopy, t_cdpkg *v, int *i);
-char			*ft_correctpath(char *path, char *str);
-void			cd_ordlink_1(t_cdpkg *v, int flag);
+char			*handlepath(t_cdpkg *v);
+char			*handlepath(t_cdpkg *v);
+int				ft_error_cd(char *path, char **arg, char *oldpwd);
+char			*createnewpath(char *path, char *pwd);
+char			*rmbackslashs(char *path);
 
 /*
 ** HELPER FUNCTIONS

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/07 19:41:25 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 13:50:27 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void			exec_fc(void)
 	if (!(content = read_fc()))
 		return ;
 	cmds = ft_strsplit(content, '\n');
+	ft_strdel(&content);
 	i = -1;
 	while (cmds && cmds[++i])
 	{

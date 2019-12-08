@@ -45,13 +45,13 @@ static void	initial_shell(t_select **select)
 {
 	g_pos.cmd = NULL;
 	g_exit_status = 0;
+	g_tty_name = ttyname(0);
 	call_signal();
 	initial_read_line(&g_history, select);
 	init_fc_built();
 	init_alias_hash();
 	setsid();
 	g_shellpid = getpid();
-	g_proc_sub = 0;
 }
 
 int			main(void)
@@ -67,7 +67,7 @@ int			main(void)
 	while (1337)
 	{
 		ft_putstr("\033[0;32m42sh $>\033[0m ");
-		if ((ft_read_line(&g_history, select, 8)) == NULL || !g_pos.cmd[0])
+		if ((ft_read_line(&g_history, select, PR_S)) == NULL || !g_pos.cmd[0])
 		{
 			ft_job_processing();
 			continue ;
@@ -78,6 +78,7 @@ int			main(void)
 		(!g_pos.exit) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
 		ft_job_processing();
 		ft_strdel(&g_pos.cmd);
+		g_proc_sub = 0;
 	}
 	return (0);
 }

@@ -13,9 +13,12 @@
 #include "shell.h"
 #include "read_line.h"
 
+/*
+**	correction map by remove matched Quoting, sub-shell ,
+**		or (Dquote, sub-shell) inside quote.
+*/
 
-
-static int		correct_maps(char *maps)
+static int	correct_maps(char *maps)
 {
 	int i;
 	int rtn;
@@ -33,6 +36,10 @@ static int		correct_maps(char *maps)
 	}
 	return (rtn);
 }
+
+/*
+** Fill maps with symbole : q -> quote, Q -> Dquote, S -> sub-shell
+*/
 
 void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 {
@@ -63,45 +70,51 @@ void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 		clean_maps(*maps);
 }
 
-void		ft_read_subsh(char **line, t_select *select, t_history *his)
+int			read_subsh(char **line, t_select *select, t_history *his)
 {
 	if (!line || !(*line))
-		return ;
+		return (0);
 	*line = ft_strjoir(*line, "\n", 1);
 	ft_putstr("sub> ");
-	ft_read_line(his, select, 5);
+	ft_read_line(his, select, SUB_S);
+	if (g_pos.cmd[0] == EXIT_CLD)
+		return (-1);
 	if (g_pos.cmd)
 	{
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
 		g_pos.cmd = NULL;
 	}
+	return (0);
 }
 
-void		ft_read_quote(char **line, int quote,
+int			read_quote(char **line, int quote,
 	t_select *select, t_history *his)
 {
 	if (!line || !(*line))
-		return ;
+		return (0);
 	*line = ft_strjoir(*line, "\n", 1);
 	if (quote == '\'')
 	{
 		ft_putstr("quote> ");
-		ft_read_line(his, select, 7);
+		ft_read_line(his, select, QUOTE);
 	}
 	else if (quote == '"')
 	{
 		ft_putstr("dquotes>> ");
-		ft_read_line(his, select, 10);
+		ft_read_line(his, select, DQUOTE);
 	}
+	if (g_pos.cmd[0] == EXIT_CLD)
+		return (-1);
 	if (!g_pos.exit && g_pos.cmd)
 	{
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
 		g_pos.cmd = NULL;
 	}
+	return (0);
 }
 
-
-char		*completing_line(char *str_cmds, t_select *select, t_history *his)
+char		*completing_line(char *str_cmds, t_select *select,\
+t_history *his)
 {
 	char	*maps;
 	char	*cmd;

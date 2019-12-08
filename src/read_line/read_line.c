@@ -44,9 +44,7 @@ char	*ft_call_complete(t_select *select, char *s, char *buf)
 
 char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
 {
-	if (TAB == CAST(buf))
-		s = ft_auto_completion(&g_pos, s);
-	else if (CTRL_D == CAST(buf))
+	if (CTRL_D == CAST(buf))
 		s = ft_ctrl_d(&g_pos, his, select, s);
 	else if (CTRL_T == CAST(buf))
 		tab_mode(&s);
@@ -75,7 +73,7 @@ int		ft_calling_center(t_history *his, t_select *select, char *buf)
 	g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, g_pos.cmd, g_pos.p);
 	ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
 	if (!(g_pos.cmd = ft_key_call_func(his, select, g_pos.cmd, buf))
-		|| g_pos.cmd[0] == -1)
+		|| g_pos.cmd[0] == EXIT_CLD)
 		return (1);
 	return (0);
 }
@@ -83,10 +81,10 @@ int		ft_calling_center(t_history *his, t_select *select, char *buf)
 char	*ft_read_line(t_history *his, t_select *select, int p)
 {
 	char	buf[6];
-	int 	crash;
-	
+	int		crash;
+
 	crash = 0;
-	// crash = open("/tmp/crash.fifo", O_RDONLY);
+	//crash = open("/tmp/crash.fifo", O_RDONLY);
 	ft_initial(p);
 	ft_bzero(buf, 6);
 	ft_enable();

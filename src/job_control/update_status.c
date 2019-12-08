@@ -108,6 +108,6 @@ void	ft_wait(t_job *current)
 			ft_updatestatus(job, status, pid);
 			tmp = tmp->next;
 		}
+		ft_collect_job_status();
 	}
-	ft_collect_job_status();
 }

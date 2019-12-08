@@ -12,15 +12,15 @@
 
 #include "libft.h"
 
-int ft_str_alpha(char *str)
+int		ft_str_alpha(char *str)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while (str[++i])
-    {
-        if (!ft_isalpha(str[i]))
-            return (0);
-    }
-    return (1);
+	i = -1;
+	while (str[++i])
+	{
+		if (!ft_isalpha(str[i]))
+			return (0);
+	}
+	return (1);
 }

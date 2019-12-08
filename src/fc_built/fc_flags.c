@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 11:05:50 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/07 19:55:50 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 13:46:41 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,7 @@ int		fc_flag_e(t_history his, char **args)
 			return (EXIT_FAILURE);
 		exec_fc();
 		if (access(".42sh-fc", F_OK) == 0)
-		{
-			ft_putendl("llllllllll");
 			ft_multi_cmd("rm .42sh-fc", 0);
-		}
 	}
 	return (EXIT_SUCCESS);
 }

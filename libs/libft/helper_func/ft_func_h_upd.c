@@ -12,18 +12,6 @@
 
 #include "../libft.h"
 
-void	ft_bchar(char *str, size_t n, char c)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-	{
-		str[i] = c;
-		i++;
-	}
-}
-
 int		ft_putstrr(char *s, int free_str)
 {
 	int		i;

@@ -1,47 +1,158 @@
-- check signal Ctr+c  and g_pos.cmd varaible 
-- check implementation of alias
+--------- ERROR  -----------------
 
--------------------------------
+alaisa asd="asd"asda"asdasd"kjhkjh
 
-- Check exit_status in signale
-- Check environ , g_environ , temp_env
-- Check Execution 
-- Check Lexer
-- Check Parsing
-- Check Allocation
-- Check Redirection
-- Check function aliasmatched (return args)
+'$HOME'$PWD"$HOME"
+echo $PWD'$HOMEE'$HOME
 
-/*      NORME   Lignes */
+--------- Expansion --------------
 
-ft_helper_func.c 
+echo $$$$$$
+echo \$\$\$\$
+$$$?
+$"""$HOME"$$
+'$HOME'$PWD"$HOME"
+echo ~/toutou
+~
+"~"
+"\~\~\/~"
+echo ./~ .~
+'"$HOME"'
+echo $PWD'$HOMEE'$HOME
+echo $\???\\
+echo "'\\'$HOME"
+echo ${}
+echo ${\}
+echo ${{}
+echo \$\{\}
+echo $${PWD}
+echo $PWD\      $       HOME
+${{PWD}}
+echo ${?}
+echo ${!}
+echo ${\%\%}
+echo ${555555555 55555}
+echo ${aaaa{sss}
+echo ${aaaa{
+echo hasdklajsdklasd${asdasdasd}asdasdasd
+echo "${PWD}asdasdasd" ; echo "sdfsdf${PW}asdasdasd"
+echo ${""}
+echo ${?}${\$}
+echo $}{}
+echo ${}
+echo ${$$}
+echo ${  "p"  }
+echo ${  "\n"  }
+echo ${"asdasdasd
+echo ${''}
+echo ${%}
+echo ${$$}
+echo ${$}
+echo ${?}
+echo $${HOME}
+echo ${$HOME}
+echo ${hello}
+echo ${?}${$}
+${}
+${
+echo \~
+echo ./
+echo ./~
+echo /~
+echo ~/
+echo ~/
+echo ~//
+echo "~"
+echo ~~
+~
+~~
+\~\~
+\~
 
-/*      Verify Addresses , variable */
+--------- command sub_stitution --------------
 
-+ Lexer
-- Parser
-- Execution
-- pipe
-- sub-shell
-- expansions
-- exec_builtens
-- Signale
-
-
-/*      LEAK       */
-
--------- Find path func
-
-
+echo "$(echo hello) world ; $(pwd) '$(not sub_shell)' $(echo fin)"
+echo aaaaaaaaaaaa $(echo hellooooo)
+pwd $()
+$()
+echo $(<fi"l"e     pwd)
+echo $(<file)
+echo $(<"f"i"l"e)
+echo $(<file "")
+echo $(<file)
+echo $(<fi"l"e)
+echo $(<"fil )
+----
+echo $(<file
 
 
 
+)
+----
+$(<file)
+echo hello "$(echo world) rtfm"'rr'$(echo aaaa)"$(echo bbbb)cccc"ddddd
+----
+echo hello "$(echo world) rtfm"'rr'$(echo aaaaa
+echo bbbb
+echo ccccc
+)"fin".
+---
+
+--------- Redirection --------------
+
+1>&1 cat 2>&- <<EOL > /tmp/oops.oops; 1<&- >/tmp/lol cat 2>&1 <<EOF > /tmp/oops1.oops
+oops
+EOL
+oops 2
+EOF
+rm -f /tmp/lol
+cat Makefile 3>&1 >&3
+cat Makefile 3>&1 >&3 3>&-
+cat Makefile 5>&1 >&5
+cat Makefile 5>&1 >&5 5>&-
+cat Makefile 5>&1 >&5 5>&- >&- <&-
+cat 5>&1 >&5 5>&- >&- <&- Makefile
+5>&1 >&5 5>&- >&- <&- cat Makefile
+5>&1 cat >&5 5>&- Makefile >&- <&-
 
 
 
 
-ls -la | cat -e
-| echo hello world | cat -e
+
+
+
+
+
+
+
+
+
+
+
+${}
+${%}
+
+
+
+/bin/ls | grep -o "42sh"
+/bin/ls -laF | grep -o "CMakeLists.txt*"
+/bin/ls -l -a -F | grep -o "CMakeLists.txt*"
+ls | grep "42sh"
+ls -laF | grep -o "CMakeLists.txt*"
+ls -l -a -F | grep -o "CMakeLists.txt*"
+GREP=$(which grep)
+unset PATH
+/bin/ls | ${GREP} -o "42sh"
+/bin/ls -laF | ${GREP} -o "CMakeLists.txt*"
+/bin/ls -l -a -F | ${GREP} -o "CMakeLists.txt*"
+ls 2>&1 | ${GREP} -o "ls"
+ls -laF 2>&1 | ${GREP} -o "ls"
+ls -l -a -F 2>&1 |${GREP} -o "ls"
+
+
+
+
+
 
 
 

@@ -23,7 +23,7 @@ int			builtens_mini(t_pipes *st_pipes, char ***tmp_env)
 
 	status = 0;
 	if (STR_CMP(*(st_pipes->args), "exit"))
-		built_exit();
+		status = built_exit(st_pipes->args);
 	else if (STR_CMP(*(st_pipes->args), "echo"))
 		status = built_echo(st_pipes->st_tokens);
 	else if (STR_CMP(*(st_pipes->args), "alias"))

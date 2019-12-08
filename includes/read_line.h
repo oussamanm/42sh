@@ -65,6 +65,13 @@
 # define CTRL_L 12
 # define CTRL_R 18
 
+# define SUB_S 5
+# define QUOTE 7
+# define PR_S 8
+# define HEREDOC 9
+# define DQUOTE 10
+# define EXIT_CLD -10
+
 # define CAST(x) *((int *)x)
 
 typedef struct s_history	t_history;
@@ -150,7 +157,6 @@ void				ft_print_touch_and_join(t_cursor *pos, char *buf, char **s);
 void				ft_move_right(int n);
 char				*ft_ctrl_d(t_cursor *pos, \
 t_history *his, t_select *select, char *s);
-char				*ft_auto_completion(t_cursor *pos, char *s);
 void				save_address(t_select **select);
 void				ft_clear_readline_struct(void);
 char				*ft_read_heredoc(char *eol);
@@ -187,8 +193,7 @@ void				rev_his_list(t_history *lst);
 void				display_his_list(t_history his, int order);
 int					history_handling(char **str_cmds);
 char				*history_content(t_history his);
-char				*completing_line(char *str_cmds,\
-t_select *select, t_history *his);
+
 void				his_new_line(char *line, char **cmd, t_cursor *pos);
 char				*str_notnumber(char *keyword);
 void				history_search(t_history his, char **s, char buf[6]);
@@ -221,11 +226,13 @@ void				ft_go_to_right(t_cursor *pos, char *s);
 void				ft_right_touch(t_cursor *pos, int size);
 void				save_address(t_select **select);
 void				initial_read_line(t_history *his, t_select **select);
+char				*completing_line(char *str_cmds,\
+t_select *select, t_history *his);
 void				completing_line_(char **maps, char **cmd, t_select *select,\
 t_history *his);
-void				ft_read_quote(char **line, int quote,t_select *select,\
+int					read_quote(char **line, int quote, t_select *select,\
 t_history *his);
-void				ft_read_subsh(char **line, t_select *select,\
+int					read_subsh(char **line, t_select *select,\
 t_history *his);
 char				*shift_expansion(char *keyword, int *i);
 int					is_expansion_syntax(char *cmd);

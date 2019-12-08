@@ -19,8 +19,9 @@ OBJS = error_handler.o\
 	utility/free.o utility/free_.o utility/ft_strsplit.o\
 	utility/find_closed.o utility/helper_exec.o\
 	utility/helper_contin.o utility/helper_built.o\
-	utility/line_contin.o utility/initial.o \
-	utility/helper_variab.o\
+	utility/line_contin.o utility/initial.o\
+	utility/helper_variab.o utility/helper_syntaxerr.o\
+	utility/helper_subshell.o\
 	features/pipe.o features/line_continuation.o\
 	features/proc_sub.o features/redir_parse.o\
 	features/redir_read.o features/redir_setup.o\
@@ -32,10 +33,9 @@ OBJS = error_handler.o\
 	builtins_cmds/alias_built.o builtins_cmds/alias_func.o \
 	builtins_cmds/hash_built.o builtins_cmds/hash_func.o\
 	builtins_cmds/free_hash_and_alias.o builtins_cmds/unaliase_built.o\
-	builtins_cmds/cd_built_symb.o builtins_cmds/built_srcs.o\
+	builtins_cmds/cd_built_1.o builtins_cmds/built_srcs.o\
 	builtins_cmds/built_export.o builtins_cmds/manage_export.o\
 	read_line/addition.o\
-	read_line/auto_completion.o\
 	read_line/copy_paste.o\
 	read_line/ctrl_d.o\
 	read_line/delete.o\
@@ -63,7 +63,7 @@ OBJS = error_handler.o\
 	job_control/index_up.o job_control/init.o\
 	job_control/job_execution.o job_control/job_processing.o\
 	job_control/msg_sig.o job_control/output.o\
-	job_control/update_status.o
+	job_control/update_status.o\
 
 FLAG = -Wall -Wextra -Werror 
 INCL = ./includes

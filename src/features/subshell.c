@@ -34,6 +34,7 @@ void		child_subsh(int fds[2], char *cmd)
 		if (i != 0)
 			ft_putchar(-1);
 		g_proc_sub = 2;
+		spec_case_subshell(&(args[i]));
 		ft_multi_cmd(args[i], 1);
 		i++;
 	}
