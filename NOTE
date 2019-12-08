@@ -1,9 +1,5 @@
 --------- ERROR  -----------------
 
-alaisa asd="asd"asda"asdasd"kjhkjh
-
-'$HOME'$PWD"$HOME"
-echo $PWD'$HOMEE'$HOME
 
 --------- Expansion --------------
 
@@ -18,6 +14,7 @@ echo ~/toutou
 "\~\~\/~"
 echo ./~ .~
 '"$HOME"'
+echo '$HOME'$PWD"$HOME"
 echo $PWD'$HOMEE'$HOME
 echo $\???\\
 echo "'\\'$HOME"

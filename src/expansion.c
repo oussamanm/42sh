@@ -160,7 +160,7 @@ char			*ft_corr_args(char *cmd)
 		else if (cmd[i] == '"')
 			bl_q = (bl_q == 0) ? 1 : 0;
 		else if (cmd[i] == '\'' && !bl_q)
-			i += ft_find_char(cmd + i + 1, '\'') + 2;
+			i += ft_find_char(cmd + i + 1, '\'') + 1;
 		else if (cmd[i] == '$' && is_variab_expans(&cmd[i + 1]))
 			cmd = ft_swap_vrb(cmd, &i);
 		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
