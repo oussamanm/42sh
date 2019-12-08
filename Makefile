@@ -53,7 +53,7 @@ OBJS = error_handler.o\
 	read_line/cut.o read_line/clear_line_or_window.o\
 	read_line/tab_pos.o\
 	history/history_expansion.o\
-	history/history_file.o history/history_readline.o\
+	history/history_file.o history/history_readline.o history/history_errors.o\
 	history/manage_history.o history/history_other.o history/history_content.o\
 	history/history_search.o history/history_handling.o history/history_termcap.o\
 	fc_built/fc_built.o fc_built/fc_file.o fc_built/fc_flag_l.o\

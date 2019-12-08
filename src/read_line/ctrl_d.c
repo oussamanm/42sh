@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 17:14:32 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/11/26 01:59:59 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/05 22:56:30 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	ft_free_tab(char **tableau)
 
 int		ft_read_exit(t_cursor *pos, t_history *his, t_select *select, char **s)
 {
+	
 	if (g_pos.p == 9 || g_pos.p == 10)
 	{
 		(*s)[0] = -1;
@@ -43,6 +44,7 @@ int		ft_read_exit(t_cursor *pos, t_history *his, t_select *select, char **s)
 	if (select->save)
 		free(select->save);
 	save_history(his);
+	ft_putendl("world");
 	delete_intern();
 	ft_disable();
 	exit(0);

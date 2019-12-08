@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 07:28:51 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/01 23:29:58 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 13:25:45 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static	void	setup_vrb(t_tokens *st_tokens, t_intern vrb, int index, int n)
 		if (NEXT->next && NEXT->next->indx == index &&
 			T_IS_TXT(NEXT->next->token))
 			temp = ft_strjoir(temp, NEXT->next->value, 0);
+		if (ft_strcmp("PATH", vrb.key) == 0)
+			erase_hash_table();
 		ft_set_vrb(temp, &g_environ, 1);
 		add_intern_var(&g_intern, vrb.key, vrb.value, 1);
 		exported_vars(vrb, STDIN_FILENO, 0);
@@ -92,4 +94,22 @@ int				built_export(t_tokens *st_tokens)
 	if (!setup_export(st_tokens, n))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
+}
+
+void			set_export_env(char **env)
+{
+	int			i;
+	t_intern	vrb;
+
+	i = -1;
+	g_environ = NULL;
+	while (env[++i])
+	{
+		vrb = get_vrb_value(env[i]);
+		add_intern_var(&g_intern, vrb.key, vrb.value, 0);
+		exported_vars(vrb, STDIN_FILENO, 0);
+		ft_add_vrb(env[i], &g_environ);
+		ft_strdel(&vrb.key);
+		ft_strdel(&vrb.value);
+	}
 }

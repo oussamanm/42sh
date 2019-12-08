@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 23:19:49 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/07 15:54:47 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,8 @@ char					**ft_tokens_arg_env(t_tokens *st_tokens);
 int						valid_identifier(char *arg);
 int						ft_is_equal(int index, t_tokens *st_tokens);
 void					move_to_env(char *key);
+t_intern				get_vrb_value(char *vrb);
+void					set_export_env(char **env);
 /*
 ** Variable
 */

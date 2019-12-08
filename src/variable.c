@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_variable.c                                      :+:      :+:    :+:   */
+/*   variable.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:24:55 by onouaman          #+#    #+#             */
-/*   Updated: 2019/10/05 16:19:40 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/07 16:41:36 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		ft_add_vrb(char *arg, char ***env)
 	char	**environ;
 	int		len;
 
-	if (env == NULL || *env == NULL || arg == NULL)
+	if (arg == NULL)
 		return ;
 	len = ft_strrlen(*env);
 	if ((environ = ft_strr_dup(*env, len + 1)) == NULL)

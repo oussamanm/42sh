@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/04 21:56:34 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 06:18:52 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ struct				s_history
 {
 	struct s_info	*head;
 	struct s_info	*tail;
+	char			*home;
 	int				len;
 	int				bg;
 };
@@ -200,11 +201,10 @@ char				is_shell_delimiter(char c);
 char				*get_delimiter(char *keyword, int i);
 char				*read_fc(void);
 void				write_fc(char *content);
-void				fc_flag_l(t_history history, char *flags, char **args);
-void				fc_built(char **args, t_history *history, char **tmp);
-void				fc_flag_l(t_history history, char *flags, char **args);
-void				fc_flag_s(t_history *his, char *arg);
-void				fc_flag_e(t_history his, char **args);
+int					fc_flag_l(t_history history, char *flags, char **args);
+int					fc_built(char **args, t_history *history, char **tmp);
+int					fc_flag_s(t_history *his, char *arg);
+int					fc_flag_e(t_history his, char **args);
 t_info				*fc_value(t_history his, char *keyword);
 int					read_fc_flags(char **args, char **fl, char *err);
 void				fc_usage(char c, char *msg);
@@ -227,5 +227,7 @@ void				ft_read_quote(char **line, int quote,t_select *select,\
 t_history *his);
 void				ft_read_subsh(char **line, t_select *select,\
 t_history *his);
+char				*shift_expansion(char *keyword, int *i);
+int					is_expansion_syntax(char *cmd);
 
 #endif

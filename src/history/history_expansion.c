@@ -6,11 +6,11 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 16:21:54 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/04 22:22:42 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 13:16:51 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/read_line.h"
+#include "read_line.h"
 
 /*
 **	get the value of history index given with their completion
@@ -31,55 +31,44 @@ static	char	*history_expansion_value(t_history his, char *str, int index)
 	return (value);
 }
 
-static	char	*shift_expansion(char *keyword, int *i)
-{
-	int	bg;
-
-	*i += 1;
-	bg = *i;
-	while (keyword[*i] && keyword[*i] != '!'
-			&& !is_shell_delimiter(keyword[*i]))
-		*i += 1;
-	return (ft_strsub(keyword, bg, *i - bg));
-}
-
 /*
 **	get expansions one by one and return false if no expansion left
 */
 
-static	int		get_next_expansion(char *keyword, char **exp, int *i)
+static	int		get_next_expansion(char *cmd, char **exp, int *i)
 {
-	while (keyword[*i] && keyword[*i] != '!'
-			&& !is_shell_delimiter(keyword[*i]) && *i > 0)
+	int	bg;
+	int	q;
+
+	q = 0;
+	bg = *i;
+	if (!cmd[*i])
+		return (0);
+	while (cmd[*i])
+	{
+		if (cmd[*i] == '\'')
+			q = (!q) ? 1 : 0;
+		if ((cmd[*i] == '\\' && cmd[*i + 1] == '!')
+		|| (cmd[*i] == '!' && cmd[*i + 1] == '!' && *i == bg))
+		{
+			*i += 2;
+			continue ;
+		}
+		if (cmd[*i] == '!' && !q && *i > bg)
+			break ;
 		*i += 1;
-	if (!keyword[*i])
-		return (0);
-	else if (is_shell_delimiter(keyword[*i]) || *i == 0)
-	{
-		*exp = get_delimiter(keyword, *i);
-		*i += ft_strlen(*exp);
 	}
-	else if (keyword[*i + 1] == '!')
-	{
-		*exp = ft_strdup("!");
-		*i += 2;
-	}
-	else if (ft_isprint(keyword[*i + 1]))
-		*exp = shift_expansion(keyword, i);
-	if (!keyword[*i] && !*exp)
-		return (0);
+	*exp = ft_strsub(cmd, bg, *i - bg);
 	return (1);
 }
 
-static	char	*command_expansion(t_history his, char *exp, int i)
+static	char	*command_expansion(t_history his, char *exp)
 {
 	int		index;
 	t_info	*res;
 
-	if (!exp)
+	if (!exp || !his.head || !his.tail)
 		return (NULL);
-	if (is_shell_delimiter(exp[0]) || i - ft_strlen(exp) == 0)
-		return (ft_strdup(exp));
 	if (exp[0] == '!' && his.tail)
 		return (ft_strdup(his.tail->cmd));
 	else if (ft_isdigit(exp[0]))
@@ -99,30 +88,58 @@ static	char	*command_expansion(t_history his, char *exp, int i)
 **	get history cmds by ! expansion keyword
 */
 
-char			*history_expansion(t_history his, char *keyword)
+static	char	*parse_expansion(t_history his, char *split, char **cmd)
 {
 	char	*exp;
+	int		i;
+
+	if (split[0] == '!' && is_shell_delimiter(split[1]))
+	{
+		ft_strdel(cmd);
+		return (ft_strdup("!"));
+	}
+	else if (split[0] != '!' || ft_isspace(split[1]) || !split[1])
+		*cmd = ft_strjoir(*cmd, split, 1);
+	else if (split[0] == '!')
+	{
+		i = 0;
+		if ((exp = shift_expansion(split, &i)))
+		{
+			if (!(*cmd = ft_strjoir(*cmd, command_expansion(his, exp + 1), 3)))
+				return (exp);
+			if (i < (int)ft_strlen(split))
+				*cmd = ft_strjoir_rtn(*cmd, split + i, 1);
+			ft_strdel(&exp);
+		}
+	}
+	return (NULL);
+}
+
+char			*history_expansion(t_history his, char *keyword)
+{
+	char	*split;
+	char	*err;
 	char	*cmd;
 	int		i;
 
 	cmd = ft_strnew(1);
-	if (!his.head || !his.tail || !keyword)
-		return (cmd);
-	exp = NULL;
+	split = NULL;
+	err = NULL;
 	i = 0;
-	while (get_next_expansion(keyword, &exp, &i))
+	while (get_next_expansion(keyword, &split, &i))
 	{
-		if (!(cmd = ft_strjoir_rtn(cmd, command_expansion(his, exp, i), 3)))
+		err = parse_expansion(his, split, &cmd);
+		ft_strdel(&split);
+		if (err)
 			break ;
-		ft_strdel(&exp);
 	}
 	if (!cmd)
 	{
-		ft_putstr_fd("42sh: !", 2);
-		ft_putstr_fd(exp, 2);
+		ft_putstr_fd("42sh: ", 2);
+		ft_putstr_fd(err, 2);
 		ft_putendl_fd(": event not found", 2);
+		history_readline(&g_history, 0, NULL);
 	}
-	ft_strdel(&exp);
-	ft_strdel(&keyword);
+	ft_strdel(&err);
 	return (cmd);
 }
