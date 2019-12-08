@@ -297,7 +297,7 @@ int						error_syntax_expans(char *str_cmds);
 int						helper_error_expans(char *str_cmds, int i);
 int						ft_putchar_err(int c);
 void					puterr_identifier(char *arg, char *cmd);
-int			error_token_redi(t_tokens *st_tokens);
+int						error_token_redi(t_tokens *st_tokens);
 
 /*
 ** Updated Splite
