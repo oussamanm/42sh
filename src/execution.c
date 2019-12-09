@@ -72,7 +72,9 @@ void			ft_handle_child(t_pipes *st_pipes, char **environ)
 	}
 	if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 		exit(EXIT_FAILURE);
-	if (!ft_check_cmd(st_pipes->args[0], environ))
+	if (lookup_hash(st_pipes->args[0]))
+		ft_cmd_exec(st_pipes->args, environ);
+	else if (!ft_check_cmd(st_pipes->args[0], environ))
 		ft_cmd_exec(st_pipes->args, environ);
 	else
 		exit(EXIT_CMD_NF);
@@ -299,6 +301,7 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 		return (-1);
 	st_cmds = ft_new_cmds();
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
+<<<<<<< HEAD
 	st_cmds->st_tokens = ft_lexer(st_cmds->args);
 	dprintf(2,"--Begin with st_token=|%s| \n", st_cmds->st_tokens->value);
 	handle_alias(&(st_cmds->st_tokens));
@@ -312,6 +315,19 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 						}
 						dprintf(2, "----- 	fin -----\n");
 	if (error_syntax_lexer(st_cmds->st_tokens))
+=======
+	st_cmds->args = aliasmatched(st_cmds->args);
+	// int i;
+	// i = 0;
+	// while (st_cmds->args[i])
+	// {
+	// 		ft_putstr_fd("ret of aliasmatched ==> ", 1);
+	// 		ft_putendl_fd(st_cmds->args[i], 1);
+	// 		i++;
+	// }
+	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL ||
+		error_syntax_lexer(st_cmds->st_tokens))
+>>>>>>> 3a7373168ef04407d5358d173400e60c44134e2e
 	{
 		free_list_cmds(st_cmds);
 		return ((g_exit_status = 258));

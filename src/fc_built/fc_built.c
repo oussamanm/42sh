@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 13:50:27 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 22:14:29 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static	char	*history_getcmds(t_history his, char **args, int r)
 **	by the editor given and re-execute them
 */
 
-int				fc_edit(t_history his, char *editor, char *fl, char **args)
+int				fc_edit(t_history his, char *editor,
+					unsigned char fl, char **args)
 {
 	char	*content;
 	char	*cmd;
@@ -51,8 +52,8 @@ int				fc_edit(t_history his, char *editor, char *fl, char **args)
 		ft_putendl_fd("42sh: must specify editor in FCEDIT", 2);
 		return (EXIT_FAILURE);
 	}
-	(fl) && (args++);
-	if (!(content = history_getcmds(his, args, (ft_strchr(fl, 'r')) ? 1 : 0)))
+	(fl && args) && (args++);
+	if (!(content = history_getcmds(his, args, (fl & FC_R) ? 1 : 0)))
 	{
 		ft_putendl_fd("42sh: fc: history specification out of range", 2);
 		return (EXIT_FAILURE);
@@ -92,7 +93,8 @@ void			exec_fc(void)
 	ft_strrdel(cmds);
 }
 
-int				fc_3adiya(t_history his, char *flags, char **args, char **env)
+int				fc_3adiya(t_history his, unsigned char flags,
+							char **args, char **env)
 {
 	char	*editor;
 
@@ -100,17 +102,21 @@ int				fc_3adiya(t_history his, char *flags, char **args, char **env)
 		editor = get_intern_value("FCEDIT");
 	(!editor) && (editor = ft_strdup("vi"));
 	if (fc_edit(his, editor, flags, args))
+	{
+		ft_strdel(&editor);
 		return (EXIT_FAILURE);
+	}
+	ft_strdel(&editor);
 	if (access(".42sh-fc", F_OK) == 0)
 		ft_multi_cmd("rm .42sh-fc", 0);
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }
 
 int				fc_built(char **args, t_history *history, char **env)
 {
-	char	*flags;
-	char	c;
-	int		pos;
+	unsigned	char	flags;
+	char				c;
+	int					pos;
 
 	if (!history->head || !history->tail)
 	{
@@ -122,13 +128,13 @@ int				fc_built(char **args, t_history *history, char **env)
 		fc_usage(c, "invalid option");
 		return (EXIT_FAILURE);
 	}
-	if (ft_strchr(flags, 's'))
+	if (flags & FC_S)
 		return (fc_flag_s(history, *(args + pos)));
-	else if (ft_strchr(flags, 'e'))
+	else if (flags & FC_E)
 		return (fc_flag_e(*history, args + pos));
-	else if (ft_strchr(flags, 'l'))
+	else if (flags & FC_L)
 		return (fc_flag_l(*history, flags, args + pos));
-	else if (!flags || ft_strchr(flags, 'r'))
+	else if (flags == 0 || flags & FC_R)
 		return (fc_3adiya(*history, flags, args, env));
 	return (EXIT_SUCCESS);
 }

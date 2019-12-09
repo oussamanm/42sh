@@ -126,7 +126,7 @@ int		built_cd(char **arg, char **env)
 		return (EXIT_FAILURE);
 	oldpath = ft_strdup(v.path);
 	v.path = rmbackslashs(v.path);
-	v.path = handlepath(&v);
+	v.path = handlepath(&v, NULL);
 	if (ft_error_cd(v.path, arg + 0, oldpath))
 	{
 		ft_strdel(&v.path);

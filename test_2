@@ -1,0 +1,25 @@
+alias
+unalias -a
+source .42shrc
+ll
+a
+b
+e
+m
+l
+f
+alias f="m"
+f
+unalias a b c d l
+ll
+unalias -a
+source .42shrc
+mm
+m
+l
+ll
+a
+e
+unalias e
+a
+exit

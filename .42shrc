@@ -1,0 +1,8 @@
+alias a="b"
+alias b="c"
+alias c="d"
+alias d="e"
+alias e="d"
+alias l="ls"
+alias ll="l -la"
+alias m="ll"

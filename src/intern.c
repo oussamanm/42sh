@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 21:41:01 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/02 00:07:54 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/09 00:05:43 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,20 @@ int			delete_intern_var(char *key, t_intern **head)
 t_intern	get_key_value(t_tokens *st_tokens)
 {
 	t_intern	var;
+	int			indx;
 
+	var = (t_intern){NULL, NULL, NULL};
 	var.key = st_tokens->value;
-	if (NEXT && NEXT->next && NEXT->next->indx == st_tokens->indx)
-		var.value = NEXT->next->value;
-	else if (NEXT && NEXT->token == T_EQUAL)
-		var.value = "";
-	else
-		var.value = NULL;
+	indx = st_tokens->indx;
+	if (NEXT && NEXT->next && NEXT->next->indx == indx)
+	{
+		st_tokens = NEXT->next;
+		while (st_tokens && st_tokens->indx == indx)
+		{
+			var.value = ft_strjoir_rtn(var.value, st_tokens->value, 1);
+			st_tokens = NEXT;
+		}
+	}
 	return (var);
 }
 

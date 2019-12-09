@@ -79,7 +79,7 @@ void	ft_foreg_wait(t_job *job, t_list **tmp, t_list **pr)
 
 int		ft_fg_content(t_job *job, char *arg, t_list **tmp, t_list **pr)
 {
-	if (job->status == RUN || job->status == STOPED)
+	if ((job->status == RUN || job->status == STOPED) && (job->p == '+' || arg))
 	{
 		ft_putendl(job->cmd);
 		(arg) ? ft_update_p_fg(job->index) : 0;

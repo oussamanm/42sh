@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:34:51 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 23:03:08 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:07:42 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int			built_exit(char **args)
 {
 	int status;
 
-	ft_putendl("exit");
 	if ((status = ft_exit_status(args + 1)) == -1)
 		return (EXIT_FAILURE);
 	if (ft_check_stopped_job())
@@ -43,55 +42,28 @@ int			built_exit(char **args)
 }
 
 /*
-** - this func work with cd_built
-*/
-
-char		*ft_correctpath(char *path, char *str)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	tmp = NULL;
-	while (str[i] &&\
-			str[i] == '.' &&\
-			str[i + 1] == '.' &&\
-			str[i + 2] == '/')
-	{
-		i += 3;
-	}
-	if (str[i] && str[i] != '/' && str[i + 1] != '.')
-	{
-		tmp = str;
-		path = ft_strjoir(path, ft_strjoir("/", str + i, 0), 1);
-		ft_strdel(&tmp);
-	}
-	else if ((!str[i] && (ft_strcmp(path, "") == 0)) ||\
-	(str[i] == '.' && str[i + 1] == '.' && !str[i + 2] &&\
-	(ft_strcmp(path, "") == 0)))
-		path = ft_strjoir("/", path, 2);
-	return (path);
-}
-
-/*
 ** - import alias content file to list;
 */
 
-void		importaliasfilecontent_1(char *line, char *tmp, int j)
+void		importaliasfilecontent_1(char *line)
 {
-	int	i;
+	int		j;
+	int		i;
+	char	*str1;
+	char	*str2;
 
+	j = 0;
 	while (line[j] && ft_isspace(line[j]))
 		j++;
 	i = j;
-	while (line[i] && line[i] != '=')
-		i++;
-	if (line[i] == '=')
-	{
-		tmp = ft_strsub(line, j, i);
-		rm_alias_by_elem_flag(tmp, 0, 0);
-		pushtolist(line + j, 1);
-		ft_strdel(&tmp);
-	}
-	(line) ? ft_strdel(&line) : 0;
+	while (line[j] && line[j] != '=')
+		j++;
+	str1 = ft_strsub(line, i, j - 1);
+	str2 = ft_strsub(line, ++j, ft_strlen(line));
+	rm_alias_by_elem_flag(str1);
+	if (!str2)
+		str2 = ft_strdup("");
+	pushtolist(str1, str2, 1);
+	ft_strdel(&str1);
+	ft_strdel(&str2);
 }

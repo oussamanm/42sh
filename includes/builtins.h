@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:18:15 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/01 22:00:03 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:08:22 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_alias		t_alias;
 typedef struct s_aliaspkg	t_aliaspkg;
 typedef struct s_cdpkg		t_cdpkg;
 typedef struct s_hash		t_hash;
+typedef struct s_aliasswitcher t_aliashel;
 
 enum	e_flags {
 	n_flg = 1,
@@ -48,6 +49,7 @@ struct			s_cdpkg
 struct			s_alias
 {
 	char		*shortcut;
+	char		*equal;
 	char		*cmd;
 	int			flag;
 	t_alias		*next;
@@ -57,6 +59,12 @@ struct			s_aliaspkg
 {
 	t_alias		*head_ref;
 	t_alias		*tail_ref;
+};
+
+struct			s_aliasswitcher
+{
+	char			*string;
+	t_aliashel	*next;
 };
 
 struct			s_hash
@@ -74,7 +82,6 @@ struct			s_hash
 int				built_cd(char **arg, char **env);
 int				built_type(char **args, char **tmpenv);
 int				hash_table(char **args);
-void			built_env(char **args, char ***tmp_env);
 int				built_unset(char **args);
 
 /*
@@ -109,15 +116,24 @@ char			echo_charcmp(char c, char *str);
 */
 
 t_aliaspkg		*storeaddrstruct(t_aliaspkg *addr);
-void			pushtolist(char *string, int flag);
-int				rm_alias_by_elem_flag(char *shortcut,\
-				int check, int flag);
+void			pushtolist(char *key, char *value, int flag);
+int				rm_alias_by_elem_flag(char *shortcut);
 char			*handleqoutes(char *str);
 void			importaliasfilecontent(char *tmp);
 char			**aliasmatched(char **args);
+int				freealiaslist(void);
 void			ft_buil_updatealias(char **args);
 void			printlist(void);
 void			createaliasfile(void);
+int				value_found_as_key(t_aliaspkg  *data, char *valueaskey);
+void			freetmplistalias(t_aliashel **head);
+char			*get_value(t_aliaspkg *data, char *key);
+void			init_var(t_aliashel **head, t_aliashel **tail, char ***arr);
+int				free_elem(char *lastkey, char **arr, t_aliashel **head);
+void			ft_checker(char **arr, char **newvalue);
+char			*aliasfinder(t_alias *curr, char *value, char *lastkey);
+int				ft_list(t_aliashel **head, t_aliashel **tail, char *shortkey, char **ptr);
+t_alias			*get_next_node(t_aliaspkg *data, char *value);
 
 /*
 ** HASH FUNCTIONS
@@ -135,14 +151,13 @@ void			display_hash_table();
 */
 
 void			free_hash_and_alias(void);
-void			importaliasfilecontent_1(char *line, char *tmp, int j);
+void			importaliasfilecontent_1(char *line);
 
 /*
 ** CD FUNCTIONS
 */
 
-char			*handlepath(t_cdpkg *v);
-char			*handlepath(t_cdpkg *v);
+char			*handlepath(t_cdpkg *v, char *pwd);
 int				ft_error_cd(char *path, char **arg, char *oldpwd);
 char			*createnewpath(char *path, char *pwd);
 char			*rmbackslashs(char *path);

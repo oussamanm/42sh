@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 07:28:51 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 13:25:45 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 23:57:45 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static	void	setup_vrb(t_tokens *st_tokens, t_intern vrb, int index, int n)
 {
 	char	*temp;
 
+	temp = NULL;
 	if (n)
 	{
 		exported_vars(vrb, STDERR_FILENO, -1);
@@ -36,11 +37,8 @@ static	void	setup_vrb(t_tokens *st_tokens, t_intern vrb, int index, int n)
 	}
 	else if (NEXT && NEXT->token == T_EQUAL && NEXT->indx == index)
 	{
-		temp = ft_strjoin(st_tokens->value, "=");
-		if (NEXT->next && NEXT->next->indx == index &&
-			T_IS_TXT(NEXT->next->token))
-			temp = ft_strjoir(temp, NEXT->next->value, 0);
-		if (ft_strcmp("PATH", vrb.key) == 0)
+		temp = ft_strjoir_rtn(ft_strjoin(vrb.key, "="), vrb.value, 1);
+		if (vrb.key && ft_strcmp("PATH", vrb.key) == 0)
 			erase_hash_table();
 		ft_set_vrb(temp, &g_environ, 1);
 		add_intern_var(&g_intern, vrb.key, vrb.value, 1);

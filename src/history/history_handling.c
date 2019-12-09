@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 17:50:14 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 13:45:28 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:30:10 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int		is_fc_exist(char *cmd)
 {
-	char	**sp_args;
-	char	*fl;
-	int		i;
+	char				**sp_args;
+	unsigned	char	fl;
+	int					i;
 
 	sp_args = ft_str_split_q(cmd, "\n \t");
 	i = 0;
@@ -25,13 +25,11 @@ static int		is_fc_exist(char *cmd)
 	if (sp_args && sp_args[i] && ft_strcmp(sp_args[i], "fc") == 0)
 	{
 		read_fc_flags(sp_args + i + 1, &fl, NULL);
-		if (ft_strchr(fl, 'e') || ft_strchr(fl, 's') || !ft_strchr(fl, 'l'))
+		if (fl & FC_E || fl & FC_S || !(fl & FC_L))
 		{
 			ft_strrdel(sp_args);
-			ft_strdel(&fl);
 			return (1);
 		}
-		ft_strdel(&fl);
 	}
 	ft_strrdel(sp_args);
 	return (0);
@@ -118,8 +116,7 @@ int				history_handling(char **str_cmds)
 			ft_strdel(str_cmds);
 			*str_cmds = new;
 		}
-		else
-			ft_strdel(&new);
+		(*str_cmds != new) ? ft_strdel(&new) : 0;
 		if (!is_expansion_syntax(*str_cmds))
 		{
 			insert_history(&g_history, *str_cmds);
@@ -128,8 +125,7 @@ int				history_handling(char **str_cmds)
 			return (0);
 		}
 	}
-	if (!fc_exec_flag(*str_cmds))
-		insert_history(&g_history, *str_cmds);
+	(!fc_exec_flag(*str_cmds)) ? insert_history(&g_history, *str_cmds) : 0;
 	history_readline(&g_history, 0, str_cmds);
 	trim_expansion(str_cmds);
 	return (1);

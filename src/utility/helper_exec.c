@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:09:00 by onouaman          #+#    #+#             */
-/*   Updated: 2019/11/21 19:09:05 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/12/08 23:05:48 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,11 @@ void		set_isarg(t_pipes *st_pipes)
 				break ;
 			if (!valid_identifier(st_tokens->value))
 				return ;
-			st_tokens->is_arg = T_EQUAL;
-			if (NEXT && NEXT->next && NEXT->next->indx == st_tokens->indx)
-				NEXT->next->is_arg = T_EQUAL;
+			while (st_tokens && st_tokens->indx == i)
+			{
+				st_tokens->is_arg = T_EQUAL;	
+				st_tokens = st_tokens->next;
+			}
 		}
 	}
 }
