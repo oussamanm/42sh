@@ -156,9 +156,9 @@ ls -l -a -F 2>&1 |${GREP} -o "ls"
 
 
 
-
-
-
+alias aa="pwd <file | bb"
+alias bb="echo 11 && cc"
+ alias cc="echo 22 && aa"
 
 
 /*
@@ -232,34 +232,6 @@ if (!STR_CMP(args[0], temp))
 
 }
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

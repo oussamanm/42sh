@@ -193,6 +193,7 @@ typedef struct			s_tokens
 	char				*value;
 	int					indx;
 	int					is_arg;
+	int					aliased;
 	struct s_tokens		*next;
 	struct s_tokens		*prev;
 }						t_tokens;

@@ -25,6 +25,8 @@ void		init_alias_hash(void)
 
 	i = -1;
 	data = (t_aliaspkg *)ft_memalloc(sizeof(t_aliaspkg));
+	data->head_ref = NULL;
+	data->tail_ref = NULL;
 	storeaddrstruct(data);
 	createaliasfile();
 	importaliasfilecontent(NULL);
