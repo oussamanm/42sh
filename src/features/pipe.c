@@ -60,8 +60,10 @@ void			ft_create_pipes(t_pipes *st_pipes)
 static void		ft_apply_pipe_h(t_pipes *st_pipes, t_pipes *st_head)
 {
 	int i;
+	int status;
 
 	i = 0;
+	status = 0;
 	ft_signal_default();
 	if (st_pipes != st_head && dup2(st_pipes->fds[0], 0) == -1)
 		ft_putendl_fd("Error in dub STD_IN", 2);
@@ -69,8 +71,8 @@ static void		ft_apply_pipe_h(t_pipes *st_pipes, t_pipes *st_head)
 	if (dup2(st_pipes->fds[i], i) == -1)
 		ft_putendl_fd("Error in dub STD_", 2);
 	ft_close_pipes(st_head);
-	ft_cmd_fork(0, st_pipes);
-	exit(EXIT_FAILURE);
+	status = ft_cmd_fork(0, st_pipes);
+	exit(status);
 }
 
 /*

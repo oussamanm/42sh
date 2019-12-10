@@ -13,42 +13,10 @@
 #include "shell.h"
 
 /*
-** look if arg has an alias and return him;
-*/
-
-char	**aliasmatched(char **args)
-{
-	t_aliaspkg	*data;
-	t_alias		*curr;
-	char		*temp;
-	char		**rtn;
-
-	data = storeaddrstruct(NULL);
-	curr = data->head_ref;
-	rtn = NULL;
-	while (curr)
-	{
-		if (ft_strcmp(curr->shortcut, args[0]) == 0)
-		{
-			// temp = handleqoutes(ft_strdup(curr->cmd));
-			temp = aliasfinder(curr, NULL, NULL);
-			rtn = ft_str_split_q(temp, " \t\n");
-			ft_strdel(&temp);
-			rtn = ft_strr_join(rtn, &args[1], 1);
-			break ;
-		}
-		curr = curr->next;
-	}
-	if (rtn)
-		return (rtn);
-	return (args);
-}
-
-/*
 ** Print a specific aliase for ex:cmd alias "x";
 */
 
-void	printelement(char *shortcut, int *flag)
+void			printelement(char *shortcut, int *flag)
 {
 	t_aliaspkg	*data;
 	t_alias		*curr;
@@ -78,7 +46,7 @@ void	printelement(char *shortcut, int *flag)
 ** push alias to list for example w="who";
 */
 
-void	ft_built_alias_3(t_tokens *st_tokens, char *arg)
+static void		ft_built_alias_3(t_tokens *st_tokens, char *arg)
 {
 	int		j;
 	char	*str1;
@@ -106,7 +74,7 @@ void	ft_built_alias_3(t_tokens *st_tokens, char *arg)
 ** this func call to functions to push alias in list or to print all aliases;
 */
 
-int		ft_buil_alias_2(t_tokens *st_tokens, char *arg)
+static int		ft_buil_alias_2(t_tokens *st_tokens, char *arg)
 {
 	int i;
 	int flag;
@@ -136,7 +104,7 @@ int		ft_buil_alias_2(t_tokens *st_tokens, char *arg)
 ** the main function of alias;
 */
 
-int		ft_buil_alias(t_tokens *st_tokens)
+int				ft_buil_alias(t_tokens *st_tokens)
 {
 	st_tokens = st_tokens->next;
 	if (!st_tokens)

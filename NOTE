@@ -158,9 +158,10 @@ ls -l -a -F 2>&1 |${GREP} -o "ls"
 
 alias aa="pwd <file | bb"
 alias bb="echo 11 && cc"
- alias cc="echo 22 && aa"
+alias cc="echo 22 && aa"
 
-
+pwd <file | echo 11 && echo 22 && aa || echo 11 && echo 22 && pwd <file | bb
+pwd <file | echo 11 && echo 22 && aa || echo 11 && echo 22 && pwd <file | bb
 /*
 int		exist_in_list(t_list *st_list, char *key)
 {
@@ -234,7 +235,18 @@ if (!STR_CMP(args[0], temp))
 */
 
 
-
+void				print_tokenn(t_tokens *st_tokens, char *msg)
+{
+	if (!st_tokens)
+		return ;
+	dprintf(2, "---------- %s ----------\n", msg);
+	while (st_tokens)
+	{
+		dprintf(2,"<%d> Tken <%d> value = |%s|\n",st_tokens->indx, st_tokens->token, st_tokens->value);
+		st_tokens = st_tokens->next;
+	}
+	dprintf(2, "----- 	fin -----\n");
+}
 
 
 

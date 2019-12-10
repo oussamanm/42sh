@@ -22,6 +22,8 @@ char	*lookup_hash(char *key)
 	unsigned int	index;
 	t_hash			*curr;
 
+	if (!key)
+		return (NULL);
 	hash_arr = store_addr_of_hash(NULL, 0);
 	index = hash(key);
 	curr = hash_arr[index];

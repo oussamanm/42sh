@@ -23,10 +23,7 @@ t_aliaspkg	*storeaddrstruct(t_aliaspkg *addr)
 	if (addr == NULL)
 		return (ret);
 	else
-	{
-		dprintf(2,"add 1 = %p , %p\n",ret,addr);
 		ret = addr;
-	}
 	return (ret);
 }
 
