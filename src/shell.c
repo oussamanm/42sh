@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/08 13:18:14 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/11 20:13:44 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static void	initial_shell(t_select **select)
 			break ;
 		kill(g_shellpid, SIGTTIN);
 	}
+	g_intern = NULL;
+	g_export = NULL;
 	g_pos.cmd = NULL;
 	g_exit_status = 0;
 	g_tty_name = ttyname(0);
@@ -64,9 +66,8 @@ int			main(void)
 	extern char	**environ;
 	t_select	*select;
 
-	g_intern = NULL;
-	set_export_env(environ);
 	initial_shell(&select);
+	set_export_env(environ);
 	if (ft_set_termcap() == -1)
 		ft_err_exit("ERROR in setting Termcap parameters\n");
 	while (1337)

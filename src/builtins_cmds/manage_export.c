@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 20:58:00 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 22:44:05 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/11 20:05:21 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,21 +89,20 @@ static	void	display_export(t_intern *export)
 
 void			exported_vars(t_intern vrb, int rest, int edit)
 {
-	static	t_intern	*export;
 	char				*line;
 
 	if (rest == STDIN_FILENO)
 	{
-		if (add_intern_var(&export, vrb.key, vrb.value, edit) && vrb.value)
+		if (add_intern_var(&g_export, vrb.key, vrb.value, edit) && vrb.value)
 		{
 			line = ft_strjoir_rtn(ft_strjoin(vrb.key, "="), vrb.value, 1);
 			ft_set_vrb(line, &g_environ, 1);
 		}
 	}
 	else if (rest == STDOUT_FILENO)
-		display_export(export);
+		display_export(g_export);
 	else if (rest == STDERR_FILENO)
-		delete_intern_var(vrb.key, &export);
+		delete_intern_var(vrb.key, &g_export);
 }
 
 t_intern		get_vrb_value(char *vrb)

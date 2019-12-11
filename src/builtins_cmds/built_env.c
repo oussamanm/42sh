@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 11:56:36 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/08 21:08:27 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/11 20:27:00 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	move_to_env(char *key)
 {
 	t_intern	*lst;
 	char		*vrb;
+	char		*key;
 
 	lst = g_intern;
 	while (lst)
@@ -24,6 +25,7 @@ void	move_to_env(char *key)
 		{
 			vrb = ft_strjoir_rtn(ft_strjoin(lst->key, "="), lst->value, 1);
 			ft_set_vrb(vrb, &g_environ, 1);
+			
 			exported_vars((t_intern){key, lst->value, NULL}, STDIN_FILENO, 0);
 			return ;
 		}

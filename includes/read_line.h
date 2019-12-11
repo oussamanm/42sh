@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/08 16:26:05 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/11 20:04:53 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@
 # define FC_S 0x10
 
 typedef struct s_history	t_history;
+
 
 typedef struct		s_cursor
 {

@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 12:19:07 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/02 11:25:15 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/11 18:50:09 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void			search_new_line(char *search, char *line,
 	pos->index = ft_strlen(line);
 	pos->x = pos->end[pos->num_lines - 1];
 	pos->y = pos->num_lines - 1;
+	ft_strdel(cmd);
 	*cmd = ft_strdup(line);
 }
 
