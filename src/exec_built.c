@@ -29,23 +29,22 @@ static void		save_fds(void)
 
 static void		restor_fds(void)
 {
-	int	i;
-	int	fd;
+	int		i;
+	int		fd;
 
 	i = -1;
 	fd = SAVED_FD;
-	if (read(SAVED_FD, NULL, 0) == -1 &&
-		write(SAVED_FD, NULL, 0) == -1 && g_tty_name)
+	if (read(SAVED_FD, NULL, 0) == -1 && write(SAVED_FD, NULL, 0) == -1
+		&& g_tty_name)
 		if ((fd = open(g_tty_name, O_RDWR)) == -1)
 			fd = SAVED_FD;
 	while (++i < 3)
 	{
-		if (g_proc_sub == 2)
-			continue ;
 		if (dup2(fd, i) == -1)
 			ft_putendl_fd("Error in dup or close in builtens \n", 2);
 	}
-	close(fd);
+	if (fd > 2)
+		close(fd);
 }
 
 /*
@@ -113,7 +112,7 @@ int				ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 int				ft_check_built(char *arg)
 {
 	if (arg == NULL)
-		return (-1);
+		return (0);
 	if (!ft_strcmp(arg, "exit") || !ft_strcmp(arg, "echo"))
 		return (1);
 	else if (!ft_strcmp(arg, "export"))

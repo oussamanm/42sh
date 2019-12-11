@@ -64,6 +64,7 @@ t_tokens	*ft_new_token(void)
 	st_token->next = NULL;
 	st_token->indx = -1;
 	st_token->is_arg = 0;
+	st_token->aliased = 0;
 	return (st_token);
 }
 

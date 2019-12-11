@@ -120,7 +120,6 @@ void			pushtolist(char *key, char *value, int flag);
 int				rm_alias_by_elem_flag(char *shortcut);
 char			*handleqoutes(char *str);
 void			importaliasfilecontent(char *tmp);
-char			**aliasmatched(char **args);
 int				freealiaslist(void);
 void			ft_buil_updatealias(char **args);
 void			printlist(void);

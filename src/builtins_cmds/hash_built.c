@@ -33,6 +33,8 @@ unsigned int	hash(char *key)
 {
 	unsigned int value;
 
+	if (!key)
+		return (0);
 	value = key[0] - 'a';
 	return (value % SIZE);
 }

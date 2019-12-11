@@ -125,17 +125,9 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 		return (-1);
 	st_cmds = ft_new_cmds();
 	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
-	st_cmds->args = aliasmatched(st_cmds->args);
-	// int i;
-	// i = 0;
-	// while (st_cmds->args[i])
-	// {
-	// 		ft_putstr_fd("ret of aliasmatched ==> ", 1);
-	// 		ft_putendl_fd(st_cmds->args[i], 1);
-	// 		i++;
-	// }
-	if ((st_cmds->st_tokens = ft_lexer(st_cmds->args)) == NULL ||
-		error_syntax_lexer(st_cmds->st_tokens))
+	st_cmds->st_tokens = ft_lexer(st_cmds->args);
+	handle_alias(&(st_cmds->st_tokens));
+	if (error_syntax_lexer(st_cmds->st_tokens))
 	{
 		free_list_cmds(st_cmds);
 		return ((g_exit_status = 258));

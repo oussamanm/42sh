@@ -111,6 +111,8 @@ long long int		ft_strlenint(long long int nb);
 int					ft_lstcount(t_list *lst);
 int					ft_countw(const char *str, char c);
 void				ft_lstprint(t_list *lst);
+int					ft_lstfind(t_list *st_list, char *content);
+void				ft_lst_free(t_list **st_list);
 char				*ft_nstrdup(const char *s1, size_t n);
 
 int					ft_find_file(char *path, char *file);

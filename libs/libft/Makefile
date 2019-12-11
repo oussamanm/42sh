@@ -26,6 +26,7 @@ ft_strlcat.c ft_strlen.c ft_strmap.c ft_strmapi.c ft_strncat.c ft_strncmp.c\
 ft_strncpy.c ft_strnequ.c ft_strnew.c ft_strnstr.c ft_strrchr.c ft_strsplit.c\
 ft_strstr.c ft_strsub.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_chrlen.c\
 bchar.c ft_strrchrindex.c ft_strchrindex.c ft_isalpha_exist.c get_next_line.c\
+ft_lstfind.c ft_lst_del.c\
 
 SRC_H = ft_func_h_file.c ft_func_h_str2.c\
 ft_func_h_strr.c ft_func_h_upd.c ft_func_h_str.c ft_func_h_str3.c\

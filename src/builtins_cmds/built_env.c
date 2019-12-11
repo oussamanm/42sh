@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 11:56:36 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/11 20:27:00 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/11 20:31:32 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	move_to_env(char *key)
 {
 	t_intern	*lst;
 	char		*vrb;
-	char		*key;
 
 	lst = g_intern;
 	while (lst)
