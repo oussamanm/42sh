@@ -17,11 +17,11 @@
 # define CD_OEMSG	"invalid option\ncd: usage: cd [-L][-P] [dir]"
 # define SIZE		100
 
-typedef struct s_alias		t_alias;
-typedef struct s_aliaspkg	t_aliaspkg;
-typedef struct s_cdpkg		t_cdpkg;
-typedef struct s_hash		t_hash;
-typedef struct s_aliasswitcher t_aliashel;
+typedef struct s_alias			t_alias;
+typedef struct s_aliaspkg		t_aliaspkg;
+typedef struct s_cdpkg			t_cdpkg;
+typedef struct s_hash			t_hash;
+typedef struct s_aliasswitcher	t_aliashel;
 
 enum	e_flags {
 	n_flg = 1,
@@ -63,7 +63,7 @@ struct			s_aliaspkg
 
 struct			s_aliasswitcher
 {
-	char			*string;
+	char		*string;
 	t_aliashel	*next;
 };
 
@@ -124,14 +124,15 @@ int				freealiaslist(void);
 void			ft_buil_updatealias(char **args);
 void			printlist(void);
 void			createaliasfile(void);
-int				value_found_as_key(t_aliaspkg  *data, char *valueaskey);
+int				value_found_as_key(t_aliaspkg *data, char *valueaskey);
 void			freetmplistalias(t_aliashel **head);
 char			*get_value(t_aliaspkg *data, char *key);
 void			init_var(t_aliashel **head, t_aliashel **tail, char ***arr);
 int				free_elem(char *lastkey, char **arr, t_aliashel **head);
 void			ft_checker(char **arr, char **newvalue);
 char			*aliasfinder(t_alias *curr, char *value, char *lastkey);
-int				ft_list(t_aliashel **head, t_aliashel **tail, char *shortkey, char **ptr);
+int				ft_list(t_aliashel **head, t_aliashel **tail, char *shortkey,
+	char **ptr);
 t_alias			*get_next_node(t_aliaspkg *data, char *value);
 
 /*

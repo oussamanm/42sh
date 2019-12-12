@@ -59,7 +59,8 @@ char		*get_value_alias(char *key)
 ** change value of alias to tokens and join it to main_list_tokens
 */
 
-t_tokens	*handle_value_alias(char *value, t_tokens *st_tokens, t_tokens **st_head)
+t_tokens	*handle_value_alias(char *value, t_tokens *st_tokens,
+	t_tokens **st_head)
 {
 	t_tokens	*st_token;
 	t_tokens	*last_token;
@@ -96,13 +97,16 @@ t_tokens	*handle_value_alias(char *value, t_tokens *st_tokens, t_tokens **st_hea
 ** Check if alias should change to his value
 */
 
-int			check_alias(t_tokens **st_tokens, t_tokens **st_head, t_list **st_list)
+int			check_alias(t_tokens **st_tokens, t_tokens **st_head,
+	t_list **st_list)
 {
 	char	*value;
 
-	if ((value = get_value_alias((*st_tokens)->value)) && ft_lstfind(*st_list, (*st_tokens)->value) == 0)
+	if ((value = get_value_alias((*st_tokens)->value)) &&
+		ft_lstfind(*st_list, (*st_tokens)->value) == 0)
 	{
-		ft_lstadd(st_list, ft_lstnew((*st_tokens)->value, ft_strlen((*st_tokens)->value) + 1));
+		ft_lstadd(st_list, ft_lstnew((*st_tokens)->value,
+			ft_strlen((*st_tokens)->value) + 1));
 		(*st_tokens) = handle_value_alias(value, (*st_tokens), st_head);
 		return (1);
 	}

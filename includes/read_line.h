@@ -212,7 +212,8 @@ char				is_shell_delimiter(char c);
 char				*get_delimiter(char *keyword, int i);
 char				*read_fc(void);
 void				write_fc(char *content);
-int					fc_flag_l(t_history history, unsigned char flags, char **args);
+int					fc_flag_l(t_history history, unsigned char flags,
+	char **args);
 int					fc_built(char **args, t_history *history, char **tmp);
 int					fc_flag_s(t_history *his, char *arg);
 int					fc_flag_e(t_history his, char **args);

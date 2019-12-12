@@ -88,7 +88,7 @@ void		set_isarg(t_pipes *st_pipes)
 				return ;
 			while (st_tokens && st_tokens->indx == i)
 			{
-				st_tokens->is_arg = T_EQUAL;	
+				st_tokens->is_arg = T_EQUAL;
 				st_tokens = st_tokens->next;
 			}
 		}
