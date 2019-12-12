@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 07:28:51 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 23:57:45 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/11 20:15:19 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static	int		setup_export(t_tokens *st_tokens, int n)
 		}
 		vrb = get_key_value(st_tokens);
 		setup_vrb(st_tokens, vrb, i, n);
+		ft_strdel(&vrb.value);
 		i++;
 	}
 	return (1);

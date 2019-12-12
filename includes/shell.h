@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/07 15:54:47 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/11 20:05:03 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,7 @@ typedef	struct			s_cmds
 
 t_intern				*g_intern;
 char					**g_environ;
+t_intern				*g_export;
 int						g_exit_status;
 char					*g_tty_name;
 

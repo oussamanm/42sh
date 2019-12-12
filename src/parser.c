@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 21:06:25 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/08 22:54:46 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/10 04:27:41 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ static void		handle_variable(t_pipes *st_pipes)
 		{
 			tmp_env = ft_tokens_arg_env(st_pipes->st_tokens);
 			st_pipes->tmp_env = fill_env(tmp_env);
+			ft_strrdel(tmp_env);
 		}
 		set_isarg(st_pipes);
 		correct_tokens(st_pipes);
