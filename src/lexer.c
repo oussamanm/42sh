@@ -54,19 +54,19 @@ void		args_to_token_h(t_tokens **st_tokens, char *arg, int *j, int i)
 {
 	if (arg[*j] == '\\')
 		ft_lexer_txt(st_tokens, &arg[*j], j, i);
+	else if (arg[*j] == ';')
+		ft_fill_token(st_tokens, T_SEMICLN, ft_strdup(";"), i);
 	else if (IS_QUOTE(arg[*j]))
 		ft_lexer_quot(st_tokens, &arg[*j], j, i);
 	else if (arg[*j] == '&' && M_CHECK(arg[*j + 1], '>', '<'))
 		ft_lexer_red(st_tokens, &arg[*j], j, i);
 	else if (M_CHECK(arg[*j], '>', '<') && arg[*j + 1] != '(')
 		ft_lexer_red(st_tokens, &arg[*j], j, i);
-	else if ((*st_tokens)->prev && (*st_tokens)->prev->token == T_RED_OUT_A
-			&& arg[*j] == '-')
+	else if (CMP_TOKEN((*st_tokens)->prev, T_RED_OUT_A) && arg[*j] == '-')
 		ft_upd_token((*st_tokens)->prev, T_RED_OUT_B, ">&-");
 	else if (arg[*j] == '|' && arg[*j + 1] != '|')
 		ft_fill_token(st_tokens, T_PIPE, ft_strdup("|"), i);
-	else if ((arg[*j] == '&' && arg[*j + 1] == '&') ||
-			(arg[*j] == '|' && arg[*j + 1] == '|'))
+	else if (M_LOG_OPR(arg[*j], arg[*j + 1]))
 		ft_lexer_logopr(st_tokens, &arg[*j], j, i);
 	else if (arg[*j] == '&')
 		ft_fill_token(st_tokens, T_JOBCTR, ft_strdup("&"), i);

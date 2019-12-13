@@ -51,6 +51,12 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 		return (0);
 	while (st_tokens && !bl)
 	{
+		if (M_CHECK(TOKEN, T_TXT, T_DQUO) &&
+			error_syntax_expans(st_tokens->value))
+		{
+			print_error(" bad substitution", NULL, NULL, 0);
+			return (1);
+		}
 		bl = syntax_error_h(st_tokens);
 		if (bl && (!PREV || !NEXT))
 			tmp = ft_strdup(st_tokens->value);
@@ -58,11 +64,9 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 			tmp = ft_strdup(NEXT->value);
 		st_tokens = st_tokens->next;
 	}
-	if (!bl)
-		return (0);
-	print_error(tmp, NULL, ERR_SYN, 0);
+	(bl) ? print_error(tmp, NULL, ERR_SYN, 0) : NULL;
 	free(tmp);
-	return (1);
+	return (bl ? 1 : 0);
 }
 
 /*
@@ -74,6 +78,8 @@ int			error_syntax_expans(char *str_cmds)
 	int i;
 
 	i = 0;
+	if (!str_cmds)
+		return (0);
 	while (str_cmds[i])
 	{
 		if (str_cmds[i] == '$' && str_cmds[i + 1] == '{')
@@ -85,10 +91,7 @@ int			error_syntax_expans(char *str_cmds)
 			{
 				if ((str_cmds[i] == '}' && i && str_cmds[i - 1] == '{') ||
 					helper_error_expans(str_cmds, i))
-				{
-					print_error(" bad substitution", NULL, NULL, 0);
 					return (1);
-				}
 				if (str_cmds[++i] == '}')
 					break ;
 			}

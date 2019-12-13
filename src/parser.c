@@ -155,3 +155,33 @@ void			ft_parse_cmd(t_cmds *st_cmds)
 		st_jobctr = st_jobctr->next;
 	}
 }
+
+t_cmds			*parse_semicolon(t_tokens *tokens)
+{
+	t_cmds		*st_cmds;
+	t_cmds		*cmds_head;
+	t_tokens	*st_tokens;
+
+	if (!tokens)
+		return (NULL);
+	st_cmds = ft_new_cmds();
+	cmds_head = st_cmds;
+	st_cmds->st_tokens = ft_new_token();
+	st_tokens = st_cmds->st_tokens;
+	while (tokens)
+	{
+		if (tokens->token != T_SEMICLN)
+			ft_dup_token(&st_tokens, tokens, T_SEMICLN);
+		else
+		{
+			if (tokens->next && (st_cmds->next = ft_new_cmds()))
+			{
+				st_cmds = st_cmds->next;
+				st_cmds->st_tokens = ft_new_token();
+				st_tokens = st_cmds->st_tokens;
+			}
+		}
+		tokens = (tokens) ? tokens->next : tokens;
+	}
+	return (cmds_head);
+}

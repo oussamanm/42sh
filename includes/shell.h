@@ -46,6 +46,8 @@
 # define M_SPEC_CHARC(x) (x=='$'||x=='`'||x=='\\'||x=='"'||x=='\n')
 # define M_ESCAPED(x) (x == '\\')
 # define M_BRACKET(x) (x == '(' || x == ')')
+# define M_LOG_OPR(x, y) ((x == '|' && y == '|') || (x == '&' && y == '&'))
+# define M_VARIABLE(x, y) (x == '$' && y != '(')
 # define STR(x)  (*str)[x]
 # define MATCH_CLOSED(x, y)(((x=='q'||x=='Q')&&x==y)||(x=='S'&&y=='s'))
 # define PROMPT 3
@@ -77,6 +79,7 @@
 # define T_TXT			0
 # define T_QUO			1
 # define T_DQUO			2
+#define T_SEMICLN 59
 # define T_SUBSHL		117
 # define T_PROC_IN		1337
 # define T_PROC_OUT		42
@@ -104,6 +107,7 @@
 # define TOKEN st_tokens->token
 # define PREV st_tokens->prev
 # define NEXT st_tokens->next
+# define CMP_TOKEN(x, t) (x && x->token == t)
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
 # define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
 # define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
@@ -229,10 +233,10 @@ typedef struct			s_jobctr
 
 typedef	struct			s_cmds
 {
-	char				**args;
 	int					*fd;
 	t_tokens			*st_tokens;
 	t_jobctr			*st_jobctr;
+	struct s_cmds		*next;				
 }						t_cmds;
 
 t_intern				*g_intern;
@@ -332,7 +336,6 @@ void					value_to_token(char *value, t_tokens **st_tokens);
 ** Quote
 */
 
-char					*ft_corr_args(char *argv);
 void					ft_remove_quot(char **args);
 void					ft_update_tokens(t_tokens *st_tokens);
 char					*ft_str_remp(char *str, char *remp, int start, int len);
@@ -379,6 +382,7 @@ void					tokens_to_args(t_pipes *st_pipe);
 void					args_to_token(t_tokens **st_tokens, char *arg, int i);
 int						ft_count_tokens(t_tokens *st_tokens);
 int						ft_check_token(t_tokens *st_tokens, int token);
+t_tokens				*get_last_token(t_tokens *st_tokens);
 
 /*
 ** Redirection
@@ -402,7 +406,7 @@ char					*get_value_next(t_tokens *st_token);
 */
 
 void					ft_multi_cmd(char *str_cmds, int bl_subsh);
-int						ft_cmds_setup(char *str_arg, int bl_subsh);
+int						ft_cmds_setup(t_cmds *st_cmds, int bl_subsh);
 int						ft_cmd_fork(int fork_it, t_pipes *st_pipes);
 int						ft_check_cmd(char *cmd, char **environ);
 void					logical_ops(t_logopr *st_logopr);
@@ -446,6 +450,7 @@ void					free_list_pipe(t_pipes *st_pipes);
 ** Parse Cmds
 */
 
+t_cmds					*parse_semicolon(t_tokens *tokens);
 void					ft_parse_cmd(t_cmds *st_cmds);
 void					fill_args(t_pipes *st_pipes);
 void					correct_tokens(t_pipes *st_pipes);
@@ -481,6 +486,14 @@ void					spec_case_subshell(char **arg);
 int						ft_buil_alias(t_tokens *st_tokens);
 int						ft_buil_unalias(t_tokens *st_token);
 void					handle_alias(t_tokens **st_head);
+
+/*
+**	Expansions
+*/
+
+void					handle_expansions(t_tokens **st_tokens);
+char					*ft_corr_args(char *argv);
+
 
 /*
 ** job control
