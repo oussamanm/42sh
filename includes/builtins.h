@@ -160,7 +160,7 @@ void			importaliasfilecontent_1(char *line);
 char			*handlepath(t_cdpkg *v, char *pwd);
 int				ft_error_cd(char *path, char **arg, char *oldpwd);
 char			*createnewpath(char *path, char *pwd);
-char			*rmbackslashs(char *path);
+char			*rmslashs(char *path);
 
 /*
 ** HELPER FUNCTIONS

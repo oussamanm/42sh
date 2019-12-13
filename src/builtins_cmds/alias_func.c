@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "shell.h"
+#include "read_line.h"
 
 /*
 ** - store add of list that relate to alias for easy free;

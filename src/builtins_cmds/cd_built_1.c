@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-char	*rmbackslashs_1(char *path, int len)
+char	*rmslashs_1(char *path, int len)
 {
 	int		i;
 	int		j;
@@ -33,7 +33,7 @@ char	*rmbackslashs_1(char *path, int len)
 	return (freshstr);
 }
 
-char	*rmbackslashs(char *path)
+char	*rmslashs(char *path)
 {
 	int	i;
 	int	j;
@@ -58,7 +58,7 @@ char	*rmbackslashs(char *path)
 			i++;
 		j++;
 	}
-	return (rmbackslashs_1(path, i));
+	return (rmslashs_1(path, i));
 }
 
 char	*changepath(char *path)
@@ -99,7 +99,7 @@ char	*createnewpath(char *path, char *pwd)
 			pwd = ft_strjoir(pwd, ft_strjoir("/", arr[i], 0), 3);
 		i++;
 	}
-	pwd = rmbackslashs(pwd);
+	pwd = rmslashs(pwd);
 	ft_free2d(arr);
 	return (pwd);
 }
@@ -110,11 +110,11 @@ char	*handlepath(t_cdpkg *v, char *pwd)
 
 	if (!(pwd = ft_get_vrb("PWD", g_environ)))
 		pwd = ft_strdup(getcwd(v->buff, 1024));
-	if (v->path[0] == '/')
+	if (v->path[0] == '/' && v->path[1] != '.')
 	{
 		ft_strdel(&pwd);
 		pwd = v->path;
-		if (v->path[ft_strlen(v->path) - 1] == '/')
+		if ((ft_strlen(v->path) > 1) && v->path[ft_strlen(v->path) - 1] == '/')
 		{
 			v->path = ft_strsub(v->path, 0, (ft_strlen(v->path) - 1));
 			ft_strdel(&pwd);

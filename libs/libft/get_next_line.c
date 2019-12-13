@@ -15,23 +15,28 @@
 static int		copy_in_line(char **text, char **line)
 {
 	char	*tmp;
-	char	*p;
 	int		i;
 
-	p = *text;
 	i = 0;
-	while (p[i] && p[i] != '\n')
-		i++;
-	tmp = ft_strnew(i);
-	i = 0;
-	while (*p && *p != '\n')
-		tmp[i++] = *p++;
-	tmp[i] = '\0';
-	*line = ft_strdup(tmp);
-	free(tmp);
-	tmp = *text;
-	*text = ft_strdup(((*text) + i + 1));
-	ft_strdel(&tmp);
+	tmp = NULL;
+	if (ft_strchr(*text, '\n'))
+	{
+		while ((*text)[i] && (*text)[i] != '\n')
+			i++;
+		*line = ft_strsub(*text, 0, i);
+		tmp = *text;
+		*text = ft_strdup(*text + i + 1);
+		ft_strdel(&tmp);
+	}
+	else
+	{
+		while ((*text)[i] && (*text)[i] != '\n')
+			i++;
+		*line = ft_strsub(*text, 0, i);
+		tmp = *text;
+		*text = ft_strdup(*text + i);
+		ft_strdel(&tmp);
+	}
 	return (1);
 }
 
@@ -43,10 +48,10 @@ int				get_next_line(const int fd, char **line)
 	int			ret;
 
 	tmp = NULL;
-	if (fd < 0 || read(fd, buff, 0) < 0)
+	if (fd < 0)
 		return (-1);
 	if (text[fd] == NULL)
-		text[fd] = ft_strnew(0);
+		text[fd] = ft_strnew(1);
 	while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
@@ -58,5 +63,7 @@ int				get_next_line(const int fd, char **line)
 	}
 	if (*text[fd] != '\0')
 		return (copy_in_line(&text[fd], line));
+	free(text[fd]);
+	text[fd] = NULL;
 	return (0);
 }
