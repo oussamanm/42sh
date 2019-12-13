@@ -13,6 +13,19 @@
 #include "shell.h"
 
 /*
+** Get last tokens
+*/
+
+t_tokens	*get_last_token(t_tokens *st_tokens)
+{
+	if (!st_tokens)
+		return (NULL);
+	while (st_tokens && st_tokens->next)
+		st_tokens = NEXT;
+	return (st_tokens);
+}
+
+/*
 ** Correct token by remove all arg of T_EQUAL : variable = value
 */
 

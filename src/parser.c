@@ -104,29 +104,34 @@ static void		ft_fill_pipe(t_logopr *st_logopr)
 }
 
 /*
-** Fill Intern and Temp variables @
+** Parse with semi-colon
 */
 
-static void		handle_variable(t_pipes *st_pipes)
+t_cmds			*parse_semicolon(t_tokens *tokens)
 {
-	char		**tmp_env;
+	t_cmds		*st_cmds;
+	t_cmds		*cmds_head;
+	t_tokens	*st_tokens;
 
-	if (!st_pipes || !ft_check_token(st_pipes->st_tokens, T_EQUAL))
-		return ;
-	if (!st_pipes->next && ft_check_intern(st_pipes))
-		fill_intern(st_pipes);
-	while (st_pipes)
+	if (!tokens)
+		return (NULL);
+	st_cmds = ft_new_cmds();
+	cmds_head = st_cmds;
+	st_cmds->st_tokens = ft_new_token();
+	st_tokens = st_cmds->st_tokens;
+	while (tokens)
 	{
-		if (!ft_check_intern(st_pipes))
+		if (tokens->token != T_SEMICLN)
+			ft_dup_token(&st_tokens, tokens, T_SEMICLN);
+		else if (tokens->next && (st_cmds->next = ft_new_cmds()))
 		{
-			tmp_env = ft_tokens_arg_env(st_pipes->st_tokens);
-			st_pipes->tmp_env = fill_env(tmp_env);
-			ft_strrdel(tmp_env);
+			st_cmds = st_cmds->next;
+			st_cmds->st_tokens = ft_new_token();
+			st_tokens = st_cmds->st_tokens;
 		}
-		set_isarg(st_pipes);
-		correct_tokens(st_pipes);
-		st_pipes = st_pipes->next;
+		tokens = (tokens) ? tokens->next : tokens;
 	}
+	return (cmds_head);
 }
 
 /*
@@ -154,34 +159,4 @@ void			ft_parse_cmd(t_cmds *st_cmds)
 		}
 		st_jobctr = st_jobctr->next;
 	}
-}
-
-t_cmds			*parse_semicolon(t_tokens *tokens)
-{
-	t_cmds		*st_cmds;
-	t_cmds		*cmds_head;
-	t_tokens	*st_tokens;
-
-	if (!tokens)
-		return (NULL);
-	st_cmds = ft_new_cmds();
-	cmds_head = st_cmds;
-	st_cmds->st_tokens = ft_new_token();
-	st_tokens = st_cmds->st_tokens;
-	while (tokens)
-	{
-		if (tokens->token != T_SEMICLN)
-			ft_dup_token(&st_tokens, tokens, T_SEMICLN);
-		else
-		{
-			if (tokens->next && (st_cmds->next = ft_new_cmds()))
-			{
-				st_cmds = st_cmds->next;
-				st_cmds->st_tokens = ft_new_token();
-				st_tokens = st_cmds->st_tokens;
-			}
-		}
-		tokens = (tokens) ? tokens->next : tokens;
-	}
-	return (cmds_head);
 }

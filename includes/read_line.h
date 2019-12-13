@@ -82,7 +82,6 @@
 
 typedef struct s_history	t_history;
 
-
 typedef struct		s_cursor
 {
 	int				index;

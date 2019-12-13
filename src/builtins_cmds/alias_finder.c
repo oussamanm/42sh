@@ -23,15 +23,6 @@ void		iniatail_alias_tokens(t_tokens *st_tokens, int bl)
 	}
 }
 
-t_tokens	*get_last_token(t_tokens *st_tokens)
-{
-	if (!st_tokens)
-		return (NULL);
-	while (st_tokens && st_tokens->next)
-		st_tokens = NEXT;
-	return (st_tokens);
-}
-
 char		*get_value_alias(char *key)
 {
 	t_aliaspkg	*data;
@@ -63,10 +54,7 @@ t_tokens	*handle_value_alias(char *value, t_tokens *st_tokens,
 	t_tokens **st_head)
 {
 	t_tokens	*st_token;
-	t_tokens	*last_token;
 	char		**args;
-	t_tokens	*st_next;
-	t_tokens	*st_prev;
 
 	if (!value || !st_tokens)
 		return (st_tokens);
@@ -76,20 +64,7 @@ t_tokens	*handle_value_alias(char *value, t_tokens *st_tokens,
 	ft_strrdel(args);
 	if (!st_token)
 		return (st_tokens);
-	st_prev = st_tokens->prev;
-	st_next = st_tokens->next;
-	last_token = get_last_token(st_token);
-	if (st_prev == NULL)
-		*st_head = st_token;
-	else
-	{
-		st_prev->next = st_token;
-		st_token->prev = st_prev;
-	}
-	ft_strdel(&st_tokens->value);
-	free(st_tokens);
-	(st_next) ? (st_next->prev = last_token) : 0;
-	(last_token) ? (last_token->next = st_next) : 0;
+	linking_tokens(st_tokens, st_token, st_head);
 	return (st_token);
 }
 
@@ -136,7 +111,8 @@ void		handle_alias(t_tokens **st_head)
 		}
 		if (st_tokens == *st_head && TOKEN == T_TXT)
 			bl = 1;
-		else if (OPER_TOKEN(TOKEN) && NEXT && NEXT->token == T_TXT && (bl = 2))
+		else if ((OPER_TOKEN(TOKEN) || TOKEN == T_SEMICLN) && NEXT &&
+			NEXT->token == T_TXT && (bl = 2))
 			st_tokens = NEXT;
 		if (bl && (bl = check_alias(&st_tokens, st_head, &st_list)) == 1)
 			continue ;

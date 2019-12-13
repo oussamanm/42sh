@@ -24,7 +24,6 @@ void	move_to_env(char *key)
 		{
 			vrb = ft_strjoir_rtn(ft_strjoin(lst->key, "="), lst->value, 1);
 			ft_set_vrb(vrb, &g_environ, 1);
-			
 			exported_vars((t_intern){key, lst->value, NULL}, STDIN_FILENO, 0);
 			return ;
 		}
