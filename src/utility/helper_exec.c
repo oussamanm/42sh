@@ -112,30 +112,28 @@ void		set_isarg(t_pipes *st_pipes)
 ** Check if exist Cmd : check if Ok and permission
 */
 
-int			ft_check_cmd(char *cmd, char **environ)
+int			ft_check_cmd(char *str_cmd, char **args)
 {
 	int			rtn;
-	char		*path_exec;
 	struct stat	st_stat;
 
-	if (!cmd)
-		return (0);
 	rtn = 0;
-	if (!ft_check_char(cmd, '/'))
-		path_exec = ft_find_path(cmd, environ);
-	else
+	if (str_cmd && str_cmd == args[0])
 	{
-		path_exec = ft_strdup(cmd);
-		if (access(cmd, F_OK) != 0 && ++rtn)
-			print_error(FIL_NS, NULL, cmd, 0);
-		else if (!lstat(cmd, &st_stat) && S_ISDIR(st_stat.st_mode) && ++rtn)
-			print_error(IS_DIR, NULL, cmd, 0);
+		if (access(str_cmd, F_OK) != 0 && ++rtn)
+			print_error(FIL_NS, NULL, str_cmd, 0);
+		else if (!lstat(str_cmd, &st_stat) && S_ISDIR(st_stat.st_mode) && ++rtn)
+			print_error(IS_DIR, NULL, str_cmd, 0);
 	}
-	if (!rtn && path_exec && (access(path_exec, X_OK) ||
-		access(path_exec, R_OK)) && ++rtn)
-		print_error(FIL_PD, NULL, cmd, 0);
-	if (!rtn && (!path_exec || !ft_strlen(path_exec)) && ++rtn)
-		print_error(CMD_NF, NULL, cmd, 0);
-	free(path_exec);
+	if (!rtn && str_cmd && (access(str_cmd, X_OK) || access(str_cmd, R_OK)))
+	{
+		print_error(FIL_PD, NULL, args[0], 0);
+		rtn = EXIT_FAILURE;
+	}
+	else if (!str_cmd || !ft_strlen(str_cmd))
+	{
+		print_error(CMD_NF, NULL, args[0], 0);
+		rtn = EXIT_CMD_NF;
+	}
 	return (rtn);
 }
