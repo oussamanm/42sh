@@ -35,26 +35,19 @@ static void		ft_cmds_exec(t_cmds *st_cmds)
 ** Execute of Cmd
 */
 
-static void		ft_cmd_exec(char **args, char **env)
+static void		ft_cmd_exec(char *str_cmd, char **args, char **env)
 {
-	char	*str_arg;
+	int		status;
 
-	str_arg = NULL;
+	status = 0;
 	if (!args || !args[0])
 		exit(EXIT_SUCCESS);
-	if (ft_check_char(args[0], '/'))
-		str_arg = args[0];
-	else
+	if (!(status = ft_check_cmd(str_cmd, args)))
 	{
-		if (!(str_arg = lookup_hash(args[0])))
-			str_arg = ft_find_path(args[0], env);
+		execve(str_cmd, args, env);
+		status = EXIT_FAILURE;
 	}
-	if (str_arg != NULL)
-	{
-		execve(str_arg, args, env);
-		ft_strdel(&str_arg);
-	}
-	exit(EXIT_FAILURE);
+	exit(status);
 }
 
 /*
@@ -63,6 +56,9 @@ static void		ft_cmd_exec(char **args, char **env)
 
 void			ft_handle_child(t_pipes *st_pipes, char **environ)
 {
+	char *str_cmd;
+
+	str_cmd = NULL;
 	ft_signal_default();
 	if (g_proc_sub && st_pipes->bl_jobctr)
 	{
@@ -72,12 +68,16 @@ void			ft_handle_child(t_pipes *st_pipes, char **environ)
 	}
 	if (ft_check_redi(st_pipes) && parse_redir(st_pipes) == PARSE_KO)
 		exit(EXIT_FAILURE);
-	if (lookup_hash(st_pipes->args[0]))
-		ft_cmd_exec(st_pipes->args, environ);
-	else if (!ft_check_cmd(st_pipes->args[0], environ))
-		ft_cmd_exec(st_pipes->args, environ);
+	if (ft_check_char((st_pipes->args)[0], '/'))
+		str_cmd = (st_pipes->args)[0];
+	else if (!st_pipes->tmp_env)
+	{
+		if (!(str_cmd = lookup_hash(st_pipes->args[0])))
+			str_cmd = ft_find_path((st_pipes->args)[0], environ);
+	}
 	else
-		exit(EXIT_CMD_NF);
+		str_cmd = ft_find_path((st_pipes->args)[0], environ);
+	ft_cmd_exec(str_cmd, st_pipes->args, environ);
 }
 
 /*

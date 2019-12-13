@@ -1,6 +1,19 @@
+<<<<<<< HEAD
 alias a="b"
 alias b="c"
 alias c="d"
 alias d="e"
 alias e="d"
 alias m="b"
+=======
+alias m='ll'
+alias a='b'
+alias b='c'
+alias c='d'
+alias d='e'
+alias f='lll'
+alias lll='ll'
+alias ll='l -la > file'
+alias l='ls'
+alias e='c'
+>>>>>>> 5cab43b14d73cee83fed40b4156239bb866cae58

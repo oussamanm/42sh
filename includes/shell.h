@@ -79,7 +79,7 @@
 # define T_TXT			0
 # define T_QUO			1
 # define T_DQUO			2
-#define T_SEMICLN 59
+# define T_SEMICLN		59
 # define T_SUBSHL		117
 # define T_PROC_IN		1337
 # define T_PROC_OUT		42
@@ -236,7 +236,7 @@ typedef	struct			s_cmds
 	int					*fd;
 	t_tokens			*st_tokens;
 	t_jobctr			*st_jobctr;
-	struct s_cmds		*next;				
+	struct s_cmds		*next;
 }						t_cmds;
 
 t_intern				*g_intern;
@@ -331,6 +331,8 @@ int						ft_check_redi(t_pipes *st_pipes);
 int						ft_sum_asci(char str[]);
 char					*ft_str_remp(char *str, char *remp, int start, int len);
 void					value_to_token(char *value, t_tokens **st_tokens);
+t_tokens				*linking_tokens(t_tokens *st_remp, t_tokens *st_tokens,
+	t_tokens **st_head);
 
 /*
 ** Quote
@@ -450,6 +452,7 @@ void					free_list_pipe(t_pipes *st_pipes);
 ** Parse Cmds
 */
 
+void					handle_variable(t_pipes *st_pipes);
 t_cmds					*parse_semicolon(t_tokens *tokens);
 void					ft_parse_cmd(t_cmds *st_cmds);
 void					fill_args(t_pipes *st_pipes);
@@ -493,7 +496,6 @@ void					handle_alias(t_tokens **st_head);
 
 void					handle_expansions(t_tokens **st_tokens);
 char					*ft_corr_args(char *argv);
-
 
 /*
 ** job control

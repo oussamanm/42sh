@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 21:27:03 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/11 20:04:53 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/13 21:19:33 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@
 
 typedef struct s_history	t_history;
 
-
 typedef struct		s_cursor
 {
 	int				index;
@@ -153,7 +152,6 @@ void				ft_move_by_lines(t_cursor *pos, char *s, char *buf);
 void				ft_move_left(int n);
 void				ft_quotes(char **line, t_select *select, t_history *his);
 char				**ft_alloc_tab(void);
-void				ft_win_change(int signal);
 void				ft_print_with_reverse_mode(char *s, \
 int start, int end, t_cursor *pos);
 char				*ft_delcolomn(char *s, t_cursor *pos);
