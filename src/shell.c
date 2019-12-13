@@ -57,8 +57,6 @@ static void	initial_shell(t_select **select)
 			break ;
 		kill(g_shellpid, SIGTTIN);
 	}
-	g_intern = NULL;
-	g_export = NULL;
 	g_pos.cmd = NULL;
 	g_exit_status = 0;
 	g_tty_name = ttyname(0);
