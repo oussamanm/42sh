@@ -57,8 +57,6 @@ static void	initial_shell(t_select **select)
 			break ;
 		kill(g_shellpid, SIGTTIN);
 	}
-	g_intern = NULL;
-	g_export = NULL;
 	g_pos.cmd = NULL;
 	g_exit_status = 0;
 	g_tty_name = ttyname(0);
@@ -73,8 +71,8 @@ int			main(void)
 	extern char	**environ;
 	t_select	*select;
 
-	initial_shell(&select);
 	set_export_env(environ);
+	initial_shell(&select);
 	if (ft_set_termcap() == -1)
 		ft_err_exit("ERROR in setting Termcap parameters\n");
 	while (1337)
