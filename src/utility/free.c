@@ -61,10 +61,16 @@ void		free_list_jobctr(t_jobctr *st_jobctr)
 
 void		free_list_cmds(t_cmds *st_cmds)
 {
+	t_cmds *st_temp;
+
 	if (!st_cmds)
 		return ;
-	ft_strrdel(st_cmds->args);
-	free_tokens(st_cmds->st_tokens, 1);
-	free_list_jobctr(st_cmds->st_jobctr);
-	free(st_cmds);
+	while (st_cmds)
+	{
+		st_temp = st_cmds->next;
+		free_tokens(st_cmds->st_tokens, 0);
+		free_list_jobctr(st_cmds->st_jobctr);
+		free(st_cmds);
+		st_cmds = st_temp;
+	}
 }

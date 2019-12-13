@@ -14,31 +14,38 @@
 #include "read_line.h"
 
 /*
-** Split with ; and Check error syntax , and correction args before start
+** - Lexer - Check Syntax - Parse with ; , handling Alias and Expansion
 */
 
 void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 {
-	char	**args;
-	int		i;
+	t_tokens	*st_tokens;
+	t_cmds		*st_cmds;
+	t_cmds		*cmds_head;
+	char		**args;
 
-	i = 0;
 	if (!str_cmds)
 		return ;
-	str_cmds = ft_strdup(str_cmds);
-	args = ft_str_split_q(str_cmds, ";");
-	ft_strr_trim(args);
-	if (!error_syntax_semi(str_cmds, args) && !error_syntax_expans(str_cmds))
+	cmds_head = NULL;
+	args = ft_str_split_q(str_cmds, " \t\n");
+	st_tokens = ft_lexer(args);
+	handle_alias(&st_tokens);
+	if (!error_syntax_semi(str_cmds, args) && !error_syntax_lexer(st_tokens))
 	{
-		while (args[i] != NULL)
+		handle_expansions(&st_tokens);
+		st_cmds = parse_semicolon(st_tokens);
+		cmds_head = st_cmds;
+		while (st_cmds)
 		{
-			args[i] = ft_corr_args(args[i]);
-			ft_cmds_setup(args[i], bl_subsh);
-			i++;
+			ft_cmds_setup(st_cmds, bl_subsh);
+			st_cmds = st_cmds->next;
 		}
 	}
+	else
+		g_exit_status = 258;
+	free_list_cmds(cmds_head);
+	free_tokens(st_tokens, 1);
 	ft_strrdel(args);
-	ft_strdel(&str_cmds);
 }
 
 static void	initial_shell(t_select **select)

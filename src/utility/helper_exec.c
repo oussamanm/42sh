@@ -13,6 +13,19 @@
 #include "shell.h"
 
 /*
+** Get last tokens
+*/
+
+t_tokens	*get_last_token(t_tokens *st_tokens)
+{
+	if (!st_tokens)
+		return (NULL);
+	while (st_tokens && st_tokens->next)
+		st_tokens = NEXT;
+	return (st_tokens);
+}
+
+/*
 ** Correct token by remove all arg of T_EQUAL : variable = value
 */
 
@@ -88,7 +101,7 @@ void		set_isarg(t_pipes *st_pipes)
 				return ;
 			while (st_tokens && st_tokens->indx == i)
 			{
-				st_tokens->is_arg = T_EQUAL;	
+				st_tokens->is_arg = T_EQUAL;
 				st_tokens = st_tokens->next;
 			}
 		}

@@ -114,24 +114,13 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 }
 
 /*
-** Config Cmds by : - Lexer - Check Syntax - sub_shell - her_doc - Clear lists
+** Config Cmds by : sub_shell - her_doc - Clear lists
 */
 
-int				ft_cmds_setup(char *str_arg, int bl_subsh)
+int				ft_cmds_setup(t_cmds *st_cmds, int bl_subsh)
 {
-	t_cmds		*st_cmds;
-
-	if (str_arg == NULL)
+	if (st_cmds == NULL)
 		return (-1);
-	st_cmds = ft_new_cmds();
-	st_cmds->args = ft_str_split_q(str_arg, " \t\n");
-	st_cmds->st_tokens = ft_lexer(st_cmds->args);
-	handle_alias(&(st_cmds->st_tokens));
-	if (error_syntax_lexer(st_cmds->st_tokens))
-	{
-		free_list_cmds(st_cmds);
-		return ((g_exit_status = 258));
-	}
 	ft_update_tokens(st_cmds->st_tokens);
 	apply_subsh(st_cmds->st_tokens);
 	if (ft_check_token(st_cmds->st_tokens, T_PROC_IN) ||
@@ -141,6 +130,5 @@ int				ft_cmds_setup(char *str_arg, int bl_subsh)
 	(!bl_subsh) ? ft_apply_her_doc(st_cmds->st_jobctr) : NULL;
 	(!g_pos.exit) ? ft_cmds_exec(st_cmds) : 0;
 	procsub_close(st_cmds->fd);
-	free_list_cmds(st_cmds);
 	return (0);
 }

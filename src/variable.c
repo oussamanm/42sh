@@ -95,33 +95,6 @@ void		ft_unset_vrb(char *vrb, char ***env)
 	}
 }
 
-void		ft_insert_vrb(char *vrb, char ***env, int rm)
-{
-	int			i;
-	int			len_vrb;
-	char		**temp;
-
-	if (vrb == NULL || *env == NULL)
-		return ;
-	i = -1;
-	temp = *env;
-	while (temp[++i] != NULL)
-	{
-		len_vrb = ft_find_char(vrb, '=');
-		if (len_vrb != -1 && !ft_strncmp(vrb, temp[i], len_vrb)
-			&& temp[i][len_vrb] == '=')
-		{
-			ft_strdel(&temp[i]);
-			temp[i] = ft_strdup(vrb);
-			i = -2;
-			break ;
-		}
-	}
-	if (i != -2)
-		temp[i] = ft_strdup(vrb);
-	(rm == 1) ? ft_strdel(&vrb) : NULL;
-}
-
 int			ft_edit_vrb(char *vrb, char ***env, int rm)
 {
 	int		i;
@@ -146,4 +119,30 @@ int			ft_edit_vrb(char *vrb, char ***env, int rm)
 	}
 	(rm == 1) ? ft_strdel(&vrb) : NULL;
 	return (0);
+}
+
+/*
+** Fill Intern and Temp variables @ (parsing)
+*/
+
+void		handle_variable(t_pipes *st_pipes)
+{
+	char		**tmp_env;
+
+	if (!st_pipes || !ft_check_token(st_pipes->st_tokens, T_EQUAL))
+		return ;
+	if (!st_pipes->next && ft_check_intern(st_pipes))
+		fill_intern(st_pipes);
+	while (st_pipes)
+	{
+		if (!ft_check_intern(st_pipes))
+		{
+			tmp_env = ft_tokens_arg_env(st_pipes->st_tokens);
+			st_pipes->tmp_env = fill_env(tmp_env);
+			ft_strrdel(tmp_env);
+		}
+		set_isarg(st_pipes);
+		correct_tokens(st_pipes);
+		st_pipes = st_pipes->next;
+	}
 }
