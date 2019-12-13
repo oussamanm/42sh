@@ -1,0 +1,18 @@
+total 616
+drwxr-xr-x  17 mfilahi  candidate     578 Dec 13 23:06 .
+drwxr-xr-x  46 mfilahi  candidate    1564 Dec 13 22:18 ..
+-rw-r--r--   1 mfilahi  candidate     281 Dec 13 22:37 .42shrc
+drwxr-xr-x  16 mfilahi  candidate     544 Dec 13 23:06 .git
+-rw-r--r--   1 mfilahi  candidate      87 Dec 13 19:52 .gitignore
+-rwxr-xr-x   1 mfilahi  candidate  154512 Dec 13 23:01 42sh
+drwxr-xr-x   3 mfilahi  candidate     102 Dec 13 19:59 42sh.dSYM
+-rwxr-xr-x   1 mfilahi  candidate    5220 Dec 13 19:52 Makefile
+-rwxr-xr-x   1 mfilahi  candidate  113188 Dec 13 19:52 NOTE
+-rwxr-xr-x   1 mfilahi  candidate     141 Dec 13 19:52 README.md
+-rwxr-xr-x   1 mfilahi  candidate      43 Dec 13 19:52 author
+-rwxr-xr-x   1 mfilahi  candidate     729 Dec 13 19:52 crash.py
+-rw-r--r--   1 mfilahi  candidate   16317 Dec 13 19:52 crash.test
+-rw-r--r--   1 mfilahi  candidate       0 Dec 13 23:06 file
+drwxr-xr-x   5 mfilahi  candidate     170 Dec 13 22:37 includes
+drwxr-xr-x   3 mfilahi  candidate     102 Dec 13 19:52 libs
+drwxr-xr-x  37 mfilahi  candidate    1258 Dec 13 23:01 src
