@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 21:35:32 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/01 18:51:07 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/13 18:27:42 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void	call_signal(void)
 {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, ft_catch_signal);
-	signal(SIGWINCH, ft_win_change);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
