@@ -6,29 +6,11 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 14:42:41 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 11:38:00 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/13 18:28:55 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "read_line.h"
-
-void	ft_win_change(int sig)
-{
-	sig = 0;
-	if (g_pos.cmd)
-	{
-		g_pos.num_col = ft_get_size_windz();
-		tputs(tgetstr("cl", NULL), 0, my_outc);
-		ft_putstr_fd("\033[0;32m42sh $>\033[0m ", 2);
-		ft_putstr_term(g_pos.num_col, g_pos.cmd, &g_pos);
-		ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
-		g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, \
-		g_pos.cmd, g_pos.p);
-		g_pos.index = ft_strlen(g_pos.cmd);
-		g_pos.x = g_pos.end[g_pos.num_lines - 1];
-		g_pos.y = g_pos.num_lines - 1;
-	}
-}
 
 void	print_tab(int num_col, int *x)
 {
