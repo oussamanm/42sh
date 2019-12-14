@@ -45,6 +45,7 @@ int		ft_read_exit(t_cursor *pos, t_history *his, t_select *select, char **s)
 	save_history(his);
 	delete_intern();
 	ft_disable();
+	free_hash_and_alias();
 	exit(0);
 	return (1);
 }

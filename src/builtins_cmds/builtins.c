@@ -38,6 +38,7 @@ int			built_exit(char **args)
 	if (ft_check_stopped_job())
 		return (EXIT_FAILURE);
 	save_history(&g_history);
+	free_hash_and_alias();
 	exit(status);
 }
 

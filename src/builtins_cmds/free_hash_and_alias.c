@@ -27,8 +27,9 @@ void	free_alias_list(void)
 	while (curr)
 	{
 		tmp = curr->next;
-		ft_strdel(&curr->shortcut);
-		ft_strdel(&curr->cmd);
+		(curr->shortcut) ? ft_strdel(&curr->shortcut) : 0;
+		(curr->equal) ? ft_strdel(&curr->equal) : 0;
+		(curr->cmd) ? ft_strdel(&curr->cmd) : 0;
 		free(curr);
 		curr = NULL;
 		curr = tmp;

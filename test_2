@@ -1,0 +1,222 @@
+cd includes
+pwd
+env | grep PWD
+cd ..
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd ../includes
+pwd
+env | grep PWD
+cd ~
+pwd
+env | grep PWD
+cd ../../../
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd Desktop
+pwd
+env | grep PWD
+cd ../Desktop/42sh
+pwd
+env | grep PWD
+cd -P /tmp
+pwd
+env | grep PWD
+cd /var
+pwd
+env | grep PWD
+cd -L /var
+pwd
+env | grep PWD
+cd -L mail
+pwd
+env | grep PWD
+cd .
+pwd
+env | grep PWD
+cd ../named
+pwd
+env | grep PWD
+cd -P /tmp
+pwd
+env | grep PWD
+cd /tmp
+pwd
+env | grep PWD
+cd munki_swupd_cache
+pwd
+env | grep PWD
+cd ../munki_swupd_cache
+pwd
+env | grep PWD
+cd -P ../munki_swupd_cache
+pwd
+env | grep PWD
+cd /tmp/munki_swupd_cache
+pwd
+env | grep PWD
+cd ../com.apple.launchd.6ZvmFN12hf
+pwd
+env | grep PWD
+cd ~
+pwd
+env | grep PWD
+cd ../../../.././
+pwd
+env | grep PWD
+cd ~
+pwd
+env | grep PWD
+cd ../mfilahi/../mfilahi/../../Users/mfilahi/Desktop
+pwd
+env | grep PWD
+cd ./42sh
+pwd
+env | grep PWD
+pwd
+env | grep PWD
+cd ~
+pwd
+env | grep PWD
+cd ./../.
+pwd
+env | grep PWD
+cd 42sh/includes/../../
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd ~/Desktop/42sh
+pwd
+env | grep PWD
+cd -L symb
+pwd
+env | grep PWD
+cd ./.
+pwd 
+env | grep PWD
+cd /etc
+pwd
+env | grep PWD
+cd apache2
+pwd
+env | grep PWD
+cd ../apache2
+pwd
+env | grep PWD
+cd ../../tmp
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd -P ../../tmp
+pwd
+env | grep PWD
+cd /
+pwd
+env | grep PWD
+cd ///////
+pwd
+env | grep PWD
+cd /tmp/////
+pwd
+env | grep PWD
+cd //////////tmp/./././../.
+pwd
+env | grep PWD
+cd /tmp/../.././tmp
+pwd
+env | grep PWD
+cd tmp
+pwd
+env | grep PWD
+HOME=/tmp cd
+pwd
+env | grep PWD
+HOME=/tmp cd -P
+pwd
+env | grep PWD
+HOME=/tmp cd -L
+pwd
+env | grep PWD
+HOME=/tmp/../tmp cd -L
+pwd
+env | grep PWD
+HOME=/tmp/../tmp cd -P
+pwd
+env | grep PWD
+OLDPWD=/tmp cd -P -
+pwd
+env | grep PWD
+OLDPWD=/tmp cd -L -
+pwd
+env | grep PWD
+echo
+echo -n
+echo -e
+echo -Ee 
+echo "hello"
+echo -n "hello"
+echo -n "hello\n"
+echo -ne "hello\n"
+echo -neE "hello\n"
+echo -n "\t\t\t\t\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n"
+echo -e "\t\t\t\t\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n"
+echo -ne "\t\t\t\t\t\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n"
+echo -nE "\t\t\tt\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n"
+echo -E "\t\t\t\t\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n"
+echo -Ee "\t\t\t\t\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n"
+echo -eE "\t\t\t\\t\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n"
+echo -ne \t\t\tt\t\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n
+echo -nE \t\t\t\t\t\t\t\t\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n
+echo -e \t\t\t\t\v\v\v\v\v\vhello\n\n\n\n\n\n\n\n
+alias
+unalias -a
+alias 
+alias a b c d f l lll e m zz xx o 
+source .42shrc
+alias
+alias r a b c d f l lll e m zz xx o
+unalias r a b c d f l lll e
+alias r a b c d f l lll e
+source .42shrc
+ls
+who
+whoami
+grep
+ping
+find
+w
+ls
+ls
+unset PATH
+hash
+ls
+export PATH=/Users/mfilahi/.brew/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/munki:/Users/mfilahi/.brew/bin
+ls
+who
+hash
+hash -r
+ls
+who
+hash
+type
+type ls who echo a
+type -a ls who echo a
+type -t ls who echo a
+type -p ls who echo a
+type -P ls who echo a
+type -F ls who echo a
+type -at ls who echo a
+exit
