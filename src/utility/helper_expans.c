@@ -65,7 +65,7 @@ char			*ft_str_remp(char *str, char *remp, int start, int len)
 		bl = 1;
 	}
 	len_remp = ft_strlen(remp);
-	len_rtn = (int )ft_strlen(str) - len + len_remp;
+	len_rtn = (int)ft_strlen(str) - len + len_remp;
 	rtn = ft_strnew((len_rtn < 0) ? 0 : len_rtn);
 	ft_strncpy(rtn, str, start);
 	ft_strncpy(rtn + start, remp, len_remp);
