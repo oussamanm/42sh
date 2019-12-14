@@ -108,20 +108,18 @@ char	*handlepath(t_cdpkg *v, char *pwd)
 {
 	char	*newpath;
 
-	if (!(pwd = ft_get_vrb("PWD", g_environ)))
-		pwd = ft_strdup(getcwd(v->buff, 1024));
+	newpath = NULL;
 	if (v->path[0] == '/' && v->path[1] != '.')
 	{
-		ft_strdel(&pwd);
-		pwd = v->path;
-		if ((ft_strlen(v->path) > 1) && v->path[ft_strlen(v->path) - 1] == '/')
-		{
-			v->path = ft_strsub(v->path, 0, (ft_strlen(v->path) - 1));
-			ft_strdel(&pwd);
-		}
-		return (v->path);
+		newpath = createnewpath(v->path, ft_strdup(""));
+		if (ft_strlen(newpath) == 0)
+			newpath = ft_strjoir("/", newpath, 2);
+		(v->path) ? ft_strdel(&v->path) : 0;
+		return (newpath);
 	}
-	else if ((ft_strcmp(v->path, ".") == 0) ||\
+	if (!(pwd = ft_get_vrb("PWD", g_environ)))
+		pwd = ft_strdup(getcwd(v->buff, 1024));
+	if ((ft_strcmp(v->path, ".") == 0) ||\
 			(ft_strcmp(v->path, "./") == 0))
 	{
 		newpath = ft_strdup(pwd);
@@ -129,6 +127,6 @@ char	*handlepath(t_cdpkg *v, char *pwd)
 	}
 	else
 		newpath = createnewpath(v->path, pwd);
-	ft_strdel(&v->path);
+	(v->path) ? ft_strdel(&v->path) : 0;
 	return (newpath);
 }

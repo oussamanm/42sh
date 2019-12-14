@@ -81,10 +81,11 @@ char	*get_path(char **arg, char **tmpenv, int flag)
 {
 	char	*path;
 
+	(void)flag;
 	path = NULL;
 	if (*(arg + 0) && *(arg + 1))
 		return (ft_putstr("42sh: cd: too many arguments\n") ? NULL : NULL);
-	else if (*(arg) == NULL && !flag)
+	else if (*(arg) == NULL)
 		return (ft_get_vrb("HOME", (tmpenv) ? tmpenv : g_environ));
 	else if (*(arg) && *(arg)[0] == '-' && !*(arg + 1))
 	{

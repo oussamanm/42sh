@@ -21,7 +21,12 @@ void	no_options(char *arg, int *flag)
 	char *path;
 
 	path = NULL;
-	if ((path = lookup_hash(arg)))
+	if ((path = get_value_alias(arg)))
+	{
+		path = ft_strdup(path);
+		buil_putstr(arg, " is aliased to ", path, 1);
+	}
+	else if ((path = lookup_hash(arg)))
 	{
 		path = ft_strdup(path);
 		buil_putstr(arg, " is hashed ", path, 1);
@@ -32,7 +37,7 @@ void	no_options(char *arg, int *flag)
 		buil_putstr(arg, " is ", path, 1);
 	else if ((*flag = 1))
 		buil_putstr("42sh: type ", arg, ": not found", 2);
-	ft_strdel(&path);
+	(path) ? ft_strdel(&path) : 0;
 }
 
 /*
@@ -46,15 +51,22 @@ int		a_option(char *arg)
 
 	path = NULL;
 	ret = 0;
+	if ((path = get_value_alias(arg)))
+	{
+		ret = 1;
+		path = ft_strdup(path);
+		buil_putstr(arg, " is aliased to ", path, 1);
+	}
 	if (ft_check_built(arg) && (ret = 1))
 		buil_putstr(arg, " is a shell builtin", NULL, 1);
-	if ((path = ft_find_path(arg, g_environ)))
+	if ((!ret) && (path = ft_find_path(arg, g_environ)))
 	{
 		buil_putstr(arg, " is ", path, 1);
 		ret = 1;
 	}
 	if (!ret)
 		buil_putstr("42sh: type ", arg, ": not found", 2);
+	(path) ? ft_strdel(&path) : 0;
 	return (ret);
 }
 
@@ -69,15 +81,21 @@ int		p_option(char *arg, int maj_p)
 
 	path = NULL;
 	ret = 0;
-	if ((path = ft_find_path(arg, g_environ)) &&\
-	!ft_check_built(arg) && (ret = 1))
+	if (!ft_check_built(arg) &&\
+	(path = ft_find_path(arg, g_environ)))
+	{
+		ret = 1;
 		buil_putstr(path, NULL, NULL, 1);
-	else if ((path = ft_find_path(arg, g_environ)) && \
-	ft_check_built(arg) && maj_p && (ret = 1))
+	}
+	else if (ft_check_built(arg) &&\
+	maj_p && (path = ft_find_path(arg, g_environ)))
+	{
+		ret = 1;
 		buil_putstr(path, NULL, NULL, 1);
-	ft_strdel(&path);
+	}
 	if (!ret)
 		buil_putstr("42sh: type ", arg, ": not found", 2);
+	(path) ? ft_strdel(&path) : 0;
 	return (ret);
 }
 
@@ -92,7 +110,13 @@ int		t_option(char *arg, int flag)
 
 	path = NULL;
 	ret = 0;
-	if (ft_check_built(arg) && flag && (ret = 1))
+	if ((path = get_value_alias(arg)))
+	{
+		ret = 1;
+		path = ft_strdup(path);
+		buil_putstr("alias", NULL, NULL, 1);
+	}
+	else if (ft_check_built(arg) && flag && (ret = 1))
 		buil_putstr("builtin", NULL, NULL, 1);
 	else if ((path = ft_find_path(arg, g_environ)))
 	{
@@ -101,7 +125,7 @@ int		t_option(char *arg, int flag)
 	}
 	if (!ret)
 		buil_putstr("42sh: type ", arg, ": not found", 2);
-	ft_strdel(&path);
+	(path) ? ft_strdel(&path) : 0;
 	return (ret);
 }
 
@@ -116,15 +140,24 @@ int		at_option(char *arg)
 
 	path = NULL;
 	ret = 0;
-	if (ft_check_built(arg) && (ret = 1))
+	if ((path = get_value_alias(arg)))
+	{
+		ret = 1;
+		path = ft_strdup(path);
+		buil_putstr("alias", NULL, NULL, 1);
+	}
+	if (ft_check_built(arg))
+	{
+		ret = 1;
 		buil_putstr("builtin", NULL, NULL, 1);
-	if ((path = ft_find_path(arg, g_environ)))
+	}
+	if ((!ret) && (path = ft_find_path(arg, g_environ)))
 	{
 		ret = 1;
 		buil_putstr("file", NULL, NULL, 1);
 	}
 	if (!ret)
 		buil_putstr("42sh: type ", arg, ": not found", 2);
-	ft_strdel(&path);
+	(path) ? ft_strdel(&path) : 0;
 	return (ret);
 }

@@ -101,6 +101,8 @@ void			set_export_env(char **env)
 	t_intern	vrb;
 
 	i = -1;
+	g_intern = NULL;
+	g_export = NULL;
 	g_environ = NULL;
 	while (env[++i])
 	{
