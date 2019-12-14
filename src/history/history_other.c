@@ -68,7 +68,7 @@ int		valid_identifier(char *arg)
 {
 	int i;
 
-	if (!arg)
+	if (!arg || !arg[0])
 		return (0);
 	i = -1;
 	while (arg[++i])

@@ -52,7 +52,7 @@ int			find_subsh(char *str)
 		temp = 0;
 		if (M_ESCAPED(str[i]))
 		{
-			i += (str[i + 1]) ? 2 : 1;
+			i += (str[i + 1]) ? 1 : 0;
 			continue ;
 		}
 		if (str[i] == '"' && (temp = find_dquot(&str[i])) != -1)

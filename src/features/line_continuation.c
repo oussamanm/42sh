@@ -56,13 +56,13 @@ void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 			break ;
 		if (str_cmd[i] == '\\' && (str_cmd[i + 1] != '\'' || quoted == 0 || !j))
 			i += (str_cmd[i + 1]) ? 1 : 0;
-		else if (str_cmd[i] == '"')
+		else if (str_cmd[i] == '"' && !quoted)
 			(*maps)[j++] = 'Q';
 		else if (str_cmd[i] == '\'' && ((*maps)[j++] = 'q'))
 			quoted = (quoted) ? 0 : 1;
-		else if (M_SUBSH(str_cmd[i]) && str_cmd[i + 1] == '(' && ++i)
+		else if (!quoted && M_SUBSH(str_cmd[i]) && str_cmd[i + 1] == '(' && ++i)
 			(*maps)[j++] = 'S';
-		else if (str_cmd[i] == ')')
+		else if (str_cmd[i] == ')' && !quoted)
 			(*maps)[j++] = 's';
 		i += (str_cmd[i] != '\0');
 	}
@@ -78,7 +78,10 @@ int			read_subsh(char **line, t_select *select, t_history *his)
 	ft_putstr("sub> ");
 	ft_read_line(his, select, SUB_S);
 	if (g_pos.cmd[0] == EXIT_CLD)
+	{
+		ft_strdel(&g_pos.cmd);
 		return (-1);
+	}
 	if (g_pos.cmd)
 	{
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
@@ -104,7 +107,10 @@ int			read_quote(char **line, int quote,
 		ft_read_line(his, select, DQUOTE);
 	}
 	if (g_pos.cmd[0] == EXIT_CLD)
+	{
+		ft_strdel(&g_pos.cmd);
 		return (-1);
+	}
 	if (!g_pos.exit && g_pos.cmd)
 	{
 		*line = ft_strjoir(*line, g_pos.cmd, 3);
