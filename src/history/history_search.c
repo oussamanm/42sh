@@ -30,6 +30,8 @@ void			search_new_line(char *search, char *line,
 	pos->y = pos->num_lines - 1;
 	ft_strdel(cmd);
 	*cmd = ft_strdup(line);
+	convert_tab_to_neg(cmd);
+	update_tab_str(cmd, pos);
 }
 
 /*
@@ -85,6 +87,7 @@ static	void	his_edit_line(char *search, char *res, char **cmd)
 		search_new_line(search, res, cmd, &g_pos);
 	else if (search)
 		down = g_pos.num_lines;
+	g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, *cmd, g_pos.p);
 	his_cursor_do(down);
 	tputs(tgetstr("cd", NULL), 0, my_outc);
 	if (!res && up > 0 && (p += 8))
