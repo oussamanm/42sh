@@ -63,7 +63,11 @@ t_tokens	*handle_value_alias(char *value, t_tokens *st_tokens,
 	iniatail_alias_tokens(st_token, 0);
 	ft_strrdel(args);
 	if (!st_token)
+	{
+		if (st_tokens)
+			ft_strdel(&st_tokens->value);
 		return (st_tokens);
+	}
 	linking_tokens(st_tokens, st_token, st_head);
 	return (st_token);
 }

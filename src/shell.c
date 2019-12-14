@@ -13,6 +13,15 @@
 #include "shell.h"
 #include "read_line.h"
 
+void		call_cmds(t_cmds *st_cmds, int bl_subsh)
+{
+	while (st_cmds)
+	{
+		ft_cmds_setup(st_cmds, bl_subsh);
+		st_cmds = st_cmds->next;
+	}
+}
+
 /*
 ** - Lexer - Check Syntax - Parse with ; , handling Alias and Expansion
 */
@@ -35,11 +44,7 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 		handle_expansions(&st_tokens);
 		st_cmds = parse_semicolon(st_tokens);
 		cmds_head = st_cmds;
-		while (st_cmds)
-		{
-			ft_cmds_setup(st_cmds, bl_subsh);
-			st_cmds = st_cmds->next;
-		}
+		call_cmds(st_cmds, bl_subsh);
 	}
 	else
 		g_exit_status = 258;

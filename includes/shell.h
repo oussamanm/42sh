@@ -46,6 +46,7 @@
 # define M_SPEC_CHARC(x) (x=='$'||x=='`'||x=='\\'||x=='"'||x=='\n')
 # define M_ESCAPED(x) (x == '\\')
 # define M_BRACKET(x) (x == '(' || x == ')')
+# define M_CURLBRCK(str, i) ((str[i] == '}' && i && str[i - 1] == '{'))
 # define M_LOG_OPR(x, y) ((x == '|' && y == '|') || (x == '&' && y == '&'))
 # define M_VARIABLE(x, y) (x == '$' && y != '(')
 # define STR(x)  (*str)[x]

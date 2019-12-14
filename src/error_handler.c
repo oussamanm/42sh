@@ -89,8 +89,7 @@ int			error_syntax_expans(char *str_cmds)
 			i += 2;
 			while (str_cmds[i])
 			{
-				if ((str_cmds[i] == '}' && i && str_cmds[i - 1] == '{') ||
-					helper_error_expans(str_cmds, i))
+				if (M_CURLBRCK(str_cmds, i) || helper_error_expans(str_cmds, i))
 					return (1);
 				if (str_cmds[++i] == '}')
 					break ;
