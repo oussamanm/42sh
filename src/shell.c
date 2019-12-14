@@ -44,7 +44,7 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	else
 		g_exit_status = 258;
 	free_list_cmds(cmds_head);
-	free_tokens(st_tokens, 1);
+	free_tokens(st_tokens, 0);
 	ft_strrdel(args);
 }
 

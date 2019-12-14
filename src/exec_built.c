@@ -56,7 +56,7 @@ int				ft_init_built(t_pipes *st_pipes, int fork_it, char ***tmp_env)
 	int		status;
 	int		pid;
 
-	fork_it = (fork_it && st_pipes->bl_jobctr == 1) ? 1 : 0;
+	fork_it = (fork_it && (st_pipes->bl_jobctr == 1 || g_proc_sub)) ? 1 : 0;
 	pid = 0;
 	if (!fork_it)
 		save_fds();

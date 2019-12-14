@@ -111,7 +111,7 @@ void		ft_lexer_txt(t_tokens **st_tokens, char *arg, int *j, int indx)
 		escaped = (arg[i] == '\\' && !escaped) ? 1 : 0;
 		if (!arg[i + 1] || M_CHECK(arg[i + 1], ' ', '\t') ||
 			M_CHECK(arg[i + 1], '&', '|') || IS_QUOTE(arg[i + 1]) ||
-			(M_SUBSH(arg[i + 1]) && arg[i + 2] == '(') ||
+			(M_SUBSH(arg[i + 1]) && arg[i + 2] == '(') || M_REDIR(arg[i + 1]) ||
 			(arg[0] != '=' && arg[i + 1] == '=') || arg[i + 1] == ';')
 		{
 			if (escaped && arg[i + 1])

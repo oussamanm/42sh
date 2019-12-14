@@ -84,7 +84,7 @@ int			error_syntax_expans(char *str_cmds)
 	{
 		if (str_cmds[i] == '$' && str_cmds[i + 1] == '{')
 		{
-			if (i && str_cmds[i - 1] == '$')
+			if (i && str_cmds[i - 1] == '$' && ++i)
 				continue ;
 			i += 2;
 			while (str_cmds[i])
@@ -95,6 +95,8 @@ int			error_syntax_expans(char *str_cmds)
 				if (str_cmds[++i] == '}')
 					break ;
 			}
+			if (str_cmds[i] == '\0')
+				return (1);
 		}
 		i += ((str_cmds[i]) ? 1 : 0);
 	}

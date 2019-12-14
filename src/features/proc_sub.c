@@ -96,7 +96,7 @@ void		proc_substitution(t_cmds *st_cmds)
 							(st_tokens->token == T_PROC_OUT) ? 0 : 1);
 			ft_strdel(&st_tokens->value);
 			st_tokens->value = ft_strjoir("/dev/fd/",
-								ft_itoa(st_cmds->fd[i++]), 0);
+				ft_itoa(st_cmds->fd[i++]), 2);
 		}
 		st_tokens = st_tokens->next;
 	}
