@@ -22,6 +22,7 @@ OBJS = error_handler.o\
 	utility/line_contin.o utility/initial.o\
 	utility/helper_variab.o utility/helper_syntaxerr.o\
 	utility/helper_subshell.o utility/helper_expans.o\
+	utility/helper_redir.o\
 	features/pipe.o features/line_continuation.o\
 	features/proc_sub.o features/redir_parse.o\
 	features/redir_read.o features/redir_setup.o\

@@ -34,17 +34,12 @@ static void		restor_fds(void)
 
 	i = -1;
 	fd = SAVED_FD;
-	if (read(SAVED_FD, NULL, 0) == -1 && write(SAVED_FD, NULL, 0) == -1
-		&& g_tty_name)
-		if ((fd = open(g_tty_name, O_RDWR)) == -1)
-			fd = SAVED_FD;
 	while (++i < 3)
 	{
 		if (dup2(fd, i) == -1)
 			ft_putendl_fd("Error in dup or close in builtens \n", 2);
 	}
-	if (fd > 2)
-		close(fd);
+	close(fd);
 }
 
 /*

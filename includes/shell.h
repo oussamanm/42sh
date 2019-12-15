@@ -35,8 +35,6 @@
 # define EXIT_SIGINT 130
 # define BUFF_SIZE 10
 # define UNUSED(x) (void)(x)
-# define DEBUG(msg) puts(msg)
-# define DEBUGF(msg,...) printf(msg, __VA_ARGS__)
 # define STR_CMP(x, y) ((ft_strcmp(x, y)) ? 0 : 1)
 # define M_CHECK(x , y, z) ((x == y || x == z) ? 1 : 0)
 # define IS_QUOTE(x) (x == 34 || x == 39)
@@ -244,7 +242,6 @@ t_intern				*g_intern;
 char					**g_environ;
 t_intern				*g_export;
 int						g_exit_status;
-char					*g_tty_name;
 
 /*
 ** Builtins
@@ -403,6 +400,7 @@ void					ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens);
 void					ft_apply_hered(t_redir *st_redi);
 void					ft_apply_her_doc(t_jobctr *st_jobctr);
 char					*get_value_next(t_tokens *st_token);
+int						reserved_fd(t_redir *st_redirec);
 
 /*
 ** Execution

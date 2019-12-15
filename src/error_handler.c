@@ -21,7 +21,9 @@ int			syntax_error_h(t_tokens *st_tokens)
 	int	bl;
 
 	bl = 0;
-	if (st_tokens->token == T_PIPE &&
+	if (st_tokens->token == -138)
+		bl = 1;
+	else if (st_tokens->token == T_PIPE &&
 		(!PREV || !NEXT || OPER_TOKEN(NEXT->token)))
 		bl = 1;
 	else if (st_tokens->token == T_JOBCTR &&

@@ -61,18 +61,16 @@ static void		read_tokens(t_pipes *st_pipes)
 **	ft_apply_redi : apply redirection
 */
 
-static int		ft_apply_redi(t_pipes *st_pipes)
+static int		ft_apply_redi(t_redir *st_r)
 {
-	t_redir	*st_r;
-
-	if (st_pipes == NULL)
+	if (st_r == NULL)
 		return (REDI_KO);
-	st_r = st_pipes->st_redir;
 	while (st_r != NULL)
 	{
+		if (reserved_fd(st_r) == 1 && ((st_r = st_r->next) || !st_r))
+			continue ;
 		(st_r->type_red == 4) ? ft_apply_hered(st_r) : NULL;
-		if (st_r->fd_close != -1)
-			close(st_r->fd_close);
+		(st_r->fd_close != -1) ? close(st_r->fd_close) : 0;
 		if (st_r->fd_red != -1 && st_r->fd_des != -1)
 		{
 			if (st_r->fd_des == -2)
@@ -131,7 +129,7 @@ int				parse_redir(t_pipes *st_pipes)
 	if (!st_pipes)
 		return (PARSE_KO);
 	read_tokens(st_pipes);
-	if (ft_apply_redi(st_pipes) == REDI_KO)
+	if (st_pipes && ft_apply_redi(st_pipes->st_redir) == REDI_KO)
 		return (PARSE_KO);
 	ft_update_args(st_pipes);
 	return (PARSE_OK);
