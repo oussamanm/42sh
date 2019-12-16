@@ -23,6 +23,9 @@ int			syntax_error_h(t_tokens *st_tokens)
 	bl = 0;
 	if (st_tokens->token == -138)
 		bl = 1;
+	if (st_tokens->token == T_SEMICLN &&
+		(!PREV || (NEXT	&& OPER_TOKEN(NEXT->token))))
+		bl = 1;
 	else if (st_tokens->token == T_PIPE &&
 		(!PREV || !NEXT || OPER_TOKEN(NEXT->token)))
 		bl = 1;
@@ -39,7 +42,7 @@ int			syntax_error_h(t_tokens *st_tokens)
 }
 
 /*
-** Check errors Syntax (Lexer) resirection, pipe, job_ctr, || , &&
+** Check errors Syntax (Lexer) , pipe, job_ctr, || , &&
 */
 
 int			error_syntax_lexer(t_tokens *st_tokens)
@@ -49,8 +52,6 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 
 	tmp = NULL;
 	bl = 0;
-	if (!st_tokens)
-		return (0);
 	while (st_tokens && !bl)
 	{
 		if (M_CHECK(TOKEN, T_TXT, T_DQUO) &&
@@ -61,14 +62,13 @@ int			error_syntax_lexer(t_tokens *st_tokens)
 		}
 		bl = syntax_error_h(st_tokens);
 		if (bl && (!PREV || !NEXT))
-			tmp = ft_strdup(st_tokens->value);
+			tmp = st_tokens->value;
 		else if (bl && NEXT)
-			tmp = ft_strdup(NEXT->value);
+			tmp = NEXT->value;
 		st_tokens = st_tokens->next;
 	}
 	(bl) ? print_error(tmp, NULL, ERR_SYN, 0) : NULL;
-	free(tmp);
-	return (bl ? 1 : 0);
+	return (bl);
 }
 
 /*

@@ -126,9 +126,12 @@ t_cmds			*parse_semicolon(t_tokens *tokens)
 		else if (tokens->next && (st_cmds->next = ft_new_cmds()))
 		{
 			st_cmds = st_cmds->next;
+			ft_strdel(&tokens->value);
 			st_cmds->st_tokens = ft_new_token();
 			st_tokens = st_cmds->st_tokens;
 		}
+		else
+			ft_strdel(&tokens->value);
 		tokens = (tokens) ? tokens->next : tokens;
 	}
 	return (cmds_head);

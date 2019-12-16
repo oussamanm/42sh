@@ -13,10 +13,14 @@
 #include "shell.h"
 #include "read_line.h"
 
-void		call_cmds(t_cmds *st_cmds, int bl_subsh)
+/*
+** loop on cmds parsed by ";" , handle expansions
+*/
+static void	call_cmds(t_cmds *st_cmds, int bl_subsh)
 {
 	while (st_cmds)
 	{
+		handle_expansions(&st_cmds->st_tokens);
 		ft_cmds_setup(st_cmds, bl_subsh);
 		st_cmds = st_cmds->next;
 	}
@@ -30,25 +34,22 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 {
 	t_tokens	*st_tokens;
 	t_cmds		*st_cmds;
-	t_cmds		*cmds_head;
 	char		**args;
 
 	if (!str_cmds)
 		return ;
-	cmds_head = NULL;
+	st_cmds = NULL;
 	args = ft_str_split_q(str_cmds, " \t\n");
 	st_tokens = ft_lexer(args);
 	handle_alias(&st_tokens);
-	if (!error_syntax_semi(str_cmds, args) && !error_syntax_lexer(st_tokens))
+	if (!error_syntax_lexer(st_tokens))
 	{
-		handle_expansions(&st_tokens);
 		st_cmds = parse_semicolon(st_tokens);
-		cmds_head = st_cmds;
 		call_cmds(st_cmds, bl_subsh);
 	}
 	else
 		g_exit_status = 258;
-	free_list_cmds(cmds_head);
+	free_list_cmds(st_cmds);
 	free_tokens(st_tokens, (g_exit_status == 258) ? 1 : 0);
 	ft_strrdel(args);
 }
