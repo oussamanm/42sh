@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_built.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfilahi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:17:40 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/07 04:27:22 by mfilahi          ###   ########.fr       */
+/*   Updated: 2019/12/15 20:39:31 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,28 +86,48 @@ char	*get_path(char **arg, char **tmpenv, int flag)
 	if (*(arg + 0) && *(arg + 1))
 		return (ft_putstr("42sh: cd: too many arguments\n") ? NULL : NULL);
 	else if (*(arg) == NULL)
-		return (ft_get_vrb("HOME", (tmpenv) ? tmpenv : g_environ));
+	{
+		if (!(path = ft_get_vrb("HOME", tmpenv)) && !(path = get_intern_value("HOME")))
+		{
+			print_error("cd: HOME not set", NULL, NULL, 0);
+			return (NULL);
+		}
+		return (path);
+	}
 	else if (*(arg) && *(arg)[0] == '-' && !*(arg + 1))
 	{
-		if (!(path = ft_get_vrb("OLDPWD", (tmpenv) ? tmpenv : g_environ)))
+		if (!(path = ft_get_vrb("OLDPWD", tmpenv)) && !(path = get_intern_value("OLDPWD")))
 		{
 			print_error("cd: OLDPWD not set", NULL, NULL, 0);
 			return (NULL);
 		}
-		else
-			return (path);
+		return (path);
 	}
 	return (ft_strdup(*arg));
 }
 
 void	changedirectory(t_cdpkg *v)
 {
-	ft_set_vrb(ft_strjoir("OLDPWD=", ft_get_vrb("PWD", g_environ), 2)\
-			, &g_environ, 1);
+	char *pwd;
+	char *vrb;
+
+	if ((pwd = get_intern_value("PWD")))
+	{
+		if (add_intern_var(&g_intern, "OLDPWD", pwd, 1))
+		{
+			vrb = ft_strjoin("OLDPWD=", pwd);
+			ft_edit_vrb(vrb, &g_environ, 1);
+		}
+		ft_strdel(&pwd);
+	}
 	chdir(v->path);
 	ft_bzero(v->buff, 1024);
-	ft_set_vrb(ft_strjoir("PWD=", (v->flag == P_flg) ?\
-	getcwd(v->buff, 1024) : v->path, 0), &g_environ, 1);
+	pwd = (v->flag == P_flg) ? getcwd(v->buff, 1024) : v->path;
+	if (add_intern_var(&g_intern, "PWD", pwd, 1))
+	{
+		vrb = ft_strjoin("PWD=", pwd);
+		ft_edit_vrb(vrb, &g_environ, 1);
+	}
 }
 
 /*

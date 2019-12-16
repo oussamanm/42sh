@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:45:42 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 22:14:29 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/15 20:41:28 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ int				fc_3adiya(t_history his, unsigned char flags,
 {
 	char	*editor;
 
-	if (!(editor = ft_get_vrb("FCEDIT", env)))
-		editor = get_intern_value("FCEDIT");
-	(!editor) && (editor = ft_strdup("vi"));
+	if (!(editor = ft_get_vrb("FCEDIT", env))
+	&& !(editor = get_intern_value("FCEDIT")))
+		editor = ft_strdup("vi");
 	if (fc_edit(his, editor, flags, args))
 	{
 		ft_strdel(&editor);
