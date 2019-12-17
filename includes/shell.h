@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/22 17:07:47 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/15 19:17:43 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:02:26 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,7 +324,7 @@ int						find_closed(char *str, char c);
 ** Helper
 */
 
-char					*ft_find_path(char *arg);
+char					*ft_find_path(char *arg, char **environ);
 int						ft_check_redi(t_pipes *st_pipes);
 int						ft_sum_asci(char str[]);
 char					*ft_str_remp(char *str, char *remp, int start, int len);

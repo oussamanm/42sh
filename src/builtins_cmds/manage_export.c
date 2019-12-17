@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 20:58:00 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/15 20:54:39 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:54:16 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static	void	display_export(t_intern *export)
 
 void			exported_vars(t_intern vrb, int rest, int edit)
 {
-	char				*line;
+	char		*line;
 
 	if (rest == STDIN_FILENO)
 	{
@@ -98,7 +98,8 @@ void			exported_vars(t_intern vrb, int rest, int edit)
 		{
 			add_intern_var(&g_intern, vrb.key, vrb.value, 0);
 			line = ft_strjoir_rtn(ft_strjoin(vrb.key, "="), vrb.value, 1);
-			ft_set_vrb(line, &g_environ, 1);
+			ft_set_vrb(line, &g_environ, 0);
+			ft_strdel(&line);
 		}
 	}
 	else if (rest == STDOUT_FILENO)

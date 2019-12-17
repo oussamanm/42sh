@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:15:37 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/15 19:17:27 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:02:06 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** find file in PATH
 */
 
-char		*ft_find_path(char *arg)
+char		*ft_find_path(char *arg, char **environ)
 {
 	int		i;
 	char	**str_paths;
@@ -28,7 +28,8 @@ char		*ft_find_path(char *arg)
 	str_paths = NULL;
 	if (g_intern != NULL && arg)
 	{
-		temp = get_intern_value("PATH");
+		if (!(temp = ft_get_vrb("PATH", environ)))
+			temp = get_intern_value("PATH");
 		str_paths = (temp != NULL) ? ft_str_split(temp, ":") : NULL;
 		ft_strdel(&temp);
 	}

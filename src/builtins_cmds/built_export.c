@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 07:28:51 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/15 20:46:57 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/17 19:00:14 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,7 @@ void			set_export_env(char **env)
 	while (env[++i])
 	{
 		vrb = get_vrb_value(env[i]);
-		//add_intern_var(&g_intern, vrb.key, vrb.value, 0);
 		exported_vars(vrb, STDIN_FILENO, 0);
-		//ft_add_vrb(env[i], &g_environ);
 		ft_strdel(&vrb.key);
 		ft_strdel(&vrb.value);
 	}
