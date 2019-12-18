@@ -137,6 +137,7 @@ static char		*ft_swap_vrb(char *arg, int *index)
 		value = ft_strnew(0);
 	result = ft_str_remp(arg, value, *index, len_vrb + 1);
 	*index += (ft_strlen(value) - 1);
+	*index = (*index < 0) ? 0 : *index;
 	free_addresses((void *[MAX_TAB_ADDR]){&variable, &value, &arg});
 	return (result);
 }

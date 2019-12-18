@@ -106,7 +106,7 @@ int			read_quote(char **line, int quote,
 		ft_putstr("dquotes>> ");
 		ft_read_line(his, select, DQUOTE);
 	}
-	if (g_pos.cmd[0] == EXIT_CLD)
+	if (g_pos.cmd[0] == EXIT_CLD || g_pos.exit)
 	{
 		ft_strdel(&g_pos.cmd);
 		return (-1);
