@@ -42,7 +42,11 @@ void	ft_continue(char *arg)
 	int		index;
 
 	(!g_jobs) ? ft_putendl_fd("42sh: bg: current: no such job", 2) : 0;
-	(arg) ? (index = ft_atoi(arg)) : 0;
+	if (arg)
+	{
+		(arg[0] == '%') ? arg++ : 0;
+		(index = ft_atoi(arg)) : 0;
+	}
 	tmp = g_jobs;
 	while (tmp)
 	{
