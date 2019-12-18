@@ -1,0 +1,11 @@
+fc -l
+true; echo ${?}; false; echo ${?}
+ls -1 | grep testdir
+ls -1
+echo $?
+ls
+mkdir testdir
+env
+PATH=/bin:/usr/bin
+unset PATH
+

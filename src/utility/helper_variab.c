@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   helper_variab.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:01:46 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/02 12:01:48 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/12/15 19:17:52 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 /*
-**	ft_get_vrb : return variable (allocated) || NULL :
+**	 : return variable (allocated) || NULL :
 */
 
 char		*ft_get_vrb(char *vrb, char **env)

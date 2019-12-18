@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper_expans.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 15:26:33 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/13 15:26:35 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/12/15 20:16:48 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,7 @@ static char		*ft_swap_vrb(char *arg, int *index)
 	else if (M_CHECK(variable[0], '$', '?'))
 		value = (variable[0] == '$') ?\
 		ft_itoa((int)getpid()) : ft_itoa(g_exit_status);
-	else if (!(value = ft_get_vrb(variable, g_environ))
-		&& !(value = get_intern_value(variable)))
+	else if (!(value = get_intern_value(variable)))
 		value = ft_strnew(0);
 	result = ft_str_remp(arg, value, *index, len_vrb + 1);
 	*index += (ft_strlen(value) - 1);
@@ -167,7 +166,7 @@ char			*ft_corr_args(char *cmd)
 			cmd = ft_swap_vrb(cmd, &i);
 		else if (cmd[i] == '~' && (i ? (ft_isspace(cmd[i - 1])) : 1) &&
 				(cmd[i + 1] == '/' || !cmd[i + 1] || ft_isspace(cmd[i + 1])))
-			cmd = ft_str_remp(cmd, ft_get_vrb("HOME", g_environ), i, -1);
+			cmd = ft_str_remp(cmd, get_intern_value("HOME"), i, -1);
 		i += (cmd[i] != '\0');
 	}
 	return (cmd);

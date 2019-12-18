@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_helper_func.c                                   :+:      :+:    :+:   */
+/*   helper_func.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onouaman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:15:37 by onouaman          #+#    #+#             */
-/*   Updated: 2019/05/03 06:21:40 by onouaman         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:02:06 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** find file in PATH
 */
 
-char		*ft_find_path(char *arg, char **env)
+char		*ft_find_path(char *arg, char **environ)
 {
 	int		i;
 	char	**str_paths;
@@ -26,9 +26,10 @@ char		*ft_find_path(char *arg, char **env)
 		return (NULL);
 	i = -1;
 	str_paths = NULL;
-	if (env != NULL && *env != NULL && arg)
+	if (g_intern != NULL && arg)
 	{
-		temp = ft_get_vrb("PATH", env);
+		if (!(temp = ft_get_vrb("PATH", environ)))
+			temp = get_intern_value("PATH");
 		str_paths = (temp != NULL) ? ft_str_split(temp, ":") : NULL;
 		ft_strdel(&temp);
 	}

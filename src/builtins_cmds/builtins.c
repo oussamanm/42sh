@@ -15,12 +15,18 @@
 
 int			ft_exit_status(char **args)
 {
-	if (!args || !*args)
+	int i;
+
+	i = -1;
+	if (!args[0])
 		return (0);
+	while (args[0][++i])
+		if (!ft_isdigit(args[0][i]))
+			return (-1);
 	if (*args && *(args + 1))
 	{
 		ft_putendl_fd("42sh: exit: too many arguments", 2);
-		return (-1);
+		return (-22);
 	}
 	return (ft_atoi(*args));
 }
@@ -34,9 +40,15 @@ int			built_exit(char **args)
 	int status;
 
 	if ((status = ft_exit_status(args + 1)) == -1)
+	{
+		ft_putstr_fd("42sh: exit: ", 2);
+		ft_putstr_fd(args[1], 2);
+		ft_putendl_fd(": numeric argument required", 2);
+
+	}
+	if (status == -22 || ft_check_stopped_job())
 		return (EXIT_FAILURE);
-	if (ft_check_stopped_job())
-		return (EXIT_FAILURE);
+	ft_putendl_fd("exit", 2);
 	save_history(&g_history);
 	free_hash_and_alias();
 	exit(status);

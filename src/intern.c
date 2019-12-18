@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 21:41:01 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/11 20:14:46 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/17 19:00:45 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int			add_intern_var(t_intern **intern, char *key, char *value, int edit)
 		{
 			if (ft_strcmp(lst->key, key) == 0)
 			{
+				if (!edit)
+					return (0);
 				free(lst->value);
 				lst->value = ft_strdup(value);
 				return (1);

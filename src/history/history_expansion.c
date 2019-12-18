@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 16:21:54 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/08 17:54:19 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/17 19:57:38 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,16 @@ static	int		get_next_expansion(char *cmd, char **exp, int *i)
 {
 	int	bg;
 	int	q;
+	int s;
 
+	s = 0;
 	q = 0;
 	bg = *i;
 	if (!cmd[*i])
 		return (0);
 	while (cmd[*i])
 	{
+		
 		if (cmd[*i] == '\'')
 			q = (!q) ? 1 : 0;
 		if ((cmd[*i] == '\\' && cmd[*i + 1] == '!')
@@ -54,8 +57,12 @@ static	int		get_next_expansion(char *cmd, char **exp, int *i)
 			*i += 2;
 			continue ;
 		}
-		if (cmd[*i] == '!' && !q && *i > bg)
+		if (cmd[*i] == '!' && !q && !s && *i > bg)
 			break ;
+		if (cmd[*i] == '!' && ft_isalpha(cmd[*i + 1]))
+			s = 1;
+		if (is_shell_delimiter(cmd[*i]) || ft_isspace(cmd[*i]))
+			s = 0;
 		*i += 1;
 	}
 	*exp = ft_strsub(cmd, bg, *i - bg);
@@ -70,7 +77,7 @@ static	char	*command_expansion(t_history his, char *exp)
 	if (!exp || !his.head || !his.tail)
 		return (NULL);
 	if (exp[0] == '!' && his.tail)
-		return (ft_strdup(his.tail->cmd));
+		return (ft_strjoin(his.tail->cmd, exp + 1));
 	else if (ft_isdigit(exp[0]))
 		return (history_expansion_value(his, exp, ft_atoi(exp)));
 	else if (exp[0] == '-' && ft_isdigit(exp[1]))
@@ -105,6 +112,7 @@ static	char	*parse_expansion(t_history his, char *s, char **cmd)
 	{
 		i = 0;
 		exp = shift_expansion(s, &i);
+		ft_putendl(s);
 		if (!(str = command_expansion(his, exp + 1)))
 		{
 			ft_strdel(cmd);
