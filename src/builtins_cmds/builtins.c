@@ -28,7 +28,7 @@ int			ft_exit_status(char **args)
 		ft_putendl_fd("42sh: exit: too many arguments", 2);
 		return (-22);
 	}
-	return (atoi(*args));
+	return (ft_atoi(*args));
 }
 
 /*
