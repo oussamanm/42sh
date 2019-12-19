@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 04:31:53 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/15 20:49:04 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/19 19:19:01 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ char	*handlepath(t_cdpkg *v, char *pwd)
 		(v->path) ? ft_strdel(&v->path) : 0;
 		return (newpath);
 	}
-	if (!(pwd = ft_get_vrb("PWD", g_environ)))//??
+	if (!(pwd = ft_get_vrb("PWD", g_environ))
+		&& !(pwd = get_intern_value("PWD")))
 		pwd = ft_strdup(getcwd(v->buff, 1024));
 	if ((ft_strcmp(v->path, ".") == 0) ||\
 			(ft_strcmp(v->path, "./") == 0))

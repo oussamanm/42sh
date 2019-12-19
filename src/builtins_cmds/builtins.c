@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:34:51 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/11 19:08:41 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/19 19:08:29 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int			built_exit(char **args)
 		ft_putstr_fd("42sh: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-
 	}
 	if (status == -22 || ft_check_stopped_job())
 		return (EXIT_FAILURE);

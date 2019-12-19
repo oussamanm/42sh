@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 05:54:16 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/11 20:13:44 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/19 21:12:59 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 /*
 ** loop on cmds parsed by ";" , handle expansions
 */
+
 static void	call_cmds(t_cmds *st_cmds, int bl_subsh)
 {
 	while (st_cmds)
