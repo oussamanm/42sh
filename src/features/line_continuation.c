@@ -23,14 +23,16 @@ static int	correct_maps(char *maps)
 	int i;
 	int rtn;
 	int temp;
+	int quoted[2];
 
 	i = -1;
 	rtn = 0;
 	if (!maps || !(*maps))
 		return (0);
-	while (maps[++i] > 0)
+	ft_bzero(quoted, sizeof(int) * 2);
+	while (!rtn && maps[++i] > 0)
 	{
-		temp = correct_maps_(i, &rtn, maps);
+		temp = correct_maps_(i, quoted, &rtn, maps);
 		while (temp-- > 0 && ++rtn)
 			maps[++i] = -1;
 	}
@@ -49,20 +51,20 @@ void		fill_maps(char *str_cmd, char **maps, int j, int len_map)
 	if (!str_cmd || !maps || !*maps)
 		return ;
 	i = 0;
-	quoted = 0;
+	quoted = (j && *maps && (*maps)[j - 1] == 'q') ? 1 : 0;
 	while (str_cmd[i])
 	{
 		if (j >= (len_map - 1) && (len_map = increase_maps(maps)) == -1)
 			break ;
-		if (str_cmd[i] == '\\' && (str_cmd[i + 1] != '\'' || quoted == 0 || !j))
+		if (str_cmd[i] == '\\' && (str_cmd[i + 1] != '\'' || !quoted || !j))
 			i += (str_cmd[i + 1]) ? 1 : 0;
-		else if (str_cmd[i] == '"' && !quoted)
+		else if (str_cmd[i] == '"')
 			(*maps)[j++] = 'Q';
 		else if (str_cmd[i] == '\'' && ((*maps)[j++] = 'q'))
 			quoted = (quoted) ? 0 : 1;
-		else if (!quoted && M_SUBSH(str_cmd[i]) && str_cmd[i + 1] == '(' && ++i)
+		else if (M_SUBSH(str_cmd[i]) && str_cmd[i + 1] == '(' && ++i)
 			(*maps)[j++] = 'S';
-		else if (str_cmd[i] == ')' && !quoted)
+		else if (str_cmd[i] == ')')
 			(*maps)[j++] = 's';
 		i += (str_cmd[i] != '\0');
 	}

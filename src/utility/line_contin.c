@@ -30,12 +30,10 @@ int				increase_maps(char **maps)
 	return (len);
 }
 
-int				correct_maps_(int i, int *rtn, char *maps)
+int				correct_maps_(int i, int quoted[2],int *rtn, char *maps)
 {
 	int temp;
-	int quoted[2];
 
-	ft_bzero(quoted, sizeof(int) * 2);
 	temp = 0;
 	if (MATCH_CLOSED(maps[i], maps[i + 1]) && ++(*rtn))
 		bchar(&maps[i], 2, -1);
