@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 16:21:54 by aboukhri          #+#    #+#             */
-/*   Updated: 2019/12/17 19:57:38 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/19 19:54:15 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,15 @@ static	int		get_next_expansion(char *cmd, char **exp, int *i)
 		return (0);
 	while (cmd[*i])
 	{
-		
 		if (cmd[*i] == '\'')
 			q = (!q) ? 1 : 0;
-		if ((cmd[*i] == '\\' && cmd[*i + 1] == '!')
-		|| (cmd[*i] == '!' && cmd[*i + 1] == '!' && *i == bg))
-		{
-			*i += 2;
+		if (cmd[*i + 1] == '!' && (cmd[*i] == '\\'
+		|| (cmd[*i] == '!' && *i == bg)) && (*i += 2))
 			continue ;
-		}
 		if (cmd[*i] == '!' && !q && !s && *i > bg)
 			break ;
-		if (cmd[*i] == '!' && ft_isalpha(cmd[*i + 1]))
-			s = 1;
-		if (is_shell_delimiter(cmd[*i]) || ft_isspace(cmd[*i]))
-			s = 0;
+		(cmd[*i] == '!' && ft_isalpha(cmd[*i + 1])) && (s = 1);
+		(is_shell_delimiter(cmd[*i]) || ft_isspace(cmd[*i])) && (s = 0);
 		*i += 1;
 	}
 	*exp = ft_strsub(cmd, bg, *i - bg);
@@ -112,7 +106,6 @@ static	char	*parse_expansion(t_history his, char *s, char **cmd)
 	{
 		i = 0;
 		exp = shift_expansion(s, &i);
-		ft_putendl(s);
 		if (!(str = command_expansion(his, exp + 1)))
 		{
 			ft_strdel(cmd);

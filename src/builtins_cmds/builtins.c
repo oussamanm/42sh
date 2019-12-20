@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:34:51 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/11 19:08:41 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/19 19:08:29 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			built_exit(char **args)
 
 	if ((status = ft_exit_status(args + 1)) == -1)
 		print_error("numeric argument required", "exit : ", args[1], 0);
-	else if (status == -22 || ft_check_stopped_job())
+	if (status == -22 || ft_check_stopped_job())
 		return (EXIT_FAILURE);
 	ft_putendl_fd("exit", 2);
 	save_history(&g_history);

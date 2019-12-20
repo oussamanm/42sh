@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 12:17:40 by mfilahi           #+#    #+#             */
-/*   Updated: 2019/12/15 20:39:31 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/19 21:10:58 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,21 +87,19 @@ char	*get_path(char **arg, char **tmpenv, int flag)
 		return (ft_putstr("42sh: cd: too many arguments\n") ? NULL : NULL);
 	else if (*(arg) == NULL)
 	{
-		if (!(path = ft_get_vrb("HOME", tmpenv)) && !(path = get_intern_value("HOME")))
-		{
-			print_error("cd: HOME not set", NULL, NULL, 0);
-			return (NULL);
-		}
-		return (path);
+		if (!(!(path = ft_get_vrb("HOME", tmpenv))
+			&& !(path = get_intern_value("HOME"))))
+			return (path);
+		print_error("cd: HOME not set", NULL, NULL, 0);
+		return (NULL);
 	}
 	else if (*(arg) && *(arg)[0] == '-' && !*(arg + 1))
 	{
-		if (!(path = ft_get_vrb("OLDPWD", tmpenv)) && !(path = get_intern_value("OLDPWD")))
-		{
-			print_error("cd: OLDPWD not set", NULL, NULL, 0);
-			return (NULL);
-		}
-		return (path);
+		if (!(!(path = ft_get_vrb("OLDPWD", tmpenv))
+		&& !(path = get_intern_value("OLDPWD"))))
+			return (path);
+		print_error("cd: OLDPWD not set", NULL, NULL, 0);
+		return (NULL);
 	}
 	return (ft_strdup(*arg));
 }

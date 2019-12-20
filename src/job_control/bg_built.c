@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bg_built.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlamhidr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 08:05:27 by hlamhidr          #+#    #+#             */
-/*   Updated: 2019/12/01 08:05:33 by hlamhidr         ###   ########.fr       */
+/*   Updated: 2019/12/19 19:06:28 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	ft_continue(char *arg)
 	t_job	*job;
 	int		index;
 
+	index = 0;
 	(!g_jobs) ? ft_putendl_fd("42sh: bg: current: no such job", 2) : 0;
 	if (arg)
 	{

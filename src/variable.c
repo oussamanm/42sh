@@ -6,7 +6,7 @@
 /*   By: aboukhri <aboukhri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/03 06:24:55 by onouaman          #+#    #+#             */
-/*   Updated: 2019/12/15 20:51:07 by aboukhri         ###   ########.fr       */
+/*   Updated: 2019/12/19 21:14:28 by aboukhri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,9 @@ void		ft_set_vrb(char *vrb, char ***env, int rm)
 
 	if (vrb == NULL)
 		return ;
-	if (!env || !*env)
-	{
-		ft_add_vrb(vrb, env);
-		return ;
-	}
 	i = -1;
 	temp = *env;
-	while (temp[++i] != NULL)
+	while (temp && temp[++i] != NULL)
 	{
 		len_vrb = ft_find_char(vrb, '=');
 		if (len_vrb != -1 && !ft_strncmp(vrb, temp[i], len_vrb)
