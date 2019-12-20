@@ -21,9 +21,10 @@ int			syntax_error_h(t_tokens *st_tokens)
 	int	bl;
 
 	bl = 0;
-	if (st_tokens->token == -138)
+	if (st_tokens->token < 0 && !M_CHECK(TOKEN, T_RED_OUT_B, T_RED_IN_B) &&
+		(!NEXT || OPER_TOKEN(NEXT->token)))
 		bl = 1;
-	if (st_tokens->token == T_SEMICLN &&
+	else if (st_tokens->token == T_SEMICLN &&
 		(!PREV || (NEXT	&& OPER_TOKEN(NEXT->token))))
 		bl = 1;
 	else if (st_tokens->token == T_PIPE &&
@@ -119,8 +120,6 @@ char		*error_redir_h(t_tokens *st_tokens)
 		msg = "syntax error near unexpected token";
 	else if (TOKEN < T_RED_APP_A)
 		msg = "syntax error near unexpected token";
-	else if (TOKEN < 0 && ft_check_char(st_tokens->value, ERRO_IN_AND))
-		msg = "syntax error near unexpected token `&'";
 	else if (TOKEN == T_RED_OUT_A && *(st_tokens->value) == '>' &&
 			NEXT && !ft_isalldigit(NEXT->value) &&
 			PREV && PREV->indx == st_tokens->indx &&

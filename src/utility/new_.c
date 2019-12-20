@@ -19,6 +19,12 @@ t_redir		*ft_new_redir(void)
 	if ((st_redir = (t_redir *)malloc(sizeof(t_redir))) == NULL)
 		return (NULL);
 	st_redir->next = NULL;
+	st_redir->fd_file = NULL;
+	st_redir->fd_red = -1;
+	st_redir->fd_des = -1;
+	st_redir->fd_err = -1;
+	st_redir->fd_close = -1;
+	st_redir->type_red = -1;
 	return (st_redir);
 }
 

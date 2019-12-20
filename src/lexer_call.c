@@ -13,7 +13,7 @@
 #include "shell.h"
 
 /*
-** lexer for quote  @
+** lexer for quote
 */
 
 void		ft_lexer_quot(t_tokens **st_tokens, char *arg, int *j, int indx)
@@ -36,7 +36,7 @@ void		ft_lexer_quot(t_tokens **st_tokens, char *arg, int *j, int indx)
 }
 
 /*
-** lexer for all redirection  @
+** lexer for all redirection
 */
 
 void		ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx)
@@ -50,10 +50,8 @@ void		ft_lexer_red(t_tokens **st_tokens, char *arg, int *j, int indx)
 	ft_bzero(str, 5);
 	while (arg[++i] != '\0')
 	{
-		if (arg[i] == '&')
+		if (arg[i] == '&' && i < 2)
 			str[k++] = '&';
-		else if (arg[i] == '&' && i > 2)
-			str[k++] = ERRO_IN_AND;
 		else if ((arg[i] == '>' || arg[i] == '<') && (str[k++] = arg[i]))
 		{
 			if (arg[i + 1] == arg[i])

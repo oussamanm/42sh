@@ -45,7 +45,7 @@ void	ft_continue(char *arg)
 	if (arg)
 	{
 		(arg[0] == '%') ? arg++ : 0;
-		(index = ft_atoi(arg)) : 0;
+		index = ft_atoi(arg);
 	}
 	tmp = g_jobs;
 	while (tmp)

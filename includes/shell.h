@@ -51,7 +51,6 @@
 # define MATCH_CLOSED(x, y)(((x=='q'||x=='Q')&&x==y)||(x=='S'&&y=='s'))
 # define PROMPT 3
 # define PATHSIZE 1024
-# define ERRO_IN_AND -12
 # define IDENTIFIER(x) (x=="?"||x=="-"||x=="@"||x=="%"||x=="~"||x==":"||x==".")
 # define MAX_MAPS 100
 # define MAX_TAB_ADDR 10

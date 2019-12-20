@@ -40,13 +40,8 @@ int			built_exit(char **args)
 	int status;
 
 	if ((status = ft_exit_status(args + 1)) == -1)
-	{
-		ft_putstr_fd("42sh: exit: ", 2);
-		ft_putstr_fd(args[1], 2);
-		ft_putendl_fd(": numeric argument required", 2);
-
-	}
-	if (status == -22 || ft_check_stopped_job())
+		print_error("numeric argument required", "exit : ", args[1], 0);
+	else if (status == -22 || ft_check_stopped_job())
 		return (EXIT_FAILURE);
 	ft_putendl_fd("exit", 2);
 	save_history(&g_history);
