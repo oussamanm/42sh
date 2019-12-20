@@ -108,9 +108,10 @@
 # define CMP_TOKEN(x, t) (x && x->token == t)
 # define CHECK_TOKEN(t, a, b, c) (t == a || t == b || t == c)
 # define T_IS_SUBSHELL(x) (x == T_SUBSHL || x == T_PROC_IN || x == T_PROC_OUT)
+# define T_IS_LOGOPR(x) (x == T_LOGOPR_AND || x == T_LOGOPR_OR)
 # define T_IS_TXT(x) (x == T_TXT || x == T_QUO || x == T_DQUO)
 # define TOKEN_IS_ARG(x) (x->token >= 0 && x->is_arg == 0)
-# define OPER_TOKEN(t)(t==T_JOBCTR||t==T_PIPE||t==T_LOGOPR_OR||t==T_LOGOPR_AND||t==T_SEMICLN)
+# define OPER_TOKEN(t)(t==T_JOBCTR||t==T_PIPE||T_IS_LOGOPR(t)||t==T_SEMICLN)
 # define SAME_ARG(x, y) (x && x->indx == y->indx && ft_isalldigit(x->value))
 
 /*

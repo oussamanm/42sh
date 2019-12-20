@@ -80,6 +80,7 @@ int				ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 {
 	int		status;
 	int		tmp;
+	t_redir *st_redir;
 
 	status = 0;
 	tmp = 0;
@@ -91,11 +92,14 @@ int				ft_call_built(t_pipes *st_pipes, char ***tmp_env)
 		status = builtens_shell(st_pipes, tmp_env);
 	else
 		status = tmp;
-	while (st_pipes->st_redir != NULL)
+	st_redir = st_pipes->st_redir;
+	while (st_redir != NULL)
 	{
-		if (st_pipes->st_redir->fd_des != -1)
-			close(st_pipes->st_redir->fd_des);
-		st_pipes->st_redir = st_pipes->st_redir->next;
+		if (st_redir->fd_des != -1 && st_redir->fd_des != 155)
+			close(st_redir->fd_des);
+		if (st_redir->fd_red > 2 && st_redir->fd_red != 155)
+			close(st_redir->fd_red);
+		st_redir = st_redir->next;
 	}
 	return (status);
 }

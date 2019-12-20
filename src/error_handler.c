@@ -25,7 +25,7 @@ int			syntax_error_h(t_tokens *st_tokens)
 		(!NEXT || OPER_TOKEN(NEXT->token)))
 		bl = 1;
 	else if (st_tokens->token == T_SEMICLN &&
-		(!PREV || (NEXT	&& OPER_TOKEN(NEXT->token))))
+		(!PREV || (NEXT && OPER_TOKEN(NEXT->token))))
 		bl = 1;
 	else if (st_tokens->token == T_PIPE &&
 		(!PREV || !NEXT || OPER_TOKEN(NEXT->token)))

@@ -19,7 +19,7 @@ int		reserved_fd(t_redir *st_redirec)
 	if (st_redirec->fd_close == 155 || st_redirec->fd_des == 155 ||
 		st_redirec->fd_err == 155 || st_redirec->fd_red == 155)
 	{
-		print_error("Reserved file_descriptor", NULL, NULL, 0);
+		print_error("155 is a Reserved file_descriptor", NULL, NULL, 0);
 		return (1);
 	}
 	return (0);
