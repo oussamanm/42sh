@@ -13,6 +13,34 @@
 #include "shell.h"
 
 /*
+** - import alias content file to list;
+*/
+
+void			importaliasfilecontent_1(char *line)
+{
+	int		i;
+	char	*nline;
+	char	*tmp;
+
+	nline = ft_strdup(line);
+	i = 0;
+	while (nline[i] && ft_isspace(nline[i]))
+		i++;
+	tmp = nline;
+	if ((nline = remove_quotes(nline + i)))
+	{
+		if (nline[0] == '=')
+		{
+			(tmp) ? ft_strdel(&tmp) : 0;
+			(nline) ? ft_strdel(&nline) : 0;
+			return ;
+		}
+	}
+	(tmp) ? ft_strdel(&tmp) : 0;
+	importaliasfilecontent_2(nline);
+}
+
+/*
 ** Print a specific aliase for ex:cmd alias "x";
 */
 
@@ -79,12 +107,14 @@ static int		ft_buil_alias_2(t_tokens *st_tokens, char *arg)
 	int i;
 	int flag;
 
-	i = 1;
+	i = (st_tokens) ? st_tokens->indx : 1;
 	flag = 0;
 	while (st_tokens)
 	{
 		if (st_tokens->indx == i)
 		{
+			if (NEXT && NEXT->token && !error_checker(st_tokens->value, 1))
+				return (EXIT_FAILURE);
 			if (NEXT && NEXT->token == T_EQUAL &&\
 			NEXT->indx == st_tokens->indx &&\
 			ft_strlen(st_tokens->value) > 0)
@@ -106,17 +136,22 @@ static int		ft_buil_alias_2(t_tokens *st_tokens, char *arg)
 
 int				ft_buil_alias(t_tokens *st_tokens)
 {
+	int flag;
+
+	flag = 0;
 	st_tokens = st_tokens->next;
 	if (!st_tokens)
 	{
-		printlist();
+		printalias_list();
 		return (EXIT_SUCCESS);
 	}
-	if (st_tokens->value[0] == '-')
-	{
-		print_error("invalid option", "alias: ", st_tokens->value, 0);
-		print_error("alias [name[=value] ... ]", NULL, "alias: usage: ", 0);
+	st_tokens = alias_options(st_tokens, &flag);
+	if (flag == 1)
 		return (EXIT_FAILURE);
+	else if (flag == 2)
+	{
+		if (printalias_list())
+			return (EXIT_SUCCESS);
 	}
 	if (ft_buil_alias_2(st_tokens, NULL) == 1)
 		return (EXIT_FAILURE);

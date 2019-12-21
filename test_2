@@ -1,0 +1,185 @@
+cd includes
+pwd
+env | grep PWD
+cd ..
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd ../includes
+pwd
+env | grep PWD
+cd ~
+pwd
+env | grep PWD
+cd ../../../
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd Desktop
+pwd
+env | grep PWD
+cd ../Desktop/42sh
+pwd
+env | grep PWD
+cd -P /tmp
+pwd
+env | grep PWD
+cd /var
+pwd
+env | grep PWD
+cd -L /var
+pwd
+env | grep PWD
+cd -L mail
+pwd
+env | grep PWD
+cd .
+pwd
+env | grep PWD
+cd ../named
+pwd
+env | grep PWD
+cd -P /tmp
+pwd
+env | grep PWD
+cd /tmp
+pwd
+env | grep PWD
+cd munki_swupd_cache
+pwd
+env | grep PWD
+cd ../munki_swupd_cache
+pwd
+env | grep PWD
+cd -P ../munki_swupd_cache
+pwd
+env | grep PWD
+cd /tmp/munki_swupd_cache
+pwd
+env | grep PWD
+cd ../com.apple.launchd.6ZvmFN12hf
+pwd
+env | grep PWD
+cd ~
+pwd
+env | grep PWD
+cd ../../../.././
+pwd
+env | grep PWD
+cd ~
+pwd
+env | grep PWD
+cd ../mfilahi/../mfilahi/../../Users/mfilahi/Desktop
+pwd
+env | grep PWD
+cd ./42sh
+pwd
+env | grep PWD
+pwd
+env | grep PWD
+cd ~
+pwd
+env | grep PWD
+cd ./../.
+pwd
+env | grep PWD
+cd 42sh/includes/../../
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd ~/Desktop/42sh
+pwd
+env | grep PWD
+cd -L symb
+pwd
+env | grep PWD
+cd ./.
+pwd 
+env | grep PWD
+cd /etc
+pwd
+env | grep PWD
+cd apache2
+pwd
+env | grep PWD
+cd ../apache2
+pwd
+env | grep PWD
+cd ../../tmp
+pwd
+env | grep PWD
+cd -
+pwd
+env | grep PWD
+cd -P ../../tmp
+pwd
+env | grep PWD
+alias
+echo $?
+alias -p -ppppppppppp
+echo $?
+alias -p -ppppppppppp a b mmmm="mmmmmm"
+echo $?
+alias a b mmmm fd c 
+echo $?
+alias -p a b mmmm fd c 
+echo $?
+alias -p a b mmmm fd c ffff=ff a b
+echo $?
+source .42shrc
+echo $?
+unalias a b c e f // return status in error
+echo $?
+unalias yyy m ll p n sfd
+echo $?
+unalias -a
+echo $?
+unalias -a
+echo $?
+source .42shrc
+ls
+who
+type -a ls who echo a
+echo $?
+type -t ls who echo a
+echo $?
+hash
+type -p ls who echo a
+echo $?
+type -P ls who echo a // not show error 
+echo $?
+type -f ls who echo a
+echo $?
+type -f sfdsf ls fds who echo a fd
+echo $?
+hash ls who
+echo $?
+unset PATH
+echo $?
+ls
+echo $?
+who
+echo $?
+hash ls who
+echo $?
+hash -r
+echo $?
+hash
+echo $? 
+echo -n "hello world"
+echo -n "hello world\n"
+echo -ne "hello world\n"
+echo -e "\t\t\t\t\v\v\v\f\f\fhello world\n"
+echo -eE "\t\t\t\t\v\v\v\f\f\fhello world\n"
+echo -Ee "\t\t\t\t\v\v\v\f\f\fhello world\n"
+echo $HOME
+echo $OLDPWD

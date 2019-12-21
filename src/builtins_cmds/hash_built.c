@@ -90,11 +90,25 @@ void			display_hash_table(void)
 ** main func called in shell
 */
 
-int				hash_table(char **args)
+int				hash_table(char **args, char **tmpenv)
 {
+	int		err;
+	char	*ret;
+
+	err = 0;
 	if (!args[0])
 		display_hash_table();
-	else if (ft_strcmp(args[0], "-r") == 0)
+	else if (args[0][0] != '-')
+	{
+		while (*args)
+		{
+			if (!(ret = ft_find_path(*args, tmpenv)))
+				(err = 1) ? print_error("not found", "hash: ", *args, 0) : 0;
+			ft_strdel(&ret);
+			args++;
+		}
+	}
+	else if (args[0][0] == '-' && check_hash_op(args[0] + 1))
 		erase_hash_table();
 	else
 	{
@@ -102,5 +116,5 @@ int				hash_table(char **args)
 		print_error("hash [-r]", NULL, "hash: usage: ", 0);
 		return (EXIT_FAILURE);
 	}
-	return (EXIT_SUCCESS);
+	return (err ? EXIT_FAILURE : EXIT_SUCCESS);
 }

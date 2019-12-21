@@ -87,6 +87,8 @@ void	insert_hash(char *key, char *value)
 	t_hash	*node;
 	t_hash	**hash_arr;
 
+	if (!key || !value)
+		return ;
 	hash_arr = store_addr_of_hash(NULL, 0);
 	if ((node = lookup_hash_2(key)))
 	{

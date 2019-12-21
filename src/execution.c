@@ -108,7 +108,7 @@ int				ft_cmd_fork(int fork_it, t_pipes *st_pipes)
 	else if (fork_it && g_proc_sub && !st_pipes->bl_jobctr)
 		waitpid(pid, &rtn, 0);
 	(fork_it) ? signal(SIGCHLD, ft_catch_sigchild) : 0;
-	if (rtn == EXIT_SUCCESS && st_pipes->args)
+	if (rtn != EXIT_CMD_NF && st_pipes->args)
 		insert_hash(*st_pipes->args, ft_find_path(*st_pipes->args, environ));
 	return (rtn);
 }
