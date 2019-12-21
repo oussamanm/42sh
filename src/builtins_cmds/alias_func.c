@@ -61,13 +61,15 @@ void		pushtolist(char *key, char *value, int flag)
 ** - print all aliases;
 */
 
-void		printlist(void)
+int			printalias_list(void)
 {
 	t_aliaspkg	*data;
 	t_alias		*curr;
 
 	data = storeaddrstruct(NULL);
 	curr = data->head_ref;
+	if (!curr)
+		return (1);
 	while (curr)
 	{
 		ft_putstr_fd("alias ", 1);
@@ -79,6 +81,7 @@ void		printlist(void)
 		: ft_putchar_fd('\n', 1);
 		curr = curr->next;
 	}
+	return (0);
 }
 
 /*

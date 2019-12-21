@@ -122,5 +122,6 @@ int				ft_pipe(t_pipes *st_pipe)
 		status = ft_apply_pipe(st_pipe);
 	else
 		status = ft_cmd_fork(1, st_pipe);
+	status = get_state(status);
 	return (status);
 }

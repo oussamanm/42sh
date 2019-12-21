@@ -45,14 +45,12 @@ void	ft_catch_signal(int signal)
 		if (g_pos.p != PR_S || g_pos.r)
 		{
 			g_pos.exit = 1;
-			g_exit_status = EXIT_FAILURE;
 			g_pos.r = 0;
 			ioctl(0, TIOCSTI, "\12");
 		}
 		else
 		{
 			ft_putstr_fd("\n\033[0;32m42sh $>\033[0m ", 2);
-			g_exit_status = EXIT_SIGINT;
 		}
 		g_pos.p = PR_S;
 		history_readline(&g_history, 0, NULL);

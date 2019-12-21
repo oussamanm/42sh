@@ -127,11 +127,11 @@ int		built_type(char **args, char **tmpenv)
 		else
 		{
 			if (var)
-				ft_buil_type_(*args, flag);
+				var = ft_buil_type_(*args, flag);
 			else
 				var = ft_buil_type_(*args, flag);
 		}
 		args++;
 	}
-	return ((var) ? EXIT_FAILURE : EXIT_SUCCESS);
+	return (var);
 }

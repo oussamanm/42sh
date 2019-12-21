@@ -126,6 +126,8 @@ void	changedirectory(t_cdpkg *v)
 		vrb = ft_strjoin("PWD=", pwd);
 		ft_edit_vrb(vrb, &g_environ, 1);
 	}
+	(g_pwd) ? ft_strdel(&g_pwd) : 0;
+	g_pwd = ft_strdup(v->path);
 }
 
 /*
@@ -145,7 +147,7 @@ int		built_cd(char **arg, char **env)
 		return (EXIT_FAILURE);
 	oldpath = ft_strdup(v.path);
 	v.path = rmslashs(v.path);
-	v.path = handlepath(&v, NULL);
+	v.path = handlepath(&v, NULL, NULL);
 	if (ft_error_cd(v.path, arg + 0, oldpath))
 	{
 		ft_strdel(&v.path);

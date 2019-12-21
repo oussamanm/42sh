@@ -255,6 +255,7 @@ void					exported_vars(t_intern vrb, int rest, int edit);
 int						export_flags(t_tokens **st_tokens, int *n);
 int						builtens_mini(t_pipes *st_pipes, char ***tmp_env);
 int						builtens_shell(t_pipes *st_pipes, char ***tmp_env);
+int						get_state(int status);
 
 /*
 ** Intern variable
@@ -488,6 +489,7 @@ void					spec_case_subshell(char **arg);
 int						ft_buil_alias(t_tokens *st_tokens);
 int						ft_buil_unalias(t_tokens *st_token);
 void					handle_alias(t_tokens **st_head);
+t_tokens				*alias_options(t_tokens *curr, int *flag);
 char					*get_value_alias(char *key);
 
 /*

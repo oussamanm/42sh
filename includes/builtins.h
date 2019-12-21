@@ -75,13 +75,14 @@ struct			s_hash
 	t_hash		*next;
 };
 
+char			*g_pwd;
 /*
 ** CALL OF BUILT
 */
 
 int				built_cd(char **arg, char **env);
 int				built_type(char **args, char **tmpenv);
-int				hash_table(char **args);
+int				hash_table(char **args, char **tepenv);
 int				built_unset(char **args);
 
 /*
@@ -119,20 +120,17 @@ t_aliaspkg		*storeaddrstruct(t_aliaspkg *addr);
 void			pushtolist(char *key, char *value, int flag);
 int				rm_alias_by_elem_flag(char *shortcut);
 char			*handleqoutes(char *str);
+char			*remove_quotes(char *str);
 void			importaliasfilecontent(char *tmp);
+void			importaliasfilecontent_2(char *nline);
 int				freealiaslist(void);
 void			ft_buil_updatealias(char **args);
-void			printlist(void);
+int				printalias_list(void);
+int				error_checker(char *str, int flag);
 void			createaliasfile(void);
-int				value_found_as_key(t_aliaspkg *data, char *valueaskey);
-void			freetmplistalias(t_aliashel **head);
-char			*get_value(t_aliaspkg *data, char *key);
-void			init_var(t_aliashel **head, t_aliashel **tail, char ***arr);
-int				free_elem(char *lastkey, char **arr, t_aliashel **head);
-void			ft_checker(char **arr, char **newvalue);
 char			*aliasfinder(t_alias *curr, char *value, char *lastkey);
 int				ft_list(t_aliashel **head, t_aliashel **tail, char *shortkey,
-	char **ptr);
+				char **ptr);
 t_alias			*get_next_node(t_aliaspkg *data, char *value);
 
 /*
@@ -144,6 +142,7 @@ void			insert_hash(char *key, char *value);
 char			*lookup_hash(char *key);
 void			erase_hash_table();
 unsigned int	hash(char *key);
+int				check_hash_op(char *s);
 void			display_hash_table();
 
 /*
@@ -157,7 +156,7 @@ void			importaliasfilecontent_1(char *line);
 ** CD FUNCTIONS
 */
 
-char			*handlepath(t_cdpkg *v, char *pwd);
+char			*handlepath(t_cdpkg *v, char *pwd, char *newpath);
 int				ft_error_cd(char *path, char **arg, char *oldpwd);
 char			*createnewpath(char *path, char *pwd);
 char			*rmslashs(char *path);

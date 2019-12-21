@@ -51,7 +51,7 @@ int			builtens_shell(t_pipes *st_pipes, char ***tmp_env)
 	if (STR_CMP(*(st_pipes->args), "type"))
 		status = built_type(st_pipes->args + 1, *tmp_env);
 	else if (STR_CMP(*(st_pipes->args), "hash"))
-		status = hash_table(st_pipes->args + 1);
+		status = hash_table(st_pipes->args + 1, *tmp_env);
 	else if (STR_CMP(*(st_pipes->args), "history"))
 		display_his_list(g_history, 1);
 	else if (STR_CMP(*(st_pipes->args), "fc"))

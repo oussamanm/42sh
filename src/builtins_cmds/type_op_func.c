@@ -81,8 +81,7 @@ int		p_option(char *arg, int maj_p)
 
 	path = NULL;
 	ret = 0;
-	if (!ft_check_built(arg) &&\
-	(path = ft_find_path(arg, g_environ)))
+	if (!ft_check_built(arg) && (path = ft_find_path(arg, g_environ)))
 	{
 		ret = 1;
 		buil_putstr(path, NULL, NULL, 1);
@@ -93,8 +92,13 @@ int		p_option(char *arg, int maj_p)
 		ret = 1;
 		buil_putstr(path, NULL, NULL, 1);
 	}
-	if (!ret)
-		buil_putstr("42sh: type ", arg, ": not found", 2);
+	else if (ft_check_built(arg))
+		ret = 1;
+	else if ((path = get_value_alias(arg)) ||\
+			(path = lookup_hash(arg)))
+		return (1);
+	else
+		path = ft_strdup(path);
 	(path) ? ft_strdel(&path) : 0;
 	return (ret);
 }
@@ -123,8 +127,6 @@ int		t_option(char *arg, int flag)
 		ret = 1;
 		buil_putstr("file", NULL, NULL, 1);
 	}
-	if (!ret)
-		buil_putstr("42sh: type ", arg, ": not found", 2);
 	(path) ? ft_strdel(&path) : 0;
 	return (ret);
 }
@@ -156,8 +158,6 @@ int		at_option(char *arg)
 		ret = 1;
 		buil_putstr("file", NULL, NULL, 1);
 	}
-	if (!ret)
-		buil_putstr("42sh: type ", arg, ": not found", 2);
 	(path) ? ft_strdel(&path) : 0;
 	return (ret);
 }
