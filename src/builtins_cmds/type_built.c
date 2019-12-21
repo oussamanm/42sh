@@ -127,7 +127,7 @@ int		built_type(char **args, char **tmpenv)
 		else
 		{
 			if (var)
-				var = ft_buil_type_(*args, flag);
+				ft_buil_type_(*args, flag);
 			else
 				var = ft_buil_type_(*args, flag);
 		}

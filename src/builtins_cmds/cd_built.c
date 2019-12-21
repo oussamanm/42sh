@@ -120,6 +120,8 @@ void	changedirectory(t_cdpkg *v)
 	}
 	chdir(v->path);
 	ft_bzero(v->buff, 1024);
+	ft_set_vrb(ft_strjoir("PWD=", (v->flag == P_flg) ?\
+	getcwd(v->buff, 1024) : v->path, 0), &g_environ, 1);
 	pwd = (v->flag == P_flg) ? getcwd(v->buff, 1024) : v->path;
 	if (add_intern_var(&g_intern, "PWD", pwd, 1))
 	{
