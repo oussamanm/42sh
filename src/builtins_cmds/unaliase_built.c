@@ -101,7 +101,7 @@ int		ft_buil_unalias_1(t_tokens *st_token)
 			print_error("not found", "unalias: ", arg, 0);
 		else
 		{
-			if (!(rm_alias_by_elem_flag(arg)))
+			if (!(rm_alias_by_elem_flag(arg)) && (flag = 1))
 				print_error("not found", "unalias: ", arg, 0);
 		}
 		st_token = st_token->next;

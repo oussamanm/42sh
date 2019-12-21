@@ -17,7 +17,7 @@
 ** Get state
 */
 
-int		get_state(int status)
+int			get_state(int status)
 {
 	if (status > 255)
 		return (status / 256);
@@ -63,31 +63,4 @@ int			built_exit(char **args)
 	save_history(&g_history);
 	free_hash_and_alias();
 	exit(status);
-}
-
-/*
-** - import alias content file to list;
-*/
-
-void		importaliasfilecontent_1(char *line)
-{
-	int		j;
-	int		i;
-	char	*str1;
-	char	*str2;
-
-	j = 0;
-	while (line[j] && ft_isspace(line[j]))
-		j++;
-	i = j;
-	while (line[j] && line[j] != '=')
-		j++;
-	str1 = ft_strsub(line, i, j - 1);
-	str2 = ft_strsub(line, ++j, ft_strlen(line));
-	rm_alias_by_elem_flag(str1);
-	if (!str2)
-		str2 = ft_strdup("");
-	pushtolist(str1, str2, 1);
-	ft_strdel(&str1);
-	ft_strdel(&str2);
 }

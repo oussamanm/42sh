@@ -133,5 +133,5 @@ int		built_type(char **args, char **tmpenv)
 		}
 		args++;
 	}
-	return ((var) ? EXIT_FAILURE : EXIT_SUCCESS);
+	return (var);
 }

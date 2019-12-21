@@ -469,7 +469,8 @@ void					clean_maps(char *maps);
 int						count_key(char *maps, int key);
 int						closed_dquot(char *maps);
 int						increase_maps(char	**maps);
-int						correct_maps_(int i, int quoted[2], int *rtn, char *maps);
+int						correct_maps_(int i, int quoted[2], int *rtn,\
+char *maps);
 void					fill_maps(char *str_cmd, char **maps, int j,\
 int len_map);
 
@@ -489,6 +490,7 @@ void					spec_case_subshell(char **arg);
 int						ft_buil_alias(t_tokens *st_tokens);
 int						ft_buil_unalias(t_tokens *st_token);
 void					handle_alias(t_tokens **st_head);
+t_tokens				*alias_options(t_tokens *curr, int *flag);
 char					*get_value_alias(char *key);
 
 /*

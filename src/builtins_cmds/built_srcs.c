@@ -82,3 +82,16 @@ void	ft_buil_updatealias(char **args)
 		importaliasfilecontent(NULL);
 	}
 }
+
+int		check_hash_op(char *s)
+{
+	if (!*s)
+		return (0);
+	while (*s)
+	{
+		if (*s != 'r')
+			return (0);
+		s++;
+	}
+	return (1);
+}

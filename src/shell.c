@@ -45,7 +45,8 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	handle_alias(&st_tokens);
 	if (!error_syntax_lexer(st_tokens))
 	{
-		st_cmds = parse_semicolon(st_tokens);
+		if (st_tokens)
+			st_cmds = parse_semicolon(st_tokens);
 		call_cmds(st_cmds, bl_subsh);
 	}
 	else
@@ -57,6 +58,9 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 
 static void	initial_shell(t_select **select)
 {
+	char buff[1024];
+
+	ft_bzero(buff, 1024);
 	g_shellpid = getpid();
 	while (1)
 	{
@@ -64,6 +68,7 @@ static void	initial_shell(t_select **select)
 			break ;
 		kill(g_shellpid, SIGTTIN);
 	}
+	g_pwd = ft_strdup(getcwd(buff, 1024));
 	g_pos.cmd = NULL;
 	g_exit_status = 0;
 	call_signal();

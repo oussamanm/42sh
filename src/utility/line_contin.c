@@ -30,7 +30,7 @@ int				increase_maps(char **maps)
 	return (len);
 }
 
-int				correct_maps_(int i, int quoted[2],int *rtn, char *maps)
+int				correct_maps_(int i, int quoted[2], int *rtn, char *maps)
 {
 	int temp;
 

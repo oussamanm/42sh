@@ -120,12 +120,16 @@ void	changedirectory(t_cdpkg *v)
 	}
 	chdir(v->path);
 	ft_bzero(v->buff, 1024);
+	ft_set_vrb(ft_strjoir("PWD=", (v->flag == P_flg) ?\
+	getcwd(v->buff, 1024) : v->path, 0), &g_environ, 1);
 	pwd = (v->flag == P_flg) ? getcwd(v->buff, 1024) : v->path;
 	if (add_intern_var(&g_intern, "PWD", pwd, 1))
 	{
 		vrb = ft_strjoin("PWD=", pwd);
 		ft_edit_vrb(vrb, &g_environ, 1);
 	}
+	(g_pwd) ? ft_strdel(&g_pwd) : 0;
+	g_pwd = ft_strdup(v->path);
 }
 
 /*
@@ -145,7 +149,7 @@ int		built_cd(char **arg, char **env)
 		return (EXIT_FAILURE);
 	oldpath = ft_strdup(v.path);
 	v.path = rmslashs(v.path);
-	v.path = handlepath(&v, NULL);
+	v.path = handlepath(&v, NULL, NULL);
 	if (ft_error_cd(v.path, arg + 0, oldpath))
 	{
 		ft_strdel(&v.path);
