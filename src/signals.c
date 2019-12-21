@@ -30,7 +30,7 @@ void	ft_reset_line(void)
 	g_pos.x = 8;
 	g_pos.y = 0;
 	g_pos.num_col = ft_get_size_windz();
-	ft_strdel(&(g_pos.cmd));
+	ft_strdel(&g_pos.cmd);
 	g_pos.cmd = ft_strnew(0);
 }
 
@@ -49,9 +49,7 @@ void	ft_catch_signal(int signal)
 			ioctl(0, TIOCSTI, "\12");
 		}
 		else
-		{
 			ft_putstr_fd("\n\033[0;32m42sh $>\033[0m ", 2);
-		}
 		g_pos.p = PR_S;
 		history_readline(&g_history, 0, NULL);
 	}

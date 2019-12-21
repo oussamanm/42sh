@@ -42,25 +42,25 @@ char	*ft_call_complete(t_select *select, char *s, char *buf)
 ** - function call the functions needed to edit our line.
 */
 
-char	*ft_key_call_func(t_history *his, t_select *select, char *s, char *buf)
+char	*ft_key_call_func(t_history *his, t_select *select, char **s, char *buf)
 {
 	if (CTRL_D == CAST(buf))
-		s = ft_ctrl_d(&g_pos, his, select, s);
+		*s = ft_ctrl_d(&g_pos, his, select, *s);
 	else if (CTRL_T == CAST(buf))
-		tab_mode(&s);
+		tab_mode(s);
 	else if (ALT_UP == CAST(buf) || ALT_DO == CAST(buf))
-		ft_move_by_lines(&g_pos, s, buf);
+		ft_move_by_lines(&g_pos, *s, buf);
 	else if (HOME == CAST(buf) || END == CAST(buf))
-		ft_home_end(&g_pos, s, buf);
+		ft_home_end(&g_pos, *s, buf);
 	else if (RI_WOR == CAST(buf) || LE_WOR == CAST(buf))
-		ft_move_by_word(&g_pos, s, buf);
+		ft_move_by_word(&g_pos, *s, buf);
 	else if (DEL == CAST(buf))
-		s = ft_delcolomn(s, &g_pos);
+		*s = ft_delcolomn(*s, &g_pos);
 	else if (UP == CAST(buf) || DO == CAST(buf))
-		history_readline(his, CAST(buf), &s);
+		history_readline(his, CAST(buf), s);
 	else
-		s = ft_call_complete(select, s, buf);
-	return (s);
+		*s = ft_call_complete(select, *s, buf);
+	return (*s);
 }
 
 /*
@@ -72,7 +72,7 @@ int		ft_calling_center(t_history *his, t_select *select, char *buf)
 {
 	g_pos.num_lines = ft_get_num_of_lines(g_pos.num_col, g_pos.cmd, g_pos.p);
 	ft_get_end_of_line_pos(&g_pos, g_pos.cmd, g_pos.num_col);
-	if (!(g_pos.cmd = ft_key_call_func(his, select, g_pos.cmd, buf))
+	if (!(g_pos.cmd = ft_key_call_func(his, select, &g_pos.cmd, buf))
 		|| g_pos.cmd[0] == EXIT_CLD)
 		return (1);
 	return (0);

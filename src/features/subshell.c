@@ -122,8 +122,7 @@ char		*change_subsh_quot(char *arg)
 		if (cmd && (cmd = ft_strcpy(cmd, &cmd[2])))
 		{
 			cmd[ft_strlen(cmd) - 1] = '\0';
-			value = exec_subsh(cmd);
-			value = correct_result(value);
+			value = correct_result(exec_subsh(cmd));
 			arg = ft_str_remp(arg, value, i, (int)(ft_strlen(cmd) + 3) * -1);
 			ft_strdel(&cmd);
 			continue ;
