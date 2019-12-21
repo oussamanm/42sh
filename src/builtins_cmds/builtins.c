@@ -17,7 +17,7 @@
 ** Get state
 */
 
-int		get_state(int status)
+int			get_state(int status)
 {
 	if (status > 255)
 		return (status / 256);
