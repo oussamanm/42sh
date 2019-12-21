@@ -54,7 +54,10 @@ void		ft_redi_out_h(t_redir *st_redir, t_tokens *st_tokens)
 	}
 	temp = get_value_next(NEXT);
 	if ((st_tokens->value)[1] == '&' && ft_isalldigit(temp))
+	{
 		st_redir->fd_des = ft_atoi(temp);
+		ft_strdel(&temp);
+	}
 	else
 	{
 		st_redir->fd_red = 1;

@@ -81,14 +81,11 @@ int		ft_calling_center(t_history *his, t_select *select, char *buf)
 char	*ft_read_line(t_history *his, t_select *select, int p)
 {
 	char	buf[6];
-	int		crash;
 
-	crash = 0;
-	// crash = open("/tmp/crash.fifo", O_RDONLY);
 	ft_initial(p);
 	ft_bzero(buf, 6);
 	ft_enable();
-	while (read(crash, buf, 6) > 0)
+	while (read(0, buf, 6) > 0)
 	{
 		if (CTRL_R == CAST(buf))
 		{
@@ -106,8 +103,6 @@ char	*ft_read_line(t_history *his, t_select *select, int p)
 	}
 	ft_disable();
 	free(g_pos.end);
-	// if (crash != 0)
-	// 	close(crash);
 	convert_neg_to_tab(&g_pos.cmd);
 	return (g_pos.cmd);
 }

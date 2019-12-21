@@ -26,7 +26,7 @@ char		*ft_find_path(char *arg, char **environ)
 		return (NULL);
 	i = -1;
 	str_paths = NULL;
-	if (g_intern != NULL && arg)
+	if (arg)
 	{
 		if (!(temp = ft_get_vrb("PATH", environ)))
 			temp = get_intern_value("PATH");

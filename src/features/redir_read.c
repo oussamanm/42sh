@@ -72,6 +72,8 @@ void	ft_redi_in(t_redir *st_redir, t_tokens *st_tokens)
 	{
 		if (SAME_ARG(PREV, st_tokens) && (PREV->is_arg = 1))
 			st_redir->fd_close = ft_atoi(PREV->value);
+		else
+			st_redir->fd_close = 0;
 	}
 }
 

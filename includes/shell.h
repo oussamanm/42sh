@@ -255,6 +255,7 @@ void					exported_vars(t_intern vrb, int rest, int edit);
 int						export_flags(t_tokens **st_tokens, int *n);
 int						builtens_mini(t_pipes *st_pipes, char ***tmp_env);
 int						builtens_shell(t_pipes *st_pipes, char ***tmp_env);
+int						get_state(int status);
 
 /*
 ** Intern variable
@@ -468,7 +469,7 @@ void					clean_maps(char *maps);
 int						count_key(char *maps, int key);
 int						closed_dquot(char *maps);
 int						increase_maps(char	**maps);
-int						correct_maps_(int i, int *rtn, char *maps);
+int						correct_maps_(int i, int quoted[2], int *rtn, char *maps);
 void					fill_maps(char *str_cmd, char **maps, int j,\
 int len_map);
 
