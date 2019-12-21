@@ -113,8 +113,6 @@ t_cmds			*parse_semicolon(t_tokens *tokens)
 	t_cmds		*cmds_head;
 	t_tokens	*st_tokens;
 
-	if (!tokens)
-		return (NULL);
 	st_cmds = ft_new_cmds();
 	cmds_head = st_cmds;
 	st_cmds->st_tokens = ft_new_token();

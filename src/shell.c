@@ -45,7 +45,8 @@ void		ft_multi_cmd(char *str_cmds, int bl_subsh)
 	handle_alias(&st_tokens);
 	if (!error_syntax_lexer(st_tokens))
 	{
-		st_cmds = parse_semicolon(st_tokens);
+		if (st_tokens)
+			st_cmds = parse_semicolon(st_tokens);
 		call_cmds(st_cmds, bl_subsh);
 	}
 	else

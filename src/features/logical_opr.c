@@ -12,8 +12,6 @@
 
 #include "shell.h"
 
-
-
 /*
 ** Execute Logical Operateur
 */

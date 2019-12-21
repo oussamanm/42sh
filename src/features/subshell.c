@@ -112,23 +112,24 @@ char		*change_subsh_quot(char *arg)
 	int		len;
 
 	cmd = NULL;
-	i = -1;
-	len = 0;
-	arg = ft_strdup(arg);
-	while (arg[++i])
+	i = 0;
+	while (arg && arg[i])
 	{
-		if (!(arg[i] == '(' && i && M_SUBSH(arg[i - 1])))
+		if (!(M_SUBSH(arg[i]) && arg[i + 1] == '(') && ++i)
 			continue ;
-		if ((len = find_subsh(&arg[i])) != -1)
-			cmd = ft_strsub(arg, i - 1, len + 2);
+		if ((len = find_subsh(&arg[i + 1])) != -1)
+			cmd = ft_strsub(arg, i, len + 2);
 		if (cmd && (cmd = ft_strcpy(cmd, &cmd[2])))
 		{
 			cmd[ft_strlen(cmd) - 1] = '\0';
 			value = exec_subsh(cmd);
 			value = correct_result(value);
-			arg = ft_str_remp(arg, value, i - 1, (ft_strlen(cmd) + 3) * -1);
+			arg = ft_str_remp(arg, value, i, (int)(ft_strlen(cmd) + 3) * -1);
+			ft_strdel(&cmd);
+			continue ;
 		}
 		ft_strdel(&cmd);
+		i += (arg && arg[i]) ? 1 : 0;
 	}
 	return (arg);
 }
@@ -158,7 +159,7 @@ void		apply_subsh(t_tokens *st_tokens)
 		else if (st_tokens->token == T_DQUO &&
 			ft_strstr(st_tokens->value, "$("))
 		{
-			value = change_subsh_quot(st_tokens->value);
+			value = change_subsh_quot(ft_strdup(st_tokens->value));
 			(value) ? ft_strdel(&st_tokens->value) : NULL;
 			st_tokens->value = value;
 		}
