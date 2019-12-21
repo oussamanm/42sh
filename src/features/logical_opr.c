@@ -12,21 +12,7 @@
 
 #include "shell.h"
 
-/*
-** Get state
-*/
 
-static	int		get_state(int status)
-{
-	if (status == 32512)
-		return (127);
-	else if (status == 2)
-		return (130);
-	else if (status)
-		return (1);
-	else
-		return (0);
-}
 
 /*
 ** Execute Logical Operateur
@@ -66,7 +52,7 @@ void			logical_ops(t_logopr *st_logopr)
 			state = 1;
 		else
 			state = ft_pipe(st_logopr->st_pipes);
-		g_exit_status = get_state(state);
+		g_exit_status = state;
 		state = (state) ? 0 : 1;
 		apply_logic(&st_logopr, state);
 	}
