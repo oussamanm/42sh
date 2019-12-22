@@ -33,7 +33,7 @@ void	n_flag(char *arg)
 ** this functinon serve option echo -e;
 */
 
-int		e_interpretation(char *arg, int token, int i, char *str)
+int		e_interpretation(char *arg, t_tokens **st, int i, char *str)
 {
 	char	tmp;
 	char	*temp;
@@ -45,17 +45,14 @@ int		e_interpretation(char *arg, int token, int i, char *str)
 			continue ;
 		tmp = temp[i + 1];
 		temp[i + 1] = echo_charcmp(temp[i + 1], "abcfnrtv\\");
-		if ((tmp != temp[i + 1] && M_CHECK(token, T_DQUO, T_QUO)) ||
-			tmp == '\\')
-		{
-			temp[i] = -1;
-			i++;
-		}
+		if (tmp != temp[i + 1] || tmp == '\\')
+			temp[i++] = -1;
 		else if (temp[i + 1] == 'c')
 		{
 			str = temp;
 			temp = ft_strsub(temp, 0, i);
 			ft_strdel(&str);
+			*st = NULL;
 			break ;
 		}
 	}
@@ -87,17 +84,26 @@ int		echo_options(t_tokens **st_tokens)
 	return (flag);
 }
 
-int		hendl_echo(int flag, t_tokens *st_tokens, int *index)
+int		hendl_echo(int flag, t_tokens **st_tokens, int *index)
 {
-	int status;
+	int		status;
+	char	*tmp;
 
 	if (M_CHECK(flag, (e_flg | n_flg), e_flg))
-		status = e_interpretation(st_tokens->value, st_tokens->token, -1, NULL);
+	{
+		tmp = get_value_next(*st_tokens);
+		status = e_interpretation(tmp, st_tokens, -1, NULL);
+		ft_strdel(&tmp);
+		if (M_CHECK(flag, (e_flg | n_flg), n_flg))
+			n_flag("");
+		return (status);
+	}
 	else
-		status = (ft_putstr(st_tokens->value) == -1) ? 1 : 0;
-	if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !NEXT)
-		n_flag(st_tokens->value);
-	if (NEXT && NEXT->indx != *index && (*index = NEXT->indx))
+		status = (ft_putstr((*st_tokens)->value) == -1) ? 1 : 0;
+	if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !(*st_tokens)->next)
+		n_flag((*st_tokens)->value);
+	if ((*st_tokens)->next && (*st_tokens)->next->indx != *index &&\
+		(*index = (*st_tokens)->next->indx))
 		ft_putchar_fd(' ', 1);
 	return (status);
 }
@@ -119,10 +125,10 @@ int		built_echo(t_tokens *st_tokens)
 	while (st_tokens && !status)
 	{
 		if (TOKEN_IS_ARG(st_tokens))
-			status = hendl_echo(flag, st_tokens, &index);
+			status = hendl_echo(flag, &st_tokens, &index);
 		else
 			index = (NEXT) ? NEXT->indx : index;
-		st_tokens = NEXT;
+		st_tokens = (st_tokens) ? NEXT : NULL;
 	}
 	(flag != n_flg && flag != ((e_flg | n_flg))) && (my_outc('\n'));
 	return (status);
