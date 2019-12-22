@@ -129,7 +129,7 @@ void	changedirectory(t_cdpkg *v)
 		ft_edit_vrb(vrb, &g_environ, 1);
 	}
 	(g_pwd) ? ft_strdel(&g_pwd) : 0;
-	g_pwd = ft_strdup(v->path);
+	g_pwd = ft_get_vrb("PWD", g_environ);
 }
 
 /*

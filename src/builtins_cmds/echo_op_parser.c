@@ -41,17 +41,24 @@ int		echo_options_(char *arg, int *flag)
 
 int		e_interpretation_1(char *arg)
 {
+	int i;
+
 	if (!arg)
 		return (0);
-	while (*arg)
+	i = 0;
+	while (arg[i])
 	{
-		if (!(*(arg) == -1))
+		if (!(arg[i] == -1))
 		{
-			if (write(1, arg, 1) == -1)
+			if (write(1, &arg[i], 1) == -1)
+			{
+				ft_strdel(&arg);
 				return (-1);
+			}
 		}
-		arg++;
+		i++;
 	}
+	ft_strdel(&arg);
 	return (0);
 }
 

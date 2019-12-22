@@ -33,32 +33,33 @@ void	n_flag(char *arg)
 ** this functinon serve option echo -e;
 */
 
-int		e_interpretation(char *arg, int token, int i)
+int		e_interpretation(char *arg, int token, int i, char *str)
 {
 	char	tmp;
 	char	*temp;
 
-	while (arg[++i])
+	temp = ft_strdup(arg);
+	while (temp[++i])
 	{
-		if (arg[i] != '\\')
+		if (temp[i] != '\\')
 			continue ;
-		tmp = arg[i + 1];
-		arg[i + 1] = echo_charcmp(arg[i + 1], "abcfnrtv\\");
-		if ((tmp != arg[i + 1] && M_CHECK(token, T_DQUO, T_QUO)) ||
+		tmp = temp[i + 1];
+		temp[i + 1] = echo_charcmp(temp[i + 1], "abcfnrtv\\");
+		if ((tmp != temp[i + 1] && M_CHECK(token, T_DQUO, T_QUO)) ||
 			tmp == '\\')
 		{
-			arg[i] = -1;
+			temp[i] = -1;
 			i++;
 		}
-		else if (arg[i + 1] == 'c')
+		else if (temp[i + 1] == 'c')
 		{
-			temp = arg;
-			arg = ft_strsub(arg, 0, i);
-			ft_strdel(&temp);
+			str = temp;
+			temp = ft_strsub(temp, 0, i);
+			ft_strdel(&str);
 			break ;
 		}
 	}
-	return ((e_interpretation_1(arg) == -1) ? 1 : 0);
+	return ((e_interpretation_1(temp) == -1) ? 1 : 0);
 }
 
 /*
@@ -91,7 +92,7 @@ int		hendl_echo(int flag, t_tokens *st_tokens, int *index)
 	int status;
 
 	if (M_CHECK(flag, (e_flg | n_flg), e_flg))
-		status = e_interpretation(st_tokens->value, st_tokens->token, -1);
+		status = e_interpretation(st_tokens->value, st_tokens->token, -1, NULL);
 	else
 		status = (ft_putstr(st_tokens->value) == -1) ? 1 : 0;
 	if (M_CHECK(flag, (e_flg | n_flg), n_flg) && !NEXT)
