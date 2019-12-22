@@ -473,6 +473,7 @@ int						correct_maps_(int i, int quoted[2], int *rtn,\
 char *maps);
 void					fill_maps(char *str_cmd, char **maps, int j,\
 int len_map);
+int						check_apply_esp(char *cmd);
 
 /*
 ** Sub_shell

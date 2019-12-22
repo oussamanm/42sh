@@ -232,14 +232,12 @@ void				ft_go_to_right(t_cursor *pos, char *s);
 void				ft_right_touch(t_cursor *pos, int size);
 void				save_address(t_select **select);
 void				initial_read_line(t_history *his, t_select **select);
-char				*completing_line(char *str_cmds,\
-t_select *select, t_history *his);
-void				completing_line_(char **maps, char **cmd, t_select *select,\
-t_history *his);
-int					read_quote(char **line, int quote, t_select *select,\
-t_history *his);
-int					read_subsh(char **line, t_select *select,\
-t_history *his);
+char				*completing_line(char *str_cmds, t_select *select);
+void				completing_line_(char **maps, char **cmd, t_select *slc,
+	int bl);
+int					read_quote(char **line, int quote, t_select *select,
+	int bl);
+int					read_subsh(char **line, t_select *select, int bl);
 char				*shift_expansion(char *keyword, int *i);
 int					is_expansion_syntax(char *cmd);
 

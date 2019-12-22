@@ -57,8 +57,43 @@ int				correct_maps_(int i, int quoted[2], int *rtn, char *maps)
 	return (temp);
 }
 
+int				check_apply_esp(char *cmd)
+{
+	int	count;
+	int i;
+
+	if (!cmd)
+		return (0);
+	i = ft_strlen(cmd);
+	count = 0;
+	while (--i >= 0)
+	{
+		if (cmd[i] == '\\')
+			count++;
+		else
+			break ;
+	}
+	if ((count % 2) != 0)
+		return (1);
+	return (0);
+}
+
+static int		incorrect_map(int *index, char **cmd)
+{
+	int	bl;
+
+	bl = 0;
+	*index = ft_strlen(*cmd);
+	if (check_apply_esp(*cmd) && (bl = 1))
+	{
+		*index -= (*index == 0) ? 0 : 1;
+		(*cmd)[ft_strlen(*cmd) - 1] = '\0';
+	}
+	return (bl);
+}
+
 void			completing_line_(char **maps, char **cmd, t_select *slc,
-	t_history *his)
+	int bl)
 {
 	int		i;
 	int		index;
@@ -74,11 +109,11 @@ void			completing_line_(char **maps, char **cmd, t_select *slc,
 			break ;
 		if ((*maps)[i] == 'Q' || (*maps)[i] == 'q' || (*maps)[i] == 'S')
 		{
-			index = ft_strlen(*cmd);
+			bl = incorrect_map(&index, cmd);
 			if ((*maps)[i] == 'S')
-				rtn = read_subsh(cmd, slc, his);
+				rtn = read_subsh(cmd, slc, bl);
 			else
-				rtn = read_quote(cmd, ((*maps)[i] == 'Q') ? 34 : 39, slc, his);
+				rtn = read_quote(cmd, ((*maps)[i] == 'Q') ? 34 : 39, slc, bl);
 			fill_maps(&(*cmd)[index], maps, i + 1, len);
 			i = get_last_flag(*maps);
 			continue ;

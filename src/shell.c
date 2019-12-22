@@ -77,6 +77,34 @@ static void	initial_shell(t_select **select)
 	init_alias_hash();
 }
 
+char		*handle_backslash(char *str, t_select *select)
+{
+	char *tmp;
+
+	tmp = NULL;
+	if (!str)
+		return (NULL);
+	while (check_apply_esp(str) == 1)
+	{
+		tmp = str;
+		str = ft_strdup(str);
+		ft_strdel(&tmp);
+		g_pos.cmd = NULL;
+		ft_putstr("> ");
+		ft_read_line(&g_history, select, 2);
+		if (g_pos.cmd[0] == EXIT_CLD || g_pos.exit)
+		{
+			ft_strdel(&g_pos.cmd);
+			return (str);
+		}
+		str[ft_strlen(str) - 1] = '\0';
+		str = ft_strjoir(str, g_pos.cmd, 3);
+		g_pos.cmd = NULL;
+		str = completing_line(str, select);
+	}
+	return (str);
+}
+
 int			main(void)
 {
 	extern char	**environ;
@@ -94,7 +122,8 @@ int			main(void)
 			ft_job_processing();
 			continue ;
 		}
-		g_pos.cmd = completing_line(g_pos.cmd, select, &g_history);
+		g_pos.cmd = completing_line(g_pos.cmd, select);
+		g_pos.cmd = handle_backslash(g_pos.cmd, select);
 		if (!history_handling(&g_pos.cmd))
 			continue ;
 		(!g_pos.exit) ? ft_multi_cmd(g_pos.cmd, 0) : NULL;
